@@ -13,23 +13,23 @@
 final class KT_WP_Configurator {
 
     // theme support
-    const TS_POST_FORMATS         = "post-formats";
-    const TS_POST_THUMBNAIL       = "post-thumbnails";
-    const THEME_SUBPAGE_PREFIX    = "appearance_page_";
+    const TS_POST_FORMATS = "post-formats";
+    const TS_POST_THUMBNAIL = "post-thumbnails";
+    const THEME_SUBPAGE_PREFIX = "appearance_page_";
     const THEME_SETTING_PAGE_SLUG = "kt-theme-setting";
 
-    private $wpMenuCollection     = array();
-    private $widgetsCollection    = array();
-    private $sidebarCollection    = array();
-    private $excerptLenght        = null;
-    private $excerptText          = null;
-    private $metaboxRemover       = null;
-    private $pageRemover          = null;
-    private $widgetRemover        = null;
-    private $themeSettingPage     = false;
+    private $wpMenuCollection = array();
+    private $widgetsCollection = array();
+    private $sidebarCollection = array();
+    private $excerptLenght = null;
+    private $excerptText = null;
+    private $metaboxRemover = null;
+    private $pageRemover = null;
+    private $widgetRemover = null;
+    private $themeSettingPage = false;
     private $deleteImagesWithPost = false;
-    private $displayLogo          = true;
-    private $assetsConfigurator   = null;
+    private $displayLogo = true;
+    private $assetsConfigurator = null;
 
     // --- gettery ----------------------
 
@@ -129,7 +129,7 @@ final class KT_WP_Configurator {
      * @param KT_WP_Metabox_Remover_Configurator $metaboxRemover
      * @return \KT_WP_Configurator
      */
-    private function setMetaboxRemover( KT_WP_Metabox_Remover_Configurator $metaboxRemover ) {
+    private function setMetaboxRemover(KT_WP_Metabox_Remover_Configurator $metaboxRemover) {
         $this->metaboxRemover = $metaboxRemover;
 
         return $this;
@@ -144,7 +144,7 @@ final class KT_WP_Configurator {
      * @param KT_WP_Page_Remover_Configurator $pageRemover
      * @return \KT_WP_Configurator
      */
-    private function setPageRemover( KT_WP_Page_Remover_Configurator $pageRemover ) {
+    private function setPageRemover(KT_WP_Page_Remover_Configurator $pageRemover) {
         $this->pageRemover = $pageRemover;
 
         return $this;
@@ -159,7 +159,7 @@ final class KT_WP_Configurator {
      * @param KT_WP_Widget_Remover_Configurator $widgetRemover
      * @return \KT_WP_Configurator
      */
-    private function setWidgetRemover( KT_WP_Widget_Remover_Configurator $widgetRemover ) {
+    private function setWidgetRemover(KT_WP_Widget_Remover_Configurator $widgetRemover) {
         $this->widgetRemover = $widgetRemover;
         return $this;
     }
@@ -173,10 +173,10 @@ final class KT_WP_Configurator {
      * @param int $excerptLenght
      * @return \KT_WP_Configurator
      */
-    public function setExcerptLength( $excerptLenght ) {
-        $excerptLenght = kt_try_get_int( $excerptLenght );
+    public function setExcerptLength($excerptLenght) {
+        $excerptLenght = kt_try_get_int($excerptLenght);
 
-        if ( kt_isset_and_not_empty( $excerptLenght ) ) {
+        if (kt_isset_and_not_empty($excerptLenght)) {
             $this->excerptLenght = $excerptLenght;
         }
 
@@ -192,7 +192,7 @@ final class KT_WP_Configurator {
      * @param string $excerptText
      * @return \KT_WP_Configurator
      */
-    public function setExcerptText( $excerptText ) {
+    public function setExcerptText($excerptText) {
         $this->excerptText = $excerptText;
 
         return $this;
@@ -207,7 +207,7 @@ final class KT_WP_Configurator {
      * @param type $themeSettingPage
      * @return \KT_WP_Configurator
      */
-    public function setThemeSettingPage( $themeSettingPage = true ) {
+    public function setThemeSettingPage($themeSettingPage = true) {
         $this->themeSettingPage = $themeSettingPage;
         return $this;
     }
@@ -221,7 +221,7 @@ final class KT_WP_Configurator {
      * @param bol $deleteImagesWithPost
      * @return \KT_WP_Configurator
      */
-    public function setDeleteImagesWithPost( $deleteImagesWithPost = true ) {
+    public function setDeleteImagesWithPost($deleteImagesWithPost = true) {
         $this->deleteImagesWithPost = $deleteImagesWithPost;
         return $this;
     }
@@ -236,7 +236,7 @@ final class KT_WP_Configurator {
      * @param boolean $displayLogo
      * @return \KT_WP_Configurator
      */
-    public function setDisplayLogo( $displayLogo = false ) {
+    public function setDisplayLogo($displayLogo = false) {
         $this->displayLogo = $displayLogo;
         return $this;
     }
@@ -250,7 +250,7 @@ final class KT_WP_Configurator {
      * @param \KT_WP_Asset_Configurator $assetsConfigurator
      * @return \KT_WP_Configurator
      */
-    public function setAssetsConfigurator( KT_WP_Asset_Configurator $assetsConfigurator ) {
+    public function setAssetsConfigurator(KT_WP_Asset_Configurator $assetsConfigurator) {
         $this->assetsConfigurator = $assetsConfigurator;
         return $this;
     }
@@ -266,63 +266,63 @@ final class KT_WP_Configurator {
      */
     public function initialize() {
         // registrace menu
-        add_action( "init", array( $this, "registerMenusAction" ) );
+        add_action("init", array($this, "registerMenusAction"));
 
         // registrace widgetů
-        add_action( "widgets_init", array( $this, "registerWidgetsAction" ) );
+        add_action("widgets_init", array($this, "registerWidgetsAction"));
 
         // registrace sidebar
-        add_action( "widgets_init", array( $this, "registersSidebarsAction" ) );
+        add_action("widgets_init", array($this, "registersSidebarsAction"));
 
         // délka excreptu
-        if ( kt_isset_and_not_empty( $this->getExcerptLength() ) && $this->getExcerptLength() > 0 ) {
-            add_filter( 'excerpt_length', array( $this, "getExcerptLength" ) );
+        if (kt_isset_and_not_empty($this->getExcerptLength()) && $this->getExcerptLength() > 0) {
+            add_filter('excerpt_length', array($this, "getExcerptLength"));
         }
 
         // text excreptu
-        if ( kt_isset_and_not_empty( $this->getExcerptText() ) ) {
-            add_filter( 'excerpt_more', array( $this, "getExcerptText" ) );
+        if (kt_isset_and_not_empty($this->getExcerptText())) {
+            add_filter('excerpt_more', array($this, "getExcerptText"));
         }
 
         // metabox remover
-        if ( kt_isset_and_not_empty( $this->getMetaboxRemover() ) ) {
-            if ( kt_isset_and_not_empty( $this->getMetaboxRemover()->getMetaboxRemoverData() ) ) {
-                add_action( "admin_menu", array( $this, "registerMetaboxRemoverAction" ) );
+        if (kt_isset_and_not_empty($this->getMetaboxRemover())) {
+            if (kt_isset_and_not_empty($this->getMetaboxRemover()->getMetaboxRemoverData())) {
+                add_action("admin_menu", array($this, "registerMetaboxRemoverAction"));
             }
         }
 
         // page remover
-        if ( kt_isset_and_not_empty( $this->getPageRemover() ) ) {
-            add_action( "admin_menu", array( $this, "registerPageRemoverAction" ) );
-            add_action( "admin_init", array( $this, "registerSubPageRemoverAction" ) );
+        if (kt_isset_and_not_empty($this->getPageRemover())) {
+            add_action("admin_menu", array($this, "registerPageRemoverAction"));
+            add_action("admin_init", array($this, "registerSubPageRemoverAction"));
         }
 
         // widget remover
-        if ( kt_isset_and_not_empty( $this->getWidgetRemover() ) ) {
-            add_action( "widgets_init", array( $this, "registerWidgetRemoverAction" ) );
+        if (kt_isset_and_not_empty($this->getWidgetRemover())) {
+            add_action("widgets_init", array($this, "registerWidgetRemoverAction"));
         }
 
         // mazání attachmentu se smazáním postu
-        if ( $this->getDeleteImagesWithPost() ) {
-            add_action( "delete_before_post", array( $this, "registerDeleteAttachmentWithPostAction" ) );
+        if ($this->getDeleteImagesWithPost()) {
+            add_action("delete_before_post", array($this, "registerDeleteAttachmentWithPostAction"));
         }
 
         // změna login url - loga a URL redirect
-        if ( $this->getDisplayLogo() ) {
-            add_filter( 'login_headerurl', array( $this, "registerLoginLogoUrlFilter" ), 10, 4 );
-            add_action( 'login_head', array( $this, "registerLoginLogoImageAction" ) );
+        if ($this->getDisplayLogo()) {
+            add_filter('login_headerurl', array($this, "registerLoginLogoUrlFilter"), 10, 4);
+            add_action('login_head', array($this, "registerLoginLogoImageAction"));
         }
 
         // registrace a načítání scriptů zavedené v configurátoru
-        if ( kt_isset_and_not_empty( $this->getAssetsConfigurator() ) ) {
-            add_action( "init", array( $this, "registerScriptsAction" ) );
-            add_action( "init", array( $this, "registerStyleAction" ) );
-            add_action( "wp_enqueue_scripts", array( $this, "enqueueScriptAction" ) );
-            add_action( "wp_enqueue_scripts", array( $this, "enqueueStyleAction" ) );
+        if (kt_isset_and_not_empty($this->getAssetsConfigurator())) {
+            add_action("init", array($this, "registerScriptsAction"));
+            add_action("init", array($this, "registerStyleAction"));
+            add_action("wp_enqueue_scripts", array($this, "enqueueScriptAction"));
+            add_action("wp_enqueue_scripts", array($this, "enqueueStyleAction"));
         }
 
-        if ( kt_isset_and_not_empty( $this->getThemeSettingPage() ) ) {
-            $themeSettings = new KT_Custom_Metaboxes_Subpage( "themes.php", __( "Nastavení šablony", KT_DOMAIN ), __( "Nastavení šablony", KT_DOMAIN ), "update_core", self::THEME_SETTING_PAGE_SLUG );
+        if (kt_isset_and_not_empty($this->getThemeSettingPage())) {
+            $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", KT_DOMAIN), __("Nastavení šablony", KT_DOMAIN), "update_core", self::THEME_SETTING_PAGE_SLUG);
             $themeSettings->setRenderSaveButton()->register();
         }
     }
@@ -336,8 +336,8 @@ final class KT_WP_Configurator {
      * @param string $key
      * @param string $label
      */
-    public function addWpMenu( $key, $label ) {
-        $this->wpMenuCollection[ $key ] = $label;
+    public function addWpMenu($key, $label) {
+        $this->wpMenuCollection[$key] = $label;
 
         return $this;
     }
@@ -351,8 +351,8 @@ final class KT_WP_Configurator {
      * @param string $name
      * @return \KT_WP_Configurator
      */
-    public function addWidget( $name ) {
-        array_push( $this->widgetsCollection, $name );
+    public function addWidget($name) {
+        array_push($this->widgetsCollection, $name);
         return $this;
     }
 
@@ -367,25 +367,39 @@ final class KT_WP_Configurator {
      * @param int $height
      * @param boolean $crop
      */
-    public function addImageSize( $key, $width, $height, $crop = true ) {
-        add_image_size( $key, $width, $height, $crop );
+    public function addImageSize($key, $width, $height, $crop = true) {
+        add_image_size($key, $width, $height, $crop);
 
         return $this;
     }
 
     /**
-     * Přidám Theme Support do Wordpressu
-     * $tsSetting - dle WP Codexu - v případě použití thumbnails a post-formats se definuje pole post_types
+     * Přidá Theme Support do Wordpressu
+     * $postTypes - dle WP Codexu - v případě použití thumbnails a post-formats se definuje pole post_types
      *
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
      * @link http://www.ktstudio.cz
      *
-     * @param string $tsName
-     * @param array $tsSetting
+     * @param string $feature
+     * @param array $postTypes
      */
-    public function addThemeSupport( $tsName, array $tsSetting ) {
-        add_theme_support( $tsName, $tsSetting );
+    public function addThemeSupport($feature, array $postTypes) {
+        add_theme_support($feature, $postTypes);
+        return $this;
+    }
 
+    /**
+     * Přidá Post Type Support do Wordpressu
+     * $postTypes - pole post_types
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $feature
+     * @param array $postTypes
+     */
+    public function addPostTypeSupport($feature, array $postTypes) {
+        add_post_type_support($feature, $postTypes);
         return $this;
     }
 
@@ -399,12 +413,12 @@ final class KT_WP_Configurator {
      * @param type $slug
      * @return \KT_WP_Sidebar_Configurator
      */
-    public function addSidebar( $slug ) {
+    public function addSidebar($slug) {
         $newSidebar = new KT_WP_Sidebar_Configurator();
-        $newSidebar->setId( $slug );
+        $newSidebar->setId($slug);
 
-        $this->sidebarCollection[ $slug ] = $newSidebar;
-        return $this->sidebarCollection[ $slug ];
+        $this->sidebarCollection[$slug] = $newSidebar;
+        return $this->sidebarCollection[$slug];
     }
 
     /**
@@ -417,9 +431,9 @@ final class KT_WP_Configurator {
      */
     public function metaboxRemover() {
 
-        if ( kt_not_isset_or_empty( $this->getMetaboxRemover() ) ) {
+        if (kt_not_isset_or_empty($this->getMetaboxRemover())) {
             $metaboxRemover = new KT_WP_Metabox_Remover_Configurator();
-            $this->setMetaboxRemover( $metaboxRemover );
+            $this->setMetaboxRemover($metaboxRemover);
         }
 
         return $this->getMetaboxRemover();
@@ -436,9 +450,9 @@ final class KT_WP_Configurator {
     public function pageRemover() {
 
         $pageRemover = $this->getPageRemover();
-        if ( kt_not_isset_or_empty( $pageRemover ) ) {
+        if (kt_not_isset_or_empty($pageRemover)) {
             $pageRemover = new KT_WP_Page_Remover_Configurator();
-            $this->setPageRemover( $pageRemover );
+            $this->setPageRemover($pageRemover);
         }
 
         return $pageRemover;
@@ -455,9 +469,9 @@ final class KT_WP_Configurator {
     public function widgetRemover() {
 
         $widgetRemover = $this->getWidgetRemover();
-        if ( kt_not_isset_or_empty( $widgetRemover ) ) {
+        if (kt_not_isset_or_empty($widgetRemover)) {
             $widgetRemover = new KT_WP_Widget_Remover_Configurator();
-            $this->setWidgetRemover( $widgetRemover );
+            $this->setWidgetRemover($widgetRemover);
         }
 
         return $widgetRemover;
@@ -473,7 +487,7 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Configurator
      */
     public function addUserProfilePhone() {
-        add_filter( "user_contactmethods", array( $this, "registerUserProfilePhone" ) );
+        add_filter("user_contactmethods", array($this, "registerUserProfilePhone"));
     }
 
     /**
@@ -486,12 +500,12 @@ final class KT_WP_Configurator {
      */
     public function assetsConfigurator() {
 
-        if ( kt_isset_and_not_empty( $this->getAssetsConfigurator() ) ) {
+        if (kt_isset_and_not_empty($this->getAssetsConfigurator())) {
             return $this->getAssetsConfigurator();
         }
 
         $assetsConfigurator = new KT_WP_Asset_Configurator();
-        $this->setAssetsConfigurator( $assetsConfigurator );
+        $this->setAssetsConfigurator($assetsConfigurator);
 
         return $this->getAssetsConfigurator();
     }
@@ -508,8 +522,8 @@ final class KT_WP_Configurator {
      * @param array $profileFields
      * @return array
      */
-    function registerUserProfilePhone( $profileFields ) {
-        $profileFields[ KT_User_Profile_Config::PHONE ] = __( "Telefon", KT_DOMAIN );
+    function registerUserProfilePhone($profileFields) {
+        $profileFields[KT_User_Profile_Config::PHONE] = __("Telefon", KT_DOMAIN);
         return $profileFields;
     }
 
@@ -523,8 +537,8 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Configurator
      */
     public function registerMenusAction() {
-        if ( kt_isset_and_not_empty( $this->getMenusCollection() ) ) {
-            register_nav_menus( $this->getMenusCollection() );
+        if (kt_isset_and_not_empty($this->getMenusCollection())) {
+            register_nav_menus($this->getMenusCollection());
         }
 
         return $this;
@@ -541,9 +555,9 @@ final class KT_WP_Configurator {
      */
     public function registerWidgetsAction() {
         $widgets = $this->getWidgetsCollection();
-        if ( kt_isset_and_not_empty( $widgets ) ) {
-            foreach ( $widgets as $widget ) {
-                register_widget( $widget );
+        if (kt_isset_and_not_empty($widgets)) {
+            foreach ($widgets as $widget) {
+                register_widget($widget);
             }
         }
         return $this;
@@ -559,9 +573,9 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Configurator
      */
     public function registersSidebarsAction() {
-        if ( kt_isset_and_not_empty( $this->getSidebarCollection() ) ) {
-            foreach ( $this->getSidebarCollection() as $sidebar ) {
-                register_sidebar( $sidebar->getSidebarData() );
+        if (kt_isset_and_not_empty($this->getSidebarCollection())) {
+            foreach ($this->getSidebarCollection() as $sidebar) {
+                register_sidebar($sidebar->getSidebarData());
             }
         }
 
@@ -578,8 +592,8 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Configurator
      */
     public function registerMetaboxRemoverAction() {
-        foreach ( $this->getMetaboxRemover()->getMetaboxRemoverData() as $removingMetaboxData ) {
-            remove_meta_box( $removingMetaboxData[ 0 ], $removingMetaboxData[ 1 ], $removingMetaboxData[ 2 ] );
+        foreach ($this->getMetaboxRemover()->getMetaboxRemoverData() as $removingMetaboxData) {
+            remove_meta_box($removingMetaboxData[0], $removingMetaboxData[1], $removingMetaboxData[2]);
         }
 
         return $this;
@@ -596,9 +610,9 @@ final class KT_WP_Configurator {
      */
     public function registerPageRemoverAction() {
         $collection = $this->getPageRemover()->getMenuCollection();
-        if ( kt_isset_and_not_empty( $collection ) ) {
-            foreach ( $collection as $menuSlug ) {
-                remove_menu_page( $menuSlug );
+        if (kt_isset_and_not_empty($collection)) {
+            foreach ($collection as $menuSlug) {
+                remove_menu_page($menuSlug);
             }
         }
 
@@ -615,9 +629,9 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Configurator
      */
     public function registerSubPageRemoverAction() {
-        if ( kt_isset_and_not_empty( $this->getPageRemover()->getSubMenuCollectoin() ) ) {
-            foreach ( $this->getPageRemover()->getSubMenuCollectoin() as $subMenuPageDef ) {
-                remove_submenu_page( $subMenuPageDef[ KT_WP_Page_Remover_Configurator::PAGE_KEY ], $subMenuPageDef[ KT_WP_Page_Remover_Configurator::SUBPAGE_KEY ] );
+        if (kt_isset_and_not_empty($this->getPageRemover()->getSubMenuCollectoin())) {
+            foreach ($this->getPageRemover()->getSubMenuCollectoin() as $subMenuPageDef) {
+                remove_submenu_page($subMenuPageDef[KT_WP_Page_Remover_Configurator::PAGE_KEY], $subMenuPageDef[KT_WP_Page_Remover_Configurator::SUBPAGE_KEY]);
             }
         }
 
@@ -634,8 +648,8 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Configurator
      */
     public function registerWidgetRemoverAction() {
-        foreach ( $this->getWidgetRemover()->getWidgetRemoverData() as $removingWidgetData ) {
-            unregister_widget( $removingWidgetData );
+        foreach ($this->getWidgetRemover()->getWidgetRemoverData() as $removingWidgetData) {
+            unregister_widget($removingWidgetData);
         }
         return $this;
     }
@@ -647,12 +661,12 @@ final class KT_WP_Configurator {
      * @param string $capability
      * @return \KT_WP_Configurator
      */
-    public function registerThemeSettingPageAction( $capability = "update_core" ) {
-        if ( kt_not_isset_or_empty( $this->getThemeSettingPage() ) ) {
+    public function registerThemeSettingPageAction($capability = "update_core") {
+        if (kt_not_isset_or_empty($this->getThemeSettingPage())) {
             return;
         }
 
-        $themeSettings = new KT_Custom_Metaboxes_Subpage( "themes.php", __( "Nastavení šablony", KT_DOMAIN ), __( "Nastavení šablony", KT_DOMAIN ), $capability, self::THEME_SETTING_PAGE_SLUG );
+        $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", KT_DOMAIN), __("Nastavení šablony", KT_DOMAIN), $capability, self::THEME_SETTING_PAGE_SLUG);
         $themeSettings->setRenderSaveButton()->register();
 
         return $this;
@@ -669,17 +683,17 @@ final class KT_WP_Configurator {
      */
     public function registerDeleteAttachmentWithPostAction() {
         $args = array(
-            "post_type"   => "attachment",
+            "post_type" => "attachment",
             "numberposts" => -1,
             "post_status" => null,
             "post_parent" => $post_id
         );
 
-        $attachments = get_posts( $args );
+        $attachments = get_posts($args);
 
-        if ( $attachments ) {
-            foreach ( $attachments as $attachment ) {
-                wp_delete_attachment( $attachment->ID, true );
+        if ($attachments) {
+            foreach ($attachments as $attachment) {
+                wp_delete_attachment($attachment->ID, true);
             }
         }
 
@@ -707,7 +721,7 @@ final class KT_WP_Configurator {
      * @link www.ktstudio.cz
      */
     public function registerLoginLogoImageAction() {
-        wp_enqueue_style( 'kt-core-style' );
+        wp_enqueue_style('kt-core-style');
     }
 
     /**
@@ -719,17 +733,17 @@ final class KT_WP_Configurator {
      */
     public function registerScriptsAction() {
 
-        if ( kt_not_isset_or_empty( $this->getAssetsConfigurator()->getScriptCollection() ) ) {
+        if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getScriptCollection())) {
             return;
         }
 
-        foreach ( $this->getAssetsConfigurator()->getScriptCollection() as $script ) {
+        foreach ($this->getAssetsConfigurator()->getScriptCollection() as $script) {
             /* @var $script \KT_WP_Script_Definition */
-            if ( kt_not_isset_or_empty( $script->getId() ) || kt_not_isset_or_empty( $script->getSource() ) ) {
+            if (kt_not_isset_or_empty($script->getId()) || kt_not_isset_or_empty($script->getSource())) {
                 continue;
             }
 
-            wp_register_script( $script->getId(), $script->getSource(), $script->getDeps(), $script->getVersion(), $script->getInFooter() );
+            wp_register_script($script->getId(), $script->getSource(), $script->getDeps(), $script->getVersion(), $script->getInFooter());
         }
     }
 
@@ -741,18 +755,18 @@ final class KT_WP_Configurator {
      * @link www.ktstudio.cz
      */
     public function enqueueScriptAction() {
-        if ( kt_not_isset_or_empty( $this->getAssetsConfigurator()->getScriptCollection() ) ) {
+        if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getScriptCollection())) {
             return null;
         }
 
-        foreach ( $this->getAssetsConfigurator()->getScriptCollection() as $script ) {
+        foreach ($this->getAssetsConfigurator()->getScriptCollection() as $script) {
             /* @var $script \KT_WP_Script_Definition */
-            if ( !wp_script_is( $script->getId(), "registered" ) ) {
+            if (!wp_script_is($script->getId(), "registered")) {
                 continue;
             }
 
-            if ( $script->getEnqueue() === true ) {
-                wp_enqueue_script( $script->getId() );
+            if ($script->getEnqueue() === true) {
+                wp_enqueue_script($script->getId());
             }
         }
     }
@@ -765,18 +779,18 @@ final class KT_WP_Configurator {
      * @link www.ktstudio.cz
      */
     public function registerStyleAction() {
-        if ( kt_not_isset_or_empty( $this->getAssetsConfigurator()->getStyleCollection() ) ) {
+        if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getStyleCollection())) {
             return null;
         }
 
-        foreach ( $this->getAssetsConfigurator()->getStyleCollection() as $style ) {
+        foreach ($this->getAssetsConfigurator()->getStyleCollection() as $style) {
             /* @var $style \KT_WP_Style_Definition */
 
-            if ( kt_not_isset_or_empty( $style->getId() ) || kt_not_isset_or_empty( $style->getSource() ) ) {
+            if (kt_not_isset_or_empty($style->getId()) || kt_not_isset_or_empty($style->getSource())) {
                 continue;
             }
 
-            wp_register_style( $style->getId(), $style->getSource(), $style->getDeps(), $style->getVersion(), $style->getMedia() );
+            wp_register_style($style->getId(), $style->getSource(), $style->getDeps(), $style->getVersion(), $style->getMedia());
         }
     }
 
@@ -788,18 +802,18 @@ final class KT_WP_Configurator {
      * @link www.ktstudio.cz
      */
     public function enqueueStyleAction() {
-        if ( kt_not_isset_or_empty( $this->getAssetsConfigurator()->getStyleCollection() ) ) {
+        if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getStyleCollection())) {
             return null;
         }
 
-        foreach ( $this->getAssetsConfigurator()->getStyleCollection() as $style ) {
+        foreach ($this->getAssetsConfigurator()->getStyleCollection() as $style) {
             /* @var $style \KT_WP_Style_Definition */
 
-            if ( !wp_style_is( $style->getId(), "registered" ) ) {
+            if (!wp_style_is($style->getId(), "registered")) {
                 continue;
             }
 
-            wp_enqueue_style( $style->getId() );
+            wp_enqueue_style($style->getId());
         }
     }
 
