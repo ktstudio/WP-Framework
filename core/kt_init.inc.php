@@ -28,7 +28,7 @@ define("KT_WP_NAV_MENU_ITEM_KEY", "nav_menu_item");
 // theme support
 define("KT_WP_THEME_SUPPORT_POST_THUMBNAILS_KEY", "post-thumbnails");
 // post type support
-define("KT_WP_POST_TYPE_SUPPORT_EXCERPT_KEY", "title");
+define("KT_WP_POST_TYPE_SUPPORT_TITLE_KEY", "title");
 define("KT_WP_POST_TYPE_SUPPORT_EDITOR_KEY", "editor");
 define("KT_WP_POST_TYPE_SUPPORT_AUTHOR_KEY", "author");
 define("KT_WP_POST_TYPE_SUPPORT_THUMBNAIL_KEY", "thumbnail");

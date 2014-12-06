@@ -21,6 +21,7 @@ final class KT_WP_Configurator {
     private $wpMenuCollection = array();
     private $widgetsCollection = array();
     private $sidebarCollection = array();
+    private $postTypesFeatures = array();
     private $excerptLenght = null;
     private $excerptText = null;
     private $metaboxRemover = null;
@@ -53,6 +54,13 @@ final class KT_WP_Configurator {
      */
     private function getSidebarCollection() {
         return $this->sidebarCollection;
+    }
+
+    /**
+     * @return array
+     */
+    private function getPostTypesFeatures() {
+        return $this->postTypesFeatures;
     }
 
     /**
@@ -274,14 +282,17 @@ final class KT_WP_Configurator {
         // registrace sidebar
         add_action("widgets_init", array($this, "registersSidebarsAction"));
 
+        // registrace post type support (features)
+        add_action("init", array($this, "registerPostTypeSupportAction"));
+
         // délka excreptu
         if (kt_isset_and_not_empty($this->getExcerptLength()) && $this->getExcerptLength() > 0) {
-            add_filter('excerpt_length', array($this, "getExcerptLength"));
+            add_filter("excerpt_length", array($this, "getExcerptLength"));
         }
 
         // text excreptu
         if (kt_isset_and_not_empty($this->getExcerptText())) {
-            add_filter('excerpt_more', array($this, "getExcerptText"));
+            add_filter("excerpt_more", array($this, "getExcerptText"));
         }
 
         // metabox remover
@@ -389,7 +400,7 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * Přidá Post Type Support do Wordpressu
+     * Přidá Post Type Support do Wordpressu, resp. zadanou vlastnost pro zadaní post typy
      * $postTypes - pole post_types
      *
      * @author Martin Hlaváč
@@ -399,7 +410,7 @@ final class KT_WP_Configurator {
      * @param array $postTypes
      */
     public function addPostTypeSupport($feature, array $postTypes) {
-        add_post_type_support($feature, $postTypes);
+        $this->postTypesFeatures[$feature] = $postTypes;
         return $this;
     }
 
@@ -537,10 +548,10 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Configurator
      */
     public function registerMenusAction() {
-        if (kt_isset_and_not_empty($this->getMenusCollection())) {
-            register_nav_menus($this->getMenusCollection());
+        $menus = $this->getMenusCollection();
+        if (kt_isset_and_not_empty($menus)) {
+            register_nav_menus($menus);
         }
-
         return $this;
     }
 
@@ -573,12 +584,33 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Configurator
      */
     public function registersSidebarsAction() {
-        if (kt_isset_and_not_empty($this->getSidebarCollection())) {
-            foreach ($this->getSidebarCollection() as $sidebar) {
+        $siderbars = $this->getSidebarCollection();
+        if (kt_isset_and_not_empty($siderbars)) {
+            foreach ($siderbars as $sidebar) {
                 register_sidebar($sidebar->getSidebarData());
             }
         }
+        return $this;
+    }
 
+    /**
+     * Provede registraci post type features (support)
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @link www.ktstudio.cz
+     *
+     * @return \KT_WP_Configurator
+     */
+    public function registerPostTypeSupportAction() {
+        $features = $this->getPostTypesFeatures();
+        if (kt_isset_and_not_empty($features)) {
+            foreach ($features as $feature => $postTypes) {
+                foreach ($postTypes as $postType) {
+                    add_post_type_support("$postType", "$feature");
+                }
+            }
+        }
         return $this;
     }
 
