@@ -165,7 +165,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
         return $this;
     }
 
-    // --- veřejné funkce -----------------------
+    // --- veřejné funkce ------------
 
     public function initPage() {
 
@@ -179,6 +179,41 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
         }
 
         return $this;
+    }
+    
+    // --- statické funkce ------------
+    
+    /**
+     * Vrátí přesný název založené screeny pro přidávání metaboxů do vlastní podstránky
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.KTStudio.cz
+     * 
+     * @param string $parentSlug // slug rodičovské stránky
+     * @param string $subPageSlug // slug podstránky
+     * @return string
+     */
+    public static function getCustomMetaboxSubPageScreenName($parentSlug, $subPageSlug) {
+
+        $WPHooksRename = array(
+            "index.php" => "dashboard",
+            "edit.php" => "post",
+            "upload.php" => "media",
+            "link-manager.php" => "links",
+            "edit.php?post_type=page" => "pages",
+            "edit-comments.php" => "comments",
+            "themes.php" => "appearance",
+            "plugins.php" => "plugins",
+            "users.php" => "users",
+            "tools.php" => "tools",
+            "options-general.php" => "settings",
+        );
+
+        if (isset($WPHooksRename[$parentSlug])) {
+            return $WPHooksRename[$parentSlug] . "_page_" . $subPageSlug;
+        }
+
+        return $parentSlug . "_page_" . $subPageSlug;
     }
 
 }
