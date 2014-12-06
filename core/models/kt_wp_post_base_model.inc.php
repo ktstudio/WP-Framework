@@ -315,27 +315,18 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Vrátí hodnotu z $wpdb->postmeta na základě zadaného meta_key
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Martin Hlaváč
      * @link www.ktstudio.cz
      *
-     * @param type $key
-     * @return null
+     * @param string $key
+     * @return string|null
      */
     public function getMetaValue($key) {
-        if (kt_not_isset_or_empty($this->metas)) {
-            $this->initMetas();
+        $metas = $this->getMetas();
+        $value = $this->metas[$key];
+        if (kt_isset_and_not_empty($value)) {
+            return $value;
         }
-
-        if (!isset($this->metas[$key])) {
-            return null;
-        }
-
-        $meta = $this->metas[$key];
-
-        if (kt_isset_and_not_empty($meta)) {
-            return $meta;
-        }
-
         return null;
     }
 

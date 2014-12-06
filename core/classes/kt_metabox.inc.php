@@ -16,6 +16,7 @@ class KT_MetaBox implements KT_Registrable {
     private $dataType;
     private $fieldset;
     private $isDefaultAutoSave = true;
+    private $pageTemplate;
     private $customCallback;
     private $className;
     private $idParamName;
@@ -280,6 +281,33 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
+     * Vrátí (název) šablony stránky, pokud je zadán
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getPageTemplate() {
+        return $this->pageTemplate;
+    }
+
+    /**
+     * Nastaví název) šablony stránky
+     * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované stránkám, které mají právě zadanou šablonu (template)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $pageTemplate
+     * @return \KT_MetaBox
+     */
+    public function setPageTemplate($pageTemplate) {
+        $this->pageTemplate = $pageTemplate;
+        return $this;
+    }
+
+    /**
      * Vrátí název případné vlastní funkce pro callback
      *
      * @author Martin Hlaváč
@@ -392,10 +420,12 @@ class KT_MetaBox implements KT_Registrable {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
-    public function add() {
-        add_meta_box(
-                $this->getId(), $this->getTitle(), array(&$this, "metaboxCallback"), $this->getScreen(), $this->getContext(), $this->getPriority(), array($this->getFieldset())
-        );
+    public function add($post) {
+        if ($this->CheckCanHandlePostRequest($post->ID)) {
+            add_meta_box(
+                    $this->getId(), $this->getTitle(), array(&$this, "metaboxCallback"), $this->getScreen(), $this->getContext(), $this->getPriority(), array($this->getFieldset())
+            );
+        }
     }
 
     /**
@@ -411,11 +441,13 @@ class KT_MetaBox implements KT_Registrable {
         if (wp_is_post_revision($postId)) {
             return;
         }
-        $isDefaultAutoSave = $this->getIsDefaultAutoSave();
-        if ($isDefaultAutoSave) {
-            $form = new KT_form();
-            $form->addFieldSetByObject($this->getFieldset());
-            $form->saveFieldsetToPostMeta($postId);
+        if ($this->CheckCanHandlePostRequest($postId)) {
+            $isDefaultAutoSave = $this->getIsDefaultAutoSave();
+            if ($isDefaultAutoSave) {
+                $form = new KT_form();
+                $form->addFieldSetByObject($this->getFieldset());
+                $form->saveFieldsetToPostMeta($postId);
+            }
         }
     }
 
@@ -615,6 +647,26 @@ class KT_MetaBox implements KT_Registrable {
             }
         }
         return null;
+    }
+
+    /**
+     * Interní kontrola zda je možné zpracovat post, resp. požadevek pro přidání, či uložení MetaBoxu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param integer $postId
+     * @return boolean
+     */
+    private function CheckCanHandlePostRequest($postId) {
+        $pageTemplate = $this->getPageTemplate();
+        if (kt_isset_and_not_empty($pageTemplate)) { // chceme kontrolovat (aktuální) page template
+            $currentPageTemplate = get_post_meta($postId, "_wp_page_template", true);
+            if ($currentPageTemplate !== $pageTemplate) { // (aktuální) page template nesedí => ručíme přidání metaboxu
+                return false;
+            }
+        }
+        return true;
     }
 
 }
