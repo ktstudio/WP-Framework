@@ -97,13 +97,13 @@ abstract class KT_WP_Post_Attachments_Base {
     // --- settery ------------------------
 
     /**
-     * Nastaví objekt postu, z kterého se budou obrázky pro galerii vyčítat
+     * Nastaví objekt postu, z kterého se budou attachmenty do kolekce načítat
      * 
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
      * @link http://www.ktstudio.cz 
      * 
      * @param WP_Post $post
-     * @return \KT_WP_Post_Gallery
+     * @return \KT_WP_Post_Attachments_Base
      */
     public function setPost(WP_Post $post) {
         $this->post = $post;
@@ -112,7 +112,7 @@ abstract class KT_WP_Post_Attachments_Base {
     }
 
     /**
-     * Nastaví, podle ktérého klíče se budou obrázky řadit
+     * Nastaví, podle ktérého klíče se budou attachmenty řadit
      * Parametry dle WP_Query : @link http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters
      * 
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
@@ -138,7 +138,7 @@ abstract class KT_WP_Post_Attachments_Base {
     }
 
     /**
-     * Nastaví maximální počet obrázků, který se má zobrazit.
+     * Nastaví maximální počet attachmentů, který se má zobrazit.
      * 
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
      * @link http://www.ktstudio.cz 
@@ -150,13 +150,13 @@ abstract class KT_WP_Post_Attachments_Base {
     }
 
     /**
-     * Nastaví třídu každému odkazu, který směřuje na largeSize obrázek
+     * Nastaví třídu každému odkazu, který směřuje na výsledký attachment
      * 
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
      * @link http://www.ktstudio.cz 
      * 
      * @param string $linkClass
-     * @return \KT_WP_Post_Gallery
+     * @return \KT_WP_Post_Attachments_Base
      */
     public function setLinkClass($linkClass) {
         $this->linkClass = $linkClass;
@@ -165,13 +165,13 @@ abstract class KT_WP_Post_Attachments_Base {
     }
 
     /**
-     * Nastaví titulek galerie - zobrazí se jako nadpis
+     * Nastaví titulek výpisu attachmentu - zobrazí se jako nadpis
      * 
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
      * @link http://www.ktstudio.cz 
      * 
      * @param string $galleryTitle
-     * @return \KT_WP_Post_Gallery
+     * @return \KT_WP_Post_Attachments_Base
      */
     public function setContainerTitle($galleryTitle) {
         $this->containerTitle = $galleryTitle;
@@ -189,7 +189,7 @@ abstract class KT_WP_Post_Attachments_Base {
      * @link http://www.ktstudio.cz 
      * 
      * @param type $galleryTitleContainer
-     * @return \KT_WP_Post_Gallery
+     * @return \KT_WP_Post_Attachments_Base
      */
     public function setContainerTitleHtmlTag($galleryTitleContainer) {
         $this->containerTitleHtmlTag = $galleryTitleContainer;
@@ -198,13 +198,13 @@ abstract class KT_WP_Post_Attachments_Base {
     }
 
     /**
-     * Nastaví kolekci všech obrázků použité v galerii
+     * Nastaví kolekci všech attachmentů
      * 
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
      * @link http://www.ktstudio.cz 
      * 
      * @param array $files
-     * @return \KT_WP_Post_Gallery
+     * @return \KT_WP_Post_Attachments_Base
      */
     protected function setFiles(array $files) {
         $this->files = $files;
@@ -215,7 +215,7 @@ abstract class KT_WP_Post_Attachments_Base {
     // --- veřejné funkce ------------
 
     /**
-     * Vrátí, zda má galerie načtené nějaké obrázky
+     * Vrátí, zda má kolekce načtené nějaké attachmenty
      * 
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
      * @link http://www.ktstudio.cz 
@@ -231,7 +231,7 @@ abstract class KT_WP_Post_Attachments_Base {
     }
 
     /**
-     * Na základě definovaných parametrů vytvoří hlavičku - začátek - galerie
+     * Na základě definovaných parametrů vytvoří hlavičku - začátek - výpisu attachmentů
      * 
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
      * @link http://www.ktstudio.cz 
