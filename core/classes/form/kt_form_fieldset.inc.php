@@ -311,6 +311,23 @@ class KT_Form_Fieldset {
 
         return $this;
     }
+    
+    /**
+     * Do kolekce fieldů přidá jeden field
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param KT_Field $field
+     * @return \KT_Form_Fieldset
+     */
+    public function addField(KT_Field $field){
+        $fieldsCollection = $this->getFields();
+        $fieldsCollection[$field->getName()] = $field;
+        $this->setFields($fieldsCollection);
+        
+        return $this;
+    }
 
     /**
      * Vrátí HTML v podobě tabulky s inputy dle field setu, nadpisem a kontainerem
