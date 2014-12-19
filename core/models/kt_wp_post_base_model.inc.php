@@ -323,9 +323,11 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      */
     public function getMetaValue($key) {
         $metas = $this->getMetas();
-        $value = $this->metas[$key];
-        if (kt_isset_and_not_empty($value)) {
-            return $value;
+        if (array_key_exists($key, $metas)) {
+            $value = $metas[$key];
+            if (kt_isset_and_not_empty($value)) {
+                return $value;
+            }
         }
         return null;
     }
