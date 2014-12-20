@@ -87,7 +87,6 @@ class KT_Text_Field extends KT_Field {
         $html .= "<input type=\"{$fieldType}\" ";
         $html .= $this->getBasicHtml();
         $html .= "value=\"{$this->getValue()}\" ";
-        $html .= "placeholder=\"{$this->getPlaceholder()}\" ";
         $html .= "/>";
 
         if ($this->hasErrorMsg()) {

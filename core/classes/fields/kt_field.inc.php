@@ -190,6 +190,24 @@ abstract class KT_Field {
 
         return $this;
     }
+    
+    /**
+     * Nastaví HTML parametr tabindex fieldu
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param type $tabindex
+     * @return \KT_Field
+     */
+    public function setTabindex($tabindex) {
+        $tabindex = kt_try_get_int($tabindex);
+        if(kt_is_id_format($tabindex)){
+            $this->addAttribute("tabindex", $tabindex);
+        }
+        
+        return $this;
+    }   
 
     /**
      * Nastavení kolekci Validotárů
@@ -200,7 +218,7 @@ abstract class KT_Field {
      * @param array $validators
      * @return \KT_Field
      */
-    public function setValidators(array $validators) {
+    private function setValidators(array $validators) {
         $this->validators = $validators;
         return $this;
     }
@@ -244,14 +262,14 @@ abstract class KT_Field {
     }
 
     /**
-     * @return stromg
+     * @return string
      */
     protected function getToolTip() {
         return $this->toolTip;
     }
 
     /**
-     * @return stromg
+     * @return string
      */
     public function getUnit() {
         return $this->unit;
@@ -265,26 +283,26 @@ abstract class KT_Field {
     }
 
     /**
-     * @return stromg
+     * @return string
      */
     public function getId() {
         return $this->id;
     }
 
     /**
-     * @return stromg
+     * @return string
      */
     public function getPlaceholder() {
         return $this->placeholder;
     }
 
     /**
-     * @return stromg
+     * @return string
      */
     private function getError() {
         return $this->error;
     }
-
+     
     /**
      * @return array
      */
@@ -407,7 +425,7 @@ abstract class KT_Field {
 
         $html .= $this->getAttributesContent();
 
-        $html .= $this->getPlaceholder() . " ";
+        $html .= "placeholder=\"{$this->getPlaceholder()}\"" . " ";
 
         if (kt_isset_and_not_empty($this->getToolTip())) {
             $html .= 'title="' . htmlspecialchars($this->getToolTip()) . '" ';
@@ -561,7 +579,7 @@ abstract class KT_Field {
     private function getAttributesContent() {
 
         $html = "";
-
+        
         if (kt_isset_and_not_empty($this->getAttributes())) {
             foreach ($this->getAttributes() as $key => $value) {
                 if (kt_isset_and_not_empty($value)) {
