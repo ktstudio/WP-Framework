@@ -2,6 +2,10 @@
 
 /**
  * Vypíše obrázek podle ID  v případné požadované velikosti
+ * 
+ * @author Martin Hlaváč
+ * @link www.ktstudio.cz
+ * 
  * @param int $id
  * @param string $alt
  * @param string $size
@@ -34,3 +38,26 @@ function kt_the_image_by_source($id, $alt, $size = "thumbnail") {
 function kt_get_image_theme($fileName) {
     return $url = get_template_directory_uri() . "/images/" . $fileName;
 }
+
+/**
+ * Nahrazení všech datových zdrojů tagů obrázků v zadaném HTML kódu za lazy (na základě skriptu unveil)
+ * 
+ * @author Martin Hlaváč
+ * @link www.ktstudio.cz
+ * 
+ * @param string $html
+ * @return string
+ */
+function kt_replace_images_lazy_src($html) {
+        $doc = new DOMDocument();
+        $doc->loadHTML('<?xml encoding="UTF-8">' . $html);
+        $tags = $doc->getElementsByTagName("img");
+        foreach ($tags as $tag) {
+            $oldSrc = $tag->getAttribute("src");
+            $newSrc = KT_CORE_IMAGES_URL . "/transparent.png";
+            $tag->setAttribute("src", $newSrc);
+            $tag->setAttribute("data-src", $oldSrc);
+        }
+        $doc->encoding = "UTF-8";
+        return $doc->saveHTML();
+    }

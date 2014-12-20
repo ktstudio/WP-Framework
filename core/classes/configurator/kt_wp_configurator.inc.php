@@ -31,6 +31,7 @@ final class KT_WP_Configurator {
     private $deleteImagesWithPost = false;
     private $displayLogo = true;
     private $assetsConfigurator = null;
+    private $isImagesLazyLoading = null;
 
     // --- gettery ----------------------
 
@@ -332,9 +333,21 @@ final class KT_WP_Configurator {
             add_action("wp_enqueue_scripts", array($this, "enqueueStyleAction"));
         }
 
+        // stránka nastavení šablony
         if (kt_isset_and_not_empty($this->getThemeSettingPage())) {
             $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", KT_DOMAIN), __("Nastavení šablony", KT_DOMAIN), "update_core", self::THEME_SETTING_PAGE_SLUG);
             $themeSettings->setRenderSaveButton()->register();
+        }
+
+        // (images) lazy loading
+        if ($this->isImagesLazyLoading === true) {
+            add_filter("post_thumbnail_html", array($this, "htmlImageLazyLoadingFilter"), 11);
+            add_filter("get_avatar", array($this, "htmlImageLazyLoadingFilter"), 11);
+            add_filter("the_content", array($this, "htmlImageLazyLoadingFilter"), 99);
+        } elseif ($this->isImagesLazyLoading === false) {
+            remove_filter("post_thumbnail_html", array($this, "htmlImageLazyLoadingFilter"), 11);
+            remove_filter("get_avatar", array($this, "htmlImageLazyLoadingFilter"), 11);
+            remove_filter("the_content", array($this, "htmlImageLazyLoadingFilter"), 99);
         }
     }
 
@@ -521,6 +534,16 @@ final class KT_WP_Configurator {
         return $this->getAssetsConfigurator();
     }
 
+    /**
+     * Aktivace automatické aplikace lazy loadingu na obrázky pomocí skriptu unveil
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public function setImagesLazyLoading($isImagesLazyLoading) {
+        $this->isImagesLazyLoading = $isImagesLazyLoading;
+    }
+
     // --- registrační funkce ---------------------------
 
     /**
@@ -533,7 +556,7 @@ final class KT_WP_Configurator {
      * @param array $profileFields
      * @return array
      */
-    function registerUserProfilePhone($profileFields) {
+    public function registerUserProfilePhone($profileFields) {
         $profileFields[KT_User_Profile_Config::PHONE] = __("Telefon", KT_DOMAIN);
         return $profileFields;
     }
@@ -849,11 +872,24 @@ final class KT_WP_Configurator {
         }
     }
 
+    /**
+     * Zpracování filtru za účelem aplikace lazy loadingu pro obrázky, resp. post thumbnaily
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @link www.ktstudio.cz
+     * 
+     * @param string $html
+     */
+    public function htmlImageLazyLoadingFilter($html) {
+        return kt_replace_images_lazy_src($html);
+    }
+
     // --- statické funkce --------------
 
     /**
      * Vrátí název WP_Screen base pro založenou stránku theme setting.
-     *
+     * 
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
      * @link www.ktstudio.cz
      *

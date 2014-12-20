@@ -94,12 +94,12 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @link www.ktstudio.cz
      *
      * @param string $imageSize
-     * @param array $imgAtt // parametry obrázky $key => $value
+     * @param array $imageAttr // parametry obrázky $key => $value
      * @param string $defaultImageSrc
      * @return mixed null || string
      */
-    public function getThumbnailImage($imageSize, array $imgAtt = array(), $defaultImageSrc = null) {
-        return self::getThumbnailImageByPost($this->getModel()->getPost(), $imageSize, $imgAtt, $defaultImageSrc);
+    public function getThumbnailImage($imageSize, array $imageAttr = array(), $defaultImageSrc = null, $isLazyLoading = true) {
+        return self::getThumbnailImageByPost($this->getModel()->getPost(), $imageSize, $imageAttr, $defaultImageSrc, $isLazyLoading);
     }
 
     // --- static public function
@@ -107,47 +107,52 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     /**
      * Vrátí HTML tag img s náhledovým obrázkem zadaného postu dle specifikace parametrů
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj, Martin Hlaváč
      * @link www.ktstudio.cz
      *
      * @param WP_Post $post
      * @param string $imageSize
-     * @param array $imgAtt // parametry obrázky $key => $value
+     * @param array $imageAttr // parametry obrázky $key => $value
      * @param string $defaultImageSrc
-     * @return mixed null || string
+     * @param boolean $isLazyLoading
+     * @return mixed string || null
      */
-    public static function getThumbnailImageByPost(WP_Post $post, $imageSize, array $imgAtt = array(), $defaultImageSrc = null) {
-
-        $attrString = "";
-        $html = "";
-
+    public static function getThumbnailImageByPost(WP_Post $post, $imageSize, array $imageAttr = array(), $defaultImageSrc = null, $isLazyLoading = true) {
         if (has_post_thumbnail($post->ID)) {
             $thumbnailId = get_post_thumbnail_id($post->ID);
             $image = wp_get_attachment_image_src($thumbnailId, $imageSize);
-            $src = $image[0];
+            $imageSrc = $image[0];
+            $imageAttr["width"] = $image[1];
+            $imageAttr["height"] = $image[2];
+            $imageAttr["alt"] = $post->post_title;
         } else {
-            $src = $defaultImageSrc;
+            $imageSrc = $defaultImageSrc;
         }
+        return self::getImageHtmlTag($imageSrc, $imageAttr, $isLazyLoading);
+    }
 
-        if (kt_not_isset_or_empty($src)) {
-            return null;
-        }
-
-        $defaultAttr = array(
-            "alt" => trim(strip_tags($post->post_title))
-        );
-
-        $parseAttr = wp_parse_args($imgAtt, $defaultAttr);
-
-        if (kt_isset_and_not_empty($parseAttr)) {
-            foreach ($parseAttr as $attrName => $attrValue) {
-                $attrString .= "$attrName=\"$attrValue\" ";
+    /**
+     * Sestavení HTML tagu obrázku na základě zadaných parametrů
+     * 
+     * @author Martin Hlaváč
+     * @link www.ktstudio.cz
+     * 
+     * @param string $imageSrc
+     * @param array $imageAttr
+     * @param boolean $isLazyLoading
+     * @return mixed string|null
+     */
+    public static function getImageHtmlTag($imageSrc, array $imageAttr = array()) {
+        if (kt_isset_and_not_empty($imageSrc)) {
+            $parseAttr = wp_parse_args($imageAttr);
+            if (kt_isset_and_not_empty($parseAttr)) {
+                foreach ($parseAttr as $attrName => $attrValue) {
+                    $attr .= " $attrName=\"$attrValue\"";
+                }
             }
+            return apply_filters("post_thumbnail_html", "<img src=\"$imageSrc\"$attr />");
         }
-
-        $html .= "<img src=\"$src\" $attrString>";
-
-        return $html;
+        return null;
     }
 
 }
