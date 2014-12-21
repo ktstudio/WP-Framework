@@ -322,6 +322,7 @@ class KT_Form_Fieldset {
      * @return \KT_Form_Fieldset
      */
     public function addField(KT_Field $field){
+        $field->setPostPrefix($this->getPostPrefix());
         $fieldsCollection = $this->getFields();
         $fieldsCollection[$field->getName()] = $field;
         $this->setFields($fieldsCollection);
@@ -334,11 +335,13 @@ class KT_Form_Fieldset {
      *
      * @author Tomáš Kocifaj
      * @link http://www.KTStudio.cz
+     * 
+     * @param string $class - CSS Class tabulky
      *
      * @return string - HTML
      *
      */
-    public function getInputsToTable() {
+    public function getInputsToTable( $class = null ) {
 
         $html = "";
 
@@ -346,7 +349,7 @@ class KT_Form_Fieldset {
 
             $html .= $this->getStartHtmlOfFieldSet();
 
-            $html .= "<table class=\"kt-form-table\">";
+            $html .= "<table class=\"kt-form-table $class\">";
 
             foreach ($this->getFields() as $field) {
                 if ($field->getFieldType() != KT_Hidden_Field::FIELD_TYPE) {
@@ -474,7 +477,7 @@ class KT_Form_Fieldset {
      *
      * @return mixed
      */
-    public function getInputsDataToTable() {
+    public function getInputsDataToTable($class = null) {
 
         if (!$this->hasFields()) {
             return null;
@@ -498,14 +501,11 @@ class KT_Form_Fieldset {
                 $unit = $field->getUnit();
             }
 
-            $fieldContent .= "<tr>";
-            $fieldContent .= "<td>{$field->getLabel()}</td>";
-            $fieldContent .= "<td>$value $unit</td>";
-            $fieldContent .= "<tr>";
+            $fieldContent .= $this->getInputDataToTr( $field );
         }
 
         if (kt_isset_and_not_empty($fieldContent)) {
-            $html = "<table id=\"{$this->getName()}\" class=\"kt-fieldset-data-table\">";
+            $html = "<table id=\"{$this->getName()}\" class=\"kt-fieldset-data-table $class\">";
             $html .= $fieldContent;
             $html .= "</table>";
 
@@ -514,6 +514,8 @@ class KT_Form_Fieldset {
 
         return null;
     }
+    
+    
 
     /**
      * Vrátí true zda fieldset obsahuje nějakou kolekci fieldu
@@ -779,6 +781,54 @@ class KT_Form_Fieldset {
      */
     private function getClassesString() {
         return $classString = implode(" ", $this->getClasses());
+    }
+    
+    /**
+     * Sestaví jeden TR řádek v podobě Label -> value (saved).
+     * Pokud je value prázdné, nebude ho vůbec zobrazovat.
+     * Pokud má Field definovaný Unit zobrazí ho pouze v případě, že se value rovná KT_EMPTY_TEXT (---)
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.KTStudio.cz
+     *
+     * @param KT_Field $field
+     * @return string
+    */
+    private function getInputDataToTr(KT_Field $field, $exclude_keys = array()) {
+
+        if (in_array($field->getName(), $exclude_keys)) {
+            return;
+        }
+        
+        if($field->getFieldType() == KT_Hidden_Field::FIELD_TYPE){
+            return;
+        }
+
+        $value = $field->getValue();
+        
+        if(
+            $field->getFieldType() == KT_Select_Field::FIELD_TYPE
+            ||
+            $field->getFieldType() == KT_Checkbox_Field::FIELD_TYPE
+            ||
+            $field->getFieldType() == KT_Radio_Field::FIELD_TYPE
+        ){
+            $fieldOption = $field->getDataManager()->getData();
+            $value = $fieldOption[$field->getValue()];
+        }
+
+        if (kt_not_isset_or_empty($value)) {
+            return;
+        }
+
+        $unit = $value == KT_EMPTY_TEXT ? "" : $field->getUnit();
+
+        $html = "<tr>";
+        $html .= "<td>{$field->getLabel()} </td>";
+        $html .= "<td>$value {$unit}</td>";
+        $html .= "</tr>";
+
+        return $html;
     }
 
 }

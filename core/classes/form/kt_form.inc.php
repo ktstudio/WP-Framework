@@ -506,15 +506,14 @@ class KT_Form {
      * @link http://www.KTStudio.cz
      *
      * @param string $class - class tabulky
-     * @param string $id - id tabulky
      */
-    public function getInputsToTable() {
+    public function getInputsToTable($class = null) {
 
         $html = "";
 
         if ($this->hasFieldset()) {
             foreach ($this->fieldsets as $fieldSet) {
-                $html .= $fieldSet->getInputsToTable();
+                $html .= $fieldSet->getInputsToTable( $class );
             }
         }
 
@@ -621,7 +620,7 @@ class KT_Form {
      * @param string $class
      * @return string
      */
-    public function getInputsDataToTable($exclude_keys = array(), $class = 'meta-info') {
+    public function getInputsDataToTable(array $exclude_keys = array(), $class = 'meta-info') {
 
         $html = "";
 
@@ -629,52 +628,14 @@ class KT_Form {
             return $html;
         }
 
-        $html = "<table class=\"{$class}\">";
+        $html .= "<table class=\"{$class}\">";
 
         foreach ($this->getFieldsets() as $fieldset) {
             /* @var $fieldset \KT_Form_Fieldset */
-            if ($fieldset->hasFields()) {
-                foreach ($fieldset->getFields() as $field) {
-                    /* @ar $field \KT_Field */
-                    $html .= $this->getInputDataToTr($field, $exclude_keys);
-                }
-            }
+            $fieldset->getInputsDataToTable($exclude_keys, $class);
         }
 
         $html .= "</table>";
-
-        return $html;
-    }
-
-    /**
-     * Sestaví jeden TR řádek v podobě Label -> value (saved).
-     * Pokud je value prázdné, nebude ho vůbec zobrazovat.
-     * Pokud má Field definovaný Unit zobrazí ho pouze v případě, že se value rovná KT_EMPTY_TEXT (---)
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
-     *
-     * @param KT_Field $field
-     * @return string
-     */
-    public function getInputDataToTr(KT_Field $field, $exclude_keys = array()) {
-
-        if (in_array($field->getName(), $exclude_keys)) {
-            return;
-        }
-
-        $value = $field->getValue(false);
-
-        if (kt_not_isset_or_empty($value)) {
-            return;
-        }
-
-        $unit = $value == KT_EMPTY_TEXT ? "" : $field->getUnit();
-
-        $html = "<tr>";
-        $html .= "<td>{$field->getLabel()}</td>";
-        $html .= "<td>$value {$unit}</td>";
-        $html .= "</tr>";
 
         return $html;
     }
