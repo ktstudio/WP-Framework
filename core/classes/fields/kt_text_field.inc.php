@@ -10,6 +10,7 @@ class KT_Text_Field extends KT_Field {
     const INPUT_URL = "url";
 
     private $inputType = self::FIELD_TYPE;
+    private $placeholder = null;
 
     /**
      * Založení objektu typu input type="text || number || email || password"
@@ -56,6 +57,43 @@ class KT_Text_Field extends KT_Field {
 
         throw new KT_Not_Set_Argument_Exception("type");
     }
+    
+    /**
+     * Nastavení placeholderu elementu fieldu - attr placeholder
+     * Neřeší starší prohlížeče.
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.KTStudio.cz
+     * 
+     * @param string $placeholder
+     * @return \KT_Field
+    */
+    public function setPlaceholder($placeholder) {
+        $this->placeholder = $placeholder;
+
+        return $this;
+    }
+    
+    // --- gettery ------------
+    
+    /**
+     * Vrátí typ fieldu
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.KTStudio.cz
+     *
+     * @return string
+     */
+    public function getFieldType() {
+        return self::FIELD_TYPE;
+    }
+    
+    /**
+     * @return string
+    */
+    public function getPlaceholder() {
+        return $this->placeholder;
+    }
 
     // --- veařejné funkce -----------------
 
@@ -86,6 +124,9 @@ class KT_Text_Field extends KT_Field {
 
         $html .= "<input type=\"{$fieldType}\" ";
         $html .= $this->getBasicHtml();
+        
+        $html .= "placeholder=\"{$this->getPlaceholder()}\"" . " ";
+        
         $html .= "value=\"{$this->getValue()}\" ";
         $html .= "/>";
 
@@ -126,17 +167,4 @@ class KT_Text_Field extends KT_Field {
 
         return $fieldValue;
     }
-
-    /**
-     * Vrátí typ fieldu
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
-     *
-     * @return string
-     */
-    public function getFieldType() {
-        return self::FIELD_TYPE;
-    }
-
 }

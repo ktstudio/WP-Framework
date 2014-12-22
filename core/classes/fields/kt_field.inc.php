@@ -11,7 +11,6 @@ abstract class KT_Field {
     private $unit = null;
     private $classes = array(self::DEFAULT_CLASS);
     private $id = null;
-    private $placeholder = null;
     private $value = null;
     private $error = false;
     private $validators = array();
@@ -140,22 +139,6 @@ abstract class KT_Field {
      */
     public function setId($id) {
         $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Nastavení placeholderu elementu fieldu - attr placeholder
-     * Neřeší starší prohlížeče.
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
-     * 
-     * @param string $placeholder
-     * @return \KT_Field
-     */
-    public function setPlaceholder($placeholder) {
-        $this->placeholder = $placeholder;
 
         return $this;
     }
@@ -292,13 +275,6 @@ abstract class KT_Field {
     /**
      * @return string
      */
-    public function getPlaceholder() {
-        return $this->placeholder;
-    }
-
-    /**
-     * @return string
-     */
     private function getError() {
         return $this->error;
     }
@@ -424,8 +400,6 @@ abstract class KT_Field {
         $html .= "id=\"" . static::getId() . "\" ";
 
         $html .= $this->getAttributesContent();
-
-        $html .= "placeholder=\"{$this->getPlaceholder()}\"" . " ";
 
         if (kt_isset_and_not_empty($this->getToolTip())) {
             $html .= 'title="' . htmlspecialchars($this->getToolTip()) . '" ';
