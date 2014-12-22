@@ -49,15 +49,14 @@ function kt_get_image_theme($fileName) {
  * @return string
  */
 function kt_replace_images_lazy_src($html) {
-        $doc = new DOMDocument();
-        $doc->loadHTML('<?xml encoding="UTF-8">' . $html);
-        $tags = $doc->getElementsByTagName("img");
-        foreach ($tags as $tag) {
-            $oldSrc = $tag->getAttribute("src");
-            $newSrc = KT_CORE_IMAGES_URL . "/transparent.png";
-            $tag->setAttribute("src", $newSrc);
-            $tag->setAttribute("data-src", $oldSrc);
-        }
-        $doc->encoding = "UTF-8";
-        return $doc->saveHTML();
+    $dom = new DOMDocument();
+    $dom->preserveWhiteSpace = false;
+    $dom->loadHTML($html);
+    $imageTags = $dom->getElementsByTagName("img");
+    foreach ($imageTags as $imageTag) {
+        $oldSrc = $imageTag->getAttribute("src");
+        $newSrc = KT_CORE_IMAGES_URL . "/transparent.png";
+        $html = str_replace("src=\"$oldSrc\"", "src=\"$newSrc\" data-src=\"$oldSrc\"", $html);
     }
+    return $html;
+}
