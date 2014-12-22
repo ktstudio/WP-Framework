@@ -51,7 +51,7 @@ class KT_Radio_Field extends KT_Options_Field_Base {
             $html .= $this->getBasicHtml();
             $html .= "value=\"$key\" ";
 
-            if ($key == $this->getValue()) {
+            if ($key == $this->getValue() && $this->getValue() !== null) {
                 $html .= "checked=\"checked\"";
             }
 

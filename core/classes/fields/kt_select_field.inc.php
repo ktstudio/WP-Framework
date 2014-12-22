@@ -103,9 +103,9 @@ class KT_Select_Field extends KT_Options_Field_Base {
         if ($this->getFirstEmpty() == true) {
             $html .= $emptyOption;
         }
-
-        foreach ($this->getOptionsData() as $key => $val) {
-            if ($key === $this->getValue()) {
+        
+       foreach ($this->getOptionsData() as $key => $val) {
+            if ($key == $this->getValue() && $this->getValue() !== null) {
                 $selected = "selected=\"selected\"";
             }
 
