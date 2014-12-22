@@ -616,11 +616,11 @@ class KT_Form {
      * @author Tomáš Kocifaj
      * @link http://www.KTStudio.cz
      *
-     * @param array $exclude_keys - které filedy se nebudou zobrazovat $field->name
+     * @param array $excludeFields - které filedy se nebudou zobrazovat $field->name
      * @param string $class
      * @return string
      */
-    public function getInputsDataToTable(array $exclude_keys = array(), $class = 'meta-info') {
+    public function getInputsDataToTable(array $excludeFields = array(), $class = 'meta-info') {
 
         $html = "";
 
@@ -632,7 +632,7 @@ class KT_Form {
 
         foreach ($this->getFieldsets() as $fieldset) {
             /* @var $fieldset \KT_Form_Fieldset */
-            $fieldset->getInputsDataToTable($exclude_keys, $class);
+            $html .= $fieldset->getInputsDataToTable($excludeFields, $class);
         }
 
         $html .= "</table>";

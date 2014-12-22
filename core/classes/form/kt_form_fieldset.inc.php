@@ -474,10 +474,13 @@ class KT_Form_Fieldset {
      *
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
      * @link www.ktstudio.cz
+     * 
+     * @param array $excludeFields - které filedy se nebudou zobrazovat $field->name
+     * @param string $class
      *
      * @return mixed
      */
-    public function getInputsDataToTable($class = null) {
+    public function getInputsDataToTable(array $excludeFields = array(), $class = null) {
 
         if (!$this->hasFields()) {
             return null;
@@ -490,10 +493,14 @@ class KT_Form_Fieldset {
 
         foreach ($this->getFields() as $field) {
             /* @var $field \KT_Field */
+            
+            if(in_array($field->getName(), $excludeFields)){
+                continue;
+            }
 
             $value = $field->getValue();
 
-            if (kt_not_isset_or_empty($value)) {
+            if ($value === "") {
                 continue;
             }
 
