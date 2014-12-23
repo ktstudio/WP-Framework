@@ -1,6 +1,6 @@
 <?php
 
-abstract class KT_Crud implements KT_Identifiable {
+abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
     private $table = null; // Název tabulky, kde se bude provádět CRUD
     private $tablePrefix = ""; // Prefix sloupců v tabulce

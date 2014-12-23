@@ -17,7 +17,6 @@ class KT_Language_Base_Model extends KT_Catalog_Base_Model {
 
     /**
      * Výchozí konstruktor, který dodá údaje pro @see KT_Crud
-     * Je možné zadat id existující záznamu (detail) nebo ne (nový)
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
