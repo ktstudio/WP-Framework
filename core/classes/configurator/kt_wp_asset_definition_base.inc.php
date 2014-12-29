@@ -7,6 +7,7 @@ abstract class KT_WP_Asset_Definition_Base {
     private $deps = array();
     private $version = null;
     private $enqueue = false;
+    private $backEndScript = false;
 
     /**
      * Abstraktní třída pro definici a zakládní Assetů v rámci Wordpressu
@@ -62,10 +63,17 @@ abstract class KT_WP_Asset_Definition_Base {
     }
 
     /**
-     * @return boolean
+     * @return Boolean
      */
     public function getEnqueue() {
         return $this->enqueue;
+    }
+    
+    /**
+     * @return Boolean
+     */
+    public function getBackEndScript(){
+        return $this->backEndScript;
     }
 
     // --- settery ------------
@@ -140,6 +148,17 @@ abstract class KT_WP_Asset_Definition_Base {
      */
     public function setEnqueue($enqueue = true) {
         $this->enqueue = $enqueue;
+        return $this;
+    }
+    
+    /**
+     * Nastaví, zda se má script / styl volat v hlavičce administrace namísto Front-endu
+     * 
+     * @param Boolean $isBackEndScript
+     * @return \KT_WP_Asset_Definition_Base
+     */
+    public function setBackEndScript($isBackEndScript = true){
+        $this->backEndScript = $isBackEndScript;
         return $this;
     }
 

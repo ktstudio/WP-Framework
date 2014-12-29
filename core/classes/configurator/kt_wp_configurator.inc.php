@@ -32,6 +32,7 @@ final class KT_WP_Configurator {
     private $displayLogo = true;
     private $assetsConfigurator = null;
     private $isImagesLazyLoading = null;
+    private $sessionEnable = false;
 
     // --- gettery ----------------------
 
@@ -125,6 +126,13 @@ final class KT_WP_Configurator {
      */
     private function getAssetsConfigurator() {
         return $this->assetsConfigurator;
+    }
+    
+    /**
+     * @return boolean
+     */
+    private function getSessionEnable(){
+        return $this->sessionEnable;
     }
 
     // --- settery ----------------------
@@ -263,6 +271,20 @@ final class KT_WP_Configurator {
         $this->assetsConfigurator = $assetsConfigurator;
         return $this;
     }
+    
+    /**
+     * Nastaví, zda se má v rámci šablony zapnout SESSION pro WP
+     * 
+     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @link http://www.ktstudio.cz
+     * 
+     * @param type $sessionEnable
+     * @return \KT_WP_Configurator
+     */
+    public function setSessionEnable($sessionEnable = true){
+        $this->sessionEnable = $sessionEnable;
+        return $this;
+    }
 
     // --- veřejné funkce ---------------
 
@@ -331,6 +353,8 @@ final class KT_WP_Configurator {
             add_action("init", array($this, "registerStyleAction"));
             add_action("wp_enqueue_scripts", array($this, "enqueueScriptAction"));
             add_action("wp_enqueue_scripts", array($this, "enqueueStyleAction"));
+            add_action("admin_enqueue_scripts", array($this, "enqueueScriptActionForAdmin"));
+            add_action("admin_enqueue_scripts", array($this, "enqueueStyleActionForAdmin"));
         }
 
         // stránka nastavení šablony
@@ -348,6 +372,13 @@ final class KT_WP_Configurator {
             remove_filter("post_thumbnail_html", array($this, "htmlImageLazyLoadingFilter"), 11);
             remove_filter("get_avatar", array($this, "htmlImageLazyLoadingFilter"), 11);
             remove_filter("the_content", array($this, "htmlImageLazyLoadingFilter"), 99);
+        }
+        
+        // session
+        if($this->getSessionEnable() === true){
+            add_action('init', array($this, 'startSesson'), 1);
+            add_action('wp_logout', array($this, 'endSession'));
+            add_action('wp_login', array($this, 'endSession'));
         }
     }
 
@@ -801,32 +832,8 @@ final class KT_WP_Configurator {
             wp_register_script($script->getId(), $script->getSource(), $script->getDeps(), $script->getVersion(), $script->getInFooter());
         }
     }
-
-    /**
-     * Provede vložení scriptů, které mají nastaveno načtení, do frotnendu
-     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
-     */
-    public function enqueueScriptAction() {
-        if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getScriptCollection())) {
-            return null;
-        }
-
-        foreach ($this->getAssetsConfigurator()->getScriptCollection() as $script) {
-            /* @var $script \KT_WP_Script_Definition */
-            if (!wp_script_is($script->getId(), "registered")) {
-                continue;
-            }
-
-            if ($script->getEnqueue() === true) {
-                wp_enqueue_script($script->getId());
-            }
-        }
-    }
-
-    /**
+    
+        /**
      * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      * 
@@ -850,6 +857,34 @@ final class KT_WP_Configurator {
     }
 
     /**
+     * Provede vložení scriptů, které mají nastaveno načtení, do frotnendu
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     * 
+     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @link www.ktstudio.cz
+     */
+    public function enqueueScriptAction() {
+        if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getScriptCollection())) {
+            return null;
+        }
+
+        foreach ($this->getAssetsConfigurator()->getScriptCollection() as $script) {
+            /* @var $script \KT_WP_Script_Definition */
+            if (!wp_script_is($script->getId(), "registered")) {
+                continue;
+            }
+            
+            if($script->getBackEndScript()){
+                continue;
+            }
+
+            if ($script->getEnqueue() === true) {
+                wp_enqueue_script($script->getId());
+            }
+        }
+    }
+    
+    /**
      * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      * 
@@ -865,6 +900,65 @@ final class KT_WP_Configurator {
             /* @var $style \KT_WP_Style_Definition */
 
             if (!wp_style_is($style->getId(), "registered")) {
+                continue;
+            }
+            
+            if($style->getBackEndScript()){
+                continue;
+            }
+
+            wp_enqueue_style($style->getId());
+        }
+    }
+    
+    /**
+     * Provede vložení scriptů, které mají nastaveno načtení, do admin sekce
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     * 
+     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @link www.ktstudio.cz
+     */
+    public function enqueueScriptActionForAdmin() {
+        if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getScriptCollection())) {
+            return null;
+        }
+
+        foreach ($this->getAssetsConfigurator()->getScriptCollection() as $script) {
+            /* @var $script \KT_WP_Script_Definition */
+            if (!wp_script_is($script->getId(), "registered")) {
+                continue;
+            }
+            
+            if( ! $script->getBackEndScript()){
+                continue;
+            }
+
+            if ($script->getEnqueue() === true) {
+                wp_enqueue_script($script->getId());
+            }
+        }
+    }
+    
+    /**
+     * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru v rámci admin sekce
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     * 
+     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @link www.ktstudio.cz
+     */
+    public function enqueueStyleActionForAdmin() {
+        if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getStyleCollection())) {
+            return null;
+        }
+
+        foreach ($this->getAssetsConfigurator()->getStyleCollection() as $style) {
+            /* @var $style \KT_WP_Style_Definition */
+
+            if (!wp_style_is($style->getId(), "registered")) {
+                continue;
+            }
+            
+            if( ! $style->getBackEndScript()){
                 continue;
             }
 
@@ -883,6 +977,28 @@ final class KT_WP_Configurator {
      */
     public function htmlImageLazyLoadingFilter($html) {
         return kt_replace_images_lazy_src($html);
+    }
+    
+    /**
+     * Povolení a zahájení SESSION v rámci WP
+     * 
+     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @link www.ktstudio.cz
+     */
+    public function startSesson(){
+        if(!session_id()) {
+            session_start();
+        }
+    }
+    
+    /**
+     * Obsluha ukončení SESSION v rámci WP
+     * 
+     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @link www.ktstudio.cz
+     */
+    public function endSession(){
+        session_destroy();
     }
 
     // --- statické funkce --------------
