@@ -7,6 +7,10 @@
  * @link http://www.ktstudio.cz
  */
 class KT_MetaBox implements KT_Registrable {
+    
+    const CONTEXT_NORMAL = "normal";
+    const CONTEXT_ADVANCED = "advanced";
+    const CONTEXT_SIDE = "side";
 
     private $id;
     private $title;
