@@ -116,7 +116,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
 
         $html .= $this->getContainerHeader();
 
-        $html .= "<div id=\"$id postGalleryId-{$this->getPost()->ID}\" class=\"$class {$this->getPost()->post_type}\">";
+        $html .= "<div id=\"$id\" class=\"$class {$this->getPost()->post_type} postGalleryId-{$this->getPost()->ID}\">";
 
         foreach ($this->getFiles() as $image) {
             /* @var $image \WP_Post */
