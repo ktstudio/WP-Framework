@@ -267,7 +267,11 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * @param string $value
      * @return \KT_Crud
      */
-    public function addNewColumnToData($name, $value) {
+    public function addNewColumnToData($name, $value = null) {
+        if(kt_isset_and_not_empty($value)){
+            return $this;
+        }
+        
         $currentDataCollection = $this->getData();
         $currentDataCollection[$name] = $value;
         $this->setData($currentDataCollection);
@@ -292,6 +296,19 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
         }
 
         return $this;
+    }
+    
+    /**
+     * Na základě předaného názvu sloupce jeho uloženou hodnotu
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.KTStudio.cz
+     * 
+     * @param string $column
+     * @return string || int
+     */
+    public function getColumnValue($column){
+        return $this->$column;
     }
 
     /**
@@ -514,5 +531,4 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
         return $this;
     }
-
 }

@@ -11,6 +11,12 @@
  */
 class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
 
+    const ID_COLUMN = "id";
+    const TITLE_COLUMN = "title";
+    const DESCRIPTION_COLUMN = "title";
+    const CODE_COLUMN = "code";
+    const VISIBILITY_COLUMN = "visibility";
+    
     /**
      * Výchozí konstruktor ala @see KT_Crud = DB table (row)
      *
@@ -35,7 +41,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @return string
      */
     public function getTitle() {
-        return $this->title;
+        return $title = $this->getColumnValue(self::TITLE_COLUMN);
     }
 
     /**
@@ -50,7 +56,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      */
     public function setTitle($title) {
         if (kt_isset_and_not_empty($title)) {
-            $this->title = $title;
+            $this->addNewColumnToData(self::TITLE_COLUMN, $title);
             return $this;
         }
         throw new KT_Not_Set_Argument_Exception("title");
@@ -65,7 +71,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @return string
      */
     public function getDescription() {
-        return $this->description;
+        return $description = $this->getColumnValue(self::DESCRIPTION_COLUMN);
     }
 
     /**
@@ -77,8 +83,8 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @param string $description
      * @return \KT_Catalog_Base_Model
      */
-    public function setDescription($description) {
-        $this->description = $description;
+    public function setDescription($description = null) {
+        $this->addNewColumnToData(self::DESCRIPTION_COLUMN, $description);
         return $this;
     }
 
@@ -91,7 +97,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @return string|integer
      */
     public function getCode() {
-        return $this->code;
+        return $code = $this->getColumnValue(self::CODE_COLUMN);
     }
 
     /**
@@ -106,7 +112,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      */
     public function setCode($code) {
         if (kt_isset_and_not_empty($code)) {
-            $this->code = $code;
+            $this->addNewColumnToData(self::CODE_COLUMN, $code);
             return $this;
         }
         throw new KT_Not_Set_Argument_Exception("code");
@@ -121,7 +127,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @return boolean
      */
     public function getVisibility() {
-        return $this->visibility;
+        return $visibility = $this->getColumnValue(self::VISIBILITY_COLUMN);
     }
 
     /**
@@ -138,10 +144,10 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
     public function setVisibility($visibility) {
         if (isset($visibility)) {
             if ($visibility === true || $visibility == 1) {
-                $this->visibility = 1;
+                $this->addNewColumnToData(self::VISIBILITY_COLUMN, 1);
                 return $this;
             } elseif ($visibility === false || $visibility == 0) {
-                $this->visibility = 0;
+                $this->addNewColumnToData(self::VISIBILITY_COLUMN, 0);
                 return $this;
             }
             throw new InvalidArgumentException("visibility");
