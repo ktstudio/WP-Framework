@@ -11,6 +11,11 @@ class KT_MetaBox implements KT_Registrable {
     const CONTEXT_NORMAL = "normal";
     const CONTEXT_ADVANCED = "advanced";
     const CONTEXT_SIDE = "side";
+    
+    const PRIORITY_LOW = "low";
+    const PRIORITY_HIGHT = "hight";
+    const PRIORITY_DEFAULT = "default";
+    const PRIORITY_CORE = "core";
 
     private $id;
     private $title;
