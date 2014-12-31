@@ -17,7 +17,6 @@ function kt_show_admin_page($path, $page, $action = null) {
             default: // list
                 require_once (path_join($path, "kt_{$page}_list.tmp.php"));
         }
-
         echo "</div>";
     } else {
         throw new KT_Not_Set_Argument_Exception("page");
