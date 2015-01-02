@@ -2,7 +2,8 @@
 
 abstract class KT_Custom_Metaboxes_Base {
 
-    const KT_METABOX_SCREEN = 'metaboxes';
+    const KT_METABOX_SCREEN = "metaboxes";
+    const KT_CRUD_LIST_SCREEN = "crud-list";
     const KT_COLUMN_ONE = 1;
     const KT_COLUMN_TWO = 2;
 
@@ -11,6 +12,7 @@ abstract class KT_Custom_Metaboxes_Base {
     private $screenCollection = array();
     private $defaultCallbackFunction = array();
     private $metaboxCollection = array();
+    private $crudList = null;
 
     /**
      * Abstraktní třída pro zakládání a definování stránke v rámci WP administrace
@@ -49,17 +51,25 @@ abstract class KT_Custom_Metaboxes_Base {
     /**
      * @return array
      */
-    public function getDefaultCallbackFunction() {
+    public function getDefaultCallbackFunction() {      
         return $this->defaultCallbackFunction;
     }
 
     /**
      * @return array
      */
-    function getMetaboxCollection() {
+    public function getMetaboxCollection() {
         return $this->metaboxCollection;
     }
+    
+    /**
+     * @return \KT_CRUD_List
+     */
+    public function getCrudList() {
+        return $this->crudList;
+    }
 
+    
     // --- settery ----------------------
 
     /**
@@ -146,9 +156,23 @@ abstract class KT_Custom_Metaboxes_Base {
      * @param array $metaboxCollection
      * @return \KT_Custom_metaboxes_Base
      */
-    function setMetaboxCollection($metaboxCollection) {
+    public function setMetaboxCollection($metaboxCollection) {
         $this->metaboxCollection = $metaboxCollection;
 
+        return $this;
+    }
+    
+    /**
+     * Nastaví KT_CRUD_List objekt pro zobrazení tabulky s daty
+     * 
+     * @author Tomáš Kocifaj
+     * @link http//www.KTstudio.cz
+     * 
+     * @param KT_CRUD_List $crudList
+     * @return \KT_Custom_Metaboxes_Base
+     */
+    public function setCrudList(KT_CRUD_List $crudList){
+        $this->crudList = $crudList;
         return $this;
     }
 
@@ -163,6 +187,19 @@ abstract class KT_Custom_Metaboxes_Base {
     abstract function getSlug();
 
     // --- veřejné funkce funkce ------------
+    
+    /**
+     * Přidá
+     * 
+     * @param type $className
+     * @param type $tableName
+     * @return type
+     */
+    public function addCrudList($className, $tableName){
+        $crudList = new KT_CRUD_List($className, $tableName);
+        $this->setCrudList($crudList);
+        return $this->getCrudList();
+    }
 
     /**
      * Funkce přidá stránkce nový parametr, který bude volat v případě jeho nastavení jinou
@@ -298,12 +335,17 @@ abstract class KT_Custom_Metaboxes_Base {
 
                 if (kt_isset_and_not_empty($getValue) && $actionValue == $getValue) {
                     $callbackFunction = $screenAction->getCallBackFunction();
-                    if ($callbackFunction == self::KT_METABOX_SCREEN)
+                    if ($callbackFunction == self::KT_METABOX_SCREEN){
                         return array($this, 'renderPage');
+                    }
 
                     return $callbackFunction;
                 }
             }
+        }
+        
+        if($this->getDefaultCallbackFunction() == self::KT_CRUD_LIST_SCREEN){
+            return array($this, "renderCrudListPage");
         }
 
         return $this->getDefaultCallbackFunction();
@@ -349,6 +391,22 @@ abstract class KT_Custom_Metaboxes_Base {
 
         </div><!-- .wrap -->
         <?php
+    }
+    
+    /**
+     * Vykreslí obsah pro stránku s KT_CRUD_List
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.KTStudio.cz  
+     */
+    public function renderCrudListPage(){
+        if(kt_not_isset_or_empty($this->getCrudList())){
+            throw new KT_Not_Set_Argument_Exception("KT_CRUD_List is emapty fro CRUD List page screen");
+        }
+        
+        echo "<div class=\"wrap kt-custom-screen-page\">";
+        echo $this->getCrudList()->getContent();
+        echo "</div>";
     }
 
     /**
