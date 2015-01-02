@@ -681,9 +681,13 @@ class KT_Repository {
             $query .= " LIMIT $offset %d";
             array_push($preparData, $this->getLimit());
         }
+        
+        if(kt_isset_and_not_empty($preparData)){
+            $this->setQuery($wpdb->prepare($query, $preparData));
+            return $this;
+        }
 
-        $this->setQuery($wpdb->prepare($query, $preparData));
-
+        $this->setQuery($query);
         return $this;
     }
 
