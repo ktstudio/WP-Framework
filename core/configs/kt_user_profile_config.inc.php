@@ -12,11 +12,13 @@ class KT_User_Profile_Config {
 
     // --- fieldsets ---------------------------
 
-    public static function getUserProfileFieldset() {
+    public static function getUserProfileFieldset(WP_User $currentUser = null) {
         $fieldset = new KT_Form_Fieldset(self::USER_PROFILE_FIELDSET);
-        $fieldset->setPrefix(self::USER_PROFILE_FIELDSET);
+        $fieldset->setPostPrefix(self::USER_PROFILE_FIELDSET);
 
-        $currentUser = wp_get_current_user();
+        if ($currentUser === null) {
+            $currentUser = wp_get_current_user();
+        }
 
         $fieldset->addText(self::FIRST_NAME, __("Jméno:", KT_DOMAIN))
                 ->setValue($currentUser->user_firstname)
@@ -34,7 +36,7 @@ class KT_User_Profile_Config {
         $userPhoneKey = KT_User_Profile_Config::PHONE;
         $fieldset->addText(self::PHONE, __("Telefon:", KT_DOMAIN))
                 ->setValue($currentUser->$userPhoneKey)
-                ->addRule(KT_Field_Validator::REQUIRED, __("Telefon je povinná položka.", KT_DOMAIN))
+                //->addRule(KT_Field_Validator::REQUIRED, __("Telefon je povinná položka.", KT_DOMAIN))
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Telefon může mít maximálně 20 znaků.", KT_DOMAIN), 20);
         $fieldset->addText(self::PASSWORD, __("Heslo:", KT_DOMAIN))
                 ->setInputType(KT_Text_Field::INPUT_PASSWORD)

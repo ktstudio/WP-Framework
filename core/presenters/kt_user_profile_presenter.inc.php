@@ -226,7 +226,7 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
     }
 
     private function initForm(KT_Form $form) {
-        $fieldset = $this->fieldset = KT_User_Profile_Config::getUserProfileFieldset();
+        $fieldset = $this->fieldset = KT_User_Profile_Config::getUserProfileFieldset($this->getCurrentUser());
         $form->addFieldSetByObject($fieldset);
         return $this->form = $form;
     }

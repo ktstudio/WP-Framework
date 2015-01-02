@@ -313,6 +313,18 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     }
 
     /**
+     * Vrátí (za/daný) post type
+     *
+     * @author Martin Hlaváč
+     * @link www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getPostType() {
+        return $this->getPost()->post_type;
+    }
+    
+    /**
      * Vrátí hodnotu z $wpdb->postmeta na základě zadaného meta_key
      *
      * @author Martin Hlaváč

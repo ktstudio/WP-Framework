@@ -12,13 +12,11 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @param int $postId
      * @return \kt_post_type_presenter_base
      */
-    function __construct($post) {
+    function __construct(WP_Post $post = null) {
         if (kt_isset_and_not_empty($post)) {
             $postModel = new KT_WP_Post_Base_Model($post);
             $this->setModel($postModel);
         }
-
-        return $this;
     }
 
     // gettery
