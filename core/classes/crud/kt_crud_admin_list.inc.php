@@ -1,6 +1,6 @@
 <?php
 
-class KT_CRUD_List {
+class KT_CRUD_Admin_List {
     
     private $className = null;
     private $columnList = array();
@@ -33,7 +33,7 @@ class KT_CRUD_List {
      * Nástaví nazev CRUD class, s kterou se bude pracovat
      * 
      * @param string $className
-     * @return \KT_CRUD_List
+     * @return \KT_CRUD_Admin_List
      */
     private function setClassName($className) {
         $this->className = $className;
@@ -61,7 +61,7 @@ class KT_CRUD_List {
      * @link www.ktstduio.cz
      * 
      * @param array $columnList
-     * @return \KT_CRUD_List
+     * @return \KT_CRUD_Admin_List
      */
     public function setColumnList(array $columnList) {
         $this->columnList = $columnList;
@@ -82,7 +82,7 @@ class KT_CRUD_List {
      * @link www.ktstduio.cz
      * 
      * @param boolean $newItemButton
-     * @return \KT_CRUD_List
+     * @return \KT_CRUD_Admin_List
      */
     function setNewItemButton($newItemButton) {
         $this->newItemButton = $newItemButton;
@@ -103,7 +103,7 @@ class KT_CRUD_List {
      * @link www.ktstduio.cz
      * 
      * @param \KT_Repository $repository
-     * @return \KT_CRUD_List
+     * @return \KT_CRUD_Admin_List
      */
     private function setRepository( KT_Repository $repository) {
         $this->repository = $repository;
@@ -124,7 +124,7 @@ class KT_CRUD_List {
      * @link www.ktstduio.cz
      * 
      * @param type $templateTitle
-     * @return \KT_CRUD_List
+     * @return \KT_CRUD_Admin_List
      */
     public function setTemplateTitle($templateTitle) {
         $this->templateTitle = $templateTitle;
@@ -140,10 +140,12 @@ class KT_CRUD_List {
      * @link www.ktstduio.cz
      * 
      * @param string $name
-     * @return \KT_CRUD_Column $name
+     * @return \KT_CRUD_Admin_Column $name
      */
     public function addColumn($name){
-        $column = $this->columnList[$name] = new KT_CRUD_Column($name);
+        $column = $this->columnList[$name] = new KT_CRUD_Admin_Column($name);
+        $maxColumnCount = count($this->columnList);
+        $column->setPosition($maxColumnCount);
         return $column;
     }
     
@@ -154,7 +156,7 @@ class KT_CRUD_List {
      * @link www.ktstduio.cz
      * 
      * @param array $columnCollection
-     * @return \KT_CRUD_List
+     * @return \KT_CRUD_Admin_List
      */
     public function addColumnsToCollection(array $columnCollection){
         $currentColumnCollection = $this->getColumnList();
@@ -228,7 +230,7 @@ class KT_CRUD_List {
             $html .= "<th>{$column->getLabel()}</th>";
         }
         $html .= "</tr>";
-        $html .= "</table>";
+        $html .= "</thead>";
         
         return $html;
     }
@@ -242,6 +244,7 @@ class KT_CRUD_List {
             return $html;
         }
         
+        
         $html .= "<tbody>";
         
         while($repository->haveItems()) : $item = $repository->theItem();
@@ -249,7 +252,7 @@ class KT_CRUD_List {
             foreach($columnCollection as $column){
                 $html .= "<td>";
                 $html .= $column->getCellContent($item);
-                $html .= "<td>";
+                $html .= "</td>";
             }
             $html .= "</tr>";
         endwhile;

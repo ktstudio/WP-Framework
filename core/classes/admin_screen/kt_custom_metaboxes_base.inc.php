@@ -63,7 +63,7 @@ abstract class KT_Custom_Metaboxes_Base {
     }
     
     /**
-     * @return \KT_CRUD_List
+     * @return \KT_CRUD_Admin_List
      */
     public function getCrudList() {
         return $this->crudList;
@@ -168,10 +168,10 @@ abstract class KT_Custom_Metaboxes_Base {
      * @author Tomáš Kocifaj
      * @link http//www.KTstudio.cz
      * 
-     * @param KT_CRUD_List $crudList
+     * @param KT_CRUD_Admin_List $crudList
      * @return \KT_Custom_Metaboxes_Base
      */
-    public function setCrudList(KT_CRUD_List $crudList){
+    public function setCrudList(KT_CRUD_Admin_List $crudList){
         $this->crudList = $crudList;
         return $this;
     }
@@ -196,7 +196,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * @return type
      */
     public function addCrudList($className, $tableName){
-        $crudList = new KT_CRUD_List($className, $tableName);
+        $crudList = new KT_CRUD_Admin_List($className, $tableName);
         $this->setCrudList($crudList);
         return $this->getCrudList();
     }

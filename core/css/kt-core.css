@@ -21,6 +21,16 @@ img.kt-loading-image
     font-size: 15px;
 }
 
+.kt-custom-screen-page table.wp-list-table
+{
+    margin-top: 15px;
+}
+
+.kt-custom-screen-page table.wp-list-table tr td
+{
+    vertical-align: middle;
+}
+
 .kt-loading-gif
 {
     width: 16px;

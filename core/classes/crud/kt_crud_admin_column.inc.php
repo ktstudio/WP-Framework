@@ -1,6 +1,6 @@
 <?php
 
-class KT_CRUD_Column {
+class KT_CRUD_Admin_Column {
     
     const TEXT_TYPE = "text"; // Běžný sloupec s textem
     const EDIT_LINK_TYPE = "edit-link"; // Z hodnoty se vykreslí odkaz na url adresu detailu včetně odkazu pro delete
@@ -15,11 +15,11 @@ class KT_CRUD_Column {
     private $prefix = null;
     private $suffix = null;
     private $customCallbackFunction = null;
-    private $deleteAble = false;
+    private $deletable = false;
     
     /**
      * @param string $name
-     * @return \KT_CRUD_Column
+     * @return \KT_CRUD_Admin_Column
      */
     public function __construct( $className ) {
         $this->setName($className);
@@ -43,7 +43,7 @@ class KT_CRUD_Column {
      * @link www.ktstduio.cz
      * 
      * @param string $name
-     * @return \KT_CRUD_Column
+     * @return \KT_CRUD_Admin_Column
      */
     public function setName($name) {
         $this->name = $name;
@@ -64,7 +64,7 @@ class KT_CRUD_Column {
      * @link www.ktstduio.cz
      * 
      * @param string $label
-     * @return \KT_CRUD_Column
+     * @return \KT_CRUD_Admin_Column
      */
     public function setLabel($label) {
         $this->label = $label;
@@ -85,7 +85,7 @@ class KT_CRUD_Column {
      * @link www.ktstduio.cz
      * 
      * @param int $position
-     * @return \KT_CRUD_Column
+     * @return \KT_CRUD_Admin_Column
      */
     public function setPosition($position) {
         if( ! kt_try_get_int($position)){
@@ -109,7 +109,7 @@ class KT_CRUD_Column {
      * @link www.ktstduio.cz
      * 
      * @param type $type
-     * @return \KT_CRUD_Column
+     * @return \KT_CRUD_Admin_Column
      */
     public function setType($type) {
         
@@ -143,7 +143,7 @@ class KT_CRUD_Column {
      * @link www.ktstduio.cz
      * 
      * @param type $unit
-     * @return \KT_CRUD_Column
+     * @return \KT_CRUD_Admin_Column
      */
     public function setPrefix($unit) {
         $this->prefix = $unit;
@@ -164,7 +164,7 @@ class KT_CRUD_Column {
      * @link www.ktstduio.cz
      * 
      * @param type $unit
-     * @return \KT_CRUD_Column
+     * @return \KT_CRUD_Admin_Column
      */
     public function setSuffix($unit) {
         $this->suffix = $unit;
@@ -185,7 +185,7 @@ class KT_CRUD_Column {
      * @link www.ktstduio.cz
      * 
      * @param type $customCallbackFunction
-     * @return \KT_CRUD_Column
+     * @return \KT_CRUD_Admin_Column
      */
     public function setCustomCallbackFunction($customCallbackFunction) {
         $this->customCallbackFunction = $customCallbackFunction;
@@ -196,7 +196,7 @@ class KT_CRUD_Column {
      * @return boolean
      */
     private function getDeleteAble() {
-        return $this->deleteAble;
+        return $this->deletable;
     }
 
     /**
@@ -206,10 +206,10 @@ class KT_CRUD_Column {
      * @link www.ktstduio.cz
      * 
      * @param type $deleteAble
-     * @return \KT_CRUD_Column
+     * @return \KT_CRUD_Admin_Column
      */
     public function setDeleteAble($deleteAble = true) {
-        $this->deleteAble = $deleteAble;
+        $this->deletable = $deleteAble;
         return $this;
     }
 
@@ -304,6 +304,8 @@ class KT_CRUD_Column {
         }
         
         $html .= "</span>";
+        
+        return $html;
     }
     
     /**
@@ -318,7 +320,7 @@ class KT_CRUD_Column {
      * @return string
      */
     private function getSwitchButtonTypeContent($itemValue, $itemId, $className){
-        $switchField = new KT_Switch_Field( "kt-crud-switch-list-field-" . $itemId );
+        $switchField = new KT_Switch_Field( "kt-crud-switch-list-field-" . $itemId, "");
 	$switchField->setValue($itemValue)
             ->addAttribute("data-item-type", $className)
             ->addAttribute("data-item-id", $itemId)
