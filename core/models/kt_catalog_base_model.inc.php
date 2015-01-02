@@ -13,7 +13,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
 
     const ID_COLUMN = "id";
     const TITLE_COLUMN = "title";
-    const DESCRIPTION_COLUMN = "title";
+    const DESCRIPTION_COLUMN = "description";
     const CODE_COLUMN = "code";
     const VISIBILITY_COLUMN = "visibility";
     
