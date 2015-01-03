@@ -234,7 +234,7 @@ class KT_MetaBox implements KT_Registrable {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @return KT_Form_Fieldset
+     * @return \KT_Form_Fieldset
      */
 
     public function getFieldset() {

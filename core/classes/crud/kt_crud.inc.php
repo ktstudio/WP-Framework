@@ -268,10 +268,6 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * @return \KT_Crud
      */
     public function addNewColumnToData($name, $value = null) {
-        if( ! isset($value) && $value === null){
-            return $this;
-        }
-        
         $currentDataCollection = $this->getData();
         $currentDataCollection[$name] = $value;
         $this->setData($currentDataCollection);

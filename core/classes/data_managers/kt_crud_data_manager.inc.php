@@ -8,9 +8,10 @@ class KT_CRUD_Data_Manager extends KT_Data_Manager_Base {
     private $labelColumn = null;
     
     /**
-     * 
-     * @param type $modelName
-     * @param type $table
+     * @param string $modelName
+     * @param string $keyColumnName
+     * @param string $labelColumnName
+     * @param string $table
      * @return \KT_CRUD_Data_Manager
      */
     public function __construct($modelName, $keyColumnName, $labelColumnName, $table = null) {
