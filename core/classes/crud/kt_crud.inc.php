@@ -268,7 +268,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * @return \KT_Crud
      */
     public function addNewColumnToData($name, $value = null) {
-        if(kt_isset_and_not_empty($value)){
+        if( ! isset($value) && $value === null){
             return $this;
         }
         

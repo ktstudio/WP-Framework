@@ -504,6 +504,7 @@ class KT_MetaBox implements KT_Registrable {
                         $postPrefix = $fieldset->getPostPrefix();
                         if (kt_isset_and_not_empty($postPrefix)) {
                             if ($isDefaultAutoSave && $canCrudSave) {
+                                $fieldset->setFieldsData($_POST[KT_Order_Shipping_Config::FORM_PREFIX]);
                                 foreach ($fieldset->getFields() as $field) {
                                     $crudInstance->addNewColumnToData($field->getName(), $field->getValue());
                                 }
@@ -649,11 +650,13 @@ class KT_MetaBox implements KT_Registrable {
         if ($currentValue === KT_MetaBox_Data_Types::CRUD) {
             $idparamName = $this->getIdParamName();
             $idParamValue = $_GET["$idparamName"];
+            $className = $this->getClassName();
             if (kt_isset_and_not_empty($idParamValue)) {
-                $className = $this->getClassName();
                 $instance = new $className($idParamValue);
-                return $instance;
-            }
+            } else {
+                $instance = new $className();
+            }            
+            return $instance;
         }
         return null;
     }
