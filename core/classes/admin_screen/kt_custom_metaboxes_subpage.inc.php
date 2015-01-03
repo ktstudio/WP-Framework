@@ -193,7 +193,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * @param string $subPageSlug // slug podstránky
      * @return string
      */
-    public static function getCustomMetaboxSubPageScreenName($parentSlug, $subPageSlug) {        
+    public static function getScreenNameForNativeWpPage($parentSlug, $subPageSlug) {        
         
         $WPHooksRename = array(
             "index.php" => "dashboard",
@@ -213,7 +213,22 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
             return $WPHooksRename[$parentSlug] . "_page_" . $subPageSlug;
         }
 
-        return $parentSlug . "_page_" . $subPageSlug;
+        return false;
+    }
+    
+    /**
+     * Vrátí název screenu pro ručně vytvořenou stránku v administraci na základě titulku hlavní stránky
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.KTStudio.cz
+     * 
+     * @param string $pageTitle
+     * @param string $subPageSlug
+     * @return string
+     */
+    public static function getScreenNameForCustomPage($pageTitle, $subPageSlug){
+        $sanitizeTitle = sanitize_title($pageTitle);
+        return $screenName = $sanitizeTitle . "_page_" . $subPageSlug;
     }
 
 }
