@@ -175,6 +175,42 @@ class KT_CRUD_Admin_List {
     }
     
     /**
+     * Odstraní z kolekce sloupců na základě jeho názvu
+     * 
+     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @link www.ktstduio.cz
+     * 
+     * @param string $columnName
+     * @return \KT_CRUD_Admin_List
+     */
+    public function removeColumnFromCollection($columnName){
+        $columnCollection = $this->getColumnList();
+        if(isset($columnCollection[$columnName])){
+            unset($columnCollection[$columnName]);
+            $this->setColumnList($columnCollection);
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Vrátí sloupec z kolekce na základě jeho názvu
+     * 
+     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @link www.ktstduio.cz
+     * 
+     * @param string $columnName
+     * @return \KT_CRUD_Admin_Column
+     */
+    public function getColumnByName($columnName){
+        if(isset($this->columnList[$columnName])){
+            return $this->columnList[$columnName];
+        }
+        
+        return null;
+    }
+    
+    /**
      * Vrátí obsah celé stránky
      * 
      * @author Tomáš Kocifaj <kocifaj@ktstudio.c>

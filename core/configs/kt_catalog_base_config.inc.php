@@ -50,6 +50,42 @@ class KT_Catalog_Base_Config {
 
         return $fieldset;
     }
+    
+    // --- CRUD Admin List ------------------
+    
+    /**
+     * Vrátí základní sadu sloupců pro KT_CRUD_Admin_List
+     * 
+     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $className
+     * @param string $tableName
+     * @param string $templateTitle
+     * @return \KT_CRUD_Admin_List
+     */
+    public static function getCatalogCrudList($className, $tableName, $templateTitle = null){
+        $crudList = new KT_CRUD_Admin_List($className, $tableName);
+        $crudList->setTemplateTitle($templateTitle);
+        
+        $crudList->addColumn(KT_Catalog_Base_Model::TITLE_COLUMN)
+            ->setType(KT_CRUD_Admin_Column::EDIT_LINK_TYPE)
+            ->setDeletable()
+            ->setLabel(__("Titulek", KT_DOMAIN));
+        
+        $crudList->addColumn(KT_Catalog_Base_Model::DESCRIPTION_COLUMN)
+            ->setLabel(__("Popisek", KT_DOMAIN));
+        
+        $crudList->addColumn(KT_Catalog_Base_Model::CODE_COLUMN)
+                ->setLabel(__("Kód", KT_DOMAIN));
+        
+        $crudList->addColumn(KT_Order_Shipping_Model::VISIBILITY_COLUMN)
+            ->setType(KT_CRUD_Admin_Column::SWITCH_BUTTON_TYPE)
+            ->setPosition(99)
+            ->setLabel(__("Viditelnost", KT_DOMAIN));
+        
+        return $crudList;
+    }
 
     // --- helpers ---------------------------
 
