@@ -2,11 +2,15 @@
 
 class KT_CRUD_Admin_List {
     
+    const GET_ACTION = "action";
+    const GET_ACTION_CREATE = "create";
+    
     private $className = null;
     private $columnList = array();
     private $newItemButton = false;
     private $repository = null;
     private $templateTitle = null;
+    
     
     /**
      * @param string $className - jméno objektu, který se má v rámci tabulky zobrazovat. Musí být KT_CRUD
@@ -84,7 +88,7 @@ class KT_CRUD_Admin_List {
      * @param boolean $newItemButton
      * @return \KT_CRUD_Admin_List
      */
-    function setNewItemButton($newItemButton) {
+    function setNewItemButton($newItemButton = true) {
         $this->newItemButton = $newItemButton;
         return $this;
     }
@@ -179,13 +183,50 @@ class KT_CRUD_Admin_List {
      * @return html
      */
     public function getContent(){
-        
         $html = "";
-        
-        $html .= "<h2>{$this->getTemplateTitle()}</h2>";
-        $html .= $this->getTable();
+        $html .= $this->getTamplageTitleContent(); // Titulek stránky
+        $html .= $this->getAddButtonContent(); // Tlačítko pro přidání nového záznamu
+        $html .= $this->getTable(); // Tabulka s daty
         
         return $html;
+    }
+    
+    // --- protected funkce ------------------
+    
+    /**
+     * Vrátí titulek layoutu, pokud byl definován.
+     * 
+     @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @link www.ktstduio.cz
+     * 
+     * @return string
+     */
+    protected function getTamplageTitleContent(){
+        if(kt_not_isset_or_empty($this->getTemplateTitle())){
+            return "";
+        }
+        
+        return $html = "<h2>". $this->getTemplateTitle() ."</h2>";
+    }
+    
+    /**
+     * Vrátí odkaz v podobě tlačítko pro přidání nového odkazu na CRUD listu
+     * do aktuálního odkazu přidá ACTION = CREATE
+     * 
+     * Prověří, zda je nový button vyžadován. Pokud ano, vykreslí pokud ne, vrátí prázdný string
+     * 
+     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @link www.ktstduio.cz
+     * 
+     * @return string
+     */
+    protected function getAddButtonContent(){
+        if( ! $this->getNewItemButton()){
+            return "";
+        }
+        
+	$createUrl = add_query_arg( array( self::GET_ACTION => self::GET_ACTION_CREATE ));
+	return $html = "<a href=\"$createUrl\" id=\"addCrudButtonList\" class=\"button\">". __("Přidat nový záznam", KT_DOMAIN) ."</a>";
     }
     
     /**
@@ -196,7 +237,7 @@ class KT_CRUD_Admin_List {
      * 
      * @return string
      */
-    public function getTable(){
+    protected function getTable(){
         $html = "";
         
         if( ! $this->hasListColumns()){
@@ -219,7 +260,7 @@ class KT_CRUD_Admin_List {
      * 
      * @return string
      */
-    public function getTableHeader(){
+    protected function getTableHeader(){
         $html = "";
         $columnList = $this->getColumnList();
         
@@ -235,7 +276,7 @@ class KT_CRUD_Admin_List {
         return $html;
     }
     
-    public function getTableBody(){
+    protected function getTableBody(){
         $html = "";
         $columnCollection = $this->getColumnList();
         $repository = $this->getRepository()->selectData();
@@ -263,8 +304,6 @@ class KT_CRUD_Admin_List {
         
     }
     
-    // --- privátní funkce ------------------
-    
     /**
      * Zjistí, zda jsou definované některé sloupce pro vykreslení
      * 
@@ -273,7 +312,7 @@ class KT_CRUD_Admin_List {
      * 
      * @return boolean
      */
-    private function hasListColumns(){
+    protected function hasListColumns(){
         $columnList = $this->getColumnList();
         if(kt_isset_and_not_empty($columnList)){
             return true;

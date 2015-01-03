@@ -195,20 +195,20 @@ class KT_CRUD_Admin_Column {
     /**
      * @return boolean
      */
-    private function getDeleteAble() {
+    private function getDeletable() {
         return $this->deletable;
     }
 
     /**
      * Nastaví, aby mohl být záznam smazán z pozice výpisu tabulky pomocí Ajaxu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
      * @link www.ktstduio.cz
      * 
      * @param type $deleteAble
      * @return \KT_CRUD_Admin_Column
      */
-    public function setDeleteAble($deleteAble = true) {
+    public function setDeletable($deleteAble = true) {
         $this->deletable = $deleteAble;
         return $this;
     }
@@ -299,7 +299,7 @@ class KT_CRUD_Admin_Column {
         $html .= "<span class=\"row-actions\">";
         $html .= "<a href=\"$updateUrl\">". __("Detail", KT_DOMAIN) ."</a>";
         
-        if($this->getDeleteAble()){
+        if($this->getDeletable()){
             $html .= "<span class=\"delete-row\" title=\"". __( 'Trvale smazat tento záznam', KT_DOMAIN ) . "\" data-id=\"$itemId\" data-type=\"$className\">". __( "Smazat", KT_DOMAIN ) . "</span>";
         }
         
@@ -372,7 +372,7 @@ class KT_CRUD_Admin_Column {
         $html .= apply_filters($this->getCustomCallbackFunction(), $itemValue, $itemId, $className);
         $html .= $this->getSuffixContent();
         
-        return $this;
+        return $html;
     }
     
     /**

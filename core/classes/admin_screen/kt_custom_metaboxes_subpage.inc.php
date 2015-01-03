@@ -193,8 +193,8 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * @param string $subPageSlug // slug podstránky
      * @return string
      */
-    public static function getCustomMetaboxSubPageScreenName($parentSlug, $subPageSlug) {
-
+    public static function getCustomMetaboxSubPageScreenName($parentSlug, $subPageSlug) {        
+        
         $WPHooksRename = array(
             "index.php" => "dashboard",
             "edit.php" => "post",

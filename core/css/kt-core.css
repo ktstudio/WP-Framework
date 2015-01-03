@@ -17,7 +17,6 @@ img.kt-loading-image
     color: #fff;
     text-transform: uppercase;
     padding: 10px 20px;
-    display: inline-block;
     font-size: 15px;
 }
 
@@ -29,6 +28,11 @@ img.kt-loading-image
 .kt-custom-screen-page table.wp-list-table tr td
 {
     vertical-align: middle;
+}
+
+.kt-custom-screen-page #addCrudButtonList
+{
+    margin-top: 15px;
 }
 
 .kt-loading-gif
