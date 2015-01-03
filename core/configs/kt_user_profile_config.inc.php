@@ -2,7 +2,7 @@
 
 class KT_User_Profile_Config {
 
-    const USER_PROFILE_FIELDSET = "kt-user-profile-fieldset";
+    const USER_PROFILE_FIELDSET = "kt-user-profile";
     const FIRST_NAME = "first_name";
     const LAST_NAME = "last_name";
     const EMAIL = "user_email";
@@ -12,7 +12,7 @@ class KT_User_Profile_Config {
 
     // --- fieldsets ---------------------------
 
-    public static function getUserProfileFieldset(WP_User $currentUser = null) {
+    public static function getUserProfileFieldset(WP_User $currentUser = null, $withPhone = true, $isPhoneRequired = true) {
         $fieldset = new KT_Form_Fieldset(self::USER_PROFILE_FIELDSET);
         $fieldset->setPostPrefix(self::USER_PROFILE_FIELDSET);
 
@@ -34,10 +34,14 @@ class KT_User_Profile_Config {
                 ->addRule(KT_Field_Validator::EMAIL, __("E-mail musí být ve správném tvaru.", KT_DOMAIN))
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("E-mail může mít maximálně 30 znaků.", KT_DOMAIN), 30);
         $userPhoneKey = KT_User_Profile_Config::PHONE;
-        $fieldset->addText(self::PHONE, __("Telefon:", KT_DOMAIN))
-                ->setValue($currentUser->$userPhoneKey)
-                //->addRule(KT_Field_Validator::REQUIRED, __("Telefon je povinná položka.", KT_DOMAIN))
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Telefon může mít maximálně 20 znaků.", KT_DOMAIN), 20);
+        if ($withPhone) {
+            $phoneField = $fieldset->addText(self::PHONE, __("Telefon:", KT_DOMAIN))
+                    ->setValue($currentUser->$userPhoneKey)
+                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("Telefon může mít maximálně 20 znaků.", KT_DOMAIN), 20);
+            if ($isPhoneRequired) {
+                $phoneField->addRule(KT_Field_Validator::REQUIRED, __("Telefon je povinná položka.", KT_DOMAIN));
+            }
+        }
         $fieldset->addText(self::PASSWORD, __("Heslo:", KT_DOMAIN))
                 ->setInputType(KT_Text_Field::INPUT_PASSWORD)
                 ->addRule(KT_Field_Validator::MIN_LENGTH, __("Heslo musí mít mininálně 7 znaků.", KT_DOMAIN), 7)

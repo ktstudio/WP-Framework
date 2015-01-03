@@ -44,12 +44,12 @@ abstract class KT_Shortcode_Base implements KT_Registrable {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @param array $args
+     * @param array|null $attributes
      * @param string $content
      * 
      * @return string
      */
-    public abstract function handler(array $args, $content = null);
+    public abstract function handler($attributes, $content = null);
 
     /**
      * Registrace shortcodu v rámci WP na základě zadaných parametrů

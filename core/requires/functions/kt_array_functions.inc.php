@@ -138,3 +138,13 @@ function isMultiArray(array $array) {
 
     return false;
 }
+
+/**
+ * Kontrola, zda je zadaný parameter přiřezený, typu pole a má jeden nebo více záznamů
+ * 
+ * @param array|type $array
+ * @return boolean
+ */
+function kt_array_isset_and_not_empty($array) {
+    return kt_isset_and_not_empty($array) && is_array($array) && count($array) > 0;
+}
