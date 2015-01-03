@@ -324,6 +324,7 @@ class KT_CRUD_Admin_Column {
 	$switchField->setValue($itemValue)
             ->addAttribute("data-item-type", $className)
             ->addAttribute("data-item-id", $itemId)
+            ->addAttribute("data-column-name", $this->getName())
             ->addClass("edit-crud-switch-list-field");
         
         return $html = $switchField->getField();

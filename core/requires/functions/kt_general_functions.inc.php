@@ -292,14 +292,28 @@ function kt_get_google_maps_gps($address) {
 add_action('wp_ajax_kt_delete_row_from_table_list', 'kt_delete_row_from_table_lis_callback');
 
 function kt_delete_row_from_table_lis_callback() {
-    $deletingObject = $_REQUEST["type"];
-    $idRow = $_REQUEST["rowId"];
+    $className = $_REQUEST["type"];
+    $itemId = $_REQUEST["rowId"];
 
-    $createdObjectToDelete = new $deletingObject($idRow);
+    $classModel = new $className($itemId);
 
-    $createdObjectToDelete->deleteRow();
+    $classModel->deleteRow();
 
     die();
+}
+
+add_action("wp_ajax_kt_edit_crud_list_switch_field", "kt_edit_crud_list_switch_field_callback");
+
+function kt_edit_crud_list_switch_field_callback(){
+    $className = $_REQUEST["type"];
+    $itemId = $_REQUEST["rowId"];
+    $columnName = $_REQUEST["columnName"];
+    $columnValue = $_REQUEST["value"];
+    
+    $classModel = new $className($itemId);
+    $classModel->addNewColumnToData($columnName, $columnValue)->saveRow();
+    
+    return 1;
 }
 
 /**
