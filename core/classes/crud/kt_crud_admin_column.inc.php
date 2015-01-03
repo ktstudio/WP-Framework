@@ -300,7 +300,7 @@ class KT_CRUD_Admin_Column {
         $html .= "<a href=\"$updateUrl\">". __("Detail", KT_DOMAIN) ."</a>";
         
         if($this->getDeletable()){
-            $html .= "<span class=\"delete-row\" title=\"". __( 'Trvale smazat tento záznam', KT_DOMAIN ) . "\" data-id=\"$itemId\" data-type=\"$className\">". __( "Smazat", KT_DOMAIN ) . "</span>";
+            $html .= " | <span class=\"delete-row\" title=\"". __( 'Trvale smazat tento záznam', KT_DOMAIN ) . "\" data-id=\"$itemId\" data-type=\"$className\">". __( "Smazat", KT_DOMAIN ) . "</span>";
         }
         
         $html .= "</span>";

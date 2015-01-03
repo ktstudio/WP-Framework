@@ -66,6 +66,22 @@ table.wp-list-table tbody tr td.column-image a img
     height: 100px !important;
 }
 
+table.wp-list-table tbody tr td span.row-actions
+{   
+    display: block;
+}
+
+table.wp-list-table tbody tr td span.row-actions span.delete-row
+{
+    color: #ffc4c4;
+    cursor: pointer;
+}
+
+table.wp-list-table tbody tr td span.row-actions span.delete-row:hover
+{
+    color: #FF0000;
+}
+
 table.wp-list-table tbody tr.status-pending
 {
     background: #FFBFBF;

@@ -313,7 +313,7 @@ function kt_edit_crud_list_switch_field_callback(){
     $classModel = new $className($itemId);
     $classModel->addNewColumnToData($columnName, $columnValue)->saveRow();
     
-    return 1;
+    die(1);
 }
 
 /**
