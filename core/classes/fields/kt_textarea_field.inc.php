@@ -1,6 +1,6 @@
 <?php
 
-class KT_Textarea_Field extends KT_Field {
+class KT_Textarea_Field extends KT_Placeholder_Field_base {
 
     const FIELD_TYPE = "textarea";
 
@@ -54,14 +54,10 @@ class KT_Textarea_Field extends KT_Field {
     }
 
     /**
-     * Provede výpis fieldu pomocí echo $this->getField()
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
-     *
+     * @return string
      */
-    public function renderField() {
-        echo $this->getField();
+    public function getFieldType() {
+        return self::FIELD_TYPE;
     }
 
     /**
@@ -78,6 +74,11 @@ class KT_Textarea_Field extends KT_Field {
 
         $html .= "<textarea ";
         $html .= $this->getBasicHtml();
+
+        if ($this->isPlaceholder()) {
+            $html .= $this->getPlaceholderAttribute();
+        }
+
         $html .= ">";
 
         $html .= $this->getValue();
@@ -91,8 +92,15 @@ class KT_Textarea_Field extends KT_Field {
         return $html;
     }
 
-    public function getFieldType() {
-        return self::FIELD_TYPE;
+    /**
+     * Provede výpis fieldu pomocí echo $this->getField()
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.KTStudio.cz
+     *
+     */
+    public function renderField() {
+        echo $this->getField();
     }
 
 }

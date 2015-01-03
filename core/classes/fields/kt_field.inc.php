@@ -22,16 +22,13 @@ abstract class KT_Field {
      * @author Tomáš Kocifaj
      * @link http://www.KTStudio.cz
      *
-     * @param type $name
-     * @param type $label
-     * @return \KT_Field
+     * @param string $name
+     * @param string $label
      */
     public function __construct($name, $label) {
         $this->setId($name);
         $this->setLabel($label);
         $this->setName($name);
-
-        return $this;
     }
 
     // --- settery ------------------------
