@@ -547,7 +547,7 @@ abstract class KT_Field {
      * 
      * @return string
      */
-    private function getAttributesContent() {
+    protected function getAttributesContent() {
 
         $html = "";
         
@@ -602,7 +602,7 @@ abstract class KT_Field {
      * 
      * @return \KT_Field
      */
-    private function validatorJsonContentInit() {
+    protected function validatorJsonContentInit() {
         if (!kt_isset_and_not_empty($this->getValidators())) {
             return "";
         }
