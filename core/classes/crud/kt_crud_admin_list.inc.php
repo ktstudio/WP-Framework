@@ -184,10 +184,8 @@ class KT_CRUD_Admin_List {
      * @return \KT_CRUD_Admin_List
      */
     public function removeColumnFromCollection($columnName){
-        $columnCollection = $this->getColumnList();
-        if(isset($columnCollection[$columnName])){
-            unset($columnCollection[$columnName]);
-            $this->setColumnList($columnCollection);
+        if(isset($this->columnList[$columnName])){
+            unset($this->columnList[$columnName]);
         }
         
         return $this;
