@@ -8,12 +8,15 @@
  */
 class KT_Language_Model extends KT_Catalog_Base_Model {
 
-    const TABLE = "kt_languages";
-    const TABLE_PREFIX = "language_";
-    const ID_COLUMN = "language_id";
-    const ORDER_COLUMN = "language_title";
-    const PREFIX = "kt_language";
-    const FORM_PREFIX = "kt-language";
+    const TABLE = "kt_shop_languages";
+    const ORDER_COLUMN = self::TITLE_COLUMN;
+    const PREFIX = "kt_shop_languages";
+    const FORM_PREFIX = "kt-shop-languages";
+    
+    // --- DB Sloupce ----------------
+    
+    const DECIMAL_POINTS_COLUMN = "decimal_point";
+    const THOUSANDS_SEPARATOR = "thousands_separator";
 
     /**
      * Výchozí konstruktor, který dodá údaje pro @see KT_Crud
@@ -24,7 +27,7 @@ class KT_Language_Model extends KT_Catalog_Base_Model {
      * @param integer $rowId
      */
     public function __construct($rowId = null) {
-        parent::__construct(self::TABLE, self::ID_COLUMN, self::TABLE_PREFIX, $rowId);
+        parent::__construct(self::TABLE, self::ID_COLUMN, null, $rowId);
     }
 
     /**
