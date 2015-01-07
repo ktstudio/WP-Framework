@@ -37,11 +37,38 @@ img.kt-loading-image
 
 .kt-loading-gif
 {
+    position: relative;
+}
+
+.kt-loading-gif:before
+{
+    content: "";
+    display: block;
     width: 16px;
     height: 16px;
     display: inline-block;
     background: url('../images/loading.gif') top left no-repeat;
+    display: none;
+    position: absolute;
 }
+
+.kt-loading-gif.left:before
+{
+    left: -20px;
+    top: 0;
+}
+
+.kt-loading-gif.right:before
+{
+    right: -20px;
+    top: 0;
+}
+
+.kt-loading-gif.loading:before
+{
+    display: block;
+}
+
 
 /** LOGIN KT LOGO */
 
