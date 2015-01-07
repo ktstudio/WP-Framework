@@ -141,6 +141,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return mixed string|null
      */
     public static function getImageHtmlTag($imageSrc, array $imageAttr = array()) {
+        $attr = "";
+        
         if (kt_isset_and_not_empty($imageSrc)) {
             $parseAttr = wp_parse_args($imageAttr);
             if (kt_isset_and_not_empty($parseAttr)) {

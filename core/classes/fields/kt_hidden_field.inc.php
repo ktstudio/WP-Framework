@@ -35,6 +35,8 @@ class KT_Hidden_Field extends KT_Field {
      * @return string
      */
     public function getField() {
+        
+        $html = "";
 
         $html .= "<input type=\"hidden\" ";
         $html .= $this->getBasicHtml();
