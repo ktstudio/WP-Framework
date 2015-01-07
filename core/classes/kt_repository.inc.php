@@ -552,7 +552,7 @@ class KT_Repository {
         $countItems = $this->getCoutOfAllItemsInDb();
         $this->setCountItems($countItems);
 
-        $result = $wpdb->get_results($query, ARRAY_A);
+        $result = $wpdb->get_col($query);        
 
         if ($result === false) {
             $this->addError('Při selekci dat se vyskytla chyba', $wpdb->last_error);
@@ -561,8 +561,7 @@ class KT_Repository {
         if (count($result) > 0) {
             foreach ($result as $value) {
                 /* @var $item \KT_Crud */
-                $item = new $this->className();
-                $item->setData($value);
+                $item = new $this->className($value);
                 $itemsColection[] = $item;
             }
 
@@ -659,8 +658,11 @@ class KT_Repository {
 
         $preparData = array();
         $offset = "";
+        
+        $className = $this->getClassName();
+        $crudClass = new $className();
 
-        $query = "SELECT * FROM {$this->getTable()}";
+        $query = "SELECT ". $crudClass->getPrimaryKeyColumn() ." FROM {$this->getTable()}";
 
         $conditionData = $this->createConditionsQuery();
 

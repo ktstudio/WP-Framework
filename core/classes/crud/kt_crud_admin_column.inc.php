@@ -16,6 +16,7 @@ class KT_CRUD_Admin_Column {
     private $suffix = null;
     private $customCallbackFunction = null;
     private $deletable = false;
+    private $selfCallback = false;
     
     /**
      * @param string $name
@@ -184,11 +185,13 @@ class KT_CRUD_Admin_Column {
      * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
      * @link www.ktstduio.cz
      * 
-     * @param type $customCallbackFunction
+     * @param string $customCallbackFunction
+     * @selfCallback boolean // Pokud bude true, callback funkce se bude volat na CRUD Modelu, který je součástí CRUD_Listu
      * @return \KT_CRUD_Admin_Column
      */
-    public function setCustomCallbackFunction($customCallbackFunction) {
+    public function setCustomCallbackFunction($customCallbackFunction, $selfCallback = false) {
         $this->customCallbackFunction = $customCallbackFunction;
+        $this->setSelfCallback($selfCallback);
         return $this;
     }
     
@@ -212,8 +215,31 @@ class KT_CRUD_Admin_Column {
         $this->deletable = $deleteAble;
         return $this;
     }
+    
+    /**
+     * @return boolean
+     */
+    private function getSelfCallback() {
+        return $this->selfCallback;
+    }
+    
+    /**
+     * Nastaví, zda se má callback funkce volat na CRUD Modelu, který je v CRUD_Listu
+     * předáván ve filtru
+     * 
+     * @author Tomáš Kocifaj
+     * @link www.ktstudio.cz
+     * 
+     * @param boolean $selfCallback
+     * @return \KT_CRUD_Admin_Column
+     */
+    private function setSelfCallback($selfCallback) {
+        $this->selfCallback = $selfCallback;
+        return $this;
+    }
 
-        
+    
+            
         
     // --- veřejné funkce ------------------
     
@@ -250,7 +276,7 @@ class KT_CRUD_Admin_Column {
                 return $html = $this->getSwitchButtonTypeContent($itemValue, $itemId, $className);
                 
             case self::CUSTOM_TYPE:
-                return $html = $this->getCustomTypeContent($itemValue, $itemId, $className);
+                return $html = $this->getCustomTypeContent($item);
 
             default:
                 throw new InvalidArgumentException("column type is an invalid value for CRUD Column");
@@ -295,7 +321,7 @@ class KT_CRUD_Admin_Column {
         $html = "";
         $updateUrl = add_query_arg( array( "action" => "update", $className::ID_COLUMN => $itemId ) );
         
-        $html .= "<a href=\"$updateUrl\" class=\"id-link\" title=\"editovat záznam\">$itemValue</a>";
+        $html .= "<a href=\"$updateUrl\" class=\"id-link\" title=\"editovat záznam\">{$this->getPrefix()}$itemValue{$this->getSuffix()}</a>";
         $html .= "<span class=\"row-actions\">";
         $html .= "<a href=\"$updateUrl\">". __("Detail", KT_DOMAIN) ."</a>";
         
@@ -367,10 +393,19 @@ class KT_CRUD_Admin_Column {
      * @param string $className
      * @return html
      */
-    private function getCustomTypeContent($itemValue, $itemId, $className){
+    private function getCustomTypeContent($item){
         $html = "";
+        $selfCallback = $this->getSelfCallback();
+        $customCallbackFunction = $this->getCustomCallbackFunction();
+        
         $html .= $this->getPrefixContent();
-        $html .= apply_filters($this->getCustomCallbackFunction(), $itemValue, $itemId, $className);
+        
+        if($selfCallback === true){
+            $html .= $item->$customCallbackFunction();
+        } else {
+            $html .= apply_filters($customCallbackFunction, $string, $item);
+        }
+        
         $html .= $this->getSuffixContent();
         
         return $html;

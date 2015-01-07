@@ -319,7 +319,6 @@ class KT_CRUD_Admin_List {
             return $html;
         }
         
-        
         $html .= "<tbody>";
         
         while($repository->haveItems()) : $item = $repository->theItem();

@@ -4,7 +4,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
     private $table = null; // Název tabulky, kde se bude provádět CRUD
     private $tablePrefix = ""; // Prefix sloupců v tabulce
-    private $id = null; // ID záznamu z tabulky v DB
+    private $primaryKeyValue = null; // ID záznamu z tabulky v DB
     private $primaryKeyColumn = null; // Název sloupce, který je v tabulce určen jako primární klíč
     private $data = array(); // Pole s daty 'column_name' => 'value'
     private $errors = array(); // Pole s chybami
@@ -95,7 +95,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * @return int|null
      */
     public function getId() {
-        return $this->id;
+        return $this->primaryKeyValue;
     }
 
     /**
@@ -179,13 +179,13 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
     public function setId($rowId) {
 
         if ($rowId === null) {
-            $this->id = null;
+            $this->primaryKeyValue = null;
             return $this;
         }
 
         if (kt_is_id_format($rowId)) {
             $rowId = kt_try_get_int($rowId);
-            $this->id = $rowId;
+            $this->primaryKeyValue = $rowId;
             return $this;
         }
 
