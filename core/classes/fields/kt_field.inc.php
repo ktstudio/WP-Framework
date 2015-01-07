@@ -487,7 +487,7 @@ abstract class KT_Field {
      * @return string
      */
     protected function getHtmlErrorMsg() {
-        $html .= "<div class=\"validator\">";
+        $html = "<div class=\"validator\">";
         $html .= "<span class=\"erorr-s\">" . htmlspecialchars($this->getError()) . "</span>";
         $html .= "</div>";
 
