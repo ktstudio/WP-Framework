@@ -997,7 +997,7 @@ class KT_Form {
         if ($this->getMethod() == self::METHOD_GET) {
             if ($this->hasFieldset()) {
                 foreach ($this->getFieldsets() as $fieldset) {
-                    $fieldSetPrefix = $fieldset->getPrefix();
+                    $fieldSetPrefix = $fieldset->getPostPrefix();
                     if (kt_isset_and_not_empty($fieldSetPrefix)) {
                         if (array_key_exists($fieldSetPrefix, $_GET))
                             return true;

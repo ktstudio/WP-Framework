@@ -43,7 +43,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
         if (kt_isset_and_not_empty($rowId)) {
             $this->setId($rowId);
-            $this->getRow(); // autoload
+            $this->rowDataInit();
         }
     }
 
@@ -393,15 +393,17 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
         return $this->getTablePrefix() . $columnName;
     }
 
-    /**
-     * Vrátí sadu všech dat, které jsou udané v $this->table na základě zadaného rowId, názvu tabulky a primárního klíče.
+    // --- privátní funkce ------------
+    
+       /**
+     * inicializace dat na základě předaného hodnoty v construktoru
      *
      * @author Tomáš Kocifaj
      * @link http://www.KTStudio.cz
      *
      * @return \KT_Crud
      */
-    public function getRow() {
+    private function rowDataInit() {
 
         if (!kt_is_id_format($this->getId())) {
             return;
@@ -419,14 +421,10 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
             return;
         }
 
-        foreach ($result as $key => $value) {
-            $this->data[$key] = $value;
-        }
-
+        $this->setData($result);
+        
         return $this;
     }
-
-    // --- privátní funkce ------------
 
     /**
      * Naplní data do DB a nastavení $this->rowID dle nově vloženého řádku

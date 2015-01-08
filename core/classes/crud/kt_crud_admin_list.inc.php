@@ -96,7 +96,7 @@ class KT_CRUD_Admin_List {
     /**
      * @return \KT_Repository
      */
-    private function getRepository() {
+    public function getRepository() {
         return $this->repository;
     }
 
@@ -109,7 +109,7 @@ class KT_CRUD_Admin_List {
      * @param \KT_Repository $repository
      * @return \KT_CRUD_Admin_List
      */
-    private function setRepository( KT_Repository $repository) {
+    public function setRepository( KT_Repository $repository) {
         $this->repository = $repository;
         return $this;
     }
@@ -218,8 +218,15 @@ class KT_CRUD_Admin_List {
      */
     public function getContent(){
         $html = "";
+        
         $html .= $this->getTamplageTitleContent(); // Titulek stránky
         $html .= $this->getAddButtonContent(); // Tlačítko pro přidání nového záznamu
+        
+        if(array_key_exists("page", $_GET)){
+            $pageName = $_GET["page"];
+            $html = apply_filters("kt_crud_admin_list_before_table_" . $pageName, $html);
+        }
+        
         $html .= $this->getTable(); // Tabulka s daty
         
         return $html;
@@ -316,7 +323,7 @@ class KT_CRUD_Admin_List {
     protected function getTableBody(){
         $html = "";
         $columnCollection = $this->getColumnList();
-        $repository = $this->getRepository()->selectData();
+        $repository = $this->getRepository()->selectData();       
         
         if( ! $repository->haveItems()){
             return $html;
