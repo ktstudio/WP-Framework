@@ -7,11 +7,10 @@
  * @link http://www.ktstudio.cz
  */
 class KT_MetaBox implements KT_Registrable {
-    
+
     const CONTEXT_NORMAL = "normal";
     const CONTEXT_ADVANCED = "advanced";
     const CONTEXT_SIDE = "side";
-    
     const PRIORITY_LOW = "low";
     const PRIORITY_HIGHT = "hight";
     const PRIORITY_DEFAULT = "default";
@@ -429,7 +428,7 @@ class KT_MetaBox implements KT_Registrable {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
-    public function add($post) {        
+    public function add($post) {
         if ($this->CheckCanHandlePostRequest($post)) {
             add_meta_box(
                     $this->getId(), $this->getTitle(), array(&$this, "metaboxCallback"), $this->getScreen(), $this->getContext(), $this->getPriority(), array($this->getFieldset())
@@ -649,13 +648,13 @@ class KT_MetaBox implements KT_Registrable {
         $currentValue = $dataType->getCurrentValue();
         if ($currentValue === KT_MetaBox_Data_Types::CRUD) {
             $idparamName = $this->getIdParamName();
-            $idParamValue = $_GET["$idparamName"];
+            $idParamValue = htmlspecialchars($_GET["$idparamName"]);
             $className = $this->getClassName();
             if (kt_isset_and_not_empty($idParamValue)) {
                 $instance = new $className($idParamValue);
             } else {
                 $instance = new $className();
-            }            
+            }
             return $instance;
         }
         return null;
@@ -671,10 +670,10 @@ class KT_MetaBox implements KT_Registrable {
      * @return boolean
      */
     private function CheckCanHandlePostRequest($post) {
-        if( ! $post instanceof WP_Post){
+        if (!$post instanceof WP_Post) {
             return true;
         }
-        
+
         $pageTemplate = $this->getPageTemplate();
         if (kt_isset_and_not_empty($pageTemplate)) { // chceme kontrolovat (aktuální) page template
             $currentPageTemplate = get_post_meta($post->ID, "_wp_page_template", true);
