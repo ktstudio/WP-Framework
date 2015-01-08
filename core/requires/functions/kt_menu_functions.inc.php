@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Vrátí uživatelský titulek menu podle jeho lokace nebo zadaný vlastní - výchozí
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
+ * @param string $location
+ * @param string $defaultTitle
+ * @return string
+ */
 function kt_get_custom_menu_name($location, $defaultTitle = null) {
     $locations = get_nav_menu_locations();
     $menuLocation = $locations[$location];
@@ -15,12 +25,12 @@ function kt_get_custom_menu_name($location, $defaultTitle = null) {
     return $defaultTitle;
 }
 
-function kt_the_custom_menu_name($location, $defaultTitle = null) {
-    echo kt_get_custom_menu_name($location, $defaultTitle);
-}
-
 /**
  * Vypíše požadované menu bez "obalujícího" divu
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
  * @param string $themeLocation
  * @param int $depth
  */
