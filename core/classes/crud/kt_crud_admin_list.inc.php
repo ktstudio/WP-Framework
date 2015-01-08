@@ -278,7 +278,9 @@ class KT_CRUD_Admin_List {
             return $html;
         }
         
-        $html .= "<table id=\"{$this->getClassName()}\" class=\"wp-list-table widefat fixed item-list\" cellspacing=\"0\">";
+        $tableId = strtolower($this->getClassName());
+        
+        $html .= "<table id=\"{$tableId}\" class=\"wp-list-table widefat fixed item-list\" cellspacing=\"0\">";
         $html .= $this->getTableHeader();
         $html .= $this->getTableBody();
         $html .= "</table>";
@@ -302,7 +304,8 @@ class KT_CRUD_Admin_List {
         $html .= "<tr>";
         foreach($columnList as $column){
             /** @var $column \KT_CRUD_Column */
-            $html .= "<th>{$column->getLabel()}</th>";
+            $class = kt_isset_and_not_empty($column->getCssClass()) ? " class=\"{$column->getCssClass()}\"" : "";
+            $html .= "<th$class>{$column->getLabel()}</th>";
         }
         $html .= "</tr>";
         $html .= "</thead>";
@@ -324,7 +327,10 @@ class KT_CRUD_Admin_List {
         while($repository->haveItems()) : $item = $repository->theItem();
             $html .= "<tr id=\"row-{$item->getId()}\">";
             foreach($columnCollection as $column){
-                $html .= "<td>";
+                
+                $class = kt_isset_and_not_empty($column->getCssClass()) ? " class=\"{$column->getCssClass()}\"" : "";
+                
+                $html .= "<td$class>";
                 $html .= $column->getCellContent($item);
                 $html .= "</td>";
             }

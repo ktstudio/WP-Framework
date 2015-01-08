@@ -153,7 +153,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
         $rowIdFromData = null;
 
-        if (isset($data[$this->getPrimaryKeyColumn()])) {
+        if (array_key_exists($this->getPrimaryKeyColumn(), $data)) {
             $rowIdFromData = $data[$this->getPrimaryKeyColumn()];
         }
 

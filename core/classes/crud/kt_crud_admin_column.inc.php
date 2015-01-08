@@ -17,6 +17,7 @@ class KT_CRUD_Admin_Column {
     private $customCallbackFunction = null;
     private $deletable = false;
     private $selfCallback = false;
+    private $cssClass = null;
     
     /**
      * @param string $name
@@ -238,7 +239,26 @@ class KT_CRUD_Admin_Column {
         return $this;
     }
 
-    
+    /**
+     * @return string
+     */
+    public function getCssClass() {
+        return $this->cssClass;
+    }
+
+    /**
+     * Nastaví CSS class tagu TD
+     * 
+     * @author Tomáš Kocifaj
+     * @link www.ktstudio.cz
+     * 
+     * @param string $cssClass
+     * @return \KT_CRUD_Admin_Column
+     */
+    public function setCssClass($cssClass) {
+        $this->cssClass = $cssClass;
+        return $this;
+    }
             
         
     // --- veřejné funkce ------------------
@@ -401,7 +421,7 @@ class KT_CRUD_Admin_Column {
         $html .= $this->getPrefixContent();
         
         if($selfCallback === true){
-            $html .= $item->$customCallbackFunction();
+            $html .= $item->$customCallbackFunction( $item );
         } else {
             $html .= apply_filters($customCallbackFunction, $string, $item);
         }
