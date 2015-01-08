@@ -93,6 +93,11 @@ class KT_Admin_URL_Param_Checker {
      * @return boolean
      */
     public function getCheckedResult(){
+        
+        if( ! is_admin()){
+            return $this->getResult();
+        }
+        
         if(kt_not_isset_or_empty($this->getParamCollection())){
             return $this->getResult();
         }
