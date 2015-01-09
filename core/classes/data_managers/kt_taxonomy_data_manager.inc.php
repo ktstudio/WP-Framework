@@ -9,6 +9,12 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
     private $queryArgs = array();
     private $optionValueType = self::FIELD_ID;
 
+    function __construct($taxonomy = null) {
+        if (kt_isset_and_not_empty($taxonomy)) {
+            $this->setTaxonomy($taxonomy);
+        }
+    }
+
     // --- gettery -----------------
 
     /**

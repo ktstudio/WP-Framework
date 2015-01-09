@@ -1,17 +1,30 @@
 <?php
 
+/**
+ * Základ pro datové managery 
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.KTStudio.cz
+ */
 abstract class KT_Data_Manager_Base {
 
     private $data = array();
 
-    // --- gettery ------------------
-
+    /**
+     * Vrátí data
+     * 
+     * @return array
+     */
     public function getData() {
         return $this->data;
     }
 
-    // --- settery ------------------
-
+    /**
+     * Nastaví data
+     * 
+     * @param array $data
+     * @return \KT_Data_Manager_Base
+     */
     public function setData(array $data = array()) {
         $this->data = $data;
         return $this;

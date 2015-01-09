@@ -132,7 +132,7 @@ function kt_array_remove_by_key(array $haystack, $needle) {
  * @param array $array
  * @return boolean
  */
-function isMultiArray(array $array) {
+function kt_array_is_multi(array $array) {
     if (count($array) == count($array, COUNT_RECURSIVE))
         return true;
 
@@ -147,4 +147,28 @@ function isMultiArray(array $array) {
  */
 function kt_array_isset_and_not_empty($array) {
     return kt_isset_and_not_empty($array) && is_array($array) && count($array) > 0;
+}
+
+/**
+ * Vrátí první klíč v poli
+ * 
+ * @param array
+ * @return string|int
+ */
+function kt_array_get_first_key(array $array) {
+    foreach ($array as $key => $value) {
+        return $key;
+    }
+}
+
+/**
+ * Vrátí první hodnotu v poli
+ * 
+ * @param array
+ * @return type
+ */
+function kt_array_get_first_value(array $array) {
+    foreach ($array as $key => $value) {
+        return $value;
+    }
 }
