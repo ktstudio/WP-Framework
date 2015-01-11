@@ -120,6 +120,7 @@ class KT_Admin_Columns {
                 $postMeta = get_post_meta($postId, $args[self::METAKEY_PARAM_KEY], true);
                 if (kt_isset_and_not_empty($postMeta)) {
                     $value = $postMeta;
+                    $filterFunction = $args[self::FILTER_FUNCTION];
                     if (kt_isset_and_not_empty($filterFunction)) {
                         $value = apply_filters($filterFunction, $value);
                     }

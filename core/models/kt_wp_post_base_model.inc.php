@@ -22,14 +22,9 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     function __construct(WP_Post $post = null, $postId = null) {
         if (kt_isset_and_not_empty($post)) {
             $this->setPost($post);
-
-            return $this;
         }
-
         if (kt_is_id_format($postId)) {
             $this->initPostFromId($postId);
-
-            return $this;
         }
     }
 
@@ -122,7 +117,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      */
     private function setPost(WP_Post $post) {
         $this->post = $post;
-
         return $this;
     }
 
@@ -137,7 +131,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      */
     private function setAuthor(KT_WP_User_Base_Model $author) {
         $this->author = $author;
-
         return $this;
     }
 
@@ -152,7 +145,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      */
     private function setMetas(array $metas) {
         $this->metas = $metas;
-
         return $this;
     }
 
@@ -167,13 +159,11 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      */
     private function setGallery(KT_WP_Post_Gallery $gallery) {
         $this->gallery = $gallery;
-
         return $this;
     }
 
     private function setFiles(KT_WP_Post_File_List $files) {
         $this->files = $files;
-
         return $this;
     }
 
@@ -377,7 +367,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         if (kt_isset_and_not_empty($this->getPost()->post_excerpt)) {
             return true;
         }
-
         return false;
     }
 
@@ -393,7 +382,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         if (kt_isset_and_not_empty($this->getMetaValue("_thumbnail_id"))) {
             return true;
         }
-
         return false;
     }
 
@@ -468,9 +456,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      */
     private function initGallery() {
         $postGallery = new KT_WP_Post_Gallery($this->getPost());
-
         $this->setGallery($postGallery);
-
         return $this;
     }
 
@@ -484,9 +470,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      */
     private function initFiles() {
         $fileList = new KT_WP_Post_File_List($this->getPost());
-
         $this->setFiles($fileList);
-
         return $this;
     }
 
