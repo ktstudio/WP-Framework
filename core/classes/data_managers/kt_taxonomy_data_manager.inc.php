@@ -9,7 +9,7 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
     private $args = array();
     private $optionValueType = self::FIELD_ID;
 
-    function __construct($taxonomy = null, $args = array("orderby" => "title", "hide_empty" => 0)) {
+    function __construct($taxonomy = null, $args = null) {
         if (kt_isset_and_not_empty($taxonomy)) {
             $this->setTaxonomy($taxonomy);
         }
@@ -126,7 +126,6 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
                 case self::FIELD_SLUG:
                     $key = $taxItem->slug;
                     break;
-
                 case self::FIELD_ID:
                     $key = $taxItem->term_id;
                     break;
