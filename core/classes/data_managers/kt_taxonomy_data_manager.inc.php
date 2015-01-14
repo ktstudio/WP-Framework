@@ -5,13 +5,16 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
     const FIELD_ID = "id";
     const FIELD_SLUG = "slug";
 
-    private $taxonomy = null;
-    private $queryArgs = array();
+    private $taxonomy;
+    private $args = array();
     private $optionValueType = self::FIELD_ID;
 
-    function __construct($taxonomy = null) {
+    function __construct($taxonomy = null, $args = array("orderby" => "title", "hide_empty" => 0)) {
         if (kt_isset_and_not_empty($taxonomy)) {
             $this->setTaxonomy($taxonomy);
+        }
+        if (kt_array_isset_and_not_empty($args)) {
+            $this->setArgs($args);
         }
     }
 
@@ -41,8 +44,8 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
     /**
      * @return string
      */
-    private function getQueryArgs() {
-        return $this->queryArgs;
+    private function getArgs() {
+        return $this->args;
     }
 
     /**
@@ -75,10 +78,10 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
      * @author Tomáš Kocifaj
      * @link http://www.KTStudio.cz
      * 
-     * @param array $queryArgs
+     * @param array $args
      */
-    public function setQueryArgs(array $queryArgs) {
-        $this->queryArgs = $queryArgs;
+    public function setArgs(array $args) {
+        $this->args = $args;
 
         return $this;
     }
@@ -113,8 +116,7 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
     private function dataInit() {
         $taxonomyValues = array();
 
-        $taxonomyItems = get_terms($this->getTaxonomy(), $this->getQueryArgs());
-
+        $taxonomyItems = get_terms($this->getTaxonomy(), $this->getArgs());
         if (is_wp_error($taxonomyItems)) {
             return;
         }

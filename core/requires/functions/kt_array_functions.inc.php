@@ -133,9 +133,9 @@ function kt_array_remove_by_key(array $haystack, $needle) {
  * @return boolean
  */
 function kt_array_is_multi(array $array) {
-    if (count($array) == count($array, COUNT_RECURSIVE))
+    if (count($array) == count($array, COUNT_RECURSIVE)) {
         return true;
-
+    }
     return false;
 }
 
