@@ -5,6 +5,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     private $post = null;
     private $author = null;
     private $metas = array();
+    private $metaPrefix;
     private $gallery = null;
     private $files = null;
     private $data = array();
@@ -19,13 +20,11 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @param int $postId
      * @return \KT_WP_Post_Base_Model
      */
-    function __construct(WP_Post $post = null, $postId = null) {
+    function __construct(WP_Post $post = null, $metaPrefix = null) {
         if (kt_isset_and_not_empty($post)) {
             $this->setPost($post);
         }
-        if (kt_is_id_format($postId)) {
-            $this->initPostFromId($postId);
-        }
+        $this->metaPrefix = $metaPrefix;
     }
 
     // --- magic functions -----
@@ -81,6 +80,13 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         return $this->metas;
     }
 
+    /**
+     * @return string
+     */
+    public function getMetaPrefix() {
+        return $this->metaPrefix;
+    }
+    
     /**
      * @return \KT_WP_Post_File_List
      */
@@ -388,29 +394,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     // --- private function ----
 
     /**
-     * Inicializuje WP_Post objekt na základě zadaného id
-     *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
-     *
-     * @param type $postId
-     * @return \KT_Post_Type_Presenter_Base
-     * @throws KT_Null_Reference_Exception
-     */
-    private function initPostFromId($postId) {
-        $postId = kt_try_get_int($postId);
-        $post = get_post($postId);
-
-        if (kt_isset_and_not_empty($post)) {
-            $this->setPost($post);
-        } else {
-            throw new KT_Null_Reference_Exception("post");
-        }
-
-        return $this;
-    }
-
-    /**
      * Inicializuje WP_User objekt na základě post_author
      *
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
@@ -430,19 +413,17 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     }
 
     /**
-     * Inicializuje pole (post) metas na na základě prefixu nebo všechny
+     * Inicializuje pole (post) metas na základě prefixu nebo všechny
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Martin Hlaváč
      * @link www.ktstudio.cz
      *
-     * @param string $metaNamePrefix
      * @return \KT_Post_Type_Presenter_Base
      */
-    private function initMetas($metaNamePrefix = null) {
+    private function initMetas() {
+        $metaNamePrefix = $this->getMetaPrefix();
         $metas = self::getPostMetas($this->getPost()->ID, $metaNamePrefix);
-
         $this->setMetas($metas);
-
         return $this;
     }
 
