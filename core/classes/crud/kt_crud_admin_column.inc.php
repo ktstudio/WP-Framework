@@ -187,7 +187,7 @@ class KT_CRUD_Admin_Column {
      * @link www.ktstduio.cz
      * 
      * @param string $customCallbackFunction
-     * @selfCallback boolean // Pokud bude true, callback funkce se bude volat na CRUD Modelu, který je součástí CRUD_Listu
+     * @param boolean $selfCallback // Pokud bude true, callback funkce se bude volat na CRUD Modelu, který je součástí CRUD_Listu
      * @return \KT_CRUD_Admin_Column
      */
     public function setCustomCallbackFunction($customCallbackFunction, $selfCallback = false) {
@@ -421,7 +421,7 @@ class KT_CRUD_Admin_Column {
         $html .= $this->getPrefixContent();
         
         if($selfCallback === true){
-            $html .= $item->$customCallbackFunction( $item );
+            $html .= $item->$customCallbackFunction($item);
         } else {
             $html .= apply_filters($customCallbackFunction, $string, $item);
         }

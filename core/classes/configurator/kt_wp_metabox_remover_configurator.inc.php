@@ -77,7 +77,7 @@ final class KT_WP_Metabox_Remover_Configurator {
      * @param string $postType
      * @return \KT_WP_Metabox_Remover_Configurator
      */
-    public function removeTrackBacktMetabox($postType = KT_WP_POST_KEY) {
+    public function removeTrackBackMetabox($postType = KT_WP_POST_KEY) {
         $this->removeMetabox("trackbacksdiv", $postType, "normal");
 
         return $this;

@@ -224,7 +224,8 @@ class KT_CRUD_Admin_List {
         
         if(array_key_exists("page", $_GET)){
             $pageName = $_GET["page"];
-            $html = apply_filters("kt_crud_admin_list_before_table_" . $pageName, $html);
+            $string = apply_filters("kt_crud_admin_list_before_table_" . $pageName, $html);
+            $html .= $string;
         }
         
         $html .= $this->getTable(); // Tabulka s daty
