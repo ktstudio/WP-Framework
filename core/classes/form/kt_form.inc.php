@@ -772,7 +772,7 @@ class KT_Form {
      * @link http://www.KTStudio.cz
      *
      * @param array - parametry fieldu
-     * @return array
+     * @return \KT_Form
      */
     public function validate() {
         if (!$this->isFormSend()) {
