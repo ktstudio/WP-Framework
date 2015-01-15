@@ -19,7 +19,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         }
     }
 
-    // gettery
+    // --- gettery ---------------------------
 
     /**
      * @return \KT_WP_Post_Base_Model
@@ -28,7 +28,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         return parent::getModel();
     }
 
-    // --- veřejné funkce --
+    // --- veřejné funkce ---------------------------
 
     /**
      * Vypíše kolekci všech termů, kam je post zařazen na základě taxonomy
@@ -45,7 +45,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     public function getListOfTermsName($taxonomy, array $args = array(), $before = "", $after = " ") {
 
         $html = "";
-        $terms = $this->getModel()->getTermCollection($taxonomy, $args);
+        $terms = $this->getModel()->getTerms($taxonomy, $args);
 
         if (kt_isset_and_not_empty($terms)) {
             foreach ($terms as $term) {
@@ -71,7 +71,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      */
     public function getListOfLinksToTerms($taxonomy, array $args = array(), $before = "", $after = " ") {
         $html = "";
-        $terms = $this->getModel()->getTermCollection($taxonomy, $args);
+        $terms = $this->getModel()->getTerms($taxonomy, $args);
 
         if (kt_isset_and_not_empty($terms)) {
             foreach ($terms as $term) {
@@ -83,7 +83,20 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         return $html;
     }
 
-    // --- public function -----
+    /**
+     * Vrátí excerpt pokud je k dispozici a v HTML formátu (odstavec)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return mixed null|string (HTML)
+     */
+    public function getExcerpt() {
+        if ($this->getModel()->hasExcrept()) {
+            return $html = "<p class=\"perex\">{$this->getModel()->getExcerpt()}</p>";
+        }
+        return null;
+    }
 
     /**
      * Vrátí HTML tag img s náhledovým obrázkem zadaného postu dle specifikace parametrů
@@ -94,13 +107,40 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @param string $imageSize
      * @param array $imageAttr // parametry obrázky $key => $value
      * @param string $defaultImageSrc
-     * @return mixed null || string
+     * @return mixed null|string (HTML)
      */
     public function getThumbnailImage($imageSize, array $imageAttr = array(), $defaultImageSrc = null, $isLazyLoading = true) {
         return self::getThumbnailImageByPost($this->getModel()->getPost(), $imageSize, $imageAttr, $defaultImageSrc, $isLazyLoading);
     }
 
-    // --- static public function
+    /**
+     * Vrátí odkaz a image tag na náhledový obrázek v Large velikosti.
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $imageSize
+     * @param string $tagId
+     * @param string $tagClass
+     * 
+     * @return mixed null|string (HTML)
+     */
+    public function getThumbnailImageWithSelfLink($imageSize = KT_WP_IMAGE_SIZE_MEDIUM, $tagId = "serviceThumbImage", $tagClass = "gallery") {
+        if ($this->getModel()->hasThumbnail()) {
+            $titleAttribute = $this->getModel()->getTitleAttribute();
+            $image = $this->getThumbnailImage($imageSize, array("class" => "img-responsive", "alt" => $titleAttribute));
+            $linkImage = wp_get_attachment_image_src($this->getModel()->getThumbnailId(), KT_WP_IMAGE_SIZE_LARGE);
+            $html = kt_get_tabs_indent(0, "<div id=\"$tagId\" class=\"$tagClass\">", true);
+            $html .= kt_get_tabs_indent(1, "<a href=\"{$linkImage[0]}\" class=\"fbx-link\" title=\"$titleAttribute\">", true);
+            $html .= kt_get_tabs_indent(2, $image, true);
+            $html .= kt_get_tabs_indent(1, "</a>", true);
+            $html .= kt_get_tabs_indent(0, "</div>", true, true);
+            return $html;
+        }
+        return null;
+    }
+
+    // --- static public function ---------------------------
 
     /**
      * Vrátí HTML tag img s náhledovým obrázkem zadaného postu dle specifikace parametrů
@@ -142,7 +182,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      */
     public static function getImageHtmlTag($imageSrc, array $imageAttr = array()) {
         $attr = "";
-        
+
         if (kt_isset_and_not_empty($imageSrc)) {
             $parseAttr = wp_parse_args($imageAttr);
             if (kt_isset_and_not_empty($parseAttr)) {

@@ -86,7 +86,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     public function getMetaPrefix() {
         return $this->metaPrefix;
     }
-    
+
     /**
      * @return \KT_WP_Post_File_List
      */
@@ -319,7 +319,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     public function getPostType() {
         return $this->getPost()->post_type;
     }
-    
+
     /**
      * Vrátí hodnotu z $wpdb->postmeta na základě zadaného meta_key
      *
@@ -349,16 +349,59 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      *
      * @param string $taxonomy
      * @param array $args // wp_get_object_terms
-     * @return type
+     * 
+     * @return mixed null|array
      */
-    public function getTermCollection($taxonomy, array $args = array()) {
-
+    public function getTerms($taxonomy, array $args = array()) {
         if (kt_not_isset_or_empty($this->$taxonomy)) {
             $termCollection = self::getTermCollectionByPost($this->getPost(), $taxonomy, $args);
             $this->$taxonomy = $termCollection;
         }
-
         return $this->$taxonomy;
+    }
+
+    /**
+     * Vrátí pole ve tvaru term ID => name pro zadanou taxonomii a podle parametrů
+     *
+     * @author Martin Hlaváč
+     * @link www.ktstudio.cz
+     *
+     * @param string $taxonomy
+     * @param array $args // wp_get_object_terms
+     * 
+     * @return array
+     */
+    public function getTermsNames($taxonomy, array $args = array()) {
+        $terms = $this->getTerms($taxonomy, $args);
+        $termsNames = array();
+        if (kt_array_isset_and_not_empty($terms)) {
+            foreach ($terms as $term) {
+                $termsNames[$term->term_id] = $term->name;
+            }
+        }
+        return $termsNames;
+    }
+    
+    /**
+     * Vrátí pole ve tvaru term ID => slug pro zadanou taxonomii a podle parametrů
+     *
+     * @author Martin Hlaváč
+     * @link www.ktstudio.cz
+     *
+     * @param string $taxonomy
+     * @param array $args // wp_get_object_terms
+     * 
+     * @return array
+     */
+    public function getTermsSlugs($taxonomy, array $args = array()) {
+        $terms = $this->getTerms($taxonomy, $args);
+        $termsNames = array();
+        if (kt_array_isset_and_not_empty($terms)) {
+            foreach ($terms as $term) {
+                $termsNames[$term->term_id] = $term->slug;
+            }
+        }
+        return $termsNames;
     }
 
     /**
@@ -458,6 +501,62 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     // --- (veřejné) statické funkce --
 
     /**
+     * Vrátí term podle ID pro zadanou taxonomie
+     * 
+     * @author Martin Hlaváč
+     * @link www.ktstudio.cz
+     * 
+     * @param integer $termId
+     * @param string $taxonomy
+     * @return mixed|null|WP_Error Term Row from database
+     */
+    public static function getTaxonomyTerm($termId, $taxonomy) {
+        if (kt_isset_and_not_empty($termId)) {
+            $term = get_term($termId, $taxonomy);
+            if (kt_isset_and_not_empty($term)) {
+                return $term;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Vrátí název termu podle ID pro zadanou taxonomie
+     * 
+     * @author Martin Hlaváč
+     * @link www.ktstudio.cz
+     * 
+     * @param integer $termId
+     * @param string $taxonomy
+     * @return string
+     */
+    public static function getTaxonomyTermName($termId, $taxonomy) {
+        $term = self::getTaxonomyTerm($termId, $taxonomy);
+        if (kt_isset_and_not_empty($term)) {
+            return $term->name;
+        }
+        return null;
+    }
+
+    /**
+     * Vrátí slug termu podle ID pro zadanou taxonomie
+     * 
+     * @author Martin Hlaváč
+     * @link www.ktstudio.cz
+     * 
+     * @param integer $termId
+     * @param string $taxonomy
+     * @return string
+     */
+    public static function getTaxonomyTermSlug($termId, $taxonomy) {
+        $term = self::getTaxonomyTerm($termId, $taxonomy);
+        if (kt_isset_and_not_empty($term)) {
+            return $term->slug;
+        }
+        return null;
+    }
+
+    /**
      * Vrátí všechny termy, kam daný post patří na základě zvolené taxonomy
      *
      * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
@@ -466,7 +565,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @param WP_Post $post
      * @param string $taxonomy
      * @param array $args
-     * @return mixed null || array
+     * @return mixed null|array
      */
     public static function getTermCollectionByPost(WP_Post $post, $taxonomy = KT_WP_CATEGORY_KEY, $args = array()) {
         $terms = wp_get_object_terms($post->ID, $taxonomy, $args);
