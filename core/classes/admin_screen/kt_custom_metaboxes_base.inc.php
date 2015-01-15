@@ -361,7 +361,7 @@ abstract class KT_Custom_Metaboxes_Base {
         ?>
         <div class="wrap kt-custom-screen-page">
             <h2> <?php echo esc_html($this->getTitle()); ?> </h2>
-            <form name="kt-custom-page-screen" method="post">
+            <form id="kt-custom-page-screen" class="<?php echo $this->getSlug(); ?>" name="kt-custom-page-screen" method="post">
                 <input type="hidden" name="kt-action" value="kt-action-<?php $this->getSlug(); ?>">
                 <?php
                 wp_nonce_field('kt-action-nonce');

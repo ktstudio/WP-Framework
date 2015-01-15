@@ -161,7 +161,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
             $this->setId($rowIdFromData);
         }
 
-        $this->data = $data;
+        $this->data = wp_parse_args($data, $this->data);
 
         return $this;
     }

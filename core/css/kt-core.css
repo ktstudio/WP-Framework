@@ -175,7 +175,6 @@ div.postbox input#kt-form-submit
 
 div.validator
 {
-    float: left;
     height: 0;
     position: relative;
 }
@@ -183,10 +182,10 @@ div.validator
 span.erorr-s
 {
     position: absolute;
-    background: red;
     padding: 2px 8px;
     display: block;
-    left: 10px;
+    left: 0px;
+    top: 25px;
     white-space: nowrap;
     height: 20px;
     line-height: 20px;
@@ -196,6 +195,20 @@ span.erorr-s
     letter-spacing: -1px;
     font-size: 11px;
     background: #c92a2a;
+}
+
+span.erorr-s:after
+{
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: -5px;
+    left: 10px;
+    border-style: solid;
+    border-width: 0 5px 10px 5px;
+    border-color: transparent transparent #c92a2a transparent;
 }
 
 .kt_fieldset input[type="number"],
