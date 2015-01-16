@@ -333,7 +333,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         $metas = $this->getMetas();
         if (array_key_exists($key, $metas)) {
             $value = $metas[$key];
-            if (kt_isset_and_not_empty($value)) {
+            if (isset($value)) {
                 return $value;
             }
         }
@@ -381,7 +381,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         }
         return $termsNames;
     }
-    
+
     /**
      * Vrátí pole ve tvaru term ID => slug pro zadanou taxonomii a podle parametrů
      *
