@@ -163,7 +163,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
         );
 
         if ($this->getExcludeThumbnail()) {
-            $queryArgs["exclude"] = get_post_thumbnail_id($this->getPost()->ID);
+            $queryArgs["post__not_in"] = array(get_post_thumbnail_id($this->getPost()->ID));
         }
 
         $images = new WP_Query($queryArgs);
