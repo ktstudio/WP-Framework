@@ -1,6 +1,6 @@
 <?php
 
-define( "KT_LOADING", TRUE );
+define( "KT_LOADED", TRUE );
 
 define( "KT_BASE_PATH", path_join( TEMPLATEPATH, "kt" ) );
 define( "KT_BASE_URL", get_template_directory_uri() . "/kt" );
@@ -33,7 +33,7 @@ kt_load_all_modules();
  * @return empty|exit
  */
 function kt_check_loaded() {
-	if ( KT_LOADING === true )
+	if ( KT_LOADED === true )
 		return;
 	exit;
 }

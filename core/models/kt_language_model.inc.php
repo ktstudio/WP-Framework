@@ -12,9 +12,8 @@ class KT_Language_Model extends KT_Catalog_Base_Model {
     const ORDER_COLUMN = self::TITLE_COLUMN;
     const PREFIX = "kt_shop_languages";
     const FORM_PREFIX = "kt-shop-languages";
-    
     // --- DB Sloupce ----------------
-    
+
     const DECIMAL_POINTS_COLUMN = "decimal_point";
     const THOUSANDS_SEPARATOR = "thousands_separator";
 
@@ -91,35 +90,36 @@ class KT_Language_Model extends KT_Catalog_Base_Model {
     }
 
     /**
-     * Zformátování zadaného čísla, resp. doplnění správné des. čárky a tečky podle jazyka
+     * Zformátování zadaného čísla podle aktuálních parametrů jazyka
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
      * @param integer $number
      * @param integer $decimals počet požadovaných desetinných míst
-     * @return numeric|null
+     * @return mixed numeric|null
      */
-    public function getNumberFormat($number, $decimals) {
-        if (kt_isset_and_not_empty($number) && is_numeric($number) && kt_isset_and_not_empty($decimals) && is_numeric($decimals)) {
-            $decimals = $this->getDecimals();
-            return number_format($number, $decimals, $this->getDecimalPoint(), $this->getThousandsSeparator());
-        }
-        return null;
+    public function getCurrentFormatedNumber($number, $decimals) {
+        return self::getFormatedNumber($number, $decimals, $this->getDecimalPoint(), $this->getThousandsSeparator());
     }
 
     /**
-     * Výpis zformátování zadaného čísla, resp. doplnění správné des. čárky a tečky podle jazyka
+     * Zformátování zadaného čísla podle zadných parametrů
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @param integer $number
+     * @param float $number
      * @param integer $decimals počet požadovaných desetinných míst
-     * @return integer|null
+     * @param char $decimalPoint
+     * @param char $thousandsSeparator
+     * @return mixed float|null
      */
-    public function theNumberFormat($number, $decimals) {
-        echo $this->getNumberFormat($number, $decimals);
+    public static function getFormatedNumber($number, $decimals = KT_CURRENCY_DECIMAL_COUNT, $decimalPoint = KT_LANGUAGE_DECIMAL_POINT, $thousandsSeparator = KT_LANGUAGE_THOUSANDS_SEPARATOR) {
+        if (kt_isset_and_not_empty($number) && is_numeric($number) && is_numeric($decimals)) {
+            return number_format($number, intval($decimals), $decimalPoint, $thousandsSeparator);
+        }
+        return null;
     }
 
 }

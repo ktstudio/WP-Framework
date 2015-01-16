@@ -8,12 +8,10 @@
  * @return boolean
  */
 function kt_is_id_format($value) {
-
     $id = kt_try_get_int($value);
-
-    if (kt_isset_and_not_empty($id) && $id > 0)
+    if (kt_isset_and_not_empty($id) && $id > 0) {
         return true;
-
+    }
     return false;
 }
 
