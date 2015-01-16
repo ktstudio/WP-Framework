@@ -676,8 +676,8 @@ class KT_MetaBox implements KT_Registrable {
 
         $pageTemplate = $this->getPageTemplate();
         if (kt_isset_and_not_empty($pageTemplate)) { // chceme kontrolovat (aktuální) page template
-            $currentPageTemplate = get_post_meta($post->ID, "_wp_page_template", true);
-            if ($currentPageTemplate !== $pageTemplate) { // (aktuální) page template nesedí => ručíme přidání metaboxu
+            $currentPageTemplate = get_post_meta($post->ID, KT_WP_META_KEY_PAGE_TEMPLATE, true);
+            if ($currentPageTemplate !== $pageTemplate) { // (aktuální) page template nesedí => rušíme přidání metaboxu
                 return false;
             }
         }

@@ -50,7 +50,7 @@ function kt_get_attachment_template() {
  * @return string - template path
  */
 function kt_get_page_template(WP_Post $post) {
-    $page_template = get_post_meta($post->ID, '_wp_page_template', true);
+    $page_template = get_post_meta($post->ID, KT_WP_META_KEY_PAGE_TEMPLATE, true);
 
     if ($page_template != 'default' && $page_template != '') {
         $file = TEMPLATEPATH . '/' . $page_template;
