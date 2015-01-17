@@ -9,7 +9,7 @@ class KT_Template_Registrator {
      * Po každém přidání nutné aktualizovat permalinks Nastaveni -> Trvalá Odkazy ->Uložit změny
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      */
     public function __construct() {
@@ -38,7 +38,7 @@ class KT_Template_Registrator {
      * Zavede všechny definované URL do rewrite rules
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param type $aRules
      * @return type
@@ -63,7 +63,7 @@ class KT_Template_Registrator {
      * Akce vrátí do WP Front-endu příslušnou templatu z uvedené path URL objektu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @global WP_Query $wp_query
      * @param string $template
@@ -100,7 +100,7 @@ class KT_Template_Registrator {
      * Vrátí URL Object KT_Custom_Template na základě registrovaného pagename
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @return KT_Custom_Template
@@ -117,7 +117,7 @@ class KT_Template_Registrator {
      * Funkce pro zavedení HTML titulku pro custom page - nutné pro wp_title filter
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @global WP_Query $wp_query
      * @param string $title

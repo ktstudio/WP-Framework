@@ -26,8 +26,8 @@ class KT_Form {
     /**
      * Založení nového objetku KT_Form
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param string $method = default post
      * @param string $action = default ''
@@ -137,7 +137,7 @@ class KT_Form {
      * Pouze nastavuje property třídy
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param array $fieldsets
      * @return \KT_Form
@@ -151,7 +151,7 @@ class KT_Form {
      * nastavení metodu <form> - přijmá pouze POST a GET
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $method - POST || GET
      * @return \KT_Form
@@ -170,7 +170,7 @@ class KT_Form {
      * Nastaví id <form> tagu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $id
      * @return \KT_Form
@@ -188,7 +188,7 @@ class KT_Form {
      * Pouze nastavuje property objektu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $formClasses
      * @return \KT_Form
@@ -202,7 +202,7 @@ class KT_Form {
      * Nastaví formuláři chybu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param boolean $error
      * @return \KT_Form
@@ -216,7 +216,7 @@ class KT_Form {
      * Nastavení akci <form> tagu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param type $action
      * @return \KT_Form
@@ -232,7 +232,7 @@ class KT_Form {
      * Nastavení hodnotu submit buttonu při echování formuláře jako celku
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $value
      * @return \KT_Form
@@ -249,7 +249,7 @@ class KT_Form {
      * Nastavení class submit buttonu při echování formuláře jako celku
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $value
      * @return \KT_Form
@@ -265,7 +265,7 @@ class KT_Form {
      * Nastaví SuccessMesassage,která je vypsána v notice při průchodu validací
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $message
      * @return \KT_Form
@@ -282,7 +282,7 @@ class KT_Form {
      * Nastaví ErrorMessage, která je vypsáná v notice při chybě ve validaci
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $message
      * @return \KT_Form
@@ -299,7 +299,7 @@ class KT_Form {
      * Nastaví, zda se má u formuláře zobrazovat notifikace
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param boolean $showNotice
      * @return \KT_Form
@@ -313,7 +313,7 @@ class KT_Form {
      * Nastaví enctype formuláře
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $enctype
      * @return \KT_Form
@@ -332,7 +332,7 @@ class KT_Form {
      * Přidá classu <form> tagu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $class
      * @return \KT_Form
@@ -349,7 +349,7 @@ class KT_Form {
      * Přidá další položu fieldsetu do kolekce
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @return \KT_Form_Fieldset
@@ -365,7 +365,7 @@ class KT_Form {
      * Přidá objekt KT_Form_Fieldset do kolekce fieldsetů formu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param \KT_Form_Fieldset
      * @return \KT_Form_Fieldset
@@ -401,7 +401,7 @@ class KT_Form {
      * Vrátí položku jednoho fieldsetu na základě jeho jména.
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @return \KT_Form_Fieldset
@@ -418,7 +418,7 @@ class KT_Form {
      * Pokud formulář nemá žádné chyby ve validací, vrácí false
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz.cz
+     * @link http://www.ktstudio.cz
      *
      * @return Boolean
      */
@@ -435,7 +435,7 @@ class KT_Form {
      * Funkce vrátí zda objekt KT_Form ma zadanou nějakou kolekci fieldu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return boolean
      */
@@ -451,7 +451,7 @@ class KT_Form {
      * Vytvoří html string pro vypsání Success message
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -465,7 +465,7 @@ class KT_Form {
      * Vytvoří html string pro vypsání Error message
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -479,7 +479,7 @@ class KT_Form {
      * Na základě erroru formu vrátí html string s message
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -503,7 +503,7 @@ class KT_Form {
      * Vrátí tabulku s formulářem - echo TR TD INPUT
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $class - class tabulky
      */
@@ -524,7 +524,7 @@ class KT_Form {
      * Vrátí html všech fieldů bez všech složitostí a konstrukcí kolem
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string $html
      * @throws KT_Not_Set_Argument_Exception
@@ -546,7 +546,7 @@ class KT_Form {
      *
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string @type = table || simple
      */
@@ -580,7 +580,7 @@ class KT_Form {
      * Vrátí hlavičku formuláře <form... na základě jeho nastavení
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return type
      */
@@ -602,7 +602,7 @@ class KT_Form {
      * Vrátí ukončení formuláře </form>
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return type
      */
@@ -614,7 +614,7 @@ class KT_Form {
      * Funkce vrátí strukturu pro HTML v podobně tabulky Label -> Value (saved)
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param array $excludeFields - které filedy se nebudou zobrazovat $field->name
      * @param string $class
@@ -644,7 +644,7 @@ class KT_Form {
      * Načte data do všech fieldsetů na základě názvů fieldů z tabulky wp_option
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param $postId in
      *
@@ -684,7 +684,7 @@ class KT_Form {
      * Načte data do všech fieldsetů na základě postId z tabulky wp_postmeta
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param $postId in
      *
@@ -733,7 +733,7 @@ class KT_Form {
      * Načte data do všech fieldsetů na základě userId z tabulky wp_usermeta
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param int $userId
      * @return \KT_Form
@@ -769,7 +769,7 @@ class KT_Form {
      * Inicializuje všechny validační metody definované u fieldů
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param array - parametry fieldu
      * @return \KT_Form
@@ -805,7 +805,7 @@ class KT_Form {
     /**
      * Funkce umístí hodnoty do fieldu fomuláře. Možné definovat pomocí fieldsetu nebo obyčejným polem
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param form_data array() - $fieldSet->name => array($field->name => $fieldValue)
      */
@@ -828,7 +828,7 @@ class KT_Form {
      * Funkce uloží všechny fieldy objektu do tabuly wp_postmeta v podobě key => value
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param int $postId = ID postu, v případě nezadání, se bere global $post
      * @param array $excludeFields - kolekci fieldů, které nemají být ukládány [] => $field->getName()
@@ -881,7 +881,7 @@ class KT_Form {
      * Funkce si sama provede kontrolu, zda se jedná o serializovaný save nebo obyčejný
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param array $exludeFields - které fieldy se nebudou ukládat
      * @return \KT_Form
@@ -912,7 +912,7 @@ class KT_Form {
      * Funkce si sama provede kontrolu, zda
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param int $userId - kterému uživateli budou meta uložena
      * @param array $excludeFields - které fieldy se nebudou ukládat
@@ -944,7 +944,7 @@ class KT_Form {
      * Dodá admin notifikaci s chybovou hlášku na základě nastavené validace ze strany formuláře.
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      */
     public function addErrorNoticeAfterSavePostCallback() {
 
@@ -966,7 +966,7 @@ class KT_Form {
      * Funkce prověří, zda byl formulář odeslán na základě metody a postu nebo getu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return boolean
      */
@@ -1019,7 +1019,7 @@ class KT_Form {
      * při ukládání při editaci post_type
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @global type $current_screen
      * @return type
@@ -1055,7 +1055,7 @@ class KT_Form {
      * USED : saveFieldsToOptionTable
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param \KT_Form_Fields $fieldSet
      * @param array $exlude_fieldset
@@ -1082,7 +1082,7 @@ class KT_Form {
      * USED : saveFieldsToOptionTable
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param \KT_Form_Fieldset $fieldset
      * @param array $exludeFields
@@ -1113,7 +1113,7 @@ class KT_Form {
      * USED : saveFormDataToPostMeta
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param KT_Form_Fieldset $fieldset
      * @param array $exludeFields
@@ -1154,7 +1154,7 @@ class KT_Form {
      * USED : saveFormDataToPostMeta
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param KT_Form_Fieldset $fieldset
      * @param array $exludeFields
@@ -1187,7 +1187,7 @@ class KT_Form {
      * USED : saveFormDataToPostMeta
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param KT_Form_Fieldset $fieldset
      * @param array $exludeFields
@@ -1226,7 +1226,7 @@ class KT_Form {
      * USED : saveFormDataToPostMeta
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param KT_Form_Fieldset $fieldset
      * @param array $exludeFields
@@ -1258,7 +1258,7 @@ class KT_Form {
      * Vypíše submit form button
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $value = html value v submitu
      * @param string $class = html class
@@ -1274,7 +1274,7 @@ class KT_Form {
      * Získá jméno transientu v případě validace formuláře z pozice editace post_type
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @global \WP_Screen $current_screen
      * @return string

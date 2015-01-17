@@ -12,8 +12,8 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
     /**
      * Objekt pro základní práci s obrázky přiřazené k postu
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param WP_Post $post
      */
@@ -49,7 +49,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
     /**
      * Nastaví, zda se má z kolekce obrázků odstranit náhledový obrázek zadaného postu.
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param type $bool
@@ -67,7 +67,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
      * Nastaví velikost obrázku, která bude použita jaké náhled
      * Pouze Wordpress image size - add_image_size();
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param string $thumbnailSize
@@ -79,7 +79,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
     /**
      * Nastaveí velikost obrázku, která se bude použivát jako cíl odkazu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param string $largeSize
@@ -96,8 +96,8 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
     /**
      * Vrátí HTML s celou galerií včetně obrázků, linků a atributů - viz parametry
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param type $id // html id containeru
      * @param type $class // html class containeru
@@ -145,7 +145,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
     /**
      * Provede inicializaci a načtení všech obrázků dle zadaného Post objektu a nastavení
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @return \KT_WP_Post_Gallery
@@ -178,7 +178,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
     /**
      * Na základě předaných parametrů zhotoví <a> tag, který odkazuje na large velikost
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param array $large // data obrázku wp_get_attachment_image_src()
@@ -200,7 +200,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
     /**
      * Na základě předaných parametrů zhotoví <img> tag s obrázek dle zvolené velikosti
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param WP_Post $image // objektu obrázku

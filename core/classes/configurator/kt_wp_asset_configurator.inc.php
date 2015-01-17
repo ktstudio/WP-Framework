@@ -26,8 +26,8 @@ final class KT_WP_Asset_Configurator {
     /**
      * Nastaví celou kolekci scriptů pro registraci
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param array $scriptCollection
      * @return \KT_WP_Scripts_Registrator
@@ -40,8 +40,8 @@ final class KT_WP_Asset_Configurator {
     /**
      * Nastaví celou kolekci scriptů pro registraci
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param type $styleCollection
      * @return \KT_WP_Asset_Configurator
@@ -56,8 +56,8 @@ final class KT_WP_Asset_Configurator {
     /**
      * Přidá jeden script k registraci do kolekce dle nastavení
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $id // identifikátor scriptu
      * @param string $source // url cesta ke scriptu
@@ -73,8 +73,8 @@ final class KT_WP_Asset_Configurator {
     /**
      * Přidá jeden style k registraci do kolekce dle nastavení
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $id // identifikátor stylu
      * @param string $source // url cesta ke stylu
@@ -91,8 +91,8 @@ final class KT_WP_Asset_Configurator {
      * Přidá další kolekci scriptů do koelekce stávající
      * NEPROBÍHÁ OVĚŘENÍ, ZDA KOLEKCE JE OPRAVDU PLNÁ OBJEKTŮ SE SCRIPTY
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param array $scriptCollection
      * @return \KT_WP_Asset_Configurator
@@ -121,8 +121,8 @@ final class KT_WP_Asset_Configurator {
      * Přidá další kolekci stylů do kolekce stávající
      * NEPROBÍHÁ OVĚŘENÍ, ZDA KOLEKCE JE OPRAVDU PLNÁ OBJEKTŮ SE STYLY
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param array $styleCollection
      * @return \KT_WP_Asset_Configurator

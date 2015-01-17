@@ -31,8 +31,8 @@ final class KT_WP_Sidebar_Configurator {
     /**
      * Vrátí nastavení sidebaru pro funkci
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return array
      */

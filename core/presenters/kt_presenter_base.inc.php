@@ -3,7 +3,7 @@
 /**
  * Základní Presenter pro všechny presentery
  * 
- * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+ * @author Tomáš Kocifaj
  * @link http://www.ktstudio.cz
  */
 abstract class KT_Presenter_Base implements KT_Presentable {

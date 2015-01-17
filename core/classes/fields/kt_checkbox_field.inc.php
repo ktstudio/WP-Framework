@@ -23,7 +23,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      * Provede výpis fieldu pomocí echo $this->getField()
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      */
     public function renderField() {
@@ -34,7 +34,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      * Vrátí HTML strukturu pro zobrazní fieldu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -81,7 +81,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      * Class, Name, ID, Title(tooltip), validator jSON
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $inputName
      * @return string
@@ -109,7 +109,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      * Vrátí HTML s attributem name fieldu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $inputName
      * @return string

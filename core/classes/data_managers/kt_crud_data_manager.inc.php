@@ -59,7 +59,7 @@ class KT_CRUD_Data_Manager extends KT_Data_Manager_Base {
      * Nastaví repositář s daným CRUD objektem pro práci se selekcí dat
      * 
      * @author Tomáš Kocifaj
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param KT_Repository $repository
      * @return \KT_CRUD_Data_Manager
@@ -80,7 +80,7 @@ class KT_CRUD_Data_Manager extends KT_Data_Manager_Base {
      * Nastaví, který sloupec v rámci CRUD má být dostupný v hodnotě value u options
      * 
      * @author Tomáš Kocifaj
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $keyColumn
      * @return \KT_CRUD_Data_Manager
@@ -101,7 +101,7 @@ class KT_CRUD_Data_Manager extends KT_Data_Manager_Base {
      * Nastaví, který sloupec v rámci CRUD má být dostupný jako label (popisek) u options
      * 
      * @author Tomáš Kocifaj
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $labelColumn
      * @return \KT_CRUD_Data_Manager
@@ -118,7 +118,7 @@ class KT_CRUD_Data_Manager extends KT_Data_Manager_Base {
      * a uloží ho do modelu pro další práci.
      * 
      * @author Tomáš Kocifaj
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $table
      * @return \KT_CRUD_Data_Manager
@@ -141,7 +141,7 @@ class KT_CRUD_Data_Manager extends KT_Data_Manager_Base {
      * Provede inicializaci dat na základě nastaveného repositáře.
      * 
      * @author Tomáš Kocifaj
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @return \KT_CRUD_Data_Manager
      * @throws KT_Not_Set_Argument_Exception

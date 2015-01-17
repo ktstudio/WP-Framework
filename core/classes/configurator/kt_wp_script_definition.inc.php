@@ -9,8 +9,8 @@ class KT_WP_Script_Definition extends KT_WP_Asset_Definition_Base {
      * Řídí se:
      * @link http://codex.wordpress.org/Function_Reference/wp_register_script
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $id
      * @param string $source
@@ -34,8 +34,8 @@ class KT_WP_Script_Definition extends KT_WP_Asset_Definition_Base {
      * Nastaví, zda se má script načítat v hlavičce nebo v patičce
      * Defaultně: false 
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $inFooter
      * @return \kt_wp_script_handle

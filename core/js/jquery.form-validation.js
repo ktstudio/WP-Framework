@@ -4,7 +4,7 @@
      * jQuery plugin pro validaci KT_Form na straně browseru
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @returns {Boolean}
      */

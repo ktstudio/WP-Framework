@@ -19,7 +19,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * A přidávání metaboxů
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      */
     public function __construct() {
         $this->defaultCallbackFunction = array($this, 'renderPage');
@@ -76,7 +76,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * Nastaví, zda se má nebo nemá vykreslit metabox se submit buttonem
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param boolean $renderSaveButton
      * @return \KT_Custom_Metaboxes_Base
@@ -98,7 +98,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * Konstaty self::KT_COLUMN_ONE || self::KT_COLUMN_TWO
      *  
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @return \KT_Custom_Metaboxes_Base
      */
@@ -120,7 +120,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * Used : $this->addScreenFunctionForAction();
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param array $screenCollection
      * @return \KT_Custom_Metaboxes_Base
@@ -136,7 +136,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * stránkou nejsou volány žádné URL parametry.
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param array $defaultCallbackFunction
      * @return \KT_Custom_Metaboxes_Base
@@ -206,7 +206,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * callback funkci pro výpis obsahu na stránce.
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param string $actionName - název GET parametru
      * @param string $actionValue - hodnota GET parametru
@@ -225,7 +225,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * Do kolekce metaboxů přidá jeden metabox.
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param KT_Metabox $metabox
      * @return \KT_Custom_Metaboxes_Base
@@ -244,7 +244,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * Pokud ano, přidá kolekci k ostatním metaboxům, které jsou přidány.
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param array $metaboxCollection
      * @return \KT_Custom_Metaboxes_Base
@@ -275,7 +275,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * Provede registraci stránky. Pokud jsou definované metaboxy, provede jejich registraci
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      */
     public function register() {
         add_action('admin_menu', array($this, 'initPage'));
@@ -289,7 +289,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * Vypíše potřebný script pro funkčnost metaboxů v rámci layoutu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz   
+     * @link http://www.ktstudio.cz   
      */
     public function renderFooterScripts() {
         echo "<script> postboxes.add_postbox_toggles(pagenow);</script>";
@@ -299,7 +299,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * Provede potřebné akce, které jsou nutné pro funkčnost layoutu s metaboxy
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      */
     public function doPageAction() {
         do_action('add_meta_boxes_' . $this->getPage(), null);
@@ -314,7 +314,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * Pokud není GET parametr spárován, vrátí defaultní callback funkci.
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz   
+     * @link http://www.ktstudio.cz   
      * 
      * @return array
      */
@@ -355,7 +355,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * Vykreslí layout stránky s metaboxama.
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      */
     public function renderPage() {
         ?>
@@ -397,7 +397,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * Vykreslí obsah pro stránku s KT_CRUD_List
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      */
     public function renderCrudListPage(){
         if(kt_not_isset_or_empty($this->getCrudList())){
@@ -413,7 +413,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * V případě nastavení tlačítka pro uložení vyklresí samotný metabox
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      * 
      * @return \KT_Custom_Metaboxes_Base
      */
@@ -437,7 +437,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * USED : renderSaveMetabox();
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      * 
      */
     public function saveMetaboxCallback() {

@@ -56,7 +56,7 @@ class KT_Catalog_Base_Config {
     /**
      * Vrátí základní sadu sloupců pro KT_CRUD_Admin_List
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
      * @param string $className

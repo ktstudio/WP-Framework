@@ -4,7 +4,7 @@
  * Základní společný (KT) interface pro všechny presentery, který pracují se základním modelem
  * Pozn.: je velmi vhodné implemenovat minimálně pro každý presenter, který pracuje s určitým modelem
  * 
- * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+ * @author Tomáš Kocifaj
  * @link http://www.ktstudio.cz
  */
 Interface KT_Presentable {

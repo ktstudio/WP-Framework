@@ -5,8 +5,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     /**
      * Základní presenter pro práci s daty post_typu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param WP_Post $post
      * @param int $postId
@@ -33,8 +33,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     /**
      * Vypíše kolekci všech termů, kam je post zařazen na základě taxonomy
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param string $taxonomy
      * @param array $args // wp_get_object_terms
@@ -60,8 +60,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * Vypíše kolekci všech termů včetně odkazu na výpis na základě zadané taxonomy
      * Odkaz má vždy class = term {$term->slug} {$taxonomy} term-id-{$term->term_id}
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param type $taxonomy
      * @param array $args
@@ -101,8 +101,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     /**
      * Vrátí HTML tag img s náhledovým obrázkem zadaného postu dle specifikace parametrů
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param string $imageSize
      * @param array $imageAttr // parametry obrázky $key => $value
@@ -146,7 +146,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * Vrátí HTML tag img s náhledovým obrázkem zadaného postu dle specifikace parametrů
      *
      * @author Tomáš Kocifaj, Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param WP_Post $post
      * @param string $imageSize
@@ -173,7 +173,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * Sestavení HTML tagu obrázku na základě zadaných parametrů
      * 
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $imageSrc
      * @param array $imageAttr

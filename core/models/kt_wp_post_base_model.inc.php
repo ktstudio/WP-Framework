@@ -13,7 +13,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Základní model pro práci s daty post_typu
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param WP_Post $post
@@ -115,7 +115,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Nastaví objektu WP_Postu pro model
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param WP_Post $post
@@ -129,7 +129,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Nastaví KT_WP_User_Base_Model objekt autora příspěvku
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param KT_WP_User_Base_Model $author
@@ -143,7 +143,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Nastavení (post) metas daného příspěvku
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param array $metas
@@ -157,7 +157,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Nastaví galerii obrázků daného příspěvku
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param KT_WP_Post_Gallery $gallery
@@ -178,8 +178,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Vrátí ID WP_Postu v rámci modelu
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return int
      */
@@ -190,8 +190,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Vrátí titulek modelu na základě post_title a aplikovaného filtru
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -211,7 +211,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * 
      * Metoda šetří SQL requesty při prostém výpisu obsahu.
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
      * @return string
@@ -231,8 +231,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * 
      * Metoda šetří SQL requesty při prostém výpisu stručného popisku
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
@@ -258,8 +258,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Vrátí URL pro zobrazení detailu postu
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -280,8 +280,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Vrátí ID náhledového obrázku. Pokud není přiřazen, vrátí Null
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return mixed null || int
      */
@@ -298,8 +298,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Vrátí datum publikace příspěvku v základním formátu "d.m.Y"
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param string $dateFormat
      * @return string
@@ -312,7 +312,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Vrátí (za/daný) post type
      *
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -324,7 +324,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Vrátí hodnotu z $wpdb->postmeta na základě zadaného meta_key
      *
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $key
      * @return string|null
@@ -344,8 +344,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Vrátí kolekci všech termů, kam je post zařazen na základě zadané taxonomy
      * Pokud ještě nebyly načteny, uloží je do proměnné $this->data->{$taxonomy} a znovu se na ně nedotazuje
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param string $taxonomy
      * @param array $args // wp_get_object_terms
@@ -364,7 +364,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Vrátí pole ve tvaru term ID => name pro zadanou taxonomii a podle parametrů
      *
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $taxonomy
      * @param array $args // wp_get_object_terms
@@ -386,7 +386,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Vrátí pole ve tvaru term ID => slug pro zadanou taxonomii a podle parametrů
      *
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $taxonomy
      * @param array $args // wp_get_object_terms
@@ -407,8 +407,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Vrátí, zda daný model má nebo nemá vyplněný post_excerpt v DB tabulce.
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return boolean
      */
@@ -422,8 +422,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Zjistí, zda má model zadaný meta hodnotu na klíči - _thumbnail_id
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return boolean
      */
@@ -439,8 +439,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Inicializuje WP_User objekt na základě post_author
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_Post_Type_Presenter_Base
      */
@@ -459,7 +459,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Inicializuje pole (post) metas na základě prefixu nebo všechny
      *
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_Post_Type_Presenter_Base
      */
@@ -473,8 +473,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Inicializuje objekt WP_Post_Gallery s kolekcí obrázků u postu
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Post_Base_Model
      */
@@ -487,8 +487,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Inicializuje objekt KT_WP_Post_File_List s kolekců souborů u postu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return \KT_WP_Post_Base_Model
      */
@@ -504,7 +504,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Vrátí term podle ID pro zadanou taxonomie
      * 
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param integer $termId
      * @param string $taxonomy
@@ -524,7 +524,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Vrátí název termu podle ID pro zadanou taxonomie
      * 
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param integer $termId
      * @param string $taxonomy
@@ -542,7 +542,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Vrátí slug termu podle ID pro zadanou taxonomie
      * 
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param integer $termId
      * @param string $taxonomy
@@ -559,8 +559,8 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Vrátí všechny termy, kam daný post patří na základě zvolené taxonomy
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param WP_Post $post
      * @param string $taxonomy
@@ -581,7 +581,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Funkcí vrátí všechny parametry příspěvku a to všechny nebo s prefixem
      *
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @global WP_Database $wpdb
      * @param int $postId
@@ -613,7 +613,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Získání případní konrétní hodnoty meta podle klíče pro konkrétní příspěvěk (ID)
      *
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @global WP_Database $wpdb
      * @param int $postId
@@ -630,7 +630,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Získání případné konkrétní hodnoty meta podle klíče nebo KT_EMPTY_TEXT, či null
      *
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param int $postId
      * @param string $metaKey

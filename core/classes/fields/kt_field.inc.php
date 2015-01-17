@@ -20,7 +20,7 @@ abstract class KT_Field {
      * Abstraktní třída pro všechny KT_Fields
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -37,7 +37,7 @@ abstract class KT_Field {
      * Nastavení popisek inputu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $label
      * @return \KT_Field
@@ -52,7 +52,7 @@ abstract class KT_Field {
      * Nastavení název inputu pro jeho identifikaci v rámci fieldsetu, $_POST a $_GET - attr name
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $name
      * @return \KT_Field
@@ -68,7 +68,7 @@ abstract class KT_Field {
      * Field tak bude dostupný v další úrovni pole
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $postPrefix
      * @return \KT_Field
@@ -81,7 +81,7 @@ abstract class KT_Field {
      * Nastavení ToolTip fieldu - nápověda, která se vpíše do titulku inputu attr - title
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $toolTip
      * @return \KT_Field
@@ -97,7 +97,7 @@ abstract class KT_Field {
      * Jednotka je určena čistě pro presentační účely
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $unit
      * @return \KT_Field
@@ -113,7 +113,7 @@ abstract class KT_Field {
      * array("class1", "class2");
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param array $classes
      * @return \KT_Field
@@ -129,7 +129,7 @@ abstract class KT_Field {
      * Defaultně je id nastaven jako název fieldu (name)
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $id
      * @return \KT_Field
@@ -144,7 +144,7 @@ abstract class KT_Field {
      * Nastavení / změnu hodnoty fildu attr - value.
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $value
      * @return \KT_Field
@@ -160,7 +160,7 @@ abstract class KT_Field {
      * Pro interní použítí třídy
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $error
      * @return \KT_Field
@@ -193,7 +193,7 @@ abstract class KT_Field {
      * Nastavení kolekci Validotárů
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param array $validators
      * @return \KT_Field
@@ -208,7 +208,7 @@ abstract class KT_Field {
      * array( "attrName" => "attrValue")
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param array $attributes
      * @return \KT_Field
@@ -304,7 +304,7 @@ abstract class KT_Field {
      * Přidá fieldu classu do html tagu - attr class
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $class
      * @return \KT_Field
@@ -321,7 +321,7 @@ abstract class KT_Field {
      * Přidá html attribute do tagu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name - nzev attributu (id)
      * @param string $value - hodnota (kt-form)
@@ -337,7 +337,7 @@ abstract class KT_Field {
      * Založí fieldu nový KT_Field_Validator
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $condition
      * @param string $message
@@ -357,7 +357,7 @@ abstract class KT_Field {
      * V případě, že se jedná o chybu, nastaví automaticky fieldu hlášku s errorem z validatoru
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return boolean
      */
@@ -382,7 +382,7 @@ abstract class KT_Field {
      * Class, Name, ID, Title(tooltip), validator jSON
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -409,7 +409,7 @@ abstract class KT_Field {
      * Vrátí zda má field chybu po validaci
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return boolean
      */
@@ -434,7 +434,7 @@ abstract class KT_Field {
      * Vrátí field value na základě zaslaného postu, getu, prefixu nebo nastaveného value
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return null
      */
@@ -470,7 +470,7 @@ abstract class KT_Field {
      * Vrátí string za jméno každého fieldu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @return string
      */
@@ -482,7 +482,7 @@ abstract class KT_Field {
      * Vrátí html s notice obsahující ErrorMessage
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -500,7 +500,7 @@ abstract class KT_Field {
      * Vrátí HTML s attributem name fieldu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @return string
      */
@@ -522,7 +522,7 @@ abstract class KT_Field {
      * Vrátí všechny definované classy fieldu v potřeném stringu pro print do class attributu.
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
@@ -543,7 +543,7 @@ abstract class KT_Field {
      * Připraví string se zadanými attributy pro field
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
@@ -568,7 +568,7 @@ abstract class KT_Field {
      * Nastavení HTML 5 attributy fieldu na základě některých validačních prvků
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param type $validatorCondition
      * @param type $params
@@ -598,7 +598,7 @@ abstract class KT_Field {
      * Ze všech definovaných validátorů sestaví json, který vrátí jako string
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      * 
      * @return \KT_Field
      */

@@ -9,8 +9,8 @@ class KT_WP_Style_Definition extends KT_WP_Asset_Definition_Base {
      * Řídí se:
      * @link http://codex.wordpress.org/Function_Reference/wp_enqueue_style
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $id
      * @param string $source
@@ -35,8 +35,8 @@ class KT_WP_Style_Definition extends KT_WP_Asset_Definition_Base {
      * 
      * @link http://www.w3.org/TR/CSS2/media.html#media-types
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param type $media
      * @return \KT_WP_Style_Definition

@@ -23,7 +23,7 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base {
      * Nastaví textarea počet řádků tag rows=""
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param int $rows
      * @return \KT_Textarea_Field
@@ -40,7 +40,7 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base {
      * Nastaví textarea počet sloupců attr cols=""
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param int $cols
      * @return \KT_Textarea_Field
@@ -64,7 +64,7 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base {
      * Vrátí HTML strukturu pro zobrazní fieldu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -96,7 +96,7 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base {
      * Provede výpis fieldu pomocí echo $this->getField()
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      */
     public function renderField() {

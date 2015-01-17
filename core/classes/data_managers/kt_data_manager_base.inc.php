@@ -4,7 +4,7 @@
  * Základ pro datové managery 
  * 
  * @author Tomáš Kocifaj
- * @link http://www.KTStudio.cz
+ * @link http://www.ktstudio.cz
  */
 abstract class KT_Data_Manager_Base {
 

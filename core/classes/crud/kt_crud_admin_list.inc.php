@@ -61,7 +61,7 @@ class KT_CRUD_Admin_List {
      * Nastaví kolekci sloupců, která se bude v rámci tabulky zobrazovat
      * kolekce objektů KT_CRUD_Column
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param array $columnList
@@ -82,7 +82,7 @@ class KT_CRUD_Admin_List {
     /**
      * Nastaví, zda se má nad tabulkou zobrazit tlačítko, pro přidání nového CRUD záznamu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param boolean $newItemButton
@@ -103,7 +103,7 @@ class KT_CRUD_Admin_List {
     /**
      * Nastaví repositář, který se bude provádět selekci dat.
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param \KT_Repository $repository
@@ -124,7 +124,7 @@ class KT_CRUD_Admin_List {
     /**
      * Nastaví titulek pro templatu, který bude list vykreslovat
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param type $templateTitle
@@ -140,7 +140,7 @@ class KT_CRUD_Admin_List {
     /**
      * Do kolekce sloupců přidá nový sloupec
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param string $name
@@ -156,7 +156,7 @@ class KT_CRUD_Admin_List {
     /**
      * Do stávající kolekce sloupců přidá další kolekci (provede merge - nepřepíše původní)
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param array $columnCollection
@@ -177,7 +177,7 @@ class KT_CRUD_Admin_List {
     /**
      * Odstraní z kolekce sloupců na základě jeho názvu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param string $columnName
@@ -194,7 +194,7 @@ class KT_CRUD_Admin_List {
     /**
      * Vrátí sloupec z kolekce na základě jeho názvu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param string $columnName
@@ -211,7 +211,7 @@ class KT_CRUD_Admin_List {
     /**
      * Vrátí obsah celé stránky
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @return html
@@ -237,7 +237,7 @@ class KT_CRUD_Admin_List {
     /**
      * Vrátí titulek layoutu, pokud byl definován.
      * 
-     @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @return string
@@ -256,7 +256,7 @@ class KT_CRUD_Admin_List {
      * 
      * Prověří, zda je nový button vyžadován. Pokud ano, vykreslí pokud ne, vrátí prázdný string
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @return string
@@ -273,7 +273,7 @@ class KT_CRUD_Admin_List {
     /**
      * Vrátí HTML s celou tabulku
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @return string
@@ -298,7 +298,7 @@ class KT_CRUD_Admin_List {
     /**
      * Vrátí HTML hlavičku na základě zadané kolekce sloupců
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @return string
@@ -353,7 +353,7 @@ class KT_CRUD_Admin_List {
     /**
      * Zjistí, zda jsou definované některé sloupce pro vykreslení
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @return boolean

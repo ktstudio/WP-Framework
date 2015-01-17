@@ -72,7 +72,7 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      * Definice WP_Query $args pro příslušných post_typů, které budou součástí kolekce dat
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param array $queryArgs
      * @return \KT_Post_Type_Select_Field
@@ -87,7 +87,7 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      * V popisu u jednotlivých položek dat může být nastavený textový prefix na základě meta_key
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $prefixMetaKey
      * @return \KT_Post_Type_Select_Field
@@ -102,7 +102,7 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      * V popisu u jednotlivých položek dat může být nastavený textový suffix na základě meta_key
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $suffixMetaKey
      * @return \KT_Post_Type_Select_Field
@@ -117,7 +117,7 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      * Nastaví vyčtenou hodnotu z postMetas pro další použití
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $prefixMetaValue
      */
@@ -129,7 +129,7 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      * Nastaví vyčtenou hodnotu z postMetas pro další použití
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $suffixMetaValue
      */
@@ -144,7 +144,7 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      * Selekt probíhá pomocí get_posts @link http://codex.wordpress.org/Function_Reference/get_posts
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @return \KT_Post_Type_Select_Field
      */
@@ -175,7 +175,7 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      * Vrátí hodnotu meta_value na základě nastaveného meta klíče
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param int $postId
      * @return string
@@ -199,7 +199,7 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      * Vrátí hodnotu meta_value na základě nastaveného meta klíče
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param int $postId
      * @return string

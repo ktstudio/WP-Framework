@@ -6,9 +6,8 @@
  * potřeba configurátor initializovat
  * ->initialize()
  * 
- * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
- * @link @link http://www.ktstudio.cz
- * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
  */
 final class KT_WP_Configurator {
 
@@ -127,11 +126,11 @@ final class KT_WP_Configurator {
     private function getAssetsConfigurator() {
         return $this->assetsConfigurator;
     }
-    
+
     /**
      * @return boolean
      */
-    private function getSessionEnable(){
+    private function getSessionEnable() {
         return $this->sessionEnable;
     }
 
@@ -140,7 +139,7 @@ final class KT_WP_Configurator {
     /**
      * Nastaví KT_WP_Metabox_Remover_Configurátor do objektu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
      * @param KT_WP_Metabox_Remover_Configurator $metaboxRemover
@@ -155,7 +154,7 @@ final class KT_WP_Configurator {
     /**
      * Nastaví KT_WP_Page_Remover_Configurator do objektu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
      * @param KT_WP_Page_Remover_Configurator $pageRemover
@@ -184,7 +183,7 @@ final class KT_WP_Configurator {
     /**
      * Nastavení délku excreptu pří výpisu entit.
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param int $excerptLenght
@@ -203,7 +202,7 @@ final class KT_WP_Configurator {
     /**
      * Nastaví ukončovací text pří výpisu excreptu entit.
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param string $excerptText
@@ -218,7 +217,7 @@ final class KT_WP_Configurator {
     /**
      * Nastaví, zda se má automaticky založit stránky pro nastavení šablony s metaboxy
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param type $themeSettingPage
@@ -232,7 +231,7 @@ final class KT_WP_Configurator {
     /**
      * Nastaví, aby se při smazání postu (i custom post_type) došlo k smazání všch attachmentů, které jsou u postu nahrané
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param bol $deleteImagesWithPost
@@ -247,7 +246,7 @@ final class KT_WP_Configurator {
      * Nastaví / zruší zobrazení KT Loga na login stránce Wordpress
      * POKUD NÁS CHCETE PODPOŘIT, TUTO FUNKCI NEPOUŽÍVEJTE :-) DĚKUJEME !
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param boolean $displayLogo
@@ -261,7 +260,7 @@ final class KT_WP_Configurator {
     /**
      * Nastaví KT_WP_Asset_Configurator do objektu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
      * @param \KT_WP_Asset_Configurator $assetsConfigurator
@@ -271,17 +270,17 @@ final class KT_WP_Configurator {
         $this->assetsConfigurator = $assetsConfigurator;
         return $this;
     }
-    
+
     /**
      * Nastaví, zda se má v rámci šablony zapnout SESSION pro WP
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
      * @param type $sessionEnable
      * @return \KT_WP_Configurator
      */
-    public function setSessionEnable($sessionEnable = true){
+    public function setSessionEnable($sessionEnable = true) {
         $this->sessionEnable = $sessionEnable;
         return $this;
     }
@@ -291,7 +290,7 @@ final class KT_WP_Configurator {
     /**
      * Provede inicializaci celého nastavení. Nuté volat při zadání nastavení
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      */
@@ -373,9 +372,9 @@ final class KT_WP_Configurator {
             remove_filter("get_avatar", array($this, "htmlImageLazyLoadingFilter"), 11);
             remove_filter("the_content", array($this, "htmlImageLazyLoadingFilter"), 99);
         }
-        
+
         // session
-        if($this->getSessionEnable() === true){
+        if ($this->getSessionEnable() === true) {
             add_action('init', array($this, 'startSesson'), 1);
             add_action('wp_logout', array($this, 'endSession'));
             add_action('wp_login', array($this, 'endSession'));
@@ -385,7 +384,7 @@ final class KT_WP_Configurator {
     /**
      * Do kolekce registrovaných WP Menu přidá další položku
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param string $key
@@ -414,7 +413,7 @@ final class KT_WP_Configurator {
     /**
      * Přidá novou velikost obrázků
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param string $key
@@ -432,7 +431,7 @@ final class KT_WP_Configurator {
      * Přidá Theme Support do Wordpressu
      * $postTypes - dle WP Codexu - v případě použití thumbnails a post-formats se definuje pole post_types
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param string $feature
@@ -462,7 +461,7 @@ final class KT_WP_Configurator {
      * Do kolekce registrovaných sidebarů přidá nový
      * Sidebaru se automaticky nastavi $slug jako jeho ID
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param type $slug
@@ -479,7 +478,7 @@ final class KT_WP_Configurator {
     /**
      * Aktivuje metabox remover v rámci configu, který následně umožní odstranění metaboxů
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Metabox_Remover_Configurator
@@ -497,7 +496,7 @@ final class KT_WP_Configurator {
     /**
      * Aktivuje page remover v rámci configu, který následně umožní odstranění stránek z WP Adminu
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Page_Remover_Configurator
@@ -536,7 +535,7 @@ final class KT_WP_Configurator {
      * Přidá do user_contactmethods, tzn. na uživatelském profilu, novou položku pro telefon
      * Definice pomocí, resp. na základě @see KT_User_Profile_Config::PHONE
      *
-     * @author Martin Hlaváč <hlavac@ktstudio.cz>
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Configurator
@@ -548,7 +547,7 @@ final class KT_WP_Configurator {
     /**
      * Založí configurátoru možnost přidat assety k registraci a případnému začlenění do frontendu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
      * @return type
@@ -581,7 +580,7 @@ final class KT_WP_Configurator {
      * Přidá do pole s položkami profilu telefonní číslo
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
-     * @author Martin Hlaváč <hlavac@ktstudio.cz>
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
      * @param array $profileFields
@@ -596,8 +595,8 @@ final class KT_WP_Configurator {
      * Provede registrace WP Menu
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Configurator
      */
@@ -614,7 +613,7 @@ final class KT_WP_Configurator {
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Configurator
      */
@@ -632,8 +631,8 @@ final class KT_WP_Configurator {
      * Provede registrace Sidebar dle jejich nastavení
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Configurator
      */
@@ -652,7 +651,7 @@ final class KT_WP_Configurator {
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Configurator
      */
@@ -672,8 +671,8 @@ final class KT_WP_Configurator {
      * Provede inicializaci smazání metaboxů dle nastavení configu - není potřeba volat veřejně
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Configurator
      */
@@ -689,8 +688,8 @@ final class KT_WP_Configurator {
      * Provede inicializaci odstranění stránek z Wordpress menu dle nastavení configu
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Configurator
      */
@@ -709,8 +708,8 @@ final class KT_WP_Configurator {
      * Provede inicializaci odstranění podstránekstránek z Wordpress menu dle nastavení configu
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Configurator
      */
@@ -729,7 +728,7 @@ final class KT_WP_Configurator {
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Configurator
      */
@@ -762,8 +761,8 @@ final class KT_WP_Configurator {
      * Provede inicializace odstranění attachmentů společně se smazání postu
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_WP_Configurator
      */
@@ -790,8 +789,8 @@ final class KT_WP_Configurator {
      * Provede inicializaci KT Logo s redirectem na stránky ktstudio.cz
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -803,8 +802,8 @@ final class KT_WP_Configurator {
      * Provede inicializaci změny loga na logovací stránce
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      */
     public function registerLoginLogoImageAction() {
         wp_enqueue_style('kt-core-style');
@@ -814,8 +813,8 @@ final class KT_WP_Configurator {
      * Provede registraci všech scriptů, které byly přidáno do assetConfigurátoru
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      */
     public function registerScriptsAction() {
 
@@ -832,13 +831,13 @@ final class KT_WP_Configurator {
             wp_register_script($script->getId(), $script->getSource(), $script->getDeps(), $script->getVersion(), $script->getInFooter());
         }
     }
-    
-        /**
+
+    /**
      * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      */
     public function registerStyleAction() {
         if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getStyleCollection())) {
@@ -860,8 +859,8 @@ final class KT_WP_Configurator {
      * Provede vložení scriptů, které mají nastaveno načtení, do frotnendu
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      */
     public function enqueueScriptAction() {
         if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getScriptCollection())) {
@@ -873,8 +872,8 @@ final class KT_WP_Configurator {
             if (!wp_script_is($script->getId(), "registered")) {
                 continue;
             }
-            
-            if($script->getBackEndScript()){
+
+            if ($script->getBackEndScript()) {
                 continue;
             }
 
@@ -883,13 +882,13 @@ final class KT_WP_Configurator {
             }
         }
     }
-    
+
     /**
      * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      */
     public function enqueueStyleAction() {
         if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getStyleCollection())) {
@@ -902,21 +901,21 @@ final class KT_WP_Configurator {
             if (!wp_style_is($style->getId(), "registered")) {
                 continue;
             }
-            
-            if($style->getBackEndScript()){
+
+            if ($style->getBackEndScript()) {
                 continue;
             }
 
             wp_enqueue_style($style->getId());
         }
     }
-    
+
     /**
      * Provede vložení scriptů, které mají nastaveno načtení, do admin sekce
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      */
     public function enqueueScriptActionForAdmin() {
         if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getScriptCollection())) {
@@ -928,8 +927,8 @@ final class KT_WP_Configurator {
             if (!wp_script_is($script->getId(), "registered")) {
                 continue;
             }
-            
-            if( ! $script->getBackEndScript()){
+
+            if (!$script->getBackEndScript()) {
                 continue;
             }
 
@@ -938,13 +937,13 @@ final class KT_WP_Configurator {
             }
         }
     }
-    
+
     /**
      * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru v rámci admin sekce
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      */
     public function enqueueStyleActionForAdmin() {
         if (kt_not_isset_or_empty($this->getAssetsConfigurator()->getStyleCollection())) {
@@ -957,8 +956,8 @@ final class KT_WP_Configurator {
             if (!wp_style_is($style->getId(), "registered")) {
                 continue;
             }
-            
-            if( ! $style->getBackEndScript()){
+
+            if (!$style->getBackEndScript()) {
                 continue;
             }
 
@@ -971,33 +970,33 @@ final class KT_WP_Configurator {
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
      * @author Martin Hlaváč
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $html
      */
     public function htmlImageLazyLoadingFilter($html) {
         return kt_replace_images_lazy_src($html);
     }
-    
+
     /**
      * Povolení a zahájení SESSION v rámci WP
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      */
-    public function startSesson(){
-        if(!session_id()) {
+    public function startSesson() {
+        if (!session_id()) {
             session_start();
         }
     }
-    
+
     /**
      * Obsluha ukončení SESSION v rámci WP
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      */
-    public function endSession(){
+    public function endSession() {
         session_destroy();
     }
 
@@ -1006,8 +1005,8 @@ final class KT_WP_Configurator {
     /**
      * Vrátí název WP_Screen base pro založenou stránku theme setting.
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */

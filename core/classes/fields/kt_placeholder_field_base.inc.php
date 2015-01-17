@@ -4,7 +4,7 @@
  * Abstraktní základ pro všechny KT fieldy s placeholdrem
  *
  * @author Martin Hlaváč
- * @link http://www.KTStudio.cz
+ * @link http://www.ktstudio.cz
  */
 abstract class KT_Placeholder_Field_base extends KT_Field {
 
@@ -14,7 +14,7 @@ abstract class KT_Placeholder_Field_base extends KT_Field {
      * Abstraktní základ pro všechny KT fieldy s placeholdrem
      *
      * @author Martin Hlaváč
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -27,7 +27,7 @@ abstract class KT_Placeholder_Field_base extends KT_Field {
      * Vrátí holdu pro placeholder
      * 
      * @author Martin Hlaváč
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
@@ -40,7 +40,7 @@ abstract class KT_Placeholder_Field_base extends KT_Field {
      * Neřeší starší prohlížeče.
      * 
      * @author Martin Hlaváč
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $placeholder
      * @return \KT_Placeholder_Field_base
@@ -54,7 +54,7 @@ abstract class KT_Placeholder_Field_base extends KT_Field {
      * Vrátí html attribute (i s hodnotou) pro sestavení html tagu
      * 
      * @author Martin Hlaváč
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @return (html)string
      */
@@ -67,7 +67,7 @@ abstract class KT_Placeholder_Field_base extends KT_Field {
      * Označení, zda je placeholder zadaný
      * 
      * @author Martin Hlaváč
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @return boolean
      */

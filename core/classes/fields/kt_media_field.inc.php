@@ -22,8 +22,8 @@ class KT_Media_Field extends KT_Field {
     /**
      * Provede výpis fieldu pomocí echo $this->getField()
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      */
     public function renderField() {
         echo $this->getField();
@@ -32,8 +32,8 @@ class KT_Media_Field extends KT_Field {
     /**
      * Vrátí HTML strukturu pro zobrazní fieldu
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -74,8 +74,8 @@ class KT_Media_Field extends KT_Field {
     /**
      * Vrátí prázdný content pro field bez nastaveného attachmentu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
@@ -87,8 +87,8 @@ class KT_Media_Field extends KT_Field {
      * Vrátí obsah s daty pro field v případě, že je attachment nastaven
      * V případě obrázku vrátí jeho thumbnail v případě souboru pouze název
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
@@ -114,8 +114,8 @@ class KT_Media_Field extends KT_Field {
     /**
      * Funkce provede kontrolu, zda předaný attachment je typu obrázek
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param WP_Post $attachment
      * @return boolean

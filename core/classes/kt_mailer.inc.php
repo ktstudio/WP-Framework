@@ -14,8 +14,8 @@ class KT_Mailer {
     /**
      * Založí nový objekt pro odeslání emailu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param string $recipient - platný email
      * @param string $subject - předmět emailu
@@ -93,8 +93,8 @@ class KT_Mailer {
     /**
      * Nastaví emailu příslušný content replacer, pro nahrazení hash tagů za reálné data
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param KT_Content_Replacer $contentReplacer
      * @return \KT_Mailer
@@ -107,8 +107,8 @@ class KT_Mailer {
     /**
      * Nastaveí předmět odesílaného emailu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $subject
      * @return \KT_Mailer
@@ -126,8 +126,8 @@ class KT_Mailer {
      * Nastaví příjemce emailu - nepřidá, pouze setne
      * Provede validaci emailové adresy
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $recipientEmail
      * @param string $recipientName
@@ -147,8 +147,8 @@ class KT_Mailer {
      * Nastaví jako odesílatele emailu
      * Provede validaci emailové adresy
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz 
      * 
      * @param type $senderEmail
      * @return \KT_Mailer
@@ -165,8 +165,8 @@ class KT_Mailer {
     /**
      * Nastaveí jméno odesílatele
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz  
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz  
      * 
      * @param type $sender_name
      * @return \KT_Mailer
@@ -183,8 +183,8 @@ class KT_Mailer {
     /**
      * Nastaví obsah emailu - HTML type
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz 
      * 
      * @param string $content
      * @return \KT_Mailer
@@ -197,8 +197,8 @@ class KT_Mailer {
     /**
      * Nastaveí hlavičku emailu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz 
      * 
      * @param string $header
      * @return \KT_Mailer
@@ -211,7 +211,7 @@ class KT_Mailer {
     /**
      * Nastaví kolekci všech příloh, které budou odeslány společně s emailem
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstduio.cz
      * 
      * @param array $attachments
@@ -227,8 +227,8 @@ class KT_Mailer {
     /**
      * Přidá dalšího recipienta - nepřepíše původního!
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz 
      * 
      * @param type $senderEmail
      * @return \KT_Mailer
@@ -247,8 +247,8 @@ class KT_Mailer {
     /**
      * Vyprázdní aktuální obsah emailu (content)
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz 
      * 
      * @return \KT_Mailer
      */
@@ -260,8 +260,8 @@ class KT_Mailer {
     /**
      * Přidá do contentu další část html obsahu a oddělí ho <br /> na konci
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz 
      * 
      * @param string $html
      * @return \KT_Mailer
@@ -280,8 +280,8 @@ class KT_Mailer {
     /**
      * Přidá do kolekci příloh jeden soubor
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz 
      * 
      * @param string $attachment - celá cesta k souboru na serveru
      * @return \KT_Mailer
@@ -299,8 +299,8 @@ class KT_Mailer {
     /**
      * Přidá do kolekcí příloh další kolekci (merge).
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz 
      * 
      * @param array $attachments
      * @return \KT_Mailer
@@ -330,8 +330,8 @@ class KT_Mailer {
      * return true při úspěšném odelsání emailu
      * return false při chybě při odesílání
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz 
      *
      * @return boolean
      */
@@ -357,8 +357,8 @@ class KT_Mailer {
     /**
      * Vytvoří html string hlavičku emailu, nezbytnou pro odeslání emailu dle nastavení maileru
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz  
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz  
      *
      * @return \KT_Mailer
      */
@@ -379,8 +379,8 @@ class KT_Mailer {
      * Zkontroluje, zda jsou všechny hodnoty nastavené.
      * Musí být nastaveno - recipients, content, sender_email, sender_name
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz 
      *
      * @throws KT_Not_Set_Argument_Exception
      */
@@ -412,7 +412,7 @@ class KT_Mailer {
     /**
      * Podle zadaných parametrů vrátí e-mail ve správném formátu pro hlavičku
      * 
-     * @author Martin Hlaváč <hlavac@ktstudio.cz>
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
      * @param string $email

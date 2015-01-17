@@ -12,8 +12,8 @@ abstract class KT_WP_Asset_Definition_Base {
     /**
      * Abstraktní třída pro definici a zakládní Assetů v rámci Wordpressu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param type $id
      * @param type $source
@@ -81,8 +81,8 @@ abstract class KT_WP_Asset_Definition_Base {
     /**
      * Nastaví id scriptu (identifikátor), pod kterým bude script registrován
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $id
      * @return \kt_wp_script_handle
@@ -95,8 +95,8 @@ abstract class KT_WP_Asset_Definition_Base {
     /**
      * Nastaví zdroj, odkdud má být script načten - URL
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $source
      * @return \kt_wp_script_handle
@@ -111,8 +111,8 @@ abstract class KT_WP_Asset_Definition_Base {
      * 
      * array("jquery", "kt-core")...
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param array $deps
      * @return \kt_wp_script_handle
@@ -125,8 +125,8 @@ abstract class KT_WP_Asset_Definition_Base {
     /**
      * Nastaví aktuální verzi scriptu - vhodné pro cashování
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $version
      * @return \kt_wp_script_handle
@@ -140,8 +140,8 @@ abstract class KT_WP_Asset_Definition_Base {
      * Nastaví, zda se má daný asset automaticky načíst do frontendu
      * DEFAUTLNĚ : false
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param type $enqueue
      * @return \KT_WP_Asset_Definition_Base

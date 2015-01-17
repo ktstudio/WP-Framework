@@ -44,7 +44,7 @@ class KT_WP_User_Field extends KT_Select_Field {
      * Nastaví fieldu, zda chcete vybrat uživatele pouze s příslušnou rolí a ostatní bude ignorovat
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param type $userRole
      * @return \KT_WP_User_Field
@@ -60,7 +60,7 @@ class KT_WP_User_Field extends KT_Select_Field {
      * Řidící se interně třídou
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param array $allUserRoles
      * @return \KT_WP_User_Field
@@ -76,7 +76,7 @@ class KT_WP_User_Field extends KT_Select_Field {
      * WP_User_Query @link http://codex.wordpress.org/Class_Reference/WP_User_Query
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param array $userMetaQuery
      * @return \KT_WP_User_Field
@@ -95,7 +95,7 @@ class KT_WP_User_Field extends KT_Select_Field {
      * Zavede do selektu příslušný html string pro prezentaci <option> v rámci selektu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      * 
      * @return type
      */
@@ -117,7 +117,7 @@ class KT_WP_User_Field extends KT_Select_Field {
      * Vrátí html string s <option> kolekcí na základě uživatelské role.
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      * 
      * @param string $userRoleName
      * @param string $optionHead
@@ -152,7 +152,7 @@ class KT_WP_User_Field extends KT_Select_Field {
      * S použítím <optgroup> = název skupiny uživatelů
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @return string
      */
@@ -177,7 +177,7 @@ class KT_WP_User_Field extends KT_Select_Field {
      * Pokud požadovaná role není v rámci Wordpress registrovná, vrátí automaticky prázdné pole
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      * 
      * @param string $role
      * @return string
@@ -206,7 +206,7 @@ class KT_WP_User_Field extends KT_Select_Field {
      * Provede inicilizaci všech registrovaných uživatelských rolí založené ve Wordpress
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @return \KT_WP_User_Field
      */

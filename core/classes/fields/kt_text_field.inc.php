@@ -19,7 +19,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      * DEFAULT TEXT
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name - hash v poli
      * @param string $label - popisek v html
@@ -36,7 +36,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      * NUMBER || EMAIL || DATE || PASSWORD
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param type $type
      * @return \KT_Text_Field
@@ -64,7 +64,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      * Vrátí typ fieldu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -78,7 +78,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      * Provede výpis fieldu pomocí echo $this->getField()
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      */
     public function renderField() {
@@ -89,7 +89,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      * Vrátí HTML strukturu pro zobrazní fieldu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -120,7 +120,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      * Vrátí typ vstupu - NUMBER || EMAIL || DATE || PASSWORD
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return mixed string || null
      */
@@ -132,7 +132,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      * Vrátí přeconvertovanou hodnotu ve fieldu, kdy bere ohled na date Field
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param bolean $original - má vrátít originální hodnotu v DB nebo hodnotou pro zobrazení
      * @return null

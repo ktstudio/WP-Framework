@@ -10,7 +10,7 @@ class KT_Custom_Page_Action_Screen {
      * Základní třída pro práci a definici parametrů pro Custom Metaboxes Screens
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param type $actionName - název GET parametru
      * @param type $actionValue - hodnota GET parametru
@@ -51,7 +51,7 @@ class KT_Custom_Page_Action_Screen {
      * Nastaví název GET parametru pro identifikace screenu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $actionName
      * @return \KT_Custom_Page_Action_Screen
@@ -66,7 +66,7 @@ class KT_Custom_Page_Action_Screen {
      * Nastavení hodnotu GET parametru pro identifikaci callback funkce
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $actionValue
      * @return \KT_Custom_Page_Action_Screen
@@ -81,7 +81,7 @@ class KT_Custom_Page_Action_Screen {
      * Nastavení callback funkci, která se bude volat při schodě název a hodnoty nastavených GET parametrů
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param mixed array || string - $callBackFunction
      * @return \KT_Custom_Page_Action_Screen

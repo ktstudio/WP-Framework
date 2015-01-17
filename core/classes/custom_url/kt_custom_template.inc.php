@@ -11,7 +11,7 @@ class KT_Custom_Template {
      * Založení nového Custom URL
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $pageName - bude volán soubor z adresy $path/$pagename.php
      * @param string $path - musí existovat
@@ -48,7 +48,7 @@ class KT_Custom_Template {
      * Nastaví název stránky - slug v url
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $pageName
      * @return \KT_Custom_Template
@@ -69,7 +69,7 @@ class KT_Custom_Template {
      * Nastaví HTML titulek pro danou templatu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param type $title
      * @return \KT_Custom_Template
@@ -121,7 +121,7 @@ class KT_Custom_Template {
      * Nastaví cestu na příslušnou templatu - musí existovat
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param type $path
      * @return \KT_Custom_Template
@@ -147,7 +147,7 @@ class KT_Custom_Template {
      * Vrátí celou cestu k templatě $path + $pagename.php
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return type
      * @throws InvalidArgumentException

@@ -4,7 +4,7 @@
  * Vypíše obrázek podle ID  v případné požadované velikosti
  * 
  * @author Martin Hlaváč
- * @link www.ktstudio.cz
+ * @link http://www.ktstudio.cz
  * 
  * @param int $id
  * @param string $alt
@@ -29,7 +29,7 @@ function kt_the_image_by_source($id, $alt, $size = "thumbnail") {
 /**
  * Vrátí odkaz na obrázek, který je ve složce images v rootu šablony
  * 
- * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+ * @author Tomáš Kocifaj
  * @link http://www.ktstudio.cz
  * 
  * @param string $fileName
@@ -43,7 +43,7 @@ function kt_get_image_theme($fileName) {
  * Nahrazení všech datových zdrojů tagů obrázků v zadaném HTML kódu za lazy (na základě skriptu unveil)
  * 
  * @author Martin Hlaváč
- * @link www.ktstudio.cz
+ * @link http://www.ktstudio.cz
  * 
  * @param string $html
  * @return string

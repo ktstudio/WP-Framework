@@ -12,8 +12,8 @@ class KT_WP_Post_File_List extends KT_WP_Post_Attachments_Base {
      * Objekt pro práci s kolekcí souborů (application type) nahrané u příspěvku
      * Použití dashIcons vyžaduje implementaci dashIcons styles do front-endu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param WP_Post $post
      */
@@ -49,8 +49,8 @@ class KT_WP_Post_File_List extends KT_WP_Post_Attachments_Base {
     /**
      * Nastaví, zda se má při výpisu souborů vypisovat na začátku popisku ikonka
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param boolean $printIcon
      * @return \KT_WP_Post_File_List
@@ -66,8 +66,8 @@ class KT_WP_Post_File_List extends KT_WP_Post_Attachments_Base {
      * 
      * Pokud bude nastavená custom icons, nebude se používat dashicons
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $dashIcons - název class pro dashicons
      * @return \KT_WP_Post_File_List
@@ -80,8 +80,8 @@ class KT_WP_Post_File_List extends KT_WP_Post_Attachments_Base {
     /**
      * Nastaví vlastní iconku z URL, která bude použitá při výpisu souborů
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $customIcon - url na zdroj ikony
      * @return \KT_WP_Post_File_List
@@ -128,8 +128,8 @@ class KT_WP_Post_File_List extends KT_WP_Post_Attachments_Base {
     /**
      * Provede načtení všech souborů typu application u postu a přidá je do kolekce souborů
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return \KT_WP_Post_File_List
      */
@@ -157,8 +157,8 @@ class KT_WP_Post_File_List extends KT_WP_Post_Attachments_Base {
     /**
      * Dle nastavení objektu vrátí HTML tag s ikonou
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */

@@ -19,7 +19,7 @@ abstract class KT_WP_Post_Attachments_Base {
     /**
      * Abstraktní klása se základní sadou funkcí pro práci s post attachmentama a jejich výpisem
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param WP_Post $post
@@ -99,7 +99,7 @@ abstract class KT_WP_Post_Attachments_Base {
     /**
      * Nastaví objekt postu, z kterého se budou attachmenty do kolekce načítat
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param WP_Post $post
@@ -115,7 +115,7 @@ abstract class KT_WP_Post_Attachments_Base {
      * Nastaví, podle ktérého klíče se budou attachmenty řadit
      * Parametry dle WP_Query : @link http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param string $orderby
@@ -128,7 +128,7 @@ abstract class KT_WP_Post_Attachments_Base {
      * Nastaví řarezení ASC nebo DESC
      * Parametry dle WP_Query : @link http://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param string $order
@@ -140,7 +140,7 @@ abstract class KT_WP_Post_Attachments_Base {
     /**
      * Nastaví maximální počet attachmentů, který se má zobrazit.
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param int $numberImages
@@ -152,7 +152,7 @@ abstract class KT_WP_Post_Attachments_Base {
     /**
      * Nastaví třídu každému odkazu, který směřuje na výsledký attachment
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param string $linkClass
@@ -167,7 +167,7 @@ abstract class KT_WP_Post_Attachments_Base {
     /**
      * Nastaví titulek výpisu attachmentu - zobrazí se jako nadpis
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param string $galleryTitle
@@ -185,7 +185,7 @@ abstract class KT_WP_Post_Attachments_Base {
      * 
      * Defaultně : h2
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param type $galleryTitleContainer
@@ -200,7 +200,7 @@ abstract class KT_WP_Post_Attachments_Base {
     /**
      * Nastaví kolekci všech attachmentů
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @param array $files
@@ -217,7 +217,7 @@ abstract class KT_WP_Post_Attachments_Base {
     /**
      * Vrátí, zda má kolekce načtené nějaké attachmenty
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @return boolean
@@ -233,7 +233,7 @@ abstract class KT_WP_Post_Attachments_Base {
     /**
      * Na základě definovaných parametrů vytvoří hlavičku - začátek - výpisu attachmentů
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
      * @return string

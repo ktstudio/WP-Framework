@@ -41,7 +41,7 @@ class KT_CRUD_Admin_Column {
     /**
      * Nastaví název sloupce z databáze.
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param string $name
@@ -62,7 +62,7 @@ class KT_CRUD_Admin_Column {
     /**
      * Nastaví popisek sloupce, který se zobrazí v hlavičce tabulky
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param string $label
@@ -83,7 +83,7 @@ class KT_CRUD_Admin_Column {
     /**
      * Nastaví pořadí sloupce v tabulce zařeno 1,2,3...n
      *  
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param int $position
@@ -107,7 +107,7 @@ class KT_CRUD_Admin_Column {
     /**
      * Nastaví, o jaký typ sloupce se jedná - viz constanty třídy
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param type $type
@@ -141,7 +141,7 @@ class KT_CRUD_Admin_Column {
     /**
      * Nastaví prefix ke každé hodnotě, která se v tabulce vypíše
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param type $unit
@@ -162,7 +162,7 @@ class KT_CRUD_Admin_Column {
     /**
      * Nastaví suffix ke každé hodnotě, která se v tabulce vypíše
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param type $unit
@@ -183,7 +183,7 @@ class KT_CRUD_Admin_Column {
     /**
      * Nastaví název funkce, která se bude volat při zobrazení obsahu u jednotlivé položky
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param string $customCallbackFunction
@@ -206,7 +206,7 @@ class KT_CRUD_Admin_Column {
     /**
      * Nastaví, aby mohl být záznam smazán z pozice výpisu tabulky pomocí Ajaxu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param type $deleteAble
@@ -229,7 +229,7 @@ class KT_CRUD_Admin_Column {
      * předáván ve filtru
      * 
      * @author Tomáš Kocifaj
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param boolean $selfCallback
      * @return \KT_CRUD_Admin_Column
@@ -250,7 +250,7 @@ class KT_CRUD_Admin_Column {
      * Nastaví CSS class tagu TD
      * 
      * @author Tomáš Kocifaj
-     * @link www.ktstudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $cssClass
      * @return \KT_CRUD_Admin_Column
@@ -310,7 +310,7 @@ class KT_CRUD_Admin_Column {
     /**
      * Vrátí obsah buňky s obyčejným textovým typem
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param type $itemValue
@@ -329,7 +329,7 @@ class KT_CRUD_Admin_Column {
     /**
      * Vrátí obsah buňky s možností prokliku do detailu záznamu a případného smazání
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param string $itemValue
@@ -357,7 +357,7 @@ class KT_CRUD_Admin_Column {
     /**
      * Vrátí obsah buňky s možnosti nastavení switchfieldu dle zvolené hodnoty
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param string $itemValue
@@ -379,7 +379,7 @@ class KT_CRUD_Admin_Column {
     /**
      * Vrátí obsah buňky s obrázkovým typem
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param string $itemValue
@@ -405,7 +405,7 @@ class KT_CRUD_Admin_Column {
      * Vytvoří filtr z názvu custom call back funkci a předá do ní všechny parametry.
      * Vrácený obsah z filtru vypíše jako html.
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @param string $itemValue
@@ -435,7 +435,7 @@ class KT_CRUD_Admin_Column {
      * Zkontroluje, zda má sloupec definovaný prefix, pokud ano, tak ho vrátí
      * pokud ne, vrátí prázdný string.
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @return string
@@ -452,7 +452,7 @@ class KT_CRUD_Admin_Column {
      * Zkontroluje, zda má sloupec definovaný suffix, pokud ano, tak ho vrátí
      * pokud ne, vrátí prázdný string
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.c>
+     * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
      * @return string

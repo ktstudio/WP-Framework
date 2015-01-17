@@ -59,7 +59,7 @@ abstract class KT_Options_Field_Base extends KT_Field {
     /**
      * Vrátí pole po select, nebo radio které obsahuje (3) možnosti výběru: (prázdnou), ano, ne
      * 
-     * @author Martin Hlaváč <hlavac@ktstudio.cz>
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
      * @param boolean $withFirtEmpty

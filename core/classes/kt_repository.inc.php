@@ -25,8 +25,8 @@ class KT_Repository {
      * pro iterování kolekce lze požit $object->haveItems() $object->theItem()
      * lze použít pouze v loopět while()
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param string $className // který objekt bude repositář iterovat - Název classy
      * @param string $table // Z které tabulky bude repositář selectovat data
@@ -52,8 +52,8 @@ class KT_Repository {
     /**
      * Vrátí aktuální objekt, na kterém se nachází vnitřní iterátor pomoc haveItems() a theItems()
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return object - dle definice className
      */
@@ -64,8 +64,8 @@ class KT_Repository {
     /**
      * Vrátí aktuální hodnotu iterátoru (indexu), na kterém se iterace objektu nachází
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return int
      */
@@ -76,8 +76,8 @@ class KT_Repository {
     /**
      * Vrátí kolekci všech objektů, které byly dle SQL dotazu načteny
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return array
      */
@@ -88,8 +88,8 @@ class KT_Repository {
     /**
      * Vrátí název tabulky, nad kterou budou probíhat základní dotazy na selekci dat
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
@@ -100,8 +100,8 @@ class KT_Repository {
     /**
      * Vrátí základní relaci mezi WHERE parametry
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
@@ -112,8 +112,8 @@ class KT_Repository {
     /**
      * Vrátí název sloupce, podle kterého se bude výsledek dotazu v repositáři řadit
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
@@ -124,8 +124,8 @@ class KT_Repository {
     /**
      * Vrátí, zda se má dotaz řadit ASC nebo DESC
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return type
      */
@@ -136,8 +136,8 @@ class KT_Repository {
     /**
      * Vrátí LIMIT pro SQL dotaz
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return int
      */
@@ -148,8 +148,8 @@ class KT_Repository {
     /**
      * Vrátí OFFSET pro SQL dotaz - LIMIT 10,10 (offset)
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return int
      */
@@ -160,8 +160,8 @@ class KT_Repository {
     /**
      * Vrátí kolekci všech WHERE parametrů, které byly objektu definovány pro select dotaz
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return array
      */
@@ -172,8 +172,8 @@ class KT_Repository {
     /**
      * Vrátí kolekci všech chyb, které byly při používání objektu zavedeny
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return type
      */
@@ -193,8 +193,8 @@ class KT_Repository {
     /**
      * Vrátí název objektu, který má být iterován
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
@@ -205,8 +205,8 @@ class KT_Repository {
     /**
      * Vrátí celkový počet všechn potenciálních výsledku bez ohledu na nastavení LIMIT nebo offset
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return int
      */
@@ -219,8 +219,8 @@ class KT_Repository {
     /**
      * Nastaví, na jakém itemu se aktuální iterovaný kolekce nachází
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param int $currentItem
      * @return \KT_Repository
@@ -234,8 +234,8 @@ class KT_Repository {
     /**
      * Nastaví aktuální pozici iterátoru
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param int $iterator
      * @return \KT_Repository
@@ -252,8 +252,8 @@ class KT_Repository {
     /**
      * Nastaví kolekci itemů
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param array $items
      * @return \KT_Repository
@@ -266,8 +266,8 @@ class KT_Repository {
     /**
      * Nastaví název tabulky, odkud bude repositář stahovat data
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $table
      * @return \KT_Repository
@@ -281,7 +281,7 @@ class KT_Repository {
      * Nastaví relační podmínku pro Where dotazy - default 'AND'
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $relation
      * @return \KT_Repository
@@ -297,8 +297,8 @@ class KT_Repository {
     /**
      * Nastaví, podle kterého sloupce má být kolekce itemů seřazena při dotazu repositáře
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param type $orderby
      * @return \KT_Repository
@@ -311,8 +311,8 @@ class KT_Repository {
     /**
      * Nastavení řazení order hodnoty pro dotaz repositáře
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param string $order // ASCE | DESC
      * @return \KT_Repository
@@ -330,8 +330,8 @@ class KT_Repository {
     /**
      * Nastavení LIMIT a pro dotaz repositáře
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param int $limit
      * @return \KT_Repository
@@ -349,8 +349,8 @@ class KT_Repository {
     /**
      * Nastaví offset dotazu (LIMIT)
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param int $offset
      * @return \KT_Repository
@@ -363,8 +363,8 @@ class KT_Repository {
     /**
      * Nastaví kolekce všechn where paramtrů, které byly v rámci repositáře vydefinovány
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param array $queryParams
      * @return \KT_Repository
@@ -377,8 +377,8 @@ class KT_Repository {
     /**
      * Nastaví kolekci všech chyb, které byly v rámci použití objekty zjištěny
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param array $error
      * @return \KT_Repository
@@ -391,8 +391,8 @@ class KT_Repository {
     /**
      * Nastavení query pro selekci dat MySQL
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $query
      * @return \KT_Repository
@@ -405,8 +405,8 @@ class KT_Repository {
     /**
      * Nastaví název objektu, který bude vracen spolu s daty při iteraci repositáře
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $className
      * @return \KT_Repository
@@ -419,8 +419,8 @@ class KT_Repository {
     /**
      * Nastaví, kolik celkových výsledků bylo při nastavené dotazu zjištěno.
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param int $countItems
      * @return \KT_Repository
@@ -439,8 +439,8 @@ class KT_Repository {
     /**
      * Nastaví ručně tvořenou query se sadou dat pro prepare statment
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @global wpdb $wpdb
      * @param string $query
@@ -464,7 +464,7 @@ class KT_Repository {
      * Přidá jeden parametr do Where selectu dat
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $column
      * @param mixed $value
@@ -490,7 +490,7 @@ class KT_Repository {
      * Přidá WHERE parametr, kde se dotazuje na to, zda v daném sloupci je nastasven NULL
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param type $column
      * @return \KT_Repository
@@ -513,7 +513,7 @@ class KT_Repository {
      * Přidá WHERE parametr, kde se dotazuje na to, zda ve sloupci je nějaká hodnota - tedy není NULL
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param type $column
      * @return \KT_Repository
@@ -536,7 +536,7 @@ class KT_Repository {
      * Naplní kolekci items příslušnými ID záznamů v DB
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @global wpdb $wpdb // globální proměnná pro práci s DB v rámci WP
      * @return \KT_Repository
@@ -575,7 +575,7 @@ class KT_Repository {
      * Vrací TRUE když v procházení kolekce má ještě další item k iteraci
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return boolean
      */
@@ -592,8 +592,8 @@ class KT_Repository {
     /**
      * V procházení kolekce nastaví aktuální $item
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return object dle zadaného parametru v constructoru
      */
@@ -611,8 +611,8 @@ class KT_Repository {
     /**
      * Připráví základní string s query na základě specifikovaných where podmínek
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return array
      */
@@ -647,8 +647,8 @@ class KT_Repository {
     /**
      * Na základě parametrů zadané v objektu sestaví celé Query pro DB
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param string $selectWhat
      */
@@ -697,8 +697,8 @@ class KT_Repository {
      * Zjistí počet všech záznam, které odpovídají zadanému selectu
      * Používá se pro stránkování
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @global wpdb $wpdb
      * @return type
@@ -722,8 +722,8 @@ class KT_Repository {
     /**
      * Přidá objektu Error
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param type $message
      * @param type $content
@@ -735,8 +735,8 @@ class KT_Repository {
     /**
      * Vrátí hash znak pro preparStatments za účelem vytvoření query pro $wpdb
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz 
      * 
      * @param str|int|float $value
      * @return string

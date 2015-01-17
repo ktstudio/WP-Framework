@@ -93,7 +93,7 @@ function kt_pr($objekt, $name = '', $return = false) {
  * Funkce vrátí post object na základě předaného parametru post_id = null
  *
  * @author Tomáš Kocifaj
- * @link http://www.KTStudio.cz
+ * @link http://www.ktstudio.cz
  *
  * @global object WP_Post $post - post object: Použitelný pouze v loopě
  * @param int $post_id - Id postu, který se nastaveí
@@ -287,7 +287,7 @@ function kt_get_google_maps_gps($address) {
  * Pro účeli custom číselníků pracující na báz KT_Crud - převážně.
  *
  * @author Tomáš Kocifaj
- * @link http://www.KTStudio.cz
+ * @link http://www.ktstudio.cz
  */
 add_action('wp_ajax_kt_delete_row_from_table_list', 'kt_delete_row_from_table_lis_callback');
 

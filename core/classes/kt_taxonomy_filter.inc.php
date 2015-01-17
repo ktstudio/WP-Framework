@@ -3,6 +3,7 @@
 /**
  * Podle Add Taxonomy filter to Custom Post Type
  * TODO: upravit více podle svého :) hlavně definice paramterů opačně taxonomy => post_types
+ * 
  * @author Ohad Raz <admin@bainternet.info>
  * @link http://en.bainternet.info/2013/add-taxonomy-filter-to-custom-post-type Bainternet
  */

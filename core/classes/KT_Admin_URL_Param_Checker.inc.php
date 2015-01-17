@@ -17,8 +17,8 @@ class KT_Admin_URL_Param_Checker {
     /**
      * Nastaví kolekcy kontrolvaných parametrů
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param array $paramCollection
      * @return \KT_Admin_URL_Param_Checker
@@ -38,8 +38,8 @@ class KT_Admin_URL_Param_Checker {
     /**
      * Nastaví výsledek knotroly
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param bollean $result
      * @return \KT_Admin_URL_Param_Checker
@@ -55,8 +55,8 @@ class KT_Admin_URL_Param_Checker {
     /**
      * Do kolekce kontrolovaných parametrů URL přidá $key => $value
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $paramName
      * @param string $paramValue
@@ -70,8 +70,8 @@ class KT_Admin_URL_Param_Checker {
     /**
      * Odstraní z kolekce kontrolovaných parametrů URL parametr na základě jeho názvu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $paramName
      * @return \KT_Admin_URL_Param_Checker
@@ -87,8 +87,8 @@ class KT_Admin_URL_Param_Checker {
     /**
      * Zkontroluje, zda všechny zadané parametry odpovídají požadavkům
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return boolean
      */
@@ -119,8 +119,8 @@ class KT_Admin_URL_Param_Checker {
     /**
      * Zkontroluje, zda zadaný parametr je nastavený správně dle požadavků
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $paramName
      * @param string $paramValue

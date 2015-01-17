@@ -10,7 +10,7 @@ class KT_File_Field extends KT_Field {
      * Založení objektu typu file
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name - hash v poli
      * @param string $label - popisek v html
@@ -35,7 +35,7 @@ class KT_File_Field extends KT_Field {
      * př.: file_extension|audio/*|video/*|image/*|media_type @link http://www.w3schools.com/tags/att_input_accept.asp
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param type $acceptFileTypeString
      * @return \KT_File_Field
@@ -78,7 +78,7 @@ class KT_File_Field extends KT_Field {
      * Vrátí typ fieldu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */

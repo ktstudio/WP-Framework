@@ -13,7 +13,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * Založení WP_Screen pro zadávání metaboxů na vlastním layoutu a přídání nové podstránky do navigace Wordpress v admin sekci
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * Parametry dle funkce: add_submenu_page()
      * @link http://codex.wordpress.org/Function_Reference/add_submenu_page
@@ -86,7 +86,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * Nastavení název nadřazené stránky, kde se má podstránka zobrazit
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $parentPage
      * @return \KT_Custom_Metaboxes_Subpage
@@ -100,7 +100,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * Nastaví titulek stránky
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $title
      * @return \KT_Custom_Metaboxes_Subpage
@@ -114,7 +114,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * Nastaví název stránky v menu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $menuTitle
      * @return \KT_Custom_Metaboxes_Subpage
@@ -128,7 +128,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * Nastavení capability úrovně stránky pro editace uživatelem
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * Řídí se dle @link http://codex.wordpress.org/Roles_and_Capabilities
      * 
@@ -143,7 +143,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * Nastaví paremetr URL, pod kterým bude stránka dostupná
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param type $slug
      */
@@ -156,7 +156,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * Nastavení base name screenu po založení Wordpress stránky
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $page
      */
@@ -187,7 +187,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * Vrátí přesný název založené screeny pro přidávání metaboxů do vlastní podstránky
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $parentSlug // slug rodičovské stránky
      * @param string $subPageSlug // slug podstránky
@@ -220,7 +220,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * Vrátí název screenu pro ručně vytvořenou stránku v administraci na základě titulku hlavní stránky
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $pageTitle
      * @param string $subPageSlug

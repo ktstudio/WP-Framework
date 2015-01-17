@@ -13,8 +13,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * Rozšíření objektu o možnost CRUD pro práci s WP DB
      * Pro komunikaci s DB je použitý WP object global $wpdb;
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @global wpdb $wpdb
      * @param string $table  // název tabulky, kterou bude CRUD obsluhovat
@@ -139,8 +139,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
     /**
      * Nastaví data objektu ze všech sloupců v DB, které se u daného záznamu nacházejí
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param array $data
      * @return \KT_Crud
@@ -169,8 +169,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
     /**
      * Nastaví id záznamu v DB, musí být jasný identifikátor záznamu.
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param type $rowId
      * @return \KT_Crud
@@ -195,8 +195,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
     /**
      * Nastaví náze tabulky, který bude využívána při selekci dat v rámci DB
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $table
      * @return \KT_Crud
@@ -209,8 +209,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
     /**
      * Nastaví table column prefix v případě, že chcete používat globální table column prefixu
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param type $tablePrefix
      * @return \KT_Crud
@@ -223,8 +223,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
     /**
      * Nástaví název sloupce, který reprezentuje Primary KEY column name
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param string $column
      * @return \KT_Crud
@@ -237,8 +237,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
     /**
      * Nastaví sadu chyb, které byly při práci s objektem vyvolány
      * 
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param array $errors
      * @return \KT_Crud
@@ -260,8 +260,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * Nepřepisuje původní data, pouze přidává další do
      * kolekce dat - column => value
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link http://www.KTStudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $value
@@ -280,7 +280,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * Nepřepíše původní, provede merge dat.
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param array $columns
      */
@@ -293,17 +293,17 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
         return $this;
     }
-    
+
     /**
      * Na základě předaného názvu sloupce jeho uloženou hodnotu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $column
      * @return string || int
      */
-    public function getColumnValue($column){
+    public function getColumnValue($column) {
         return $this->$column;
     }
 
@@ -311,7 +311,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * Smaže záznam v DB na základě setWhere
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return type
      */
@@ -338,7 +338,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * Pokud je funkce nastavena, provede se update v opačném případě dojde k insertu záznamu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      */
     public function saveRow() {
         if ($this->isInDatabase()) {
@@ -352,7 +352,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * Vrácí, zda v objektu došlo k nějaké chybě nebo ne
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return boolean
      */
@@ -368,7 +368,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * Neprovádí znovu kontrolu dotazu pomocí selectu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @return boolean
      */
@@ -384,7 +384,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * Vrátí požadovaný název sloupce a doplní k němu prefix
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $columnName
      * @return string
@@ -394,12 +394,12 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
     }
 
     // --- privátní funkce ------------
-    
-       /**
+
+    /**
      * inicializace dat na základě předaného hodnoty v construktoru
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_Crud
      */
@@ -422,7 +422,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
         }
 
         $this->setData($result);
-        
+
         return $this;
     }
 
@@ -431,7 +431,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * Dojde ke vložení všech dat $this->data
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return mixed boolean | int - 1 při bezchybném vložení
      */
@@ -455,7 +455,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * updatuje všechny parametry v $this->data
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return mixed int | false
      */
@@ -481,7 +481,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * Vrátí pole s formáty pro bezpečnější práci s daty
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return array
      * @throws InvalidArgumentException
@@ -511,7 +511,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * Přidá objektu Error msg na základě předanýách parametrů
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $message - kód / hash chyby
      * @param mixed $content - popis chyby
@@ -525,4 +525,5 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
         return $this;
     }
+
 }

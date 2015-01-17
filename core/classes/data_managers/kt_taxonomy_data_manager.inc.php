@@ -61,7 +61,7 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
      * Nastaví taxonomy, z které budou vyčítány termy pro výběr
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $taxonomy
      */
@@ -76,7 +76,7 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
      * get_terms(); @link http://codex.wordpress.org/Function_Reference/get_terms
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param array $args
      */
@@ -91,7 +91,7 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
      * self::FIELD_ID || self::FIELD_SLUG
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param type $optionValueType
      * @return \KT_Taxonomy_Field
@@ -111,7 +111,7 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
      * Funkci je nutné volat po nastavení fieldu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      */
     private function dataInit() {
         $taxonomyValues = array();

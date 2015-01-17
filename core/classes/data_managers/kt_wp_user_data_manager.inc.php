@@ -44,7 +44,7 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
      * Nastaví fieldu, zda chcete vybrat uživatele pouze s příslušnou rolí a ostatní bude ignorovat
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param type $userRole
      * @return \KT_WP_User_Field
@@ -60,7 +60,7 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
      * Řidící se interně třídou
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param array $allUserRoles
      * @return \KT_WP_User_Field
@@ -76,7 +76,7 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
      * WP_User_Query @link http://codex.wordpress.org/Class_Reference/WP_User_Query
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param array $userMetaQuery
      * @return \KT_WP_User_Field
@@ -110,7 +110,7 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
      * Vrátí kolekci všech uživatelů včetně
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @return string
      */
@@ -132,7 +132,7 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
      * Vráti data v rámci jedné uživatelské role
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      * 
      * @param type $userRoleName
      * @return string
@@ -161,7 +161,7 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
      * Pokud požadovaná role není v rámci Wordpress registrovná, vrátí automaticky prázdné pole
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      * 
      * @param string $role
      * @return string
@@ -190,7 +190,7 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
      * Provede inicilizaci všech registrovaných uživatelských rolí založené ve Wordpress
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @return \KT_WP_User_Field
      */

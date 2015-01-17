@@ -26,7 +26,7 @@ class KT_Switch_Field extends KT_Field {
      * Provede výpis fieldu pomocí echo $this->getField()
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      */
     public function renderField() {
@@ -37,7 +37,7 @@ class KT_Switch_Field extends KT_Field {
      * Vrátí HTML strukturu pro zobrazní fieldu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -62,7 +62,7 @@ class KT_Switch_Field extends KT_Field {
      * Vrátí hodnotu ve fieldu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param bolean $original - má vrátít originální hodnotu v DB nebo hodnotou pro zobrazení
      * @return null
@@ -77,7 +77,7 @@ class KT_Switch_Field extends KT_Field {
      * Vrátí typ fieldu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -90,7 +90,7 @@ class KT_Switch_Field extends KT_Field {
     /**
      * Převod logického hodnoty na hodnotu pro KT_Switch_Field
      * 
-     * @author Martin Hlaváč <hlavac@ktstudio.cz>
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
      * @param boolean $value
@@ -112,7 +112,7 @@ class KT_Switch_Field extends KT_Field {
     /**
      * Převod KT_Switch_Field hodnoty na logickou hodnotu
      * 
-     * @author Martin Hlaváč <hlavac@ktstudio.cz>
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
      * @param string $value
@@ -134,7 +134,7 @@ class KT_Switch_Field extends KT_Field {
     /**
      * Vypíše hodnotu KT_Switch_Field, či boolean jako text, tedy Ano/Ne
      *
-     * @author Martin Hlaváč <hlavac@ktstudio.cz>
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz 
      * 
      * @param string|boolean $value

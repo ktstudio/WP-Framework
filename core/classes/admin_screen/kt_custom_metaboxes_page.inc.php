@@ -16,7 +16,7 @@ class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
      * Založení WP_Screen pro zadávání metaboxů na vlastním layoutu a přídání nové stránky do navigace Wordpress v admin sekci
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * Parametry dle funkce: add_menu_page()
      * @link http://codex.wordpress.org/Function_Reference/add_menu_page
@@ -98,7 +98,7 @@ class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
      * Nastaví attr title odkazu v menu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param string $title
      */
@@ -112,7 +112,7 @@ class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
      * Nastaví text, který se zobrazí jako odkaz v menu administrace
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $menuTitle
      */
@@ -126,7 +126,7 @@ class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
      * Nastavení capability úrovně stránky pro editace uživatelem
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * Řídí se dle @link http://codex.wordpress.org/Roles_and_Capabilities
      * 
@@ -142,7 +142,7 @@ class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
      * Nastaví paremetr URL, pod kterým bude stránka dostupná
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param type $slug
      */
@@ -159,7 +159,7 @@ class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
      * @link https://make.wordpress.org/core/2014/04/16/dashicons-in-wordpress-3-9/
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $icon
      */
@@ -173,7 +173,7 @@ class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
      * Nastavení pozici odkazu v menu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param type $position
      */
@@ -187,7 +187,7 @@ class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
      * Nastavení base name screenu po založení Wordpress stránky
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $page
      */
@@ -203,7 +203,7 @@ class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
      * Provede inicializaci definované stránky v a založení báse pro metaboxy.
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      */
     public function initPage() {
 

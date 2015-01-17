@@ -83,7 +83,7 @@ class KT_Form_Fieldset {
      * Nastaveí titulek fieldsetu, který se bude v případě výpisu zobrazovat jako nadpis před sadou fildů
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param type $title
      * @return \KT_Form_Fieldset
@@ -97,7 +97,7 @@ class KT_Form_Fieldset {
      * Nastaveí popisek fieldsetu, který se bude v případě výpisu zobrazovat jako text pod nadpisem
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param type $description
      * @return \KT_Form_Fieldset
@@ -111,7 +111,7 @@ class KT_Form_Fieldset {
      * Nastavení název (hash) fieldsetu pro použití v PhP - je použit jako identifikátor v kolekci fieldsetů ve formu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param type $name
      * @return \KT_Form_Fieldset
@@ -125,7 +125,7 @@ class KT_Form_Fieldset {
      * Nastavení prefix pro svou kolekci fieldsetů - postu pak budou dostupné pole pod tímto hashem, kde budou všechny  hodnoty fieldsety
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz 
+     * @link http://www.ktstudio.cz 
      * 
      * @param type $postPrefix
      * @return \KT_Form_Fieldset
@@ -142,7 +142,7 @@ class KT_Form_Fieldset {
      * Nastaví pole všech class, které budou ve fieldsetu zobrazeny
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      * 
      * @param type $classes
      * @return \KT_Form_Fieldset
@@ -156,7 +156,7 @@ class KT_Form_Fieldset {
      * Nastaví id tagu fieldsetu
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz   
+     * @link http://www.ktstudio.cz   
      * 
      * @param type $id
      * @return \KT_Form_Fieldset
@@ -170,7 +170,7 @@ class KT_Form_Fieldset {
      * Nastaveí kolekci fieldů - nepřidá, pouze nastavuje!
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz  
+     * @link http://www.ktstudio.cz  
      * 
      * @param type $fields
      * @return \KT_Form_Fieldset
@@ -184,7 +184,7 @@ class KT_Form_Fieldset {
      * Pokud je nastaveno true, všechny fieldy se uloží jako serializované pole pod názvem fieldsetu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param type $serializeSave
      * @return \KT_Form_Fieldset
@@ -203,7 +203,7 @@ class KT_Form_Fieldset {
      * Vrátí, zda některý z fieldů má nastavenou chybovou hlášku a neprošel tedy validací.
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @return boolean
      */
@@ -227,7 +227,7 @@ class KT_Form_Fieldset {
      * Vrátí field objekt na základě zvoleného názvu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @return \KT_Field
@@ -241,7 +241,7 @@ class KT_Form_Fieldset {
      * Odstraní field z kolekce filedsetu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param type $name
      * @return \KT_Form_Fieldset
@@ -260,7 +260,7 @@ class KT_Form_Fieldset {
      * Načte data k fieldům na zakladě předaného pole $field->getName() => $value
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param array $fieldsData
      */
@@ -296,7 +296,7 @@ class KT_Form_Fieldset {
      * Přidá do kolekce fieldů další fieldy na základě předaného pole
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param array $fields
      * @return \KT_Form
@@ -334,7 +334,7 @@ class KT_Form_Fieldset {
      * Vrátí HTML v podobě tabulky s inputy dle field setu, nadpisem a kontainerem
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @param string $class - CSS Class tabulky
      *
@@ -377,7 +377,7 @@ class KT_Form_Fieldset {
      * Usage: $this->getInputsToTable()
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param KT_Field $field
      * @return string
@@ -399,7 +399,7 @@ class KT_Form_Fieldset {
      * Vrátí HTML string s inputy bez tabulky - vypíše pouze inputy bez struktury
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string - HTML
      */
@@ -436,7 +436,7 @@ class KT_Form_Fieldset {
      * Vrátí HTML hlavičku s nastavení fieldSetu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string HTML
      */
@@ -459,7 +459,7 @@ class KT_Form_Fieldset {
      * Vrátí ukončení HTML pro hlavičku FieldSetu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return string HTML
      */
@@ -472,8 +472,8 @@ class KT_Form_Fieldset {
      * Pokud nemá fieldset žádné fieldy vrací null
      * Pokud jsou všechny fieldy bez dat vrací null
      *
-     * @author Tomáš Kocifaj <kocifaj@ktstudio.cz>
-     * @link www.ktstudio.cz
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param array $excludeFields - které filedy se nebudou zobrazovat $field->name
      * @param string $class
@@ -528,7 +528,7 @@ class KT_Form_Fieldset {
      * Vrátí true zda fieldset obsahuje nějakou kolekci fieldu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return bol
      */
@@ -547,7 +547,7 @@ class KT_Form_Fieldset {
      * Lze rozšířit o addType() - NUMBER, EMAIL, DATE
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -566,7 +566,7 @@ class KT_Form_Fieldset {
      * Lze rozšířit o addType() - NUMBER, EMAIL, DATE
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -584,7 +584,7 @@ class KT_Form_Fieldset {
      * Přidá nový field KT_Hidden_Field
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -602,7 +602,7 @@ class KT_Form_Fieldset {
      * Lez rozšířit i o taxonomy - addTaxonomy()
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -620,7 +620,7 @@ class KT_Form_Fieldset {
      * Lze rozšířit i o taxonomy - addTaxonomy()
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -637,7 +637,7 @@ class KT_Form_Fieldset {
      * Funkce přidá nový typ fieldu KT_Select_Field
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -655,7 +655,7 @@ class KT_Form_Fieldset {
      * Field umožní upload obrázku / souboru v admin screenu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -673,7 +673,7 @@ class KT_Form_Fieldset {
      * Přepínání mezi ANO || NE
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -690,7 +690,7 @@ class KT_Form_Fieldset {
      * Přidá nový typ fieldu - KT_Textarea_Field
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -708,7 +708,7 @@ class KT_Form_Fieldset {
      * Možné použít addParentPage() pro zadání rodiče stránek
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -744,7 +744,7 @@ class KT_Form_Fieldset {
      * Možné použít výpis pouze určité role setUserRole();
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param string $name
      * @param string $label
@@ -763,7 +763,7 @@ class KT_Form_Fieldset {
      * Všem fieldům v kolekci nastavení post_prefix dle zadaného do FieldSetu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @return \KT_Form_Fieldset
      */
@@ -782,7 +782,7 @@ class KT_Form_Fieldset {
      * do class atributu elementu.
      * 
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
@@ -796,7 +796,7 @@ class KT_Form_Fieldset {
      * Pokud má Field definovaný Unit zobrazí ho pouze v případě, že se value rovná KT_EMPTY_TEXT (---)
      *
      * @author Tomáš Kocifaj
-     * @link http://www.KTStudio.cz
+     * @link http://www.ktstudio.cz
      *
      * @param KT_Field $field
      * @return string
