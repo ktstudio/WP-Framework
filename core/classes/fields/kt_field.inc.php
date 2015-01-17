@@ -332,6 +332,20 @@ abstract class KT_Field {
 
         return $this;
     }
+    
+    /**
+     * Odstraní attribute fieldu z kolekce na základě názvu
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @param string $name
+     * @return \KT_Field
+     */
+    public function removeAttribute($name){
+        unset($this->attributes[$name]);
+        
+        return $this;
+    }
 
     /**
      * Založí fieldu nový KT_Field_Validator
