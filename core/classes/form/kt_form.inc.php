@@ -1,6 +1,6 @@
 <?php
 
-class KT_Form {
+class KT_Form extends KT_HTML_Tag_Base {
 
     const DISPLAY_TYPE_TABLE = 'table';
     const DISPLAY_TYPE_SIMPLE = 'simple';
@@ -40,6 +40,8 @@ class KT_Form {
                 ->setFormId($id)
                 ->setSuccessMessage(__("Data byla uložena", KT_DOMAIN))
                 ->setErrorMessage(__("Ve formuláři se vyskytla chyba", KT_DOMAIN));
+        
+        $this->addAttribute("data-validate", "jquery");
 
         return $this;
     }
@@ -585,8 +587,8 @@ class KT_Form {
      * @return type
      */
     public function getFormHeader() {
-        $html = "<form method=\"{$this->getMethod()}\" action=\"{$this->getAction()}\" id=\"{$this->getFormId()}\" class=\"{$this->getFormClasses()}\" role=\"form\" data-validate=\"jquery\"";
-
+        $html = "<form method=\"{$this->getMethod()}\" action=\"{$this->getAction()}\" id=\"{$this->getFormId()}\" class=\"{$this->getFormClasses()}\" role=\"form\"";
+        $html .= $this->getAttributeString();
         $enctype = $this->getEnctype();
 
         if (kt_isset_and_not_empty($enctype)) {
