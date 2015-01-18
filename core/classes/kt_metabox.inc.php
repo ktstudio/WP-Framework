@@ -19,8 +19,8 @@ class KT_MetaBox implements KT_Registrable {
     private $id;
     private $title;
     private $screen;
-    private $context = "normal";
-    private $priority = "default";
+    private $context = self::CONTEXT_NORMAL;
+    private $priority = self::PRIORITY_DEFAULT;
     private $dataType;
     private $fieldset;
     private $isDefaultAutoSave = true;

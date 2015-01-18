@@ -119,7 +119,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
      */
     protected function getOption($name) {
         $options = $this->getOptions();
-        if (kt_isset_and_not_empty($options) && is_array($options) && count($options) > 0) {
+        if (kt_array_isset_and_not_empty($options)) {
             foreach ($options as $optionName => $optionValue) {
                 if ($optionName == $name) {
                     return $optionValue;
