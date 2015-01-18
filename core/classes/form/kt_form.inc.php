@@ -618,11 +618,11 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @param array $excludeFields - které filedy se nebudou zobrazovat $field->name
+     * @param array $excludeFieldsets - které filedy se nebudou zobrazovat $field->name
      * @param string $class
      * @return string
      */
-    public function getInputsDataToTable(array $excludeFields = array(), $class = 'meta-info') {
+    public function getInputsDataToTable(array $excludeFieldsets = array(), $class = 'meta-info') {
 
         $html = "";
 
@@ -630,14 +630,14 @@ class KT_Form extends KT_HTML_Tag_Base {
             return $html;
         }
 
-        $html .= "<table class=\"{$class}\">";
-
         foreach ($this->getFieldsets() as $fieldset) {
             /* @var $fieldset \KT_Form_Fieldset */
-            $html .= $fieldset->getInputsDataToTable($excludeFields, $class);
+            if(in_array($fieldset->getName(), $excludeFieldsets)){
+                continue;
+            }
+            
+            $html .= $fieldset->getInputsDataToTable($class);
         }
-
-        $html .= "</table>";
 
         return $html;
     }

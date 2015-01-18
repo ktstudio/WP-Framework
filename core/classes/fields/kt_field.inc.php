@@ -75,6 +75,8 @@ abstract class KT_Field {
      */
     public function setPostPrefix($postPrefix) {
         $this->postPrefix = $postPrefix;
+        
+        return $this;
     }
 
     /**

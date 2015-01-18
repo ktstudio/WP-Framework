@@ -440,14 +440,16 @@ class KT_Form_Fieldset {
      *
      * @return string HTML
      */
-    public function getStartHtmlOfFieldSet() {
+    public function getStartHtmlOfFieldSet( $fieldsetTag = true) {
         $html = "<div id=\"{$this->getId()}\" class=\"kt_fieldset {$this->getClassesString()} panel panel-default\">";
 
         if (kt_isset_and_not_empty($this->getTitle())) {
             $html .= "<div class=\"panel-heading\"><h2 class=\"panel-title\">{$this->getTitle()}</h2></div>";
         }
+        
+        $tag = $fieldsetTag ? "fieldset" : "div";
 
-        $html .= "<fieldset class=\"panel-body\">";
+        $html .= "<$tag class=\"panel-body\">";
         if (kt_isset_and_not_empty($this->getDescription())) {
             $html .= "<p class=\"fieldset-description\">{$this->getDescription()}</p>";
         }
@@ -463,8 +465,9 @@ class KT_Form_Fieldset {
      *
      * @return string HTML
      */
-    public function getEndHtmlOfFieldSet() {
-        return "</fieldset></div>";
+    public function getEndHtmlOfFieldSet( $fieldsetTag = true ) {
+        $tag = $fieldsetTag ? "fieldset" : "div";
+        return "</$tag></div>";
     }
 
     /**
@@ -478,9 +481,9 @@ class KT_Form_Fieldset {
      * @param array $excludeFields - které filedy se nebudou zobrazovat $field->name
      * @param string $class
      *
-     * @return mixed
+     * @return string
      */
-    public function getInputsDataToTable(array $excludeFields = array(), $class = null) {
+    public function getInputsDataToTable($class = null) {
 
         if (!$this->hasFields()) {
             return null;
@@ -493,11 +496,6 @@ class KT_Form_Fieldset {
 
         foreach ($this->getFields() as $field) {
             /* @var $field \KT_Field */
-            
-            if(in_array($field->getName(), $excludeFields)){
-                continue;
-            }
-
             $value = $field->getValue();
 
             if ($value === "") {
@@ -512,14 +510,16 @@ class KT_Form_Fieldset {
         }
 
         if (kt_isset_and_not_empty($fieldContent)) {
-            $html = "<table id=\"{$this->getName()}\" class=\"kt-fieldset-data-table $class\">";
+            $html .= $this->getStartHtmlOfFieldSet(false);
+            $html .= "<table id=\"{$this->getName()}\" class=\"kt-fieldset-data-table $class\">";
             $html .= $fieldContent;
             $html .= "</table>";
+            $html .= $this->getEndHtmlOfFieldSet(false);
 
             return $html;
         }
 
-        return null;
+        return $html;
     }
     
     
