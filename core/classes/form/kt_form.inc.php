@@ -721,7 +721,7 @@ class KT_Form extends KT_HTML_Tag_Base {
             }
 
             if ($fieldset->getSeralizeSave()) {
-                $fieldset->setFieldsData($postMetas[$fieldset->getName()]);
+                $fieldset->setFieldsData(unserialize($postMetas[$fieldset->getName()]));
                 continue;
             }
 

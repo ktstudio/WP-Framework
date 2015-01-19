@@ -465,12 +465,24 @@ abstract class KT_Field {
             }
         }
 
-        if (isset($_POST[$this->getName()]))
+        if (isset($_POST[$this->getName()])){
             return $_POST[$this->getName()];
+        }
 
 
-        if (isset($_GET[$this->getName()]))
+        if (isset($_GET[$this->getName()])){
             return $_GET[$this->getName()];
+        }
+        
+        if($this->getFieldType() == KT_Checkbox_Field::FIELD_TYPE){
+            if(isset($_POST[$this->getPostPrefix()])){
+                return $_POST[$this->getPostPrefix()];
+            }
+            
+            if(isset($_GET[$this->getPostPrefix()])){
+                return $_GET[$this->getPostPrefix()];
+            }
+        }
 
 
         if (kt_isset_and_not_empty($this->value) || $this->value === "0" || $this->value === 0) {
