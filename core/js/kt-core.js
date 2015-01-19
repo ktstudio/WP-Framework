@@ -1,8 +1,9 @@
 jQuery(document).ready(function() {
     
     // Validování metaboxu v editaci postu (custom post_type)
-    jQuery("form#post").submit(function(){
-
+    jQuery("form#post, form#kt-custom-page-screen").submit(function(){
+        console.log("test");
+        
         jQuery("#jquery-kt-validator").remove();
 
         var validationResult = jQuery(this).formValidation();

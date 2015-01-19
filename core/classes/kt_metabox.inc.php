@@ -498,11 +498,10 @@ class KT_MetaBox implements KT_Registrable {
             case KT_MetaBox_Data_Types::CRUD:
                 $crudInstance = $this->getCrudInstance();
                 if (kt_isset_and_not_empty($crudInstance)) {
-                    $canCrudSave = $form->isFormSend() || !$form->hasError();
                     foreach ($form->getFieldsets() as $fieldset) {
                         $postPrefix = $fieldset->getPostPrefix();
                         if (kt_isset_and_not_empty($postPrefix)) {
-                            if ($isDefaultAutoSave && $canCrudSave) {
+                            if ($isDefaultAutoSave && $form->isFormSend() && !$form->hasError()) {
                                 $fieldset->setFieldsData($_POST[KT_Order_Shipping_Config::FORM_PREFIX]);
                                 foreach ($fieldset->getFields() as $field) {
                                     $crudInstance->addNewColumnToData($field->getName(), $field->getValue());
