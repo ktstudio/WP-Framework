@@ -28,7 +28,7 @@ class KT_Catalog_Base_Config {
         $fieldset->addText(KT_Catalog_Base_Model::TITLE_COLUMN, __("Název: ", KT_DOMAIN))
                 ->addRule(KT_Field_Validator::REQUIRED, "Název je povinná položka")
                 ->addRule(KT_Field_Validator::MIN_LENGTH, __("Název musí mít alespoň 3 znaky"), 3)
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Název může mít maximálně 30 znaků"), 30);
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Název může mít maximálně 50 znaků"), 50);
 
         $fieldset->addTextarea(KT_Catalog_Base_Model::DESCRIPTION_COLUMN, __("Popis: ", KT_DOMAIN))
                 ->setRows(5)
