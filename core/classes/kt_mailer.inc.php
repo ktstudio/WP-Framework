@@ -112,14 +112,13 @@ class KT_Mailer {
      * 
      * @param string $subject
      * @return \KT_Mailer
-     * @throws KT_Not_Set_Argument_Exception
      */
     public function setSubject($subject) {
         if (kt_isset_and_not_empty($subject)) {
             $this->subject = strip_tags(htmlspecialchars($subject));
-            return $this;
         }
-        throw new KT_Not_Set_Argument_Exception('subject');
+        
+        return $this;
     }
 
     /**
@@ -385,7 +384,7 @@ class KT_Mailer {
      * @throws KT_Not_Set_Argument_Exception
      */
     private function validate() {
-        $mustBeSetup = array('recipients', 'content', 'senderName', 'senderName');
+        $mustBeSetup = array('recipients', 'content');
 
         foreach ($mustBeSetup as $value) {
             if (kt_not_isset_or_empty($this->$value)) {
