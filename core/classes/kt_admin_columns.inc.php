@@ -118,7 +118,7 @@ class KT_Admin_Columns {
                 break;
             case self::POST_META_TYPE_KEY:
                 $postMeta = get_post_meta($postId, $args[self::METAKEY_PARAM_KEY], true);
-                if (kt_isset_and_not_empty($postMeta)) {
+                if (isset($postMeta)) {
                     $value = $postMeta;
                     $filterFunction = $args[self::FILTER_FUNCTION];
                     if (kt_isset_and_not_empty($filterFunction)) {
