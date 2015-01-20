@@ -414,9 +414,13 @@ class KT_MetaBox implements KT_Registrable {
      */
     public function register() {
         $screen = $this->getScreen();
-        add_action("add_meta_boxes_$screen", array(&$this, "add"));
+        add_action("add_meta_boxes_$screen", array($this, "add"));
         if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::POST_META) {
-            add_action("save_post_$screen", array(&$this, "savePost"));
+            add_action("save_post_$screen", array($this, "savePost"));
+        }
+        
+        if($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::CRUD){
+            add_action("load-$screen", array($this, "saveCrud"));
         }
     }
 
@@ -457,6 +461,35 @@ class KT_MetaBox implements KT_Registrable {
                 $form->saveFieldsetToPostMeta($postId);
             }
         }
+    }
+    
+    /**
+     * Callback pro akci load-$screen pokud je aktivní datový typ CRUD @see KT_MetaBox_Data_Types::CRUD
+     * Pozn.: Není třeba volat "ručně", jedná se o automatickou systémovou funkci
+     * 
+     * @author Tomáš Kocifaj
+     */
+    public function saveCrud(){
+        $crudInstance = $this->getCrudInstance();
+        $isDefaultAutoSave = $this->getIsDefaultAutoSave();
+        $fieldset = $this->getFieldset();
+        $fieldset->setTitle("");
+        $form = new KT_Form();
+        $form->addFieldSetByObject($fieldset);
+        
+        $form->validate();
+        
+        if ($isDefaultAutoSave && $form->isFormSend() && !$form->hasError()) {
+            $fieldset->setFieldsData($_POST[KT_Order_Shipping_Config::FORM_PREFIX]);
+            foreach ($fieldset->getFields() as $field) {
+                $crudInstance->addNewColumnToData($field->getName(), $field->getValue());
+            }
+            $crudInstance->saveRow();
+            $parsedQuery = explode("&", $_SERVER["QUERY_STRING"]);
+            $redirectUrl = admin_url("admin.php") . "?" . $parsedQuery[0] . "&" . $crudInstance::ID_COLUMN . "=" . $crudInstance->getid();
+            wp_redirect($redirectUrl);
+            exit;
+        }        
     }
 
     /**
@@ -501,13 +534,6 @@ class KT_MetaBox implements KT_Registrable {
                     foreach ($form->getFieldsets() as $fieldset) {
                         $postPrefix = $fieldset->getPostPrefix();
                         if (kt_isset_and_not_empty($postPrefix)) {
-                            if ($isDefaultAutoSave && $form->isFormSend() && !$form->hasError()) {
-                                $fieldset->setFieldsData($_POST[KT_Order_Shipping_Config::FORM_PREFIX]);
-                                foreach ($fieldset->getFields() as $field) {
-                                    $crudInstance->addNewColumnToData($field->getName(), $field->getValue());
-                                }
-                                $crudInstance->saveRow();
-                            }
                             $fieldset->setFieldsData($crudInstance->getData());
                         } else {
                             throw new KT_Not_Implemented_Exception(__("Zatím jsou podporované pouze formuláře se zadaným PostPrefixem", KT_DOMAIN));

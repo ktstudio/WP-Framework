@@ -25,6 +25,11 @@ img.kt-loading-image
     margin-top: 15px;
 }
 
+.kt-custom-screen-page table.wp-list-table tr.updated
+{
+    background-color: #DAFF75;
+}
+
 .kt-custom-screen-page table.wp-list-table tr td
 {
     vertical-align: middle;

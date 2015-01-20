@@ -329,10 +329,19 @@ class KT_CRUD_Admin_List {
             return $html;
         }
         
+        $className = $this->getClassName();
+        
+        if(array_key_exists($className::ID_COLUMN, $_GET)){
+            $updatedRowId = $_GET[$className::ID_COLUMN];
+        }
+        
         $html .= "<tbody>";
         
         while($repository->haveItems()) : $item = $repository->theItem();
-            $html .= "<tr id=\"row-{$item->getId()}\">";
+        
+            $updatedClass = $item->getId() == $updatedRowId ? " class=\"updated\"" : "";
+        
+            $html .= "<tr id=\"row-{$item->getId()}\"$updatedClass>";
             foreach($columnCollection as $column){
                 
                 $class = kt_isset_and_not_empty($column->getCssClass()) ? " class=\"{$column->getCssClass()}\"" : "";
