@@ -35,7 +35,7 @@ class KT_Catalog_Base_Config {
                 ->setTooltip(__("Doplňující údaj informačního charakteru...", KT_DOMAIN));
 
         $fieldset->addText(KT_Catalog_Base_Model::CODE_COLUMN, __("Kód: ", KT_DOMAIN))
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Kód může mít maximálně 20 znaků"), 20);
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Kód může mít maximálně 30 znaků"), 30);
 
         $fieldset->addSwitch(KT_Catalog_Base_Model::VISIBILITY_COLUMN, __("Viditelnost: ", KT_DOMAIN))
                 ->addRule(KT_Field_Validator::REQUIRED, "Viditelnost je povinná položka");
