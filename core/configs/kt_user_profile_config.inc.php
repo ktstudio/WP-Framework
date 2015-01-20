@@ -37,7 +37,9 @@ class KT_User_Profile_Config {
         if ($withPhone) {
             $phoneField = $fieldset->addText(self::PHONE, __("Telefon:", KT_DOMAIN))
                     ->setValue($currentUser->$userPhoneKey)
-                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("Telefon může mít maximálně 20 znaků.", KT_DOMAIN), 20);
+                    ->setPlaceholder(__("+420 606 707 808", KT_DOMAIN))
+                    ->setToolTip(__("Telefon by měl být v mezinárodní formě, např. \"+420 606 707 808\"...", KT_DOMAIN))
+                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("Telefon může mít maximálně 16 znaků.", KT_DOMAIN), 16);
             if ($isPhoneRequired) {
                 $phoneField->addRule(KT_Field_Validator::REQUIRED, __("Telefon je povinná položka.", KT_DOMAIN));
             }
