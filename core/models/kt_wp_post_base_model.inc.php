@@ -313,6 +313,37 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     public function getPublishDate($dateFormat = "d.m.Y") {
         return mysql2date($dateFormat, $this->getPost()->post_date);
     }
+    
+    /**
+     * Vrátí uběhnutý čas od datumu publikace příspěvku
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @return string
+     */
+    public function getElapsedTime(){
+        $now = new DateTime();
+        $orderCreated = new DateTime($this->getPost()->post_date);
+        $diff = $now->diff($orderCreated);
+
+        if ($diff->m > 0) {
+            $diffTimeFormat = $diff->m . __(' měs', KT_DOMAIN) . ' ';
+            $diffTimeFormat .= $diff->d . __(' den', KT_DOMAIN) . ' ';
+            $diffTimeFormat .= $diff->h . __(' hod', KT_DOMAIN) . ' ';
+            $diffTimeFormat .= $diff->i . __(' min', KT_DOMAIN) . ' ';
+        } elseif ($diff->d > 0) {
+            $diffTimeFormat = $diff->d . __(' den', KT_DOMAIN) . ' ';
+            $diffTimeFormat .= $diff->h . __(' hod', KT_DOMAIN) . ' ';
+            $diffTimeFormat .= $diff->i . __(' min', KT_DOMAIN) . ' ';
+        } elseif ($diff->h > 0) {
+            $diffTimeFormat .= $diff->h . __(' hod', KT_DOMAIN) . ' ';
+            $diffTimeFormat .= $diff->i . __(' min', KT_DOMAIN) . ' ';
+        } else {
+            $diffTimeFormat .= $diff->i . __(' min', KT_DOMAIN) . ' ';
+        }
+
+        return $diffTimeFormat;
+    }
 
     /**
      * Vrátí (za/daný) post type
