@@ -735,7 +735,7 @@ class KT_Form_Fieldset {
         $categoryManager = new KT_Taxonomy_Data_Manager();
         $categoryManager->setTaxonomy(KT_WP_CATEGORY_KEY);
         $field = $this->fields[$name] = new KT_Select_Field($name, $label);
-        $field->setDataManager($categoryManager);
+        $field->setDataManager($categoryManager)->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 

@@ -158,7 +158,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Nastaví galerii obrázků daného příspěvku
      *
      * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
      *
      * @param KT_WP_Post_Gallery $gallery
      * @return \KT_WP_Post_Base_Model
@@ -168,6 +167,14 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         return $this;
     }
 
+    /**
+     * Nastaví seznam souborů daného příspěvku
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @param KT_WP_Post_File_List $files
+     * @return \KT_WP_Post_Base_Model
+     */
     private function setFiles(KT_WP_Post_File_List $files) {
         $this->files = $files;
         return $this;
@@ -179,7 +186,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Vrátí ID WP_Postu v rámci modelu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
      *
      * @return int
      */
@@ -259,7 +265,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Vrátí URL pro zobrazení detailu postu
      *
      * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -270,8 +275,10 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Vrátí titulek postu ošetřen tak, aby mohl být součástí některého z HTML attributu
      * Hlavní pro title=""
+     * 
+     * @author Tomáš Kocifaj
      *
-     * @return type
+     * @return string
      */
     public function getTitleAttribute() {
         return $titleAttributeContent = esc_attr(strip_tags($this->getTitle()));
@@ -281,7 +288,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * Vrátí ID náhledového obrázku. Pokud není přiřazen, vrátí Null
      *
      * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
      *
      * @return mixed null || int
      */
