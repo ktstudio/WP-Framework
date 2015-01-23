@@ -325,14 +325,27 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         $now = new DateTime();
         $orderCreated = new DateTime($this->getPost()->post_date);
         $diff = $now->diff($orderCreated);
+        
+        switch ($diff->d) {
+            case 1:
+                $dayString = __("den", KT_DOMAIN);
+                break;
+            case 2:
+            case 3:
+            case 4:
+                $dayString = _("dny", KT_DOMAIN);
+
+            default:
+                $dayString = _("dní", KT_DOMAIN);
+        }
 
         if ($diff->m > 0) {
             $diffTimeFormat = $diff->m . __(' měs', KT_DOMAIN) . ' ';
-            $diffTimeFormat .= $diff->d . __(' den', KT_DOMAIN) . ' ';
+            $diffTimeFormat .= $diff->d . $dayString . ' ';
             $diffTimeFormat .= $diff->h . __(' hod', KT_DOMAIN) . ' ';
             $diffTimeFormat .= $diff->i . __(' min', KT_DOMAIN) . ' ';
         } elseif ($diff->d > 0) {
-            $diffTimeFormat = $diff->d . __(' den', KT_DOMAIN) . ' ';
+            $diffTimeFormat = $diff->d . $dayString . ' ';
             $diffTimeFormat .= $diff->h . __(' hod', KT_DOMAIN) . ' ';
             $diffTimeFormat .= $diff->i . __(' min', KT_DOMAIN) . ' ';
         } elseif ($diff->h > 0) {
