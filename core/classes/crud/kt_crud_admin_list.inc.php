@@ -266,7 +266,10 @@ class KT_CRUD_Admin_List {
             return "";
         }
         
-	$createUrl = add_query_arg( array( self::GET_ACTION => self::GET_ACTION_CREATE ));
+        if(array_key_exists("page", $_GET)){
+            $createUrl = admin_url() . "?page=" . $_GET["page"] . "&" . self::GET_ACTION . "=" . self::GET_ACTION_CREATE ;
+        }
+        
 	return $html = "<a href=\"$createUrl\" id=\"addCrudButtonList\" class=\"button\">". __("Přidat nový záznam", KT_DOMAIN) ."</a>";
     }
     
