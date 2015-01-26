@@ -837,11 +837,6 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @return \KT_Form
      */
     public function saveFieldsetToPostMeta($postId, array $excludeFields = array()) {
-
-        if (!$this->isFormSend()) {
-            return;
-        }
-
         if (is_admin()) {
 
             if (!current_user_can('edit_post', $postId)) {
