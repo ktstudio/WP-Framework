@@ -177,6 +177,17 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
     public function getFullName() {
         return $this->getFirstName() . " " . $this->getLastName();
     }
+    
+    /**
+     * Vrátí URL adresu na detail autora (author.php)
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @return string
+     */
+    public function getPermalink(){
+        return get_author_posts_url($this->getId());
+    }
 
     /**
      * Vráti počet příspěvků autora na základě předaných parametrů
