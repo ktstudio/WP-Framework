@@ -121,7 +121,7 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
         if (kt_isset_and_not_empty($this->getAllUserRoles())) {
             foreach ($this->getAllUserRoles() as $roleSlug => $roleName) {
                 $newUsersData = $this->getDataOfUserRole($roleSlug);
-                $data = array_merge($data, $newUsersData);
+                $data += $newUsersData;
             }
         }
 
