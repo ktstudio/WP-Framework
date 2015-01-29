@@ -49,19 +49,21 @@ function kt_get_image_theme($fileName) {
  * @return string
  */
 function kt_replace_images_lazy_src($html) {
-    $dom = new DOMDocument();
-    $dom->preserveWhiteSpace = false;
-    $dom->loadHTML($html);
-    $imageTags = $dom->getElementsByTagName("img");
-    $processedImages = array();
-    foreach ($imageTags as $imageTag) {
-        $oldSrc = $imageTag->getAttribute("src");
-        if (in_array($oldSrc, $processedImages)) {
-            continue; // tento obrázek byl již zpracován
+    if (kt_isset_and_not_empty($html)) {
+        $dom = new DOMDocument();
+        $dom->preserveWhiteSpace = false;
+        $dom->loadHTML($html);
+        $imageTags = $dom->getElementsByTagName("img");
+        $processedImages = array();
+        foreach ($imageTags as $imageTag) {
+            $oldSrc = $imageTag->getAttribute("src");
+            if (in_array($oldSrc, $processedImages)) {
+                continue; // tento obrázek byl již zpracován
+            }
+            array_push($processedImages, $oldSrc);
+            $newSrc = KT_CORE_IMAGES_URL . "/transparent.png";
+            $html = str_replace("src=\"$oldSrc\"", "src=\"$newSrc\" data-src=\"$oldSrc\"", $html);
         }
-        array_push($processedImages, $oldSrc);
-        $newSrc = KT_CORE_IMAGES_URL . "/transparent.png";
-        $html = str_replace("src=\"$oldSrc\"", "src=\"$newSrc\" data-src=\"$oldSrc\"", $html);
     }
     return $html;
 }
