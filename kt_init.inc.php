@@ -161,9 +161,6 @@ function kt_special_class_autoloader_init($name, $fileName, $moduleNames) {
      * @return array
      */
     global $ktSpecialFolders;
-    if ($name == "KT_KST_Sidebar_Menu_Widget_base") {
-        $name = "KT_KST_Sidebar_Menu_Widget_base";
-    }
     $nameParts = explode("_", $name);
     $lastNamePart = strtolower((string) array_pop($nameParts));
     if (strtolower("$lastNamePart") === KT_BASE_CLASS_SUFFIX) {
