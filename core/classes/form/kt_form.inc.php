@@ -1130,6 +1130,7 @@ class KT_Form extends KT_HTML_Tag_Base {
             
             if($new === '' || kt_not_isset_or_empty($new)){
                 delete_post_meta($postId, $field->getName());
+                return $this;
             }
 
             if ($new != $old) {
