@@ -1117,7 +1117,6 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @return \KT_Form
      */
     private function saveFieldsetToPostMetaOneByOne($postId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
-
         foreach ($fieldset->getFields() as $field) {
             /* @var $field \KT_Field */
 
@@ -1128,9 +1127,9 @@ class KT_Form extends KT_HTML_Tag_Base {
             $old = get_post_meta($postId, $field->getName(), true);
             $new = $field->getValue();
             
-            if($new === '' || kt_not_isset_or_empty($new)){
+            if($new === ''){
                 delete_post_meta($postId, $field->getName());
-                return $this;
+                continue;
             }
 
             if ($new != $old) {
@@ -1141,6 +1140,7 @@ class KT_Form extends KT_HTML_Tag_Base {
                     }
                 }
                 update_post_meta($postId, $field->getName(), $new);
+                continue;
             } elseif ('' == $new && $old) {
                 delete_post_meta($postId, $field->getName(), $old);
             }
