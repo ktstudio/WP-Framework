@@ -1127,6 +1127,10 @@ class KT_Form extends KT_HTML_Tag_Base {
 
             $old = get_post_meta($postId, $field->getName(), true);
             $new = $field->getValue();
+            
+            if($new === '' || kt_not_isset_or_empty($new)){
+                delete_post_meta($postId, $field->getName());
+            }
 
             if ($new != $old) {
                 $fieldType = get_class($field);

@@ -17,7 +17,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @link http://www.ktstudio.cz
      *
      * @param WP_Post $post
-     * @param int $postId
      * @return \KT_WP_Post_Base_Model
      */
     function __construct(WP_Post $post = null, $metaPrefix = null) {
