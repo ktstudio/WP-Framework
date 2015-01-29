@@ -94,10 +94,9 @@ class KT_Select_Field extends KT_Options_Field_Base {
      * @return string
      */
     public function getOptionContent() {
-
         $html = "";
         $selected = "";
-
+       
         $emptyOption = "<option value=\"\">" . KT_EMPTY_SYMBOL . "</option>";
 
         if ($this->getFirstEmpty() == true) {
@@ -105,7 +104,7 @@ class KT_Select_Field extends KT_Options_Field_Base {
         }
         
        foreach ($this->getOptionsData() as $key => $val) {
-            if (strval($key) === $this->getValue() && $this->getValue() !== null && $this->getValue() !== '') {
+            if ($key == $this->getValue() && $this->getValue() !== null && $this->getValue() !== '') {
                 $selected = "selected=\"selected\"";
             }
 
