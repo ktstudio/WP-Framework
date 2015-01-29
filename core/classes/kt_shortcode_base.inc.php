@@ -94,7 +94,7 @@ abstract class KT_Shortcode_Base implements KT_Registrable {
         $buttonKey = $this->getButtonKey();
         $buttonScriptPath = $this->getButtonScriptPath();
         if (kt_isset_and_not_empty($buttonKey) && kt_isset_and_not_empty($buttonScriptPath)) {
-            add_action("admin_init", array($this, "action_admin_init"));
+            add_action("admin_init", array(&$this, "adminInitAction"));
         }
     }
 
@@ -107,10 +107,10 @@ abstract class KT_Shortcode_Base implements KT_Registrable {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
-    public function action_admin_init() {
+    public function adminInitAction() {
         if (current_user_can("edit_posts") && current_user_can("edit_pages")) {
-            add_filter("mce_buttons", array($this, "editorButtonFilter"));
-            add_filter("mce_external_plugins", array($this, "editorButtonPlugin"));
+            add_filter("mce_external_plugins", array(&$this, "editorButtonPlugin"));
+            add_filter("mce_buttons", array(&$this, "editorButtonFilter"));
         }
     }
 
@@ -125,7 +125,7 @@ abstract class KT_Shortcode_Base implements KT_Registrable {
      * @return type
      */
     public function editorButtonFilter(array $buttons) {
-        $buttonKey = $this->getButtonKey();
+        $buttonKey = $this->getButtonKey();        
         array_push($buttons, "|", $buttonKey);
         return $buttons;
     }
