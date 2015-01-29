@@ -98,7 +98,7 @@ class KT_Select_Field extends KT_Options_Field_Base {
         $html = "";
         $selected = "";
 
-        $emptyOption = "<option value=\"\">" . KT_EMPTY_TEXT . "</option>";
+        $emptyOption = "<option value=\"\">" . KT_EMPTY_SYMBOL . "</option>";
 
         if ($this->getFirstEmpty() == true) {
             $html .= $emptyOption;

@@ -828,7 +828,7 @@ class KT_Form_Fieldset {
             return;
         }
 
-        $unit = $value == KT_EMPTY_TEXT ? "" : $field->getUnit();
+        $unit = $value == KT_EMPTY_SYMBOL ? "" : $field->getUnit();
 
         $html = "<tr>";
         $html .= "<td>{$field->getLabel()} </td>";

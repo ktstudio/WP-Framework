@@ -99,7 +99,7 @@ class KT_Admin_Columns {
                 if (has_post_thumbnail($postId)) {
                     the_post_thumbnail($args[self::SIZE_PARAM_KEY]);
                 } else {
-                    echo KT_EMPTY_TEXT;
+                    echo KT_EMPTY_SYMBOL;
                 }
                 break;
             case self::POST_PROPERTY_TYPE_KEY:
@@ -113,7 +113,7 @@ class KT_Admin_Columns {
                     }
                     echo $value;
                 } else {
-                    echo KT_EMPTY_TEXT;
+                    echo KT_EMPTY_SYMBOL;
                 }
                 break;
             case self::POST_META_TYPE_KEY:
@@ -126,7 +126,7 @@ class KT_Admin_Columns {
                     }
                     echo $value;
                 } else {
-                    echo KT_EMPTY_TEXT;
+                    echo KT_EMPTY_SYMBOL;
                 }
                 break;
             case self::TAXONOMY_TYPE_KEY:
@@ -140,7 +140,7 @@ class KT_Admin_Columns {
                     }
                     echo join(", ", $post_terms);
                 } else {
-                    echo KT_EMPTY_TEXT;
+                    echo KT_EMPTY_SYMBOL;
                 }
                 break;
             default:
@@ -163,7 +163,7 @@ class KT_Admin_Columns {
 
     public function addColumn($key, $args) {
         $defaults = array(
-            self::LABEL_PARAM_KEY => KT_EMPTY_TEXT,
+            self::LABEL_PARAM_KEY => KT_EMPTY_SYMBOL,
             self::SIZE_PARAM_KEY => array(self::DEFAULT_THUMBNAIL_SIZE, self::DEFAULT_THUMBNAIL_SIZE),
             self::TAXONOMY_PARAM_KEY => "",
             self::METAKEY_PARAM_KEY => "",

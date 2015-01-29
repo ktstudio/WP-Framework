@@ -88,7 +88,7 @@ abstract class KT_Enum {
             $translates = $this->getTranslates();
             return $translates[$this->getCurrentValue()];
         }
-        return KT_EMPTY_TEXT;
+        return KT_EMPTY_SYMBOL;
     }
 
     /**

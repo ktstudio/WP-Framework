@@ -10,10 +10,15 @@ define("KT_FORM_PREFIX", "kt-");
 define("KT_DOMAIN", "KT");
 define("KT_PHP_FILE_SUFFIX", ".inc.php");
 define("KT_INIT_MODULE_FILE", "kt_init.inc.php");
-define("KT_EMPTY_TEXT", __("---", KT_DOMAIN));
-define("KT_ALL_TEXT", __("Vše", KT_DOMAIN));
+define("KT_EMPTY_SYMBOL", __("---", KT_DOMAIN));
+define("KT_EMPTY_TEXT", __("<Prázdné>", KT_DOMAIN));
+define("KT_ALL_TEXT", __("<Vše>", KT_DOMAIN));
+define("KT_SELECT_TEXT", __("<Vybrat>", KT_DOMAIN));
+define("KT_SELECT_SYMBOL", __("...", KT_DOMAIN));
 define("KT_SIMPLE_CODE", __("praha", KT_DOMAIN));
+define("KT_BASE_CLASS_SUFFIX", "base");
 define("KT_INTERFACES_FOLDER", "interfaces");
+define("KT_CLASSES_FOLDER", "classes");
 define("KT_EXCEPTIONS_FOLDER", "exceptions");
 define("KT_PRESENTERS_FOLDER", "presenters");
 define("KT_CONFIGS_FOLDER", "configs");
@@ -21,7 +26,20 @@ define("KT_MODELS_FOLDER", "models");
 define("KT_ENUMS_FOLDER", "enums");
 define("KT_WIDGETS_FOLDER", "widgets");
 define("KT_SHORTCODES_FOLDER", "shortcodes");
-define("KT_CLASSES_FOLDER", "classes");
+
+/**
+ * @return array
+ */
+global $ktSpecialFolders;
+$ktSpecialFolders = array(
+    KT_EXCEPTIONS_FOLDER,
+    KT_PRESENTERS_FOLDER,
+    KT_CONFIGS_FOLDER,
+    KT_MODELS_FOLDER,
+    KT_ENUMS_FOLDER,
+    KT_WIDGETS_FOLDER,
+    KT_SHORTCODES_FOLDER,
+);
 
 
 spl_autoload_register("kt_class_autoloader_init");
@@ -96,6 +114,12 @@ function kt_class_autoloader_init($name) {
         $fileName = kt_get_include_file_name($name);
 
         $modulesNames = kt_get_all_modules_names();
+
+        // detekce pro speciální třídy (mimo adresář classes)
+        if (kt_special_class_autoloader_init($name, $fileName, $modulesNames)) {
+            return;
+        }
+
         foreach ($modulesNames as $moduleName) { // projetí všech (sub)modulů
             $modulePath = path_join(KT_BASE_PATH, $moduleName);
 
@@ -107,66 +131,10 @@ function kt_class_autoloader_init($name) {
                 return;
             }
 
-            // detekce pro případný výjimku
-            $exceptionsPath = path_join($modulePath, KT_EXCEPTIONS_FOLDER);
-            $exceptionPath = path_join($exceptionsPath, $fileName);
-            if (file_exists($exceptionPath)) {
-                require_once($exceptionPath);
-                return;
-            }
-
-            // detekce pro případné presentery
-            $presentersPath = path_join($modulePath, KT_PRESENTERS_FOLDER);
-            $presenterPath = path_join($presentersPath, $fileName);
-            if (file_exists($presenterPath)) {
-                require_once($presenterPath);
-                return;
-            }
-
-            // detekce pro případné configy
-            $configsPath = path_join($modulePath, KT_CONFIGS_FOLDER);
-            $configPath = path_join($configsPath, $fileName);
-            if (file_exists($configPath)) {
-                require_once($configPath);
-                return;
-            }
-
-            // detekce pro případné modely
-            $modelsPath = path_join($modulePath, KT_MODELS_FOLDER);
-            $modelPath = path_join($modelsPath, $fileName);
-            if (file_exists($modelPath)) {
-                require_once($modelPath);
-                return;
-            }
-
-            // detekce pro případné enumy
-            $enumsPath = path_join($modulePath, KT_ENUMS_FOLDER);
-            $enumPath = path_join($enumsPath, $fileName);
-            if (file_exists($enumPath)) {
-                require_once($enumPath);
-                return;
-            }
-
-            // detekce pro případné widgety
-            $widgetsPath = path_join($modulePath, KT_WIDGETS_FOLDER);
-            $widgetPath = path_join($widgetsPath, $fileName);
-            if (file_exists($widgetPath)) {
-                require_once($widgetPath);
-                return;
-            }
-            
-            // detekce pro případné shortcody
-            $shortcodesPath = path_join($modulePath, KT_SHORTCODES_FOLDER);
-            $shortcodePath = path_join($shortcodesPath, $fileName);
-            if (file_exists($shortcodePath)) {
-                require_once($shortcodePath);
-                return;
-            }
-
-            // detekce pro případnou třídu
+            // detekce pro případnou klasickou třídu (v adresáři classes)
             $classesPath = path_join($modulePath, KT_CLASSES_FOLDER);
             $classPath = path_join($classesPath, $fileName);
-            if (file_exists($classPath)) {
+            if (file_exists($classPath)) { // třídy na základní úrovni adresáře
                 require_once($classPath);
                 return;
             } else { // pro třídy ještě případně hledáme všechny pod úrovně (hlouby 1)
@@ -186,6 +154,34 @@ function kt_class_autoloader_init($name) {
             }
         }
     }
+}
+
+function kt_special_class_autoloader_init($name, $fileName, $moduleNames) {
+    /**
+     * @return array
+     */
+    global $ktSpecialFolders;
+    if ($name == "KT_KST_Sidebar_Menu_Widget_base") {
+        $name = "KT_KST_Sidebar_Menu_Widget_base";
+    }
+    $nameParts = explode("_", $name);
+    $lastNamePart = strtolower((string) array_pop($nameParts));
+    if (strtolower("$lastNamePart") === KT_BASE_CLASS_SUFFIX) {
+        $lastNamePart = strtolower((string) array_pop($nameParts));
+    }
+    $suffix = "{$lastNamePart}s";
+    if (in_array($suffix, $ktSpecialFolders)) {
+        foreach ($moduleNames as $moduleName) {
+            $modulePath = path_join(KT_BASE_PATH, $moduleName);
+            $specialClassesPath = path_join($modulePath, $suffix);
+            $specialClassPath = path_join($specialClassesPath, $fileName);
+            if (file_exists($specialClassPath)) {
+                require_once($specialClassPath);
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 /**
@@ -216,7 +212,6 @@ function kt_initialize_module($key, $folder = "yours", $withIncludeAll = true) {
     define("KT_{$key}_ASSETS_PATH", path_join($pathValue, "assets"));
     define("KT_{$key}_CLASSES_PATH", path_join($pathValue, "classes"));
     define("KT_{$key}_CSS_PATH", path_join($pathValue, "css"));
-    define("KT_{$key}_EXCEPTIONS_PATH", path_join($pathValue, "exceptions"));
     define("KT_{$key}_IMAGES_PATH", path_join($pathValue, "images"));
     define("KT_{$key}_INTERFACES_PATH", path_join($pathValue, "interfaces"));
     define("KT_{$key}_JS_PATH", path_join($pathValue, "js"));
@@ -229,7 +224,6 @@ function kt_initialize_module($key, $folder = "yours", $withIncludeAll = true) {
     define("KT_{$key}_ASSETS_URL", path_join($urlValue, "assets"));
     define("KT_{$key}_CLASSES_URL", path_join($urlValue, "classes"));
     define("KT_{$key}_CSS_URL", path_join($urlValue, "css"));
-    define("KT_{$key}_EXCEPTIONS_URL", path_join($urlValue, "exceptions"));
     define("KT_{$key}_IMAGES_URL", path_join($urlValue, "images"));
     define("KT_{$key}_INTERFACES_URL", path_join($urlValue, "interfaces"));
     define("KT_{$key}_JS_URL", path_join($urlValue, "js"));

@@ -146,7 +146,7 @@ class KT_Switch_Field extends KT_Field {
         } elseif ($value == KT_Switch_Field::NO || $value === false || $value === 0) {
             return __("Ne", KT_DOMAIN);
         } else {
-            echo KT_EMPTY_TEXT;
+            echo KT_EMPTY_SYMBOL;
         }
     }
 

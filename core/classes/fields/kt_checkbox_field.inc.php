@@ -41,7 +41,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
     public function getField() {
 
         if (kt_not_isset_or_empty($this->getOptionsData())) {
-            return "<span class=\"input-wrap checkbox\">" . KT_EMPTY_TEXT . "</span>";
+            return "<span class=\"input-wrap checkbox\">" . KT_EMPTY_SYMBOL . "</span>";
         }
         
         $html = "";

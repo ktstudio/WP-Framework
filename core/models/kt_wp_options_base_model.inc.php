@@ -193,7 +193,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
             return $optionValue;
         }
         if ($emptyText === true) {
-            return KT_EMPTY_TEXT;
+            return KT_EMPTY_SYMBOL;
         }
         return null;
     }
