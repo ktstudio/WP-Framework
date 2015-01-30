@@ -114,6 +114,23 @@ abstract class KT_Current_User_Presenter_Base {
     }
 
     /**
+     * Vrátí permalink na požadovaný nebo výchozí (RSS) feed podle aktuálního uživatele (ID)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $feed
+     * @return mixed string|null
+     */
+    public function getCurrentUserFeedLink($feed = "") {
+        $id = $this->getCurrentUserId();
+        if (kt_is_id_format($id)) {
+            return get_author_feed_link($id, $feed);
+        }
+        return null;
+    }
+
+    /**
      * Vrátí buď jméno a příjmení anebo zobrazované jméno uživatele, případně i login
      *
      * @author Martin Hlaváč
