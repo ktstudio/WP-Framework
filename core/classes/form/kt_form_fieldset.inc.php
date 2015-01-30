@@ -311,7 +311,7 @@ class KT_Form_Fieldset {
 
         return $this;
     }
-    
+
     /**
      * Do kolekce fieldů přidá jeden field
      * 
@@ -321,13 +321,57 @@ class KT_Form_Fieldset {
      * @param KT_Field $field
      * @return \KT_Form_Fieldset
      */
-    public function addField(KT_Field $field){
+    public function addField(KT_Field $field) {
         $field->setPostPrefix($this->getPostPrefix());
         $fieldsCollection = $this->getFields();
         $fieldsCollection[$field->getName()] = $field;
         $this->setFields($fieldsCollection);
-        
+
         return $this;
+    }
+
+    /**
+     * Vrátí pole s daty z GETu na základě nastaveného post prefixu
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @return array
+     */
+    public function getDataFromGet() {
+        if (kt_not_isset_or_empty($_GET)) {
+            return array();
+        }
+        $postPrefix = $this->getPostPrefix();
+        if (kt_isset_and_not_empty($postPrefix)) {
+            if (array_key_exists($postPrefix, $_GET)) {
+                return $_GET[$postPrefix];
+            }
+            return array();
+        }
+        return $_GET;
+    }
+
+    /**
+     * Vrátí pole s daty z POSTu na základě nastaveného post prefixu
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @return array
+     */
+    public function getDataFromPost() {
+        if (kt_not_isset_or_empty($_POST)) {
+            return array();
+        }
+        $postPrefix = $this->getPostPrefix();
+        if (kt_isset_and_not_empty($postPrefix)) {
+            if (array_key_exists($postPrefix, $_POST)) {
+                return $_POST[$postPrefix];
+            }
+            return array();
+        }
+        return $_POST;
     }
 
     /**
@@ -341,7 +385,7 @@ class KT_Form_Fieldset {
      * @return string - HTML
      *
      */
-    public function getInputsToTable( $class = null ) {
+    public function getInputsToTable($class = null) {
 
         $html = "";
 
@@ -440,13 +484,13 @@ class KT_Form_Fieldset {
      *
      * @return string HTML
      */
-    public function getStartHtmlOfFieldSet( $fieldsetTag = true) {
+    public function getStartHtmlOfFieldSet($fieldsetTag = true) {
         $html = "<div id=\"{$this->getId()}\" class=\"kt_fieldset {$this->getClassesString()} panel panel-default\">";
 
         if (kt_isset_and_not_empty($this->getTitle())) {
             $html .= "<div class=\"panel-heading\"><h2 class=\"panel-title\">{$this->getTitle()}</h2></div>";
         }
-        
+
         $tag = $fieldsetTag ? "fieldset" : "div";
 
         $html .= "<$tag class=\"panel-body\">";
@@ -465,7 +509,7 @@ class KT_Form_Fieldset {
      *
      * @return string HTML
      */
-    public function getEndHtmlOfFieldSet( $fieldsetTag = true ) {
+    public function getEndHtmlOfFieldSet($fieldsetTag = true) {
         $tag = $fieldsetTag ? "fieldset" : "div";
         return "</$tag></div>";
     }
@@ -506,7 +550,7 @@ class KT_Form_Fieldset {
                 $unit = $field->getUnit();
             }
 
-            $fieldContent .= $this->getInputDataToTr( $field );
+            $fieldContent .= $this->getInputDataToTr($field);
         }
 
         if (kt_isset_and_not_empty($fieldContent)) {
@@ -521,8 +565,6 @@ class KT_Form_Fieldset {
 
         return $html;
     }
-    
-    
 
     /**
      * Vrátí true zda fieldset obsahuje nějakou kolekci fieldu
@@ -789,7 +831,7 @@ class KT_Form_Fieldset {
     private function getClassesString() {
         return $classString = implode(" ", $this->getClasses());
     }
-    
+
     /**
      * Sestaví jeden TR řádek v podobě Label -> value (saved).
      * Pokud je value prázdné, nebude ho vůbec zobrazovat.
@@ -800,26 +842,24 @@ class KT_Form_Fieldset {
      *
      * @param KT_Field $field
      * @return string
-    */
+     */
     private function getInputDataToTr(KT_Field $field, $exclude_keys = array()) {
 
         if (in_array($field->getName(), $exclude_keys)) {
             return;
         }
-        
-        if($field->getFieldType() == KT_Hidden_Field::FIELD_TYPE){
+
+        if ($field->getFieldType() == KT_Hidden_Field::FIELD_TYPE) {
             return;
         }
 
         $value = $field->getValue();
-        
-        if(
-            $field->getFieldType() == KT_Select_Field::FIELD_TYPE
-            ||
-            $field->getFieldType() == KT_Checkbox_Field::FIELD_TYPE
-            ||
-            $field->getFieldType() == KT_Radio_Field::FIELD_TYPE
-        ){
+
+        if (
+                $field->getFieldType() == KT_Select_Field::FIELD_TYPE ||
+                $field->getFieldType() == KT_Checkbox_Field::FIELD_TYPE ||
+                $field->getFieldType() == KT_Radio_Field::FIELD_TYPE
+        ) {
             $fieldOption = $field->getDataManager()->getData();
             $value = $fieldOption[$field->getValue()];
         }

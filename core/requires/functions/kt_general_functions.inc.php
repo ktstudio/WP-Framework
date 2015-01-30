@@ -304,15 +304,15 @@ function kt_delete_row_from_table_lis_callback() {
 
 add_action("wp_ajax_kt_edit_crud_list_switch_field", "kt_edit_crud_list_switch_field_callback");
 
-function kt_edit_crud_list_switch_field_callback(){
+function kt_edit_crud_list_switch_field_callback() {
     $className = $_REQUEST["type"];
     $itemId = $_REQUEST["rowId"];
     $columnName = $_REQUEST["columnName"];
     $columnValue = $_REQUEST["value"];
-    
+
     $classModel = new $className($itemId);
     $classModel->addNewColumnToData($columnName, $columnValue)->saveRow();
-    
+
     die(1);
 }
 
@@ -341,4 +341,25 @@ function kt_get_admin_url($page, $action, $paramName = null, $paramValue = null)
         throw new KT_Not_Set_Argument_Exception("action");
     }
     throw new KT_Not_Set_Argument_Exception("page");
+}
+
+/**
+ * Rozšíření WP funkce admin_url i o případný php soubor z current screen -> parent_file nebo admin.php
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
+ * @return string
+ */
+function kt_get_admin_executive_url() {
+    $currenFile = "admin.php";
+    $currentScreen = get_current_screen();
+    if (kt_isset_and_not_empty($currentScreen)) {
+        $parentFile = $currentScreen->parent_file;
+        if (kt_isset_and_not_empty($parentFile) && kt_string_ends_with($parentFile, ".php")) {
+            $currenFile = $parentFile;
+        }
+    }
+    $adminUrl = admin_url();
+    return "$adminUrl$currenFile";
 }

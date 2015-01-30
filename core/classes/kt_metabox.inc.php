@@ -418,8 +418,8 @@ class KT_MetaBox implements KT_Registrable {
         if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::POST_META) {
             add_action("save_post_$screen", array($this, "savePost"));
         }
-        
-        if($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::CRUD){
+
+        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::CRUD) {
             add_action("load-$screen", array($this, "saveCrud"));
         }
     }
@@ -462,25 +462,25 @@ class KT_MetaBox implements KT_Registrable {
             }
         }
     }
-    
+
     /**
      * Callback pro akci load-$screen pokud je aktivní datový typ CRUD @see KT_MetaBox_Data_Types::CRUD
      * Pozn.: Není třeba volat "ručně", jedná se o automatickou systémovou funkci
      * 
      * @author Tomáš Kocifaj
      */
-    public function saveCrud(){
+    public function saveCrud() {
         $crudInstance = $this->getCrudInstance();
         $isDefaultAutoSave = $this->getIsDefaultAutoSave();
         $fieldset = $this->getFieldset();
         $fieldset->setTitle("");
         $form = new KT_Form();
         $form->addFieldSetByObject($fieldset);
-        
+
         $form->validate();
-        
+
         if ($isDefaultAutoSave && $form->isFormSend() && !$form->hasError()) {
-            $fieldset->setFieldsData($_POST[KT_Order_Shipping_Config::FORM_PREFIX]);
+            $fieldset->setFieldsData($fieldset->getDataFromPost());
             foreach ($fieldset->getFields() as $field) {
                 $crudInstance->addNewColumnToData($field->getName(), $field->getValue());
             }
@@ -489,7 +489,7 @@ class KT_MetaBox implements KT_Registrable {
             $redirectUrl = admin_url("admin.php") . "?" . $parsedQuery[0] . "&" . $crudInstance::ID_COLUMN . "=" . $crudInstance->getid();
             wp_redirect($redirectUrl);
             exit;
-        }        
+        }
     }
 
     /**
