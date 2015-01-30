@@ -749,7 +749,7 @@ class KT_Form extends KT_HTML_Tag_Base {
             return $this;
         }
 
-        $userMetas = kt_get_user_meta_all($userId);
+        $userMetas = KT_WP_User_Base_Model::getAllUserMeta($userId);
 
         foreach ($this->getFieldsets() as $fieldset) {
             /* @var $fieldset \KT_Form_Fieldset */
