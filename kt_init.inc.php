@@ -30,6 +30,12 @@ define("KT_SHORTCODES_FOLDER", "shortcodes");
 /**
  * @return array
  */
+global $ktModules;
+$ktModules = array("core");
+
+/**
+ * @return array
+ */
 global $ktSpecialFolders;
 $ktSpecialFolders = array(
     KT_EXCEPTIONS_FOLDER,
@@ -40,7 +46,6 @@ $ktSpecialFolders = array(
     KT_WIDGETS_FOLDER,
     KT_SHORTCODES_FOLDER,
 );
-
 
 spl_autoload_register("kt_class_autoloader_init");
 
@@ -62,7 +67,8 @@ function kt_check_loaded() {
  * Tato jediná funkce by se měla volat ze šablony, všech ostatní dostupný zbytek se načte sám...
  */
 function kt_load_all_modules() {
-    foreach (kt_get_all_modules_names() as $module) {
+    $submodules = kt_get_subdirs_names(KT_BASE_PATH);
+    foreach ($submodules as $module) {
         $modulePath = path_join(KT_BASE_PATH, $module);
         // chceme inicializační soubor modulu
         $initModuleFile = path_join($modulePath, KT_INIT_MODULE_FILE);
@@ -70,14 +76,6 @@ function kt_load_all_modules() {
             require_once ($initModuleFile);
         }
     }
-}
-
-/**
- * Získání všech názvů modulů (resp. podadresářů)
- * @return array
- */
-function kt_get_all_modules_names() {
-    return kt_get_subdirs_names(KT_BASE_PATH);
 }
 
 /**
@@ -111,18 +109,20 @@ function kt_get_subdirs_names($dirPath, $checkForDirExists = true) {
  */
 function kt_class_autoloader_init($name) {
     if (kt_is_prefixed($name)) {
+        if ($name == "KT_Stock_Product_Manager") {
+            $name = "KT_Stock_Product_Manager";
+        }
+        /**
+         * @return array
+         */
+        global $ktModules;
         $fileName = kt_get_include_file_name($name);
-
-        $modulesNames = kt_get_all_modules_names();
-
         // detekce pro speciální třídy (mimo adresář classes)
-        if (kt_special_class_autoloader_init($name, $fileName, $modulesNames)) {
+        if (kt_special_class_autoloader_init($name, $fileName, $ktModules)) {
             return;
         }
-
-        foreach ($modulesNames as $moduleName) { // projetí všech (sub)modulů
+        foreach ($ktModules as $moduleName) { // projetí všech (sub)modulů
             $modulePath = path_join(KT_BASE_PATH, $moduleName);
-
             // detekce pro případný interface
             $interfacesPath = path_join($modulePath, KT_INTERFACES_FOLDER);
             $interfacePath = path_join($interfacesPath, $fileName);
@@ -130,7 +130,6 @@ function kt_class_autoloader_init($name) {
                 require_once($interfacePath);
                 return;
             }
-
             // detekce pro případnou klasickou třídu (v adresáři classes)
             $classesPath = path_join($modulePath, KT_CLASSES_FOLDER);
             $classPath = path_join($classesPath, $fileName);
@@ -192,43 +191,62 @@ function kt_get_include_file_name($name) {
 }
 
 /**
+ * Registrace modulu do "systému" podle klíče - relativní cesta uvnitř KT adresáře
+ * 
+ * @global array $ktModules
+ */
+function kt_register_module($key) {
+    /**
+     * @return array
+     */
+    global $ktModules;
+    if (!in_array($key, $ktModules)) {
+        array_push($ktModules, $key);
+    }
+}
+
+/**
  * Inicializace, resp. definice potřebných konstant pro modul na základě 
  * názvu adresáře a klíče, resp. prefixu (pro sestavní konstant). 
  * Inicializuje ***_PATH a ***_URL konstanty por vnitřní a další použití. 
  * Ve výchozím nastavní se automaticky načte i adresář Requires. 
  * 
- * @param string $key (constant prefix)
+ * @param string $modulePrefix (constant prefix)
  * @param string $folder (name)
  * @param boolean $withIncludeAll (auto load requires)
+ * @param boolean $withRegistration (auto registrace modulu)
  */
-function kt_initialize_module($key, $folder = "yours", $withIncludeAll = true) {
+function kt_initialize_module($modulePrefix, $folder = "yours", $withIncludeAll = true, $withRegistration = true) {
+    if ($withRegistration) {
+        kt_register_module($folder);
+    }
     // PATH
-    $pathKey = "KT_{$key}_PATH";
-    define("KT_{$key}_PATH", path_join(KT_BASE_PATH, $folder));
+    $pathKey = "KT_{$modulePrefix}_PATH";
+    define("KT_{$modulePrefix}_PATH", path_join(KT_BASE_PATH, $folder));
     $pathValue = constant($pathKey);
-    define("KT_{$key}_ASSETS_PATH", path_join($pathValue, "assets"));
-    define("KT_{$key}_CLASSES_PATH", path_join($pathValue, "classes"));
-    define("KT_{$key}_CSS_PATH", path_join($pathValue, "css"));
-    define("KT_{$key}_IMAGES_PATH", path_join($pathValue, "images"));
-    define("KT_{$key}_INTERFACES_PATH", path_join($pathValue, "interfaces"));
-    define("KT_{$key}_JS_PATH", path_join($pathValue, "js"));
-    define("KT_{$key}_REQUIRES_PATH", path_join($pathValue, "requires"));
-    define("KT_{$key}_TEMPLATES_PATH", path_join($pathValue, "templates"));
+    define("KT_{$modulePrefix}_ASSETS_PATH", path_join($pathValue, "assets"));
+    define("KT_{$modulePrefix}_CLASSES_PATH", path_join($pathValue, "classes"));
+    define("KT_{$modulePrefix}_CSS_PATH", path_join($pathValue, "css"));
+    define("KT_{$modulePrefix}_IMAGES_PATH", path_join($pathValue, "images"));
+    define("KT_{$modulePrefix}_INTERFACES_PATH", path_join($pathValue, "interfaces"));
+    define("KT_{$modulePrefix}_JS_PATH", path_join($pathValue, "js"));
+    define("KT_{$modulePrefix}_REQUIRES_PATH", path_join($pathValue, "requires"));
+    define("KT_{$modulePrefix}_TEMPLATES_PATH", path_join($pathValue, "templates"));
     // URL
-    $urlKey = "KT_{$key}_URL";
-    define("KT_{$key}_URL", path_join(KT_BASE_URL, $folder));
+    $urlKey = "KT_{$modulePrefix}_URL";
+    define("KT_{$modulePrefix}_URL", path_join(KT_BASE_URL, $folder));
     $urlValue = constant($urlKey);
-    define("KT_{$key}_ASSETS_URL", path_join($urlValue, "assets"));
-    define("KT_{$key}_CLASSES_URL", path_join($urlValue, "classes"));
-    define("KT_{$key}_CSS_URL", path_join($urlValue, "css"));
-    define("KT_{$key}_IMAGES_URL", path_join($urlValue, "images"));
-    define("KT_{$key}_INTERFACES_URL", path_join($urlValue, "interfaces"));
-    define("KT_{$key}_JS_URL", path_join($urlValue, "js"));
-    define("KT_{$key}_REQUIRES_URL", path_join($urlValue, "requires"));
-    define("KT_{$key}_TEMPLATES_URL", path_join($urlValue, "templates"));
+    define("KT_{$modulePrefix}_ASSETS_URL", path_join($urlValue, "assets"));
+    define("KT_{$modulePrefix}_CLASSES_URL", path_join($urlValue, "classes"));
+    define("KT_{$modulePrefix}_CSS_URL", path_join($urlValue, "css"));
+    define("KT_{$modulePrefix}_IMAGES_URL", path_join($urlValue, "images"));
+    define("KT_{$modulePrefix}_INTERFACES_URL", path_join($urlValue, "interfaces"));
+    define("KT_{$modulePrefix}_JS_URL", path_join($urlValue, "js"));
+    define("KT_{$modulePrefix}_REQUIRES_URL", path_join($urlValue, "requires"));
+    define("KT_{$modulePrefix}_TEMPLATES_URL", path_join($urlValue, "templates"));
     // include all
     if ($withIncludeAll) {
-        kt_include_all(constant("KT_{$key}_REQUIRES_PATH"));
+        kt_include_all(constant("KT_{$modulePrefix}_REQUIRES_PATH"));
     }
 }
 

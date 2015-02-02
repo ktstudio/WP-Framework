@@ -1,5 +1,7 @@
 <?php
 
+// --- registrace ------------------------
+
 define("KT_CORE_PATH", path_join(KT_BASE_PATH, "core"));
 define("KT_CORE_CLASSES_PATH", path_join(KT_CORE_PATH, "classes"));
 define("KT_CORE_CSS_PATH", path_join(KT_CORE_PATH, "css"));
@@ -23,7 +25,6 @@ define("KT_WP_UPLOADS_PATH", path_join(WP_CONTENT_DIR, "uploads"));
 define("KT_WP_UPLOADS_URL", path_join(WP_CONTENT_URL, "uploads"));
 define("KT_UPLOADS_EXPORT_PATH", path_join(KT_WP_UPLOADS_PATH, "kt"));
 define("KT_UPLOADS_EXPORT_URL", path_join(KT_WP_UPLOADS_URL, "kt"));
-
 // --- WORDPRESS ------------------------
 // --- post types ------------------------
 define("KT_WP_POST_KEY", "post");
@@ -59,5 +60,7 @@ define("KT_WP_IMAGE_SIZE_ORIGINAL", "original");
 define("KT_WP_JQUERY_SCRIPT", "jquery");
 define("KT_WP_JQUERY_UI_DATEPICKER_SCRIPT", "jquery-ui-datepicker");
 define("KT_WP_JQUERY_UI_TOOLTIP_SCRIPT", "jquery-ui-tooltip");
+
+// --- inicializace ------------------------
 
 kt_include_all(KT_CORE_REQUIRES_PATH);

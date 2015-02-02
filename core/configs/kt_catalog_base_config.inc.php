@@ -37,6 +37,7 @@ class KT_Catalog_Base_Config {
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Kód může mít maximálně 30 znaků"), 30);
 
         $fieldset->addSwitch(KT_Catalog_Base_Model::VISIBILITY_COLUMN, __("Viditelnost: ", KT_DOMAIN))
+                ->setValue(KT_Switch_Field::YES)
                 ->addRule(KT_Field_Validator::REQUIRED, "Viditelnost je povinná položka");
 
         if (kt_isset_and_not_empty($item) && $item->isInDatabase()) {
@@ -71,8 +72,8 @@ class KT_Catalog_Base_Config {
                 ->setDeletable()
                 ->setLabel(__("Titulek", KT_DOMAIN));
 
-        $crudList->addColumn(KT_Catalog_Base_Model::DESCRIPTION_COLUMN)
-                ->setLabel(__("Popisek", KT_DOMAIN));
+        //$crudList->addColumn(KT_Catalog_Base_Model::DESCRIPTION_COLUMN)
+        //        ->setLabel(__("Popisek", KT_DOMAIN));
 
         $crudList->addColumn(KT_Catalog_Base_Model::CODE_COLUMN)
                 ->setLabel(__("Kód", KT_DOMAIN));
