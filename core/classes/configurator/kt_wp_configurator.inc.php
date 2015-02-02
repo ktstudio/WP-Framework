@@ -16,6 +16,7 @@ final class KT_WP_Configurator {
     const TS_POST_THUMBNAIL = "post-thumbnails";
     const THEME_SUBPAGE_PREFIX = "appearance_page_";
     const THEME_SETTING_PAGE_SLUG = "kt-theme-setting";
+    const POST_TYPE_ARCHIVE_OBJECT_KEY = "kt-post-type-archive";
 
     private $wpMenuCollection = array();
     private $widgetsCollection = array();
@@ -30,7 +31,8 @@ final class KT_WP_Configurator {
     private $deleteImagesWithPost = false;
     private $displayLogo = true;
     private $assetsConfigurator = null;
-    private $isImagesLazyLoading = null;
+    private $imagesLazyLoading = null;
+    private $postArchiveMenu = null;
     private $sessionEnable = false;
 
     // --- gettery ----------------------
@@ -118,6 +120,20 @@ final class KT_WP_Configurator {
      */
     private function getDisplayLogo() {
         return $this->displayLogo;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function getImagesLazyLoading() {
+        return $this->imagesLazyLoading;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function getPostArchiveMenu() {
+        return $this->postArchiveMenu;
     }
 
     /**
@@ -220,7 +236,7 @@ final class KT_WP_Configurator {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @param type $themeSettingPage
+     * @param boolean $themeSettingPage
      * @return \KT_WP_Configurator
      */
     public function setThemeSettingPage($themeSettingPage = true) {
@@ -234,7 +250,7 @@ final class KT_WP_Configurator {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @param bol $deleteImagesWithPost
+     * @param boolean $deleteImagesWithPost
      * @return \KT_WP_Configurator
      */
     public function setDeleteImagesWithPost($deleteImagesWithPost = true) {
@@ -283,6 +299,30 @@ final class KT_WP_Configurator {
     public function setSessionEnable($sessionEnable = true) {
         $this->sessionEnable = $sessionEnable;
         return $this;
+    }
+
+    /**
+     * Aktivace MetaBoxu s archivy post (typů) v/do menu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param boolean $postArchiveMenu
+     * @return \KT_WP_Configurator
+     */
+    public function setPostArchiveMenu($postArchiveMenu = true) {
+        $this->postArchiveMenu = $postArchiveMenu;
+        return $this;
+    }
+
+    /**
+     * Aktivace automatické aplikace lazy loadingu na obrázky pomocí skriptu unveil
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public function setImagesLazyLoading($imagesLazyLoading) {
+        $this->imagesLazyLoading = $imagesLazyLoading;
     }
 
     // --- veřejné funkce ---------------
@@ -363,14 +403,25 @@ final class KT_WP_Configurator {
         }
 
         // (images) lazy loading
-        if ($this->isImagesLazyLoading === true) {
+        $imagesLazyLoading = $this->getImagesLazyLoading();
+        if ($imagesLazyLoading === true) {
             add_filter("post_thumbnail_html", array($this, "htmlImageLazyLoadingFilter"), 11);
             add_filter("get_avatar", array($this, "htmlImageLazyLoadingFilter"), 11);
             add_filter("the_content", array($this, "htmlImageLazyLoadingFilter"), 99);
-        } elseif ($this->isImagesLazyLoading === false) {
+        } elseif ($imagesLazyLoading === false) {
             remove_filter("post_thumbnail_html", array($this, "htmlImageLazyLoadingFilter"), 11);
             remove_filter("get_avatar", array($this, "htmlImageLazyLoadingFilter"), 11);
             remove_filter("the_content", array($this, "htmlImageLazyLoadingFilter"), 99);
+        }
+
+        // achivy post typů v menu
+        $postArchiveMenu = $this->getPostArchiveMenu();
+        if ($postArchiveMenu === true) {
+            add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
+            add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"));
+        } elseif ($postArchiveMenu === false) {
+            add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
+            add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"));
         }
 
         // session
@@ -562,16 +613,6 @@ final class KT_WP_Configurator {
         $this->setAssetsConfigurator($assetsConfigurator);
 
         return $this->getAssetsConfigurator();
-    }
-
-    /**
-     * Aktivace automatické aplikace lazy loadingu na obrázky pomocí skriptu unveil
-     * 
-     * @author Martin Hlaváč
-     * @link http://www.ktstudio.cz
-     */
-    public function setImagesLazyLoading($isImagesLazyLoading) {
-        $this->isImagesLazyLoading = $isImagesLazyLoading;
     }
 
     // --- registrační funkce ---------------------------
@@ -976,6 +1017,85 @@ final class KT_WP_Configurator {
      */
     public function htmlImageLazyLoadingFilter($html) {
         return kt_replace_images_lazy_src($html);
+    }
+
+    /**
+     * Přidání metaboxu pro archivy post typů v menu
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $html
+     */
+    public function addPostArchivesMenuMetaBox() {
+        add_meta_box("kt-post-archive-nav-menu", __("Archivy", KT_DOMAIN), array($this, "postArchivesMenuMetaBoxCallBack"), "nav-menus", "side", "default");
+    }
+
+    /**
+     * Zpracování metaboxu pro archivy post typů v menu
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $html
+     */
+    public function postArchivesMenuMetaBoxCallBack() {
+        $postTypes = get_post_types(array("show_in_nav_menus" => true, "has_archive" => true), "object");
+        if (kt_array_isset_and_not_empty($postTypes)) {
+            foreach ($postTypes as &$postType) {
+                $postType->classes = array();
+                $postType->type = $postType->name;
+                $postType->object_id = $postType->name;
+                $postType->title = $postType->labels->name . " " . __("Archiv", KT_DOMAIN);
+                $postType->object = self::POST_TYPE_ARCHIVE_OBJECT_KEY;
+            }
+
+            $walker = new Walker_Nav_Menu_Checklist(array());
+
+            kt_the_tabs_indent(0, "<div id=\"kt-archive\" class=\"posttypediv\">", true);
+            kt_the_tabs_indent(1, "<div id=\"tabs-panel-kt-archive\" class=\"tabs-panel tabs-panel-active\">", true);
+            kt_the_tabs_indent(2, "<ul id=\"ctp-archive-checklist\" class=\"categorychecklist form-no-clear\">", true);
+            kt_the_tabs_indent(3, walk_nav_menu_tree(array_map("wp_setup_nav_menu_item", $postTypes), 0, (object) array("walker" => $walker)), true);
+            kt_the_tabs_indent(2, "</ul>", true);
+            kt_the_tabs_indent(1, "</div>", true);
+            kt_the_tabs_indent(0, "</div>", true, true);
+
+            $addMenuTitle = htmlspecialchars(__("Add to Menu"));
+
+            kt_the_tabs_indent(0, "<p class=\"button-controls\">", true);
+            kt_the_tabs_indent(1, "<span class=\"add-to-menu\">", true);
+            kt_the_tabs_indent(2, "<input type=\"submit\" id=\"submit-kt-archive\" name=\"add-ctp-archive-menu-item\" class=\"button-secondary submit-add-to-menu\" value=\"$addMenuTitle\" />", true);
+            kt_the_tabs_indent(1, "</span>", true);
+            kt_the_tabs_indent(0, "</p>", true, true);
+        } else {
+            kt_the_tabs_indent(0, KT_EMPTY_SYMBOL, true, true);
+        }
+    }
+
+    /**
+     * Filter metaboxu pro archivy post typů v menu
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $html
+     */
+    public function postArchivesMenuFilter($items) {
+        if (kt_array_isset_and_not_empty($items)) {
+            foreach ($items as $item) {
+                if ($item->object === self::POST_TYPE_ARCHIVE_OBJECT_KEY) {
+                    $item->url = get_post_type_archive_link($item->type);
+                    if (get_query_var("post_type") == $item->type) {
+                        $item->classes [] = "current-menu-item";
+                        $item->current = true;
+                    }
+                }
+            }
+        }
+        return $items;
     }
 
     /**
