@@ -33,7 +33,7 @@ class KT_Form extends KT_HTML_Tag_Base {
         $this->setMethod($method)
                 ->setAction($action)
                 ->setMethod(self::METHOD_POST)
-                ->setFormId($id)
+                ->setAttrId($id)
                 ->setSuccessMessage(__("Data byla uložena", KT_DOMAIN))
                 ->setErrorMessage(__("Ve formuláři se vyskytla chyba", KT_DOMAIN));
         
@@ -148,37 +148,6 @@ class KT_Form extends KT_HTML_Tag_Base {
         }
 
         throw new InvalidArgumentException('method');
-    }
-
-    /**
-     * Nastaví id <form> tagu
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param string $id
-     * @return \KT_Form
-     */
-    public function setFormId($id) {
-        if (kt_isset_and_not_empty($id)) {
-            $this->addAttribute("id", $id);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Nastavení class <form> tagu - jednotlivé classje možné oddělovat mezerou
-     * Pouze nastavuje property objektu
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param string $formClasses
-     * @return \KT_Form
-     */
-    public function setFormClasses($formClasses) {
-        $this->addClass($formClasses);
     }
 
     /**

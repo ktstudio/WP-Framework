@@ -138,7 +138,7 @@ abstract class KT_HTML_Tag_Base {
      * @param string $id
      * @return \KT_HTML_Tag_Base
      */
-    public function setId($id) {
+    public function setAttrId($id) {
         $this->addAttribute("id", $id);
         return $this;
     }
@@ -151,7 +151,7 @@ abstract class KT_HTML_Tag_Base {
      * @param string $title
      * @return \KT_HTML_Tag_Base
      */
-    public function setTitle($title) {
+    public function setAttrTitle($title) {
         $this->addAttribute("title", $title);
         return $this;
     }
@@ -164,7 +164,7 @@ abstract class KT_HTML_Tag_Base {
      * @param string $class
      * @return \KT_HTML_Tag_Base
      */
-    public function addClass($class) {
+    public function addAttrClass($class) {
         $classes = explode(" ", $class);
         
         if(kt_isset_and_not_empty($classes)){
@@ -190,7 +190,7 @@ abstract class KT_HTML_Tag_Base {
      * 
      * @param string $class
      */
-    public function removeClass($class) {
+    public function removeAttrClass($class) {
         $classes = $this->getClasses();
         $flipedClasses = array_flip($classes);
         unset($flipedClasses[$class]);

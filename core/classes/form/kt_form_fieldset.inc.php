@@ -1,20 +1,20 @@
 <?php
 
-class KT_Form_Fieldset {
+class KT_Form_Fieldset extends KT_HTML_Tag_Base {
 
     private $title = null;
     private $description = null;
     private $name = null;
     private $postPrefix = null;
-    private $classes = array('kt_fieldset');
-    private $id = null;
     private $fields = array();
     private $serializeSave = false;
 
     public function __construct($name, $title = null, $description = null) {
-        $this->setName($name);
-        $this->setTitle($title);
-        $this->setDescription($description);
+        $this->setName($name)
+                ->addAttrClass("kt_fieldset")
+                ->setAttrId($name)
+                ->setTitle($title)
+                ->setDescription($description);
 
         return $this;
     }
@@ -33,20 +33,6 @@ class KT_Form_Fieldset {
      */
     public function getDescription() {
         return $this->description;
-    }
-
-    /**
-     * @return array
-     */
-    public function getClasses() {
-        return $this->classes;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId() {
-        return $this->id;
     }
 
     /**
@@ -135,34 +121,6 @@ class KT_Form_Fieldset {
 
         $this->setPostPrefixToAllFields();
 
-        return $this;
-    }
-
-    /**
-     * Nastaví pole všech class, které budou ve fieldsetu zobrazeny
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz  
-     * 
-     * @param type $classes
-     * @return \KT_Form_Fieldset
-     */
-    public function setClasses(array $classes) {
-        $this->classes = $classes;
-        return $this;
-    }
-
-    /**
-     * Nastaví id tagu fieldsetu
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz   
-     * 
-     * @param type $id
-     * @return \KT_Form_Fieldset
-     */
-    public function setId($id) {
-        $this->id = $id;
         return $this;
     }
 
@@ -485,7 +443,7 @@ class KT_Form_Fieldset {
      * @return string HTML
      */
     public function getStartHtmlOfFieldSet($fieldsetTag = true) {
-        $html = "<div id=\"{$this->getId()}\" class=\"kt_fieldset {$this->getClassesString()} panel panel-default\">";
+        $html = "<div {$this->getAttributeString()}>";
 
         if (kt_isset_and_not_empty($this->getTitle())) {
             $html .= "<div class=\"panel-heading\"><h2 class=\"panel-title\">{$this->getTitle()}</h2></div>";
