@@ -410,7 +410,7 @@ abstract class KT_Field {
 
         $html .= $this->getNameAttribute();
 
-        $html .= "id=\"" . static::getId() . "\" ";
+        $html .= "id=\"" . $this->getName() . "\" ";
 
         $html .= $this->getAttributesContent();
 

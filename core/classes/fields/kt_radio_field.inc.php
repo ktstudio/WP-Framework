@@ -48,20 +48,48 @@ class KT_Radio_Field extends KT_Options_Field_Base {
 
             $html .= "<span class=\"input-wrap radio\">";
             $html .= "<input type=\"radio\" ";
-            $html .= $this->getBasicHtml();
+            $html .= $this->getBasicHtml( $key );
             $html .= "value=\"$key\" ";
 
             if ($key == $this->getValue() && $this->getValue() !== null) {
                 $html .= "checked=\"checked\"";
             }
 
-            $html .= "> <span class=\"radio radio-name-{$this->getId()} radio-key-$key \">$value</span> ";
+            $html .= "> <span class=\"radio radio-name-{$this->getId()} radio-key-$key \"><label for=\"{$this->getName()}-{$key}\">$value</label></span> ";
 
             $html .= "</span>";
         }
 
         if ($this->hasErrorMsg()) {
             $html .= parent::getHtmlErrorMsg();
+        }
+
+        return $html;
+    }
+    
+    /**
+     * Vrátí základní HTML prvky pro Radio field
+     * Class, Name, ID, Title(tooltip), validator jSON
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getBasicHtml( $inputName = null) {
+
+        $this->validatorJsonContentInit();
+
+        $html = "class=\"{$this->getClassAttributeContent()}\" ";
+
+        $html .= $this->getNameAttribute();
+
+        $html .= "id=\"" . $this->getName() . "-". $inputName . "\" ";
+
+        $html .= $this->getAttributesContent();
+
+        if (kt_isset_and_not_empty($this->getToolTip())) {
+            $html .= 'title="' . htmlspecialchars($this->getToolTip()) . '" ';
         }
 
         return $html;

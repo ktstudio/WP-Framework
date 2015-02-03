@@ -60,7 +60,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
                 }
             }
 
-            $html .= "> <span class=\"desc-checkbox-{$this->getId()}\">$val</span> ";
+            $html .= "> <span class=\"desc-checkbox-{$this->getId()}\"><label for=\"{$this->getName()}-{$key}\">$val</label></span> ";
 
             if ($this->hasErrorMsg()) {
                 $html .= parent::getHtmlErrorMsg();
@@ -94,7 +94,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
 
         $html .= $this->getNameAttribute( $inputName );
 
-        $html .= "id=\"" . static::getId() . "\" ";
+        $html .= "id=\"" . $this->getName() . "-" . $inputName . "\" ";
 
         $html .= $this->getAttributesContent();
 
@@ -117,12 +117,11 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
     protected function getNameAttribute( $inputName = null ) {
 
         $html = "";
-        $afterNameString = $this->getAfterNameValue();
 
         if (kt_isset_and_not_empty($this->getPostPrefix())) {
-            $html .= "name=\"{$this->getPostPrefix()}[$inputName]$afterNameString\" ";
+            $html .= "name=\"{$this->getPostPrefix()}[{$this->getName()}][$inputName]\" ";
         } else {
-            $html .= "name=\"$inputName$afterNameString\" ";
+            $html .= "name=\"{$this->getName()}[$inputName]\" ";
         }
 
         return $html;

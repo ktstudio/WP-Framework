@@ -430,7 +430,7 @@ class KT_Form_Fieldset {
         $html = "<tr>";
 
         if (kt_isset_and_not_empty($field->getLabel())) {
-            $html .= "<td><label for=\" {$field->getName()} \"> {$field->getLabel()} </label></td>";
+            $html .= "<td><label for=\"{$field->getName()}\">{$field->getLabel()}</label></td>";
         }
 
         $html .= "<td>{$field->getField()}</td>";
@@ -857,11 +857,25 @@ class KT_Form_Fieldset {
 
         if (
                 $field->getFieldType() == KT_Select_Field::FIELD_TYPE ||
-                $field->getFieldType() == KT_Checkbox_Field::FIELD_TYPE ||
                 $field->getFieldType() == KT_Radio_Field::FIELD_TYPE
         ) {
             $fieldOption = $field->getDataManager()->getData();
             $value = $fieldOption[$field->getValue()];
+        }
+
+        if ($field->getFieldType() == KT_Checkbox_Field::FIELD_TYPE) {
+            $fieldOption = $field->getDataManager()->getData();
+            $fieldData = $field->getValue();
+            if (kt_isset_and_not_empty($fieldOption) && kt_isset_and_not_empty($fieldData)) {
+                $value = "";
+                foreach ($fieldOption as $key => $optionText) {
+                    if (in_array($key, $fieldData)) {
+                        $value .= $optionText . ", ";
+                    }
+                }
+            } else {
+                $value = "";
+            }
         }
 
         if (kt_not_isset_or_empty($value)) {
