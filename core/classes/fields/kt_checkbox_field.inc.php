@@ -60,7 +60,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
                 }
             }
 
-            $html .= "> <span class=\"desc-checkbox-{$this->getId()}\"><label for=\"{$this->getName()}-{$key}\">$val</label></span> ";
+            $html .= "> <span class=\"desc-checkbox-{$this->getAttrValueByName("id")}\"><label for=\"{$this->getName()}-{$key}\">$val</label></span> ";
 
             if ($this->hasErrorMsg()) {
                 $html .= parent::getHtmlErrorMsg();
@@ -89,18 +89,10 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
     public function getBasicHtml( $inputName = null ) {
 
         $this->validatorJsonContentInit();
-
-        $html = "class=\"{$this->getClassAttributeContent()}\" ";
+        $this->setAttrId($this->getName() . "-" . $inputName);
 
         $html .= $this->getNameAttribute( $inputName );
-
-        $html .= "id=\"" . $this->getName() . "-" . $inputName . "\" ";
-
-        $html .= $this->getAttributesContent();
-
-        if (kt_isset_and_not_empty($this->getToolTip())) {
-            $html .= 'title="' . htmlspecialchars($this->getToolTip()) . '" ';
-        }
+        $html .= $this->getAttributeString();
 
         return $html;
     }

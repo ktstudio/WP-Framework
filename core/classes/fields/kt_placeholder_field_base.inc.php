@@ -7,8 +7,8 @@
  * @link http://www.ktstudio.cz
  */
 abstract class KT_Placeholder_Field_base extends KT_Field {
-
-    private $placeholder = null;
+    
+    const PLACEHOLDER_KEY = "placeholder";
 
     /**
      * Abstraktní základ pro všechny KT fieldy s placeholdrem
@@ -32,7 +32,7 @@ abstract class KT_Placeholder_Field_base extends KT_Field {
      * @return string
      */
     public function getPlaceholder() {
-        return $this->placeholder;
+        return $this->getAttrValueByName(self::PLACEHOLDER_KEY);
     }
 
     /**
@@ -46,21 +46,8 @@ abstract class KT_Placeholder_Field_base extends KT_Field {
      * @return \KT_Placeholder_Field_base
      */
     public function setPlaceholder($placeholder) {
-        $this->placeholder = $placeholder;
+        $this->addAttribute(self::PLACEHOLDER_KEY, $placeholder);
         return $this;
-    }
-
-    /**
-     * Vrátí html attribute (i s hodnotou) pro sestavení html tagu
-     * 
-     * @author Martin Hlaváč
-     * @link http://www.ktstudio.cz
-     * 
-     * @return (html)string
-     */
-    public function getPlaceholderAttribute() {
-        $placeholder = $this->getPlaceholder();
-        return " placeholder=\"$placeholder\" ";
     }
 
     /**

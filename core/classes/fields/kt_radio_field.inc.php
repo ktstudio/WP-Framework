@@ -55,7 +55,7 @@ class KT_Radio_Field extends KT_Options_Field_Base {
                 $html .= "checked=\"checked\"";
             }
 
-            $html .= "> <span class=\"radio radio-name-{$this->getId()} radio-key-$key \"><label for=\"{$this->getName()}-{$key}\">$value</label></span> ";
+            $html .= "> <span class=\"radio radio-name-{$this->getAttrValueByName("id")} radio-key-$key \"><label for=\"{$this->getName()}-{$key}\">$value</label></span> ";
 
             $html .= "</span>";
         }
@@ -77,20 +77,10 @@ class KT_Radio_Field extends KT_Options_Field_Base {
      * @return string
      */
     public function getBasicHtml( $inputName = null) {
-
         $this->validatorJsonContentInit();
-
-        $html = "class=\"{$this->getClassAttributeContent()}\" ";
-
+        $this->setAttrId($this->getName() . "-". $inputName);
         $html .= $this->getNameAttribute();
-
-        $html .= "id=\"" . $this->getName() . "-". $inputName . "\" ";
-
-        $html .= $this->getAttributesContent();
-
-        if (kt_isset_and_not_empty($this->getToolTip())) {
-            $html .= 'title="' . htmlspecialchars($this->getToolTip()) . '" ';
-        }
+        $html .= $this->getAttributeString();
 
         return $html;
     }

@@ -6,7 +6,7 @@ function kt_get_catalog_visibility_switch_field(KT_Catalog_Base_Model $item) {
     $switchField->setValue(KT_Switch_Field::convertBooleanToSwitch(kt_get_catalog_visibility($item)))
             ->addAttribute("data-item-type", get_class($item))
             ->addAttribute("data-item-id", $itemId)
-            ->addClass("catalog-edit-visibility")
+            ->addAttrClass("catalog-edit-visibility")
             ->setTooltip(__("Viditelnost v systému pro záznam č.$itemId", KT_DOMAIN));
     return $switchField;
 }

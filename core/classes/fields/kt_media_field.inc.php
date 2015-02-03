@@ -17,6 +17,7 @@ class KT_Media_Field extends KT_Field {
      */
     public function __construct($name, $label) {
         parent::__construct($name, $label);
+        $this->addAttrClass("kt-file-loader button");
     }
 
     /**
@@ -41,7 +42,7 @@ class KT_Media_Field extends KT_Field {
 
         $html = "";
 
-        $classes = $this->getClassAttributeContent();
+        $classes = $this->getAttrClassString();
 
         $html .= "<div class=\"file-load-box\">";
 
@@ -56,7 +57,7 @@ class KT_Media_Field extends KT_Field {
         $html .= "value=\"{$this->getValue()}\" ";
         $html .= "/>";
 
-        $html .= "<span class=\"kt-file-loader button $classes\" id=\"{$this->getId()}\">" . __('Vybrat soubor', KT_DOMAIN) . "</span>";
+        $html .= "<span $classes id=\"{$this->getAttrValueByName("id")}\">" . __('Vybrat soubor', KT_DOMAIN) . "</span>";
 
         if ($this->hasErrorMsg()) {
             $html .= parent::getHtmlErrorMsg();
@@ -80,7 +81,7 @@ class KT_Media_Field extends KT_Field {
      * @return string
      */
     private function getEmptySpanUrl() {
-        return $html = "<span class=\"{$this->getId()} span-url\"></span>";
+        return $html = "<span class=\"{$this->getAttrValueByName("id")} span-url\"></span>";
     }
 
     /**
@@ -106,7 +107,7 @@ class KT_Media_Field extends KT_Field {
             $fileTag = "<span class=\"file\">{$attachment->post_title}</span>";
         }
 
-        return $html = "<span class=\"{$this->getId()} span-url full\">$fileTag $removeFileTag</span>";
+        return $html = "<span class=\"{$this->getAttrValueByName("id")} span-url full\">$fileTag $removeFileTag</span>";
     }
 
     // --- statické funkce ------------

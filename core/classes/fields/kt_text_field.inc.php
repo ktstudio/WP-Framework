@@ -11,7 +11,6 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
 
     private $inputType = self::FIELD_TYPE;
     
-
     /**
      * Založení objektu typu input type="text || number || email || password"
      * V případě date založen type="text" a doplněny classy pro jQuery datapicker
@@ -47,7 +46,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
         if (kt_isset_and_not_empty($type)) {
 
             if ($type == self::INPUT_DATE) {
-                $this->addClass("datapicker");
+                $this->addAttrClass("datapicker");
             }
 
             $this->inputType = $type;
@@ -101,10 +100,6 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
 
         $html .= "<input type=\"{$fieldType}\" ";
         $html .= $this->getBasicHtml();
-
-        if ($this->isPlaceholder()) {
-            $html .= $this->getPlaceholderAttribute();
-        }
         
         $html .= "value=\"{$this->getValue()}\" ";
         $html .= "/>";

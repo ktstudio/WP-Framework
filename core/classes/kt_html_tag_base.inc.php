@@ -63,6 +63,20 @@ abstract class KT_HTML_Tag_Base {
             }
         }
         
+        $html .= $this->getAttrClassString();
+
+        return $html;
+    }
+    
+    /**
+     * Vrítí string se všemi CSS class zadané danému elementu.
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @return string
+     */
+    protected function getAttrClassString(){
+        $html = "";
         if(array_key_exists(self::CLASS_KEY, $this->getAttributes())){
             $classString = "";
 
@@ -72,7 +86,7 @@ abstract class KT_HTML_Tag_Base {
             
             $html .= self::CLASS_KEY . "=\"$classString\"";
         }
-
+        
         return $html;
     }
 

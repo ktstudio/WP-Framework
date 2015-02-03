@@ -1,20 +1,16 @@
 <?php
 
-abstract class KT_Field {
+abstract class KT_Field extends KT_HTML_Tag_Base{
 
     const DEFAULT_CLASS = 'kt-field';
 
     private $label = null;
     private $name = null;
     private $postPrefix = null;
-    private $toolTip = null;
     private $unit = null;
-    private $classes = array(self::DEFAULT_CLASS);
-    private $id = null;
     private $value = null;
     private $error = false;
     private $validators = array();
-    private $attributes = array();
 
     /**
      * Abstraktní třída pro všechny KT_Fields
@@ -26,9 +22,10 @@ abstract class KT_Field {
      * @param string $label
      */
     public function __construct($name, $label) {
-        $this->setId($name);
-        $this->setLabel($label);
-        $this->setName($name);
+        $this->setAttrId($name)
+            ->setLabel($label)
+            ->setName($name);
+                    
     }
 
     // --- settery ------------------------
@@ -89,7 +86,7 @@ abstract class KT_Field {
      * @return \KT_Field
      */
     public function setToolTip($toolTip) {
-        $this->toolTip = $toolTip;
+        $this->setAttrTitle($toolTip);
 
         return $this;
     }
@@ -106,38 +103,6 @@ abstract class KT_Field {
      */
     public function setUnit($unit) {
         $this->unit = $unit;
-
-        return $this;
-    }
-
-    /**
-     * Nastavení pole tříd, které budou ve fieldu definované
-     * array("class1", "class2");
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     * 
-     * @param array $classes
-     * @return \KT_Field
-     */
-    public function setClasses(array $classes) {
-        $this->classes = $classes;
-
-        return $this;
-    }
-
-    /**
-     * Nastavení ID field u - slouží pro identifikaci HTML elementu attr id
-     * Defaultně je id nastaven jako název fieldu (name)
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     * 
-     * @param string $id
-     * @return \KT_Field
-     */
-    public function setId($id) {
-        $this->id = $id;
 
         return $this;
     }
@@ -247,7 +212,7 @@ abstract class KT_Field {
      * @return string
      */
     protected function getToolTip() {
-        return $this->toolTip;
+        return $this->getAttrValueByName("title");
     }
 
     /**
@@ -255,20 +220,6 @@ abstract class KT_Field {
      */
     public function getUnit() {
         return $this->unit;
-    }
-
-    /**
-     * @return array
-     */
-    public function getClasses() {
-        return $this->classes;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId() {
-        return $this->id;
     }
 
     /**
@@ -285,12 +236,7 @@ abstract class KT_Field {
         return $this->validators;
     }
 
-    /**
-     * @return array
-     */
-    private function getAttributes() {
-        return $this->attributes;
-    }
+   
 
     // --- abstraktní funkce ---------------
 
@@ -301,53 +247,7 @@ abstract class KT_Field {
     abstract function getFieldType();
 
     // --- veřejné funkce ------------------
-
-    /**
-     * Přidá fieldu classu do html tagu - attr class
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param string $class
-     * @return \KT_Field
-     */
-    public function addClass($class) {
-        if (kt_isset_and_not_empty($class)) {
-            array_push($this->classes, $class);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Přidá html attribute do tagu
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param string $name - nzev attributu (id)
-     * @param string $value - hodnota (kt-form)
-     * @return \KT_Field
-     */
-    public function addAttribute($name, $value = null) {
-        $this->attributes[$name] = $value;
-
-        return $this;
-    }
-    
-    /**
-     * Odstraní attribute fieldu z kolekce na základě názvu
-     * 
-     * @author Tomáš Kocifaj
-     * 
-     * @param string $name
-     * @return \KT_Field
-     */
-    public function removeAttribute($name){
-        unset($this->attributes[$name]);
-        
-        return $this;
-    }
+  
 
     /**
      * Založí fieldu nový KT_Field_Validator
@@ -406,17 +306,9 @@ abstract class KT_Field {
 
         $this->validatorJsonContentInit();
 
-        $html = "class=\"{$this->getClassAttributeContent()}\" ";
-
         $html .= $this->getNameAttribute();
-
-        $html .= "id=\"" . $this->getName() . "\" ";
-
-        $html .= $this->getAttributesContent();
-
-        if (kt_isset_and_not_empty($this->getToolTip())) {
-            $html .= 'title="' . htmlspecialchars($this->getToolTip()) . '" ';
-        }
+        
+        $html .= $this->getAttributeString();
 
         return $html;
     }
@@ -541,52 +433,6 @@ abstract class KT_Field {
             $html .= "name=\"{$this->getPostPrefix()}[{$this->getName()}]$afterNameString\" ";
         } else {
             $html .= "name=\"{$this->getName()}$afterNameString\" ";
-        }
-
-        return $html;
-    }
-
-    /**
-     * Vrátí všechny definované classy fieldu v potřeném stringu pro print do class attributu.
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     * 
-     * @return string
-     */
-    public function getClassAttributeContent() {
-
-        $html = "";
-
-        if (kt_isset_and_not_empty($this->classes)) {
-            foreach ($this->classes as $class) {
-                $html .= "$class ";
-            }
-        }
-
-        return $html;
-    }
-
-    /**
-     * Připraví string se zadanými attributy pro field
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     * 
-     * @return string
-     */
-    protected function getAttributesContent() {
-
-        $html = "";
-        
-        if (kt_isset_and_not_empty($this->getAttributes())) {
-            foreach ($this->getAttributes() as $key => $value) {
-                if (kt_isset_and_not_empty($value)) {
-                    $html .= $key . "=\"" . htmlspecialchars($value) . "\" ";
-                } else {
-                    $html .= $key . " ";
-                }
-            }
         }
 
         return $html;

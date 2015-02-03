@@ -2,7 +2,7 @@
 
 class KT_Switch_Field extends KT_Field {
 
-    const FIELD_TYPE = "switch";
+    const FIELD_TYPE = "switch switch-toggle";
     const YES = "1";
     const NO = "0";
 
@@ -16,7 +16,7 @@ class KT_Switch_Field extends KT_Field {
     public function __construct($name, $label) {
         parent::__construct($name, $label);
 
-        $this->addClass(self::FIELD_TYPE);
+        $this->addAttrClass(self::FIELD_TYPE);
         $this->setValue(self::NO);
 
         return $this;
@@ -44,8 +44,8 @@ class KT_Switch_Field extends KT_Field {
     public function getField() {
         $html = "";
 
-        $html .= "<div class=\"{$this->getClassAttributeContent()}\">";
-        $html .= "<label for=\"{$this->getId()}\" class=\"switch-toggle {$this->getClassAttributeContent()}\" title=\"{$this->getToolTip()}\"></label>";
+        $html .= "<div class=\"{$this->getAttrClassString()}\">";
+        $html .= "<label for=\"{$this->getAttrValueByName("id")}\" {$this->getAttrClassString()} title=\"{$this->getAfterNameValue("title")}\"></label>";
         $html .= "<input type=\"hidden\" ";
         $html .= $this->getBasicHtml();
         $html .= "value=\"{$this->getValue()}\" ";

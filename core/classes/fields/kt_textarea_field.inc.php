@@ -69,20 +69,9 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base {
      * @return string
      */
     public function getField() {
-
         $html = "";
-
-        $html .= "<textarea ";
-        $html .= $this->getBasicHtml();
-
-        if ($this->isPlaceholder()) {
-            $html .= $this->getPlaceholderAttribute();
-        }
-
-        $html .= ">";
-
+        $html .= "<textarea " . $this->getBasicHtml() . ">";
         $html .= $this->getValue();
-
         $html .= "</textarea>";
 
         if ($this->hasErrorMsg()) {
