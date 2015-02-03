@@ -5,20 +5,21 @@
  *
  * @author Tomáš Kocifaj
  */
-
 abstract class KT_HTML_Tag_Base {
-    
+
+    const CLASS_KEY = "class";
+
     private $attributes = array();
-    
+
     // --- gettery a settery ----------------
-    
+
     /**
      * @return array
      */
     protected function getAttributes() {
         return $this->attributes;
     }
-    
+
     /**
      * Nastavení kolekci attributů
      * array( "attrName" => "attrValue")
@@ -36,6 +37,71 @@ abstract class KT_HTML_Tag_Base {
     // --- protected funkce ------------------
     
     /**
+     * Připraví string se zadanými attributy
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @return string
+     */
+    protected function getAttributeString() {
+        $html = "";
+        $attrCollection = $this->getAttributes();
+
+        if (kt_not_isset_or_empty($attrCollection)) {
+            return $html;
+        }
+
+        foreach ($attrCollection as $key => $value) {
+            if($key == self::CLASS_KEY){
+                continue;
+            }
+            
+            if (kt_isset_and_not_empty($value)) {
+                $html .= $key . "=\"" . htmlspecialchars($value) . "\" ";
+            } else {
+                $html .= $key . " ";
+            }
+        }
+        
+        if(array_key_exists(self::CLASS_KEY, $this->getAttributes())){
+            $classString = "";
+
+            foreach($this->getClasses() as $class){
+                $classString .= $class . " ";
+            }
+            
+            $html .= self::CLASS_KEY . "=\"$classString\"";
+        }
+
+        return $html;
+    }
+
+    /**
+     * Vykreslí string se zadanýma hodnotama
+     * 
+     * @author Tomáš Kocifaj
+     */
+    protected function renderAttributeString() {
+        echo $this->getAttributeString();
+    }
+    
+    /**
+     * Vrátí hodnotu nastaveného attributu
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @param string $attrName
+     * @return string | array
+     */
+    protected function getAttrValueByName($attrName){
+        if(array_key_exists($attrName, $this->getAttributes())){
+            return $this->attributes[$attrName];
+        }
+    }
+
+    // --- veřejné funkce ------------------
+
+    /**
      * Přidá html attribute do tagu
      *
      * @author Tomáš Kocifaj
@@ -44,12 +110,12 @@ abstract class KT_HTML_Tag_Base {
      * @param string $value - hodnota
      * @return \KT_HTML_Tag_Base
      */
-    protected function addAttribute($name, $value = null) {
+    public function addAttribute($name, $value = null) {
         $this->attributes[$name] = $value;
 
         return $this;
     }
-    
+
     /**
      * Odstraní attribute fieldu z kolekce na základě názvu
      * 
@@ -58,45 +124,105 @@ abstract class KT_HTML_Tag_Base {
      * @param string $name
      * @return \KT_HTML_Tag_Base
      */
-    protected function removeAttribute($name){
+    public function removeAttribute($name) {
         unset($this->attributes[$name]);
-        
+
         return $this;
     }
-    
-    /**
-     * Připraví string se zadanými attributy
-     * 
-     * @author Tomáš Kocifaj
-     * 
-     * @return string
-     */
-    protected function getAttributeString(){
-        $html = "";
-        $attrCollection = $this->getAttributes();
-        
-        if(kt_not_isset_or_empty($attrCollection)){
-            return $html;
-        }
-        
-        foreach ($attrCollection as $key => $value) {
-            if (kt_isset_and_not_empty($value)) {
-                $html .= $key . "=\"" . htmlspecialchars($value) . "\" ";
-            } else {
-                $html .= $key . " ";
-            }
-        }
-        
-        return $html;
-    }
-    
-    /**
-     * Vykreslí string se zadanýma hodnotama
-     * 
-     * @author Tomáš Kocifaj
-     */
-    protected function renderAttributeString(){
-        echo $this->getAttributeString();
-    }
-}
 
+    /**
+     * Nastaví HTML attr ID danému elementu
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @param string $id
+     * @return \KT_HTML_Tag_Base
+     */
+    public function setId($id) {
+        $this->addAttribute("id", $id);
+        return $this;
+    }
+
+    /**
+     * Nastaví HTML attr TITLE danému elementu
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @param string $title
+     * @return \KT_HTML_Tag_Base
+     */
+    public function setTitle($title) {
+        $this->addAttribute("title", $title);
+        return $this;
+    }
+
+    /**
+     * Přidá jednu class do HTML attr CLASS danému elementu
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @param string $class
+     * @return \KT_HTML_Tag_Base
+     */
+    public function addClass($class) {
+        $classes = explode(" ", $class);
+        
+        if(kt_isset_and_not_empty($classes)){
+            $currentClasses = $this->getClasses();
+            $newClasses = array_merge($classes, $currentClasses);
+            $this->setClasses($newClasses);
+            return $this;
+        }
+        
+        if (array_key_exists(self::CLASS_KEY, $this->attributes)) {
+            array_push($this->attributes[self::CLASS_KEY], $class);
+            return $this;
+        }
+
+        $this->attributes[self::CLASS_KEY][] = $class;
+        return $this;
+    }
+
+    /**
+     * Odstraní jednu CSS Class z kolekce všech class, které patří danému elementu
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @param string $class
+     */
+    public function removeClass($class) {
+        $classes = $this->getClasses();
+        $flipedClasses = array_flip($classes);
+        unset($flipedClasses[$class]);
+        $this->setClasses(array_flip($flipedClasses));
+    }
+
+    // --- privátní funkce ------------------
+
+    /**
+     * Vrátí kolekci všech CSS tříd, které byly elementu přidány
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @return array
+     */
+    private function getClasses() {
+        if(array_key_exists(self::CLASS_KEY, $this->getAttributes())){
+            return $this->attributes[self::CLASS_KEY];
+        }
+        
+        return array();
+    }
+    
+    /**
+     * Nastaví kolekci všech CSS tříd, které danému elementu patří.
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @param array $classes
+     */
+    private function setClasses(array $classes = array()){
+        $this->attributes[self::CLASS_KEY] = $classes;
+    }
+
+}

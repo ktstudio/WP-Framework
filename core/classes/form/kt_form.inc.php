@@ -11,17 +11,12 @@ class KT_Form extends KT_HTML_Tag_Base {
     const METHOD_GET = "get";
 
     private $fieldsets = array();
-    private $method = null;
-    private $formId = null;
-    private $formClasses = "kt-form";
     private $error = false;
-    private $action = null;
     private $buttonValue = self::BUTTON_DEFAULT_VALUE;
     private $buttonClass = "kt-form-submit button button-primary";
     private $successMessage = null;
     private $errorMessage = null;
     private $showNotice = true;
-    private $enctype;
 
     /**
      * Založení nového objetku KT_Form
@@ -34,9 +29,10 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @param string $id = default kt-form
      *
      */
-    function __construct($method = self::METHOD_POST, $action = '', $id = 'kt-form') {
+    function __construct($method = self::METHOD_POST, $action = '#', $id = 'kt-form') {
         $this->setMethod($method)
                 ->setAction($action)
+                ->setMethod(self::METHOD_POST)
                 ->setFormId($id)
                 ->setSuccessMessage(__("Data byla uložena", KT_DOMAIN))
                 ->setErrorMessage(__("Ve formuláři se vyskytla chyba", KT_DOMAIN));
@@ -59,21 +55,7 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @return string
      */
     public function getMethod() {
-        return $this->method;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFormId() {
-        return $this->formId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFormClasses() {
-        return $this->formClasses;
+        $this->getAttrValueByName("method");
     }
 
     /**
@@ -87,7 +69,7 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @return string
      */
     public function getAction() {
-        return $this->action;
+        $this->getAttrValueByName("action");
     }
 
     /**
@@ -129,7 +111,7 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @return string
      */
     public function getEnctype() {
-        return $this->enctype;
+        return $this->getAttrValueByName("enctype");
     }
 
     // ---- settery -----------------------------
@@ -161,7 +143,7 @@ class KT_Form extends KT_HTML_Tag_Base {
      */
     public function setMethod($method) {
         if ($method == self::METHOD_POST || $method == self::METHOD_GET) {
-            $this->method = $method;
+            $this->addAttribute("method", $method);
             return $this;
         }
 
@@ -179,14 +161,14 @@ class KT_Form extends KT_HTML_Tag_Base {
      */
     public function setFormId($id) {
         if (kt_isset_and_not_empty($id)) {
-            $this->formId = $id;
+            $this->addAttribute("id", $id);
         }
 
         return $this;
     }
 
     /**
-     * Nastavení class <form> tagu
+     * Nastavení class <form> tagu - jednotlivé classje možné oddělovat mezerou
      * Pouze nastavuje property objektu
      *
      * @author Tomáš Kocifaj
@@ -196,8 +178,7 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @return \KT_Form
      */
     public function setFormClasses($formClasses) {
-        $this->formClasses = $formClasses;
-        return $this;
+        $this->addClass($formClasses);
     }
 
     /**
@@ -225,7 +206,7 @@ class KT_Form extends KT_HTML_Tag_Base {
      */
     public function setAction($action) {
         if (kt_isset_and_not_empty($action)) {
-            $this->action = $action;
+            $this->addAttribute("action", $action);
         }
         return $this;
     }
@@ -321,10 +302,7 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @return \KT_Form
      */
     public function setEnctype($enctype) {
-        if (kt_isset_and_not_empty($enctype)) {
-            $this->enctype = $enctype;
-        }
-
+        $this->addAttribute("enctype", $enctype);
         return $this;
     }
 
@@ -339,13 +317,15 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @param string $class
      * @return \KT_Form
      */
-    public function addClass($class) {
+    /*public function addClass($class) {
         if (kt_isset_and_not_empty($class)) {
             $this->formClasses .= ' ' . $class;
         }
 
         return $this;
     }
+     * 
+     */
 
     /**
      * Přidá další položu fieldsetu do kolekce
@@ -587,16 +567,7 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @return type
      */
     public function getFormHeader() {
-        $html = "<form method=\"{$this->getMethod()}\" action=\"{$this->getAction()}\" id=\"{$this->getFormId()}\" class=\"{$this->getFormClasses()}\" role=\"form\"";
-        $html .= $this->getAttributeString();
-        $enctype = $this->getEnctype();
-
-        if (kt_isset_and_not_empty($enctype)) {
-            $html .= " enctype=\"$enctype\" ";
-        }
-
-        $html .= ">";
-
+        $html = "<form " . $this->getAttributeString() . ">";
         return $html;
     }
 
