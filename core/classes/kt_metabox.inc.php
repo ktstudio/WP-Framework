@@ -484,9 +484,16 @@ class KT_MetaBox implements KT_Registrable {
             foreach ($fieldset->getFields() as $field) {
                 $crudInstance->addNewColumnToData($field->getName(), $field->getValue());
             }
+            
             $crudInstance->saveRow();
-            $parsedQuery = explode("&", $_SERVER["QUERY_STRING"]);
-            $redirectUrl = admin_url("admin.php") . "?" . $parsedQuery[0] . "&" . $crudInstance::ID_COLUMN . "=" . $crudInstance->getid();
+            
+            if(array_key_exists("page", $_GET)){
+                $pageSlug = $_GET["page"];
+                $redirectUrl = menu_page_url($pageSlug, false) . "&" . $crudInstance::ID_COLUMN . "=" . $crudInstance->getid();
+            } else {
+                wp_die(__("Snažíte se podvádět?!", KT_DOMAIN));
+            }
+           
             wp_redirect($redirectUrl);
             exit;
         }
