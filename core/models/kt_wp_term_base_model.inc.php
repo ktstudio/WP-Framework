@@ -84,10 +84,6 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
         return $this->getTerm()->slug;
     }
 
-    public function getTermGroup() {
-        return $this->getTerm()->term_group;
-    }
-
     public function getTermTaxonomyId() {
         return $this->getTerm()->term_taxonomy_id;
     }
@@ -118,6 +114,19 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
      */
     public function getPermalink() {
         return $permalink = get_term_link($this->getTerm());
+    }
+    
+    /**
+     * Vrátí URL pro zobrazení feedu z daného termu
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $feed
+     * @return string
+     */
+    public function getFeedLink( $feed = "rss2" ){
+        return get_term_feed_link($this->getId(), $this->getTaxonomy(), $feed);
     }
 
     /**
@@ -170,8 +179,8 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
-     * @param WP_POst $post
-     * @return type
+     * @param WP_Post $post
+     * @return boolean
      */
     public function hasMePost(WP_POst $post) {
         return has_term($this->getId(), $this->getTaxonomy(), $post);
