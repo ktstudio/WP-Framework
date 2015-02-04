@@ -508,6 +508,7 @@ class KT_MetaBox implements KT_Registrable {
         $dataType = $this->getDataType();
         $currentValue = $dataType->getCurrentValue();
         $fieldset = $args["args"][0];
+        $form = null;
 
         if (kt_isset_and_not_empty($fieldset) && $fieldset instanceof KT_Form_Fieldset) {
             $fieldset->setTitle("");
