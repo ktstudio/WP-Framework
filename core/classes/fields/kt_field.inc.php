@@ -170,21 +170,6 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
         return $this;
     }
 
-    /**
-     * Nastavení kolekci attributů
-     * array( "attrName" => "attrValue")
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz 
-     * 
-     * @param array $attributes
-     * @return \KT_Field
-     */
-    public function setAttributes(array $attributes) {
-        $this->attributes = $attributes;
-        return $this;
-    }
-
     // --- gettery ------------------------
 
     /**
@@ -303,13 +288,10 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      * @return string
      */
     public function getBasicHtml() {
-
+        $html = "";
         $this->validatorJsonContentInit();
-
         $html .= $this->getNameAttribute();
-        
         $html .= $this->getAttributeString();
-
         return $html;
     }
 
