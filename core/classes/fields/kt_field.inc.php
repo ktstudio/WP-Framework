@@ -23,6 +23,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      */
     public function __construct($name, $label) {
         $this->setAttrId($name)
+            ->addAttrClass(self::DEFAULT_CLASS)
             ->setLabel($label)
             ->setName($name);
                     

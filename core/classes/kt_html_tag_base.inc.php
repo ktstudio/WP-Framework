@@ -107,7 +107,7 @@ abstract class KT_HTML_Tag_Base {
      * @param string $attrName
      * @return string | array
      */
-    protected function getAttrValueByName($attrName){
+    protected function getAttrValueByName($attrName){ 
         if(array_key_exists($attrName, $this->getAttributes())){
             return $this->attributes[$attrName];
         }

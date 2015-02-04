@@ -55,7 +55,7 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @return string
      */
     public function getMethod() {
-        $this->getAttrValueByName("method");
+        return $this->getAttrValueByName("method");
     }
 
     /**
@@ -1003,7 +1003,8 @@ class KT_Form extends KT_HTML_Tag_Base {
 
         foreach ($fieldSet->getFields() as $field) {
             if (!in_array($field->getName(), $exludeFields)) {
-                if (kt_isset_and_not_empty($field->getValue())) {
+                $fieldValue = $field->getValue();
+                if ($fieldValue != "" || $fieldValue === 0 || $fieldValue === "0") {
                     update_option($field->getName(), $field->getValue());
                 } else {
                     delete_option($field->getName());
@@ -1034,7 +1035,7 @@ class KT_Form extends KT_HTML_Tag_Base {
             }
         }
 
-        if (kt_isset_and_not_empty($fieldsetData)) {
+        if ($fieldValue != "" || $fieldValue === 0 || $fieldValue === "0") {
             update_option($fieldset->getName(), $fieldsetData);
         } else {
             delete_option($fieldset->getName());

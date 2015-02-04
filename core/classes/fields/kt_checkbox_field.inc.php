@@ -88,9 +88,10 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      */
     public function getBasicHtml( $inputName = null ) {
 
+        $html = "";
+        
         $this->validatorJsonContentInit();
         $this->setAttrId($this->getName() . "-" . $inputName);
-
         $html .= $this->getNameAttribute( $inputName );
         $html .= $this->getAttributeString();
 

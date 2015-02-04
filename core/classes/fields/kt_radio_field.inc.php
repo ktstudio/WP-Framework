@@ -77,6 +77,7 @@ class KT_Radio_Field extends KT_Options_Field_Base {
      * @return string
      */
     public function getBasicHtml( $inputName = null) {
+        $html = "";
         $this->validatorJsonContentInit();
         $this->setAttrId($this->getName() . "-". $inputName);
         $html .= $this->getNameAttribute();
