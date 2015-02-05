@@ -10,20 +10,30 @@
  * @param string $alt
  * @param string $size
  */
-function kt_the_image_by_source($id, $alt, $size = "thumbnail") {
-    if (kt_isset_and_not_empty($id) && $id > 0) {
+function kt_get_attachment_image_html($id, array $linkArgs = array(), array $imageArgs = array(), $size = KT_WP_IMAGE_SIZE_THUBNAIL, $tabsCount = 0) {
+    $output = null;
+    if (kt_is_id_format($id) > 0) {
         $source = wp_get_attachment_image_src($id, $size);
-        if (kt_isset_and_not_empty($source) && is_array($source)) {
-            $url = $source[0];
-            if ($size !== "large") {
-                $large = wp_get_attachment_image_src($id, "large");
-                $url = $large[0];
+        if (kt_array_isset_and_not_empty($source)) {
+            $imageUrl = $linkUrl = $source[0];
+            $imageWidth = $source[1];
+            $imageHeight = $source[2];
+            if ($size !== KT_WP_IMAGE_SIZE_ORIGINAL) {
+                $original = wp_get_attachment_image_src($id, KT_WP_IMAGE_SIZE_ORIGINAL);
+                $linkUrl = $original[0];
             }
-            echo "\n<a href=\"$url\" title=\"$alt\" class=\"image-popup-vertical-fit\">\n";
-            echo '<img src="' . $source[0] . '" width="' . $source[1] . '" height="' . $source[2] . '" alt="' . $alt . '" class="wp-post-image" />';
-            echo "\n</a>\n";
+            foreach ($linkArgs as $key => $value) {
+                $linkAttributes .= " $key=\"$value\"";
+            }
+            foreach ($imageArgs as $key => $value) {
+                $imageAttributes .= " $key=\"$value\"";
+            }
+            $output .= kt_get_tabs_indent($tabsCount, "<a href=\"$linkUrl\"$linkAttributes>", true);
+            $output .= kt_get_tabs_indent($tabsCount + 1, "<img src=\"$imageUrl\" width=\"$imageWidth\" height=\"$imageHeight\"$imageAttributes />", true);
+            $output .= kt_get_tabs_indent($tabsCount, "</a>", true, true);
         }
     }
+    return $output;
 }
 
 /**
