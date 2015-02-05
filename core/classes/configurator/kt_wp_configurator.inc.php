@@ -402,26 +402,28 @@ final class KT_WP_Configurator {
             $themeSettings->setRenderSaveButton()->register();
         }
 
-        // (images) lazy loading
-        $imagesLazyLoading = $this->getImagesLazyLoading();
-        if ($imagesLazyLoading === true) {
-            add_filter("post_thumbnail_html", array($this, "htmlImageLazyLoadingFilter"), 11);
-            add_filter("get_avatar", array($this, "htmlImageLazyLoadingFilter"), 11);
-            add_filter("the_content", array($this, "htmlImageLazyLoadingFilter"), 99);
-        } elseif ($imagesLazyLoading === false) {
-            remove_filter("post_thumbnail_html", array($this, "htmlImageLazyLoadingFilter"), 11);
-            remove_filter("get_avatar", array($this, "htmlImageLazyLoadingFilter"), 11);
-            remove_filter("the_content", array($this, "htmlImageLazyLoadingFilter"), 99);
-        }
-
-        // achivy post typů v menu
-        $postArchiveMenu = $this->getPostArchiveMenu();
-        if ($postArchiveMenu === true) {
-            add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
-            add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"));
-        } elseif ($postArchiveMenu === false) {
-            add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
-            add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"));
+        if (is_admin()) {
+            // archivy post typů v menu
+            $postArchiveMenu = $this->getPostArchiveMenu();
+            if ($postArchiveMenu === true) {
+                add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
+                add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"));
+            } elseif ($postArchiveMenu === false) {
+                add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
+                add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"));
+            }
+        } else {
+            // (images) lazy loading
+            $imagesLazyLoading = $this->getImagesLazyLoading();
+            if ($imagesLazyLoading === true) {
+                add_filter("post_thumbnail_html", array($this, "htmlImageLazyLoadingFilter"), 11);
+                add_filter("get_avatar", array($this, "htmlImageLazyLoadingFilter"), 11);
+                add_filter("the_content", array($this, "htmlImageLazyLoadingFilter"), 99);
+            } elseif ($imagesLazyLoading === false) {
+                remove_filter("post_thumbnail_html", array($this, "htmlImageLazyLoadingFilter"), 11);
+                remove_filter("get_avatar", array($this, "htmlImageLazyLoadingFilter"), 11);
+                remove_filter("the_content", array($this, "htmlImageLazyLoadingFilter"), 99);
+            }
         }
 
         // session
@@ -1007,7 +1009,7 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * Zpracování filtru za účelem aplikace lazy loadingu pro obrázky, resp. post thumbnaily
+     * Zpracování filtru za účelem aplikace lazy loadingu pro obrázky, resp. post thumbnaily (kromě administrace)
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
      * @author Martin Hlaváč
