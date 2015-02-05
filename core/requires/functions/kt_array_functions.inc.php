@@ -172,3 +172,19 @@ function kt_array_get_first_value(array $array) {
         return $value;
     }
 }
+
+/**
+ * Očistí pole od hodnot "." a ".." při scandiru
+ *
+ * @param array $input
+ * @return array
+ */
+function kt_array_clear_dir($input) {
+    foreach ($input as $key => $value) {
+        if ($value == '.' || $value == '..') {
+            unset($input[$key]);
+        }
+    }
+
+    return array_values($input);
+}

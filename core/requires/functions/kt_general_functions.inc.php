@@ -17,22 +17,6 @@ function kt_not_isset_or_empty($value) {
 }
 
 /**
- * Očistí pole od hodnot "." a ".." při scandiru
- *
- * @param array $input
- * @return array
- */
-function kt_clear_dir_array($input) {
-    foreach ($input as $key => $value) {
-        if ($value == '.' || $value == '..') {
-            unset($input[$key]);
-        }
-    }
-
-    return array_values($input);
-}
-
-/**
  * Vypise obsah cehokoliv (pole, objektu, ...)
  * Slouzi jako pomucka pri programovani
  *
