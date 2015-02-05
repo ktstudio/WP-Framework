@@ -818,7 +818,9 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
                 $field->getFieldType() == KT_Radio_Field::FIELD_TYPE
         ) {
             $fieldOption = $field->getDataManager()->getData();
-            $value = $fieldOption[$field->getValue()];
+            if(array_key_exists($field->getValue(), $fieldOption)){
+                $value = $fieldOption[$field->getValue()];
+            }
         }
 
         if ($field->getFieldType() == KT_Checkbox_Field::FIELD_TYPE) {

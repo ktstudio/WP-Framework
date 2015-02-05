@@ -263,8 +263,8 @@ class KT_CRUD_Admin_List {
     protected function getAddButtonContent() {
         if ($this->getNewItemButton()) {
             if (array_key_exists("page", $_GET)) {
-                $adminExecutiveUrl = kt_get_admin_executive_url();
-                $createUrl = "{$adminExecutiveUrl}?page=" . $_GET["page"] . "&" . self::GET_ACTION . "=" . self::GET_ACTION_CREATE;
+                $pageSlug = $_GET["page"];
+                $createUrl = menu_page_url($pageSlug, false) . "&" . self::GET_ACTION . "=" . self::GET_ACTION_CREATE;
                 return "<a href=\"$createUrl\" id=\"addCrudButtonList\" class=\"button\">" . __("Přidat nový záznam", KT_DOMAIN) . "</a>";
             }
         }

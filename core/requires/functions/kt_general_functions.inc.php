@@ -17,43 +17,6 @@ function kt_not_isset_or_empty($value) {
 }
 
 /**
- *  Vypíše všechny soubory nahrané k postu
- *
- *  @author Tomáš Kocifaj
- *  @link http://www.ktstudio.cz
- *
- *  @param int $post_id - ID Post $post->ID
- *  @return echo gallery
- */
-function kt_the_print_files($post_id) {
-
-    $args = array(
-        'post_type' => 'attachment',
-        'post_parent' => $post_id,
-        'numberposts' => -1,
-        'post_mime_type' => 'application',
-        'orderby' => 'post_title',
-        'order' => 'ASC'
-    );
-
-    $attachments = get_posts($args);
-    if ($attachments) {
-        echo '<h2>' . __('Přiložené soubory', 'Helios') . '</h2>';
-        echo '<ul class="kt_files">';
-        foreach ($attachments as $attachment) {
-            ?>
-            <li>
-                <a href="<?php echo wp_get_attachment_url($attachment->ID, false); ?>" target="_blank" title="<?php echo $attachment->post_title ?>">
-                    <?php echo $attachment->post_title; ?>
-                </a>
-            </li>
-            <?php
-        }
-        echo '</ul>';
-    }
-}
-
-/**
  * Očistí pole od hodnot "." a ".." při scandiru
  *
  * @param array $input
@@ -101,27 +64,16 @@ function kt_pr($objekt, $name = '', $return = false) {
  */
 function kt_setup_post_object($post_id = null) {
 
-    if (isset($post_id)) {
-        if (!is_object($post_id))
+    if (kt_is_id_format($post_id)) {
+        if (!$post_id instanceof WP_Post) {
             return get_post($post_id);
+        }
         $post = $post_id;
     } else {
         global $post;
     }
 
     return $post;
-}
-
-/**
- * Získání skriptu do html pro přesměrování zadané url
- * @param string $url
- * @return string
- */
-function kt_get_redirect_script($url) {
-    $string = '<script type="text/javascript">';
-    $string .= 'window.location = "' . $url . '"';
-    $string .= '</script>';
-    return $string;
 }
 
 /**
@@ -135,42 +87,6 @@ function kt_check_current_user_can_manage_options() {
         wp_die(__("Nemáte dostatečná oprávnění k přístupu na tuto stránku.", KT_DOMAIN));
         return false;
     }
-}
-
-function kt_get_skype_link($userName) {
-    return '<a href="skype:' . $userName . '?call" title="' . __("Zavolat na Skype", KT_DOMAIN) . '">' . __("Skype hovor", KT_DOMAIN) . '</a>';
-}
-
-/**
- * Taková malá pomůcka, pro návrat prvního nenulového parametru podle toho jak jdou za s sebou a pokud je to možné
- */
-function kt_get_one_or_other($firstValue, $secondValue, $thirdValue = null) {
-    if (kt_isset_and_not_empty($firstValue)) {
-        return $firstValue;
-    }
-    if (kt_isset_and_not_empty($secondValue)) {
-        return $secondValue;
-    }
-    return $thirdValue;
-}
-
-/**
- * Vrátí excerpt pro aktuální post s případným ožíznutím podle zadaného počtu znaků
- * @param integer $maxLength
- * @return string
- */
-function kt_get_excerpt($maxLength, $suffix = "...", WP_Post $post = null) {
-    if (kt_not_isset_or_empty($post)) {
-        global $post;
-    }
-    if (kt_isset_and_not_empty($post)) {
-        $excerpt = kt_get_post_excerpt($post);
-        if (kt_not_isset_or_empty($excerpt)) {
-            $excerpt = kt_get_post_content($post);
-        }
-        return kt_string_crop($excerpt, $maxLength, $suffix);
-    }
-    return "";
 }
 
 /**
@@ -243,19 +159,6 @@ function kt_get_backlink_url() {
 }
 
 /**
- * Velmi jednoduché ověření hodnoty na základě vstupu a KT_SIMPLE_CODE
- * @param string $value
- * @return boolean
- */
-function kt_check_simple_code_verification($value) {
-    if (kt_isset_and_not_empty($value) && is_string($value)) {
-        $value = strtolower(htmlspecialchars(trim($value)));
-        return $value === KT_SIMPLE_CODE;
-    }
-    return false;
-}
-
-/**
  * Na základě zadané adresy vrátí GPS souřadnice pomocí Google API pokud je možné
  * @param string $address
  * @return string|null
@@ -280,6 +183,8 @@ function kt_get_google_maps_gps($address) {
     return null;
 }
 
+add_action('wp_ajax_kt_delete_row_from_table_list', 'kt_delete_row_from_table_lis_callback');
+
 /**
  * Funkce obslouží ajax dotaz, který pošle název objektu a row id.
  * Tento záznam je pak smazán.
@@ -289,8 +194,6 @@ function kt_get_google_maps_gps($address) {
  * @author Tomáš Kocifaj
  * @link http://www.ktstudio.cz
  */
-add_action('wp_ajax_kt_delete_row_from_table_list', 'kt_delete_row_from_table_lis_callback');
-
 function kt_delete_row_from_table_lis_callback() {
     $className = $_REQUEST["type"];
     $itemId = $_REQUEST["rowId"];
@@ -304,6 +207,12 @@ function kt_delete_row_from_table_lis_callback() {
 
 add_action("wp_ajax_kt_edit_crud_list_switch_field", "kt_edit_crud_list_switch_field_callback");
 
+/**
+ * Funkce obslouží ajax dotaz, který přepne visibility stav u daného CRUD catalog base modelu
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 function kt_edit_crud_list_switch_field_callback() {
     $className = $_REQUEST["type"];
     $itemId = $_REQUEST["rowId"];
@@ -314,52 +223,4 @@ function kt_edit_crud_list_switch_field_callback() {
     $classModel->addNewColumnToData($columnName, $columnValue)->saveRow();
 
     die(1);
-}
-
-/**
- * Sestavení URL adresy v administraci podle zadaných parametrů
- *
- * @author Martin Hlaváč
- * @link http://www.ktstudio.cz
- *
- * @param string $page
- * @param string $action
- * @param string $paramName
- * @param string|integer $paramValue
- * @return string
- * @throws KT_Not_Set_Argument_Exception
- */
-function kt_get_admin_url($page, $action, $paramName = null, $paramValue = null) {
-    if (kt_isset_and_not_empty($page) && is_string($page)) {
-        if (kt_isset_and_not_empty($action) && is_string($action)) {
-            $adminUrl = admin_url("admin.php?page=$page&action=$action");
-            if (kt_isset_and_not_empty($paramName) && kt_isset_and_not_empty($paramValue)) {
-                $adminUrl .= "&$paramName=$paramValue";
-            }
-            return $adminUrl;
-        }
-        throw new KT_Not_Set_Argument_Exception("action");
-    }
-    throw new KT_Not_Set_Argument_Exception("page");
-}
-
-/**
- * Rozšíření WP funkce admin_url i o případný php soubor z current screen -> parent_file nebo admin.php
- * 
- * @author Martin Hlaváč
- * @link http://www.ktstudio.cz
- * 
- * @return string
- */
-function kt_get_admin_executive_url() {
-    $currenFile = "admin.php";
-    $currentScreen = get_current_screen();
-    if (kt_isset_and_not_empty($currentScreen)) {
-        $parentFile = $currentScreen->parent_file;
-        if (kt_isset_and_not_empty($parentFile) && kt_string_ends_with($parentFile, ".php")) {
-            $currenFile = $parentFile;
-        }
-    }
-    $adminUrl = admin_url();
-    return "$adminUrl$currenFile";
 }

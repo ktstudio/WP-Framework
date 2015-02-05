@@ -15,7 +15,6 @@ define("KT_EMPTY_TEXT", __("<Prázdné>", KT_DOMAIN));
 define("KT_ALL_TEXT", __("<Vše>", KT_DOMAIN));
 define("KT_SELECT_TEXT", __("<Vybrat>", KT_DOMAIN));
 define("KT_SELECT_SYMBOL", __("...", KT_DOMAIN));
-define("KT_SIMPLE_CODE", __("praha", KT_DOMAIN));
 define("KT_BASE_CLASS_SUFFIX", "base");
 define("KT_INTERFACES_FOLDER", "interfaces");
 define("KT_CLASSES_FOLDER", "classes");

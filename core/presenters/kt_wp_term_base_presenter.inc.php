@@ -63,7 +63,7 @@ class KT_WP_Term_Base_Presenter extends KT_Presenter_Base {
         $paged = get_query_var("paged");
 
         if (kt_not_isset_or_empty($paged)) {
-            $paged = htmlspecialchars($_GET["paged"]);
+            $paged = htmlspecialchars($paged);
         }
 
         $defaultArgs = array(

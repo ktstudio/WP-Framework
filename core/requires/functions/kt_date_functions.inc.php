@@ -12,12 +12,3 @@ function kt_date_get_now($format = "Y-m-d H:i:s", $timeStampText = null) {
     }
     return date($format);
 }
-
-/**
- * Vytiskne aktuální datum a čas v obecném tvaru
- * @param string $format
- * @param string $timeStampText
- */
-function kt_date_the_now($format = "Y-m-d H:i:s", $timestamp = null) {
-    echo kt_date_get_now($format, $timestamp);
-}
