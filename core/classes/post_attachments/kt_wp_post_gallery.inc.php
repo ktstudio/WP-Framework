@@ -6,6 +6,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
     const DEFAULT_LARGE_SIZE = "large";
 
     private $excludeThumbnail = true;
+    private $customImageIds;
     private $thumbnailSize = self::DEFAULT_THUMBNAIL_SIZE;
     private $largeSize = self::DEFAULT_LARGE_SIZE;
 
@@ -28,6 +29,13 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
      */
     private function getExcludeThumbnail() {
         return $this->excludeThumbnail;
+    }
+
+    /**
+     * @return array
+     */
+    private function getCustomImageIds() {
+        return $this->customImageIds;
     }
 
     /**
@@ -61,6 +69,18 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
         }
 
         return $this;
+    }
+
+    /**
+     * Nastaví pole vlastních (výhradních) IDs obrázků do galerie (WP_Query -> post__in)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz 
+     * 
+     * @param array $customImageIds
+     */
+    public function setCustomImageIds(array $customImageIds) {
+        $this->customImageIds = $customImageIds;
     }
 
     /**
@@ -155,15 +175,25 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
         $queryArgs = array(
             "post_type" => KT_WP_ATTACHMENT_KEY,
             "post_status" => "inherit",
-            "post_parent" => $this->getPost()->ID,
             "posts_per_page" => $this->getNumberFiles(),
             "post_mime_type" => "image",
             "orderby" => $this->getOrderby(),
             "order" => $this->getOrder()
         );
 
+        $customImageIds = $this->getCustomImageIds();
+        $isCustomImageIds = kt_array_isset_and_not_empty($customImageIds);
         if ($this->getExcludeThumbnail()) {
-            $queryArgs["post__not_in"] = array(get_post_thumbnail_id($this->getPost()->ID));
+            $thumbnailId = get_post_thumbnail_id($this->getPost()->ID);
+            $queryArgs["post__not_in"] = array($thumbnailId);
+            if ($isCustomImageIds) {
+                $customImageIds = kt_array_remove_by_value($customImageIds, $thumbnailId);
+            }
+        }
+        if ($isCustomImageIds) {
+            $queryArgs["post__in"] = $customImageIds;
+        } else {
+            $queryArgs["post_parent"] = $this->getPost()->ID;
         }
 
         $images = new WP_Query($queryArgs);
