@@ -44,7 +44,7 @@ class KT_Switch_Field extends KT_Field {
     public function getField() {
         $html = "";
 
-        $html .= "<div class=\"{$this->getAttrClassString()}\">";
+        $html .= "<div {$this->getAttrClassString()}>";
         $html .= "<label for=\"{$this->getAttrValueByName("id")}\" {$this->getAttrClassString()} title=\"{$this->getAfterNameValue("title")}\"></label>";
         $html .= "<input type=\"hidden\" ";
         $html .= $this->getBasicHtml();
