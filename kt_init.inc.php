@@ -329,42 +329,48 @@ function kt_load_template_from_subdir($template) {
 
     // --- single ---------------------------
     if (is_single()) {
-        $kt_template = kt_get_single_template($post);
-        if ($kt_template)
-            return $kt_template;
+        $ktTemplate = KT_Functions::getSingleTemplate($post);
+        if ($ktTemplate) {
+            return $ktTemplate;
+        }
     }
 
     // --- attachment ---------------------------
     if (is_attachment()) {
-        $kt_template = kt_get_attachment_template($post);
-        if ($kt_template)
-            return $kt_template;
+        $ktTemplate = KT_Functions::getAttachmentTemplate();
+        if ($ktTemplate) {
+            return $ktTemplate;
+        }
     }
 
     // --- page ---------------------------
     if (is_page()) {
-        $kt_template = kt_get_page_template($post);
-        if ($kt_template)
-            return $kt_template;
+        $ktTemplate = KT_Functions::getPageTemplate($post);
+        if ($ktTemplate) {
+            return $ktTemplate;
+        }
     }
 
     // --- category ---------------------------
     if (is_category()) {
-        $kt_template = kt_get_category_template($cat);
-        if ($kt_template)
-            return $kt_template;
+        $ktTemplate = KT_Functions::getCategoryTemplate($cat);
+        if ($ktTemplate) {
+            return $ktTemplate;
+        }
         return $template;
     }
 
     // --- search ---------------------------
-    if (is_search())
+    if (is_search()) {
         return $template;
+    }
 
     // --- taxonomy ---------------------------
     if (kt_isset_and_not_empty($taxonomy)) {
-        $kt_template = kt_get_taxonomy_template($taxonomy);
-        if ($kt_template)
-            return $kt_template;
+        $ktTemplate = KT_Functions::getTaxonomyTemplate($taxonomy);
+        if ($ktTemplate) {
+            return $ktTemplate;
+        }
     }
 
     // --- author -----------------------------
@@ -377,9 +383,10 @@ function kt_load_template_from_subdir($template) {
      * Musí být načítán vždy poslední kvůli WP Query
      */
     if (is_archive()) {
-        $kt_template = kt_get_archive_template();
-        if ($kt_template)
-            return $kt_template;
+        $ktTemplate = KT_Functions::getArchiveTemplate();
+        if ($ktTemplate) {
+            return $ktTemplate;
+        }
     }
 
     return $template;
