@@ -306,7 +306,11 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      */
     public function getMetaValueByKey($metaKey) {
         $userMetas = $this->getWpUserMetas();
-        return $userMetas[$metaKey];
+        if(array_key_exists($metaKey, $userMetas)){
+            return $userMetas[$metaKey];
+        }
+        
+        return "";
     }
 
     /**
