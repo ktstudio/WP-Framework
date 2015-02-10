@@ -1,6 +1,6 @@
 <?php
 
-abstract class KT_WP_Post_Attachments_Base {
+abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
 
     const DEFAULT_ORDERBY = "ID";
     const DEFAULT_ORDER = "ASC";

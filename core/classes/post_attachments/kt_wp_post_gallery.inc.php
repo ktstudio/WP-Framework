@@ -126,17 +126,28 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
      * @param type $withSelfLink // mají mít obrázky odkaz sami na sebe pro large velikost?
      * @return string
      */
-    public function getImageGallery($id = "ktGalleryContainer", $class = "ktGallery", $imgClass = null, $attr = array(), $withSelfLink = true) {
+    public function getImageGallery($imgClass = null, $attr = array(), $withSelfLink = true) {
 
         $html = "";
 
         if (kt_not_isset_or_empty($this->getFiles())) {
             return $html;
         }
+        
+        if(KT_Functions::notIssetOrEmpty($this->getAttrValueByName("id"))){
+            $this->setAttrId("ktGalleryContainer");
+        }
+        
+        if(KT_Functions::notIssetOrEmpty($this->getAttrClassString())){
+            $this->addAttrClass("ktGallery");
+        }
+        
+        $this->addAttrClass("postGalleryId-" . $this->getPost()->ID)
+                ->addAttrClass($this->getPost()->post_type);
 
         $html .= $this->getContainerHeader();
 
-        $html .= "<div id=\"$id\" class=\"$class {$this->getPost()->post_type} postGalleryId-{$this->getPost()->ID}\">";
+        $html .= "<div {$this->getAttributeString()}>";
 
         foreach ($this->getFiles() as $image) {
             /* @var $image \WP_Post */
