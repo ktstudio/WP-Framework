@@ -455,9 +455,9 @@ class KT_MetaBox implements KT_Registrable {
         }
         if ($this->CheckCanHandlePostRequest($postId)) {
             $isDefaultAutoSave = $this->getIsDefaultAutoSave();
-            if ($isDefaultAutoSave) {
-                $form = new KT_form();
-                $form->addFieldSetByObject($this->getFieldset());
+            $form = new KT_form();
+            $form->addFieldSetByObject($this->getFieldset());
+            if ($isDefaultAutoSave && $form->isFormSend()) {
                 $form->saveFieldsetToPostMeta($postId);
             }
         }
