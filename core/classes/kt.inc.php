@@ -20,7 +20,7 @@ class KT {
      * @throws KT_Not_Supported_Exception
      */
     public static function arrayInsert(array $input, $index, $newKey, $newValue) {
-        $index = kt_try_get_int($index);
+        $index = self::tryGetInt($index);
         $count = count($input);
         if ($index < 0 || $index >= $count) {
             throw new KT_Not_Supported_Exception("Index mimo rozsah: $index");
@@ -198,7 +198,7 @@ class KT {
      * @return boolean
      */
     public static function arrayIssetAndNotEmpty($array) {
-        return kt_isset_and_not_empty($array) && is_array($array) && count($array) > 0;
+        return self::issetAndNotEmpty($array) && is_array($array) && count($array) > 0;
     }
 
     /**
@@ -263,7 +263,7 @@ class KT {
      * @return date
      */
     public static function dateGetNow($format = "Y-m-d H:i:s", $timeStampText = null) {
-        if (kt_isset_and_not_empty($timeStampText)) {
+        if (self::issetAndNotEmpty($timeStampText)) {
             return date($format, strtotime($timeStampText));
         }
         return date($format);
@@ -328,7 +328,7 @@ class KT {
      * @return ojbect WP_post
      */
     public static function setupPostObject($post_id = null) {
-        if (kt_is_id_format($post_id)) {
+        if (self::isIdFormat($post_id)) {
             if (!$post_id instanceof WP_Post) {
                 return get_post($post_id);
             }
@@ -375,7 +375,7 @@ class KT {
             $result .= "\n";
         }
         $result .= str_repeat("\t", $tabsCount);
-        if (kt_isset_and_not_empty($content)) {
+        if (self::issetAndNotEmpty($content)) {
             $result .= $content;
         }
         if ($newLineAfter == true) {
@@ -397,7 +397,7 @@ class KT {
      * @return string
      */
     public static function theTabsIndent($tabsCount, $content = null, $newLineBefore = false, $newLineAfter = false) {
-        echo kt_get_tabs_indent($tabsCount, $content, $newLineBefore, $newLineAfter);
+        echo self::getTabsIndent($tabsCount, $content, $newLineBefore, $newLineAfter);
     }
 
     /**
@@ -452,16 +452,16 @@ class KT {
      * @return string|null
      */
     public static function getGoogleMapsGPS($address) {
-        if (kt_isset_and_not_empty($address) && is_string($address)) {
+        if (self::issetAndNotEmpty($address) && is_string($address)) {
             $address = urlencode(trim($address));
             $googleApiLink = "http://maps.googleapis.com/maps/api/geocode/json?address=$address&sensor=false";
             $googleApiResult = file_get_contents($googleApiLink);
             if ($googleApiResult) {
                 $googleApiResultJson = json_decode($googleApiResult);
-                if (kt_isset_and_not_empty($googleApiResultJson)) {
+                if (self::issetAndNotEmpty($googleApiResultJson)) {
                     $gpsLatitude = (float) $googleApiResultJson->results[0]->geometry->location->lat;
                     $gpsLongtitude = (float) $googleApiResultJson->results[0]->geometry->location->lng;
-                    if (kt_isset_and_not_empty($gpsLatitude) && kt_isset_and_not_empty($gpsLongtitude)) {
+                    if (self::issetAndNotEmpty($gpsLatitude) && self::issetAndNotEmpty($gpsLongtitude)) {
                         $coordinates = $gpsLatitude . ", " . $gpsLongtitude;
                         return $coordinates;
                     }
@@ -485,9 +485,9 @@ class KT {
      */
     public static function imageGetAttachmentHtml($id, array $linkArgs = array(), array $imageArgs = array(), $size = KT_WP_IMAGE_SIZE_THUBNAIL, $tabsCount = 0) {
         $output = null;
-        if (kt_is_id_format($id) > 0) {
+        if (self::isIdFormat($id) > 0) {
             $source = wp_get_attachment_image_src($id, $size);
-            if (kt_array_isset_and_not_empty($source)) {
+            if (self::arrayIssetAndNotEmpty($source)) {
                 $imageUrl = $linkUrl = $source[0];
                 $imageWidth = $source[1];
                 $imageHeight = $source[2];
@@ -501,9 +501,9 @@ class KT {
                 foreach ($imageArgs as $key => $value) {
                     $imageAttributes .= " $key=\"$value\"";
                 }
-                $output .= kt_get_tabs_indent($tabsCount, "<a href=\"$linkUrl\"$linkAttributes>", true);
-                $output .= kt_get_tabs_indent($tabsCount + 1, "<img src=\"$imageUrl\" width=\"$imageWidth\" height=\"$imageHeight\"$imageAttributes />", true);
-                $output .= kt_get_tabs_indent($tabsCount, "</a>", true, true);
+                $output .= self::getTabsIndent($tabsCount, "<a href=\"$linkUrl\"$linkAttributes>", true);
+                $output .= self::getTabsIndent($tabsCount + 1, "<img src=\"$imageUrl\" width=\"$imageWidth\" height=\"$imageHeight\"$imageAttributes />", true);
+                $output .= self::getTabsIndent($tabsCount, "</a>", true, true);
             }
         }
         return $output;
@@ -532,7 +532,8 @@ class KT {
      * @return string
      */
     public static function imageReplaceLazySrc($html) {
-        if (kt_isset_and_not_empty($html)) {
+        if (self::issetAndNotEmpty($html)) {
+            $libxmlInternalErrorsState = libxml_use_internal_errors(true);
             $dom = new DOMDocument();
             $dom->preserveWhiteSpace = false;
             $dom->loadHTML($html);
@@ -547,6 +548,8 @@ class KT {
                 $newSrc = KT_CORE_IMAGES_URL . "/transparent.png";
                 $html = str_replace("src=\"$oldSrc\"", "src=\"$newSrc\" data-src=\"$oldSrc\"", $html);
             }
+            libxml_clear_errors();
+            libxml_use_internal_errors($libxmlInternalErrorsState);
         }
         return $html;
     }
@@ -566,11 +569,11 @@ class KT {
     public static function getCustomMenuNameByLocation($location, $defaultTitle = null) {
         $locations = get_nav_menu_locations();
         $menuLocation = $locations[$location];
-        if (kt_isset_and_not_empty($menuLocation)) {
+        if (self::issetAndNotEmpty($menuLocation)) {
             $menuObject = wp_get_nav_menu_object($menuLocation);
-            if (kt_isset_and_not_empty($menuObject)) {
+            if (self::issetAndNotEmpty($menuObject)) {
                 $menuName = $menuObject->name;
-                if (kt_isset_and_not_empty($menuName)) {
+                if (self::issetAndNotEmpty($menuName)) {
                     return esc_html($menuName);
                 }
             }
@@ -610,8 +613,8 @@ class KT {
      * @return boolean
      */
     public static function isIdFormat($value) {
-        $id = kt_try_get_int($value);
-        if (kt_isset_and_not_empty($id) && $id > 0) {
+        $id = self::tryGetInt($value);
+        if (self::issetAndNotEmpty($id) && $id > 0) {
             return true;
         }
         return false;
@@ -627,7 +630,7 @@ class KT {
      * @return integer|null
      */
     public static function tryGetInt($value) {
-        if (kt_isset_and_not_empty($value) && is_numeric($value)) {
+        if (self::issetAndNotEmpty($value) && is_numeric($value)) {
             if (is_int($value)) {
                 return $value;
             }
@@ -649,7 +652,7 @@ class KT {
      * @return float|null
      */
     public static function tryGetFloat($value) {
-        if (kt_isset_and_not_empty($value) && is_numeric($value)) {
+        if (self::issetAndNotEmpty($value) && is_numeric($value)) {
             if (is_float($value)) {
                 return $value;
             }
@@ -671,7 +674,7 @@ class KT {
      * @return double|null
      */
     public static function tryGetDouble($value) {
-        if (kt_isset_and_not_empty($value) && is_numeric($value)) {
+        if (self::issetAndNotEmpty($value) && is_numeric($value)) {
             if (is_double($value)) {
                 return $value;
             }
@@ -693,7 +696,7 @@ class KT {
      * @return number
      */
     public static function roundNumber($value) {
-        if ((kt_isset_and_not_empty($value) && is_numeric($value) || $value === "0")) {
+        if ((self::issetAndNotEmpty($value) && is_numeric($value) || $value === "0")) {
             if (is_int($value)) {
                 return round($value, 0, PHP_ROUND_HALF_UP);
             } else {
@@ -718,34 +721,34 @@ class KT {
      */
     public static function bootstrapPagination($previousNext = true, $customClass = "pagination-centered") {
         global $paged;
-        $paged = kt_try_get_int($paged) ? : 1;
-        if (kt_isset_and_not_empty($paged) && $paged > 0) {
+        $paged = self::tryGetInt($paged) ? : 1;
+        if (self::issetAndNotEmpty($paged) && $paged > 0) {
             global $wp_query;
-            $pages = kt_try_get_int($wp_query->max_num_pages);
-            if (kt_isset_and_not_empty($pages) && $pages > 1 && $paged >= $paged) {
-                echo kt_the_tabs_indent(0, "<ul class=\"pagination $customClass\">", true);
+            $pages = self::tryGetInt($wp_query->max_num_pages);
+            if (self::issetAndNotEmpty($pages) && $pages > 1 && $paged >= $paged) {
+                echo self::theTabsIndent(0, "<ul class=\"pagination $customClass\">", true);
 
                 if ($previousNext) {
                     $firstClass = $paged > 2 ? "" : 'class="disabled"';
-                    echo kt_the_tabs_indent(1, "<li $firstClass><a href='" . get_pagenum_link(1) . "'>&laquo;</a></li>", true);
+                    echo self::theTabsIndent(1, "<li $firstClass><a href='" . get_pagenum_link(1) . "'>&laquo;</a></li>", true);
                     $secondClass = $paged > 1 ? "" : 'class="disabled"';
-                    echo kt_the_tabs_indent(1, "<li $secondClass><a href='" . get_pagenum_link($paged - 1) . "'>&lsaquo;</a></li>", true);
+                    echo self::theTabsIndent(1, "<li $secondClass><a href='" . get_pagenum_link($paged - 1) . "'>&lsaquo;</a></li>", true);
                 }
 
                 for ($i = 1; $i <= $pages; $i ++) {
                     $pagenumlink = get_pagenum_link($i);
                     $activeClass = ($i == $paged) ? 'class="active"' : "";
-                    echo kt_the_tabs_indent(1, "<li $activeClass><a href=\"$pagenumlink\">$i</a></li>", true);
+                    echo self::theTabsIndent(1, "<li $activeClass><a href=\"$pagenumlink\">$i</a></li>", true);
                 }
 
                 if ($previousNext) {
                     $penultimateClass = $paged < $pages ? "" : 'class="disabled"';
-                    echo kt_the_tabs_indent(1, "<li $penultimateClass><a href='" . get_pagenum_link($paged + 1) . "'>&rsaquo;</a></li>", true);
+                    echo self::theTabsIndent(1, "<li $penultimateClass><a href='" . get_pagenum_link($paged + 1) . "'>&rsaquo;</a></li>", true);
                     $latestClass = $paged < $pages - 1 ? "" : 'class="disabled"';
-                    echo kt_the_tabs_indent(1, "<li $latestClass><a href='" . get_pagenum_link($pages) . "'>&raquo;</a></li>", true);
+                    echo self::theTabsIndent(1, "<li $latestClass><a href='" . get_pagenum_link($pages) . "'>&raquo;</a></li>", true);
                 }
 
-                kt_the_tabs_indent(0, "</div>", true, true);
+                self::theTabsIndent(0, "</div>", true, true);
             }
         }
     }
@@ -826,7 +829,7 @@ class KT {
      * @return string
      */
     public static function stringCrop($text, $maxLength, $suffix = "...") {
-        $maxLength = kt_try_get_int($maxLength);
+        $maxLength = self::tryGetInt($maxLength);
         $currentLength = strlen($text);
         if ($maxLength > 0 && $currentLength > $maxLength) {
             $text = strip_tags($text);

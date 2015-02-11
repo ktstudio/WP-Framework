@@ -108,9 +108,6 @@ function kt_get_subdirs_names($dirPath, $checkForDirExists = true) {
  * @param string $name třída nebo interface k auto načtení
  */
 function kt_class_autoloader_init($name) {
-    if ($name === "KT") {
-        $name = "KT";
-    }
     if (kt_is_prefixed($name) || $name === KT_BASE_STATIC_CLASS) {
         /**
          * @return array

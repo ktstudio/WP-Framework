@@ -429,6 +429,7 @@ function kt_get_image_theme($fileName) {
  */
 function kt_replace_images_lazy_src($html) {
     if (kt_isset_and_not_empty($html)) {
+        $libxmlInternalErrorsState = libxml_use_internal_errors(true);
         $dom = new DOMDocument();
         $dom->preserveWhiteSpace = false;
         $dom->loadHTML($html);
@@ -443,6 +444,8 @@ function kt_replace_images_lazy_src($html) {
             $newSrc = KT_CORE_IMAGES_URL . "/transparent.png";
             $html = str_replace("src=\"$oldSrc\"", "src=\"$newSrc\" data-src=\"$oldSrc\"", $html);
         }
+        libxml_clear_errors();
+        libxml_use_internal_errors($libxmlInternalErrorsState);
     }
     return $html;
 }
