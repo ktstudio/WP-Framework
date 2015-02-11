@@ -10,6 +10,7 @@ define("KT_FORM_PREFIX", "kt-");
 define("KT_DOMAIN", "KT");
 define("KT_PHP_FILE_SUFFIX", ".inc.php");
 define("KT_INIT_MODULE_FILE", "kt_init.inc.php");
+define("KT_BASE_STATIC_CLASS", "KT");
 define("KT_EMPTY_SYMBOL", __("---", KT_DOMAIN));
 define("KT_EMPTY_TEXT", __("<Prázdné>", KT_DOMAIN));
 define("KT_ALL_TEXT", __("<Vše>", KT_DOMAIN));
@@ -107,10 +108,10 @@ function kt_get_subdirs_names($dirPath, $checkForDirExists = true) {
  * @param string $name třída nebo interface k auto načtení
  */
 function kt_class_autoloader_init($name) {
-    if (kt_is_prefixed($name)) {
-        if ($name == "KT_Stock_Product_Manager") {
-            $name = "KT_Stock_Product_Manager";
-        }
+    if ($name === "KT") {
+        $name = "KT";
+    }
+    if (kt_is_prefixed($name) || $name === KT_BASE_STATIC_CLASS) {
         /**
          * @return array
          */
@@ -329,7 +330,7 @@ function kt_load_template_from_subdir($template) {
 
     // --- single ---------------------------
     if (is_single()) {
-        $ktTemplate = KT_Functions::getSingleTemplate($post);
+        $ktTemplate = KT::getSingleTemplate($post);
         if ($ktTemplate) {
             return $ktTemplate;
         }
@@ -337,7 +338,7 @@ function kt_load_template_from_subdir($template) {
 
     // --- attachment ---------------------------
     if (is_attachment()) {
-        $ktTemplate = KT_Functions::getAttachmentTemplate();
+        $ktTemplate = KT::getAttachmentTemplate();
         if ($ktTemplate) {
             return $ktTemplate;
         }
@@ -345,7 +346,7 @@ function kt_load_template_from_subdir($template) {
 
     // --- page ---------------------------
     if (is_page()) {
-        $ktTemplate = KT_Functions::getPageTemplate($post);
+        $ktTemplate = KT::getPageTemplate($post);
         if ($ktTemplate) {
             return $ktTemplate;
         }
@@ -353,7 +354,7 @@ function kt_load_template_from_subdir($template) {
 
     // --- category ---------------------------
     if (is_category()) {
-        $ktTemplate = KT_Functions::getCategoryTemplate($cat);
+        $ktTemplate = KT::getCategoryTemplate($cat);
         if ($ktTemplate) {
             return $ktTemplate;
         }
@@ -367,7 +368,7 @@ function kt_load_template_from_subdir($template) {
 
     // --- taxonomy ---------------------------
     if (kt_isset_and_not_empty($taxonomy)) {
-        $ktTemplate = KT_Functions::getTaxonomyTemplate($taxonomy);
+        $ktTemplate = KT::getTaxonomyTemplate($taxonomy);
         if ($ktTemplate) {
             return $ktTemplate;
         }
@@ -383,7 +384,7 @@ function kt_load_template_from_subdir($template) {
      * Musí být načítán vždy poslední kvůli WP Query
      */
     if (is_archive()) {
-        $ktTemplate = KT_Functions::getArchiveTemplate();
+        $ktTemplate = KT::getArchiveTemplate();
         if ($ktTemplate) {
             return $ktTemplate;
         }
