@@ -50,7 +50,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
             $html .= "<span class=\"input-wrap\">";
             $html .= "<input type=\"checkbox\" ";
             $html .= $this->getBasicHtml( $key );
-            $html .= "value=\"$key\" ";
+            $html .= " value=\"$key\" ";
 
             $data = $this->getValue();
 

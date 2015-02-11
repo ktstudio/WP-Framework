@@ -40,7 +40,7 @@ class KT_Hidden_Field extends KT_Field {
 
         $html .= "<input type=\"hidden\" ";
         $html .= $this->getBasicHtml();
-        $html .= "value=\"{$this->getValue()}\" ";
+        $html .= " value=\"{$this->getValue()}\" ";
         $html .= "/>";
 
         return $html;

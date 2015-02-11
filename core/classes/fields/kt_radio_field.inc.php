@@ -49,7 +49,7 @@ class KT_Radio_Field extends KT_Options_Field_Base {
             $html .= "<span class=\"input-wrap radio\">";
             $html .= "<input type=\"radio\" ";
             $html .= $this->getBasicHtml( $key );
-            $html .= "value=\"$key\" ";
+            $html .= " value=\"$key\" ";
 
             if ($key == $this->getValue() && $this->getValue() !== null) {
                 $html .= "checked=\"checked\"";

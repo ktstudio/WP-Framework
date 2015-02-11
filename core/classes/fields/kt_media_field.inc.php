@@ -54,7 +54,7 @@ class KT_Media_Field extends KT_Field {
 
         $html .= "<input type=\"hidden\" ";
         $html .= $this->getBasicHtml();
-        $html .= "value=\"{$this->getValue()}\" ";
+        $html .= " value=\"{$this->getValue()}\" ";
         $html .= "/>";
 
         $html .= "<span $classes id=\"{$this->getAttrValueByName("id")}\">" . __('Vybrat soubor', KT_DOMAIN) . "</span>";
