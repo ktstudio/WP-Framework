@@ -980,10 +980,24 @@ class KT {
      * @return string - template path
      */
     public static function getTaxonomyTemplate($taxonomy) {
+        
+        $term = get_queried_object();
+        
         $file = TEMPLATEPATH . '/taxonomies/taxonomy-' . $taxonomy . '.php';
         if (file_exists($file)) {
             return $file;
         }
+        
+        $file = TEMPLATEPATH . "/taxonomies/taxonomy-" . $taxonomy . "-" . $term->slug . ".php";
+        if (file_exists($file)) {
+            return $file;
+        }
+        
+        $file = TEMPLATEPATH . "/taxonomies/taxonomy-" . $taxonomy . "-" . $term->term_id . ".php";
+        if (file_exists($file)) {
+            return $file;
+        }
+        
         if (file_exists(TEMPLATEPATH . '/taxonomies/taxonomy.php')) {
             return TEMPLATEPATH . '/taxonomies/taxonomy.php';
         }
