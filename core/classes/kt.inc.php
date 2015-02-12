@@ -983,17 +983,17 @@ class KT {
         
         $term = get_queried_object();
         
-        $file = TEMPLATEPATH . '/taxonomies/taxonomy-' . $taxonomy . '.php';
-        if (file_exists($file)) {
-            return $file;
-        }
-        
         $file = TEMPLATEPATH . "/taxonomies/taxonomy-" . $taxonomy . "-" . $term->slug . ".php";
         if (file_exists($file)) {
             return $file;
         }
         
         $file = TEMPLATEPATH . "/taxonomies/taxonomy-" . $taxonomy . "-" . $term->term_id . ".php";
+        if (file_exists($file)) {
+            return $file;
+        }
+        
+        $file = TEMPLATEPATH . '/taxonomies/taxonomy-' . $taxonomy . '.php';
         if (file_exists($file)) {
             return $file;
         }
