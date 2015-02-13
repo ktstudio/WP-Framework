@@ -687,6 +687,29 @@ class KT {
     }
 
     /**
+     * Vzájemné porovnání (celočíselných) hodnot
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param int $a
+     * @param int $b
+     * @return int
+     */
+    public static function intCompare($a, $b) {
+        $first = self::tryGetInt($a);
+        $second = self::tryGetInt($b);
+        if ($first == $second) {
+            return 0;
+        } else if ($first > $second) {
+            return 1;
+        } else if ($first < $second) {
+            return -1;
+        }
+        return null;
+    }
+
+    /**
      * Obecné zaokrouhlení podle celých nebo destinných čísel
      * 
      * @author Martin Hlaváč
@@ -704,6 +727,34 @@ class KT {
             }
         }
         return $value;
+    }
+
+    // --- LOGICKÉ HODNOTY ---------------------------
+
+    /**
+     * Kontrola hodnoty, jestli jde o logickou hodnotu, resp. bool a případné přetypování nebo rovnou návrat, jinak null
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param number $value
+     * @return integer|null
+     */
+    public static function tryGetBool($value) {
+        if (KT_ITH::issetAndNotEmpty($value)) {
+            if (is_bool($value)) {
+                return $value;
+            }
+            return (bool) $value;
+        }
+        strtolower((string) $value);
+        if ($text === "1" || $text === "true" || $text === "ano" || $text === "yes") {
+            return false;
+        }
+        if ($text === "0" || $text === "false" || $text === "ne" || $text === "no") {
+            return false;
+        }
+        return null;
     }
 
     // --- STRÁNKOVÁNÍ ---------------------------
@@ -726,26 +777,26 @@ class KT {
             global $wp_query;
             $pages = self::tryGetInt($wp_query->max_num_pages);
             if (self::issetAndNotEmpty($pages) && $pages > 1 && $paged >= $paged) {
-                echo self::theTabsIndent(0, "<ul class=\"pagination $customClass\">", true);
+                self::theTabsIndent(0, "<ul class=\"pagination $customClass\">", true);
 
                 if ($previousNext) {
                     $firstClass = $paged > 2 ? "" : 'class="disabled"';
-                    echo self::theTabsIndent(1, "<li $firstClass><a href='" . get_pagenum_link(1) . "'>&laquo;</a></li>", true);
+                    self::theTabsIndent(1, "<li $firstClass><a href='" . get_pagenum_link(1) . "'>&laquo;</a></li>", true);
                     $secondClass = $paged > 1 ? "" : 'class="disabled"';
-                    echo self::theTabsIndent(1, "<li $secondClass><a href='" . get_pagenum_link($paged - 1) . "'>&lsaquo;</a></li>", true);
+                    self::theTabsIndent(1, "<li $secondClass><a href='" . get_pagenum_link($paged - 1) . "'>&lsaquo;</a></li>", true);
                 }
 
                 for ($i = 1; $i <= $pages; $i ++) {
                     $pagenumlink = get_pagenum_link($i);
                     $activeClass = ($i == $paged) ? 'class="active"' : "";
-                    echo self::theTabsIndent(1, "<li $activeClass><a href=\"$pagenumlink\">$i</a></li>", true);
+                    self::theTabsIndent(1, "<li $activeClass><a href=\"$pagenumlink\">$i</a></li>", true);
                 }
 
                 if ($previousNext) {
                     $penultimateClass = $paged < $pages ? "" : 'class="disabled"';
-                    echo self::theTabsIndent(1, "<li $penultimateClass><a href='" . get_pagenum_link($paged + 1) . "'>&rsaquo;</a></li>", true);
+                    self::theTabsIndent(1, "<li $penultimateClass><a href='" . get_pagenum_link($paged + 1) . "'>&rsaquo;</a></li>", true);
                     $latestClass = $paged < $pages - 1 ? "" : 'class="disabled"';
-                    echo self::theTabsIndent(1, "<li $latestClass><a href='" . get_pagenum_link($pages) . "'>&raquo;</a></li>", true);
+                    self::theTabsIndent(1, "<li $latestClass><a href='" . get_pagenum_link($pages) . "'>&raquo;</a></li>", true);
                 }
 
                 self::theTabsIndent(0, "</div>", true, true);
@@ -980,24 +1031,24 @@ class KT {
      * @return string - template path
      */
     public static function getTaxonomyTemplate($taxonomy) {
-        
+
         $term = get_queried_object();
-        
+
         $file = TEMPLATEPATH . "/taxonomies/taxonomy-" . $taxonomy . "-" . $term->slug . ".php";
         if (file_exists($file)) {
             return $file;
         }
-        
+
         $file = TEMPLATEPATH . "/taxonomies/taxonomy-" . $taxonomy . "-" . $term->term_id . ".php";
         if (file_exists($file)) {
             return $file;
         }
-        
+
         $file = TEMPLATEPATH . '/taxonomies/taxonomy-' . $taxonomy . '.php';
         if (file_exists($file)) {
             return $file;
         }
-        
+
         if (file_exists(TEMPLATEPATH . '/taxonomies/taxonomy.php')) {
             return TEMPLATEPATH . '/taxonomies/taxonomy.php';
         }
