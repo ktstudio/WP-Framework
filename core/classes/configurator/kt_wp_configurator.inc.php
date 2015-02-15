@@ -872,6 +872,11 @@ final class KT_WP_Configurator {
             }
 
             wp_register_script($script->getId(), $script->getSource(), $script->getDeps(), $script->getVersion(), $script->getInFooter());
+            if(KT_ITH::issetAndNotEmpty($script->getLocalizationData())){
+                foreach($script->getLocalizationData() as $name => $data){
+                    wp_localize_script($script->getId(), $name, $data);
+                }
+            }
         }
     }
 
