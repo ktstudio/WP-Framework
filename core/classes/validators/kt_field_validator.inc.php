@@ -13,6 +13,7 @@ class KT_Field_Validator {
     const MIN_LENGTH = 'minLength'; // hodnota nesmí být menší než v zadaném $param
     const MAX_NUMBER = 'maxNumber'; // hodnota nesmí být větší číslo než v zadaném $param
     const MIN_NUMBER = 'minNumber'; // hodnota nesmí být menší číslo než v zadaném $param
+    const REGULAR = "regular"; // Hodnota musí odpovídat regulárnímu výrazu
 
     private $condition = null;
     private $message = null;
@@ -402,6 +403,29 @@ class KT_Field_Validator {
         }
 
         return false;
+    }
+
+    /**
+     * Odpovídá hodnota zadanému regulárnímu výrazu?
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param type $value
+     * @return boolean
+     */
+    public function regular($value) {
+        $param = $this->getParam();
+
+        $regResult = preg_match($param, $value);
+
+        switch ($regResult) {
+            case 1:
+                return true;
+
+            default:
+                return false;
+        }
     }
 
 }

@@ -122,6 +122,10 @@
 
                 return false;
             },
+            regular: function(value, param){
+                var patt = new RegExp(param);
+                return patt.test(value);
+            },
             // funkce vrátím HTML s chybovou hláškou na základě předané MSG
             errorMsgContent: function ( msg ) {
                 var html = "<div class=\"validator\">" +
