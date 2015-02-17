@@ -2,7 +2,6 @@
 
 class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
 
-    private $userRole = null;
     private $allUserRoles = array();
     private $userMetaQuery = array();
 
@@ -22,10 +21,6 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
         return parent::getData();
     }
 
-    private function getUserRole() {
-        return $this->userRole;
-    }
-
     private function getAllUserRoles() {
         if (kt_not_isset_or_empty($this->allUserRoles)) {
             $this->allUserRolesInit();
@@ -40,20 +35,6 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
 
     // --- settery --------------
 
-    /**
-     * Nastaví fieldu, zda chcete vybrat uživatele pouze s příslušnou rolí a ostatní bude ignorovat
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     * 
-     * @param type $userRole
-     * @return \KT_WP_User_Field
-     */
-    public function setUserRole($userRole) {
-        $this->userRole = $userRole;
-
-        return $this;
-    }
 
     /**
      * Proměnná obsahuje všechny dostupné use roles v rámci Wordpressu
@@ -65,7 +46,7 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
      * @param array $allUserRoles
      * @return \KT_WP_User_Field
      */
-    private function setAllUserRoles(array $allUserRoles) {
+    public function setAllUserRoles(array $allUserRoles) {
         $this->allUserRoles = $allUserRoles;
 
         return $this;
