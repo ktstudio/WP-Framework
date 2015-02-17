@@ -72,18 +72,19 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
 
     // --- privátní funkce --------
 
+    /**
+     * Načte všechny uživatele na základě vybraných rolí
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz 
+     * 
+     * 
+     * @return \KT_WP_User_Data_Manager
+     */
     private function dataInit() {
-
         $userData = array();
-
-        if (kt_isset_and_not_empty($this->getUserRole())) {
-            $userData = $this->getDataOfUserRole($this->getUserRole());
-        } else {
-            $userData = $this->getAllUsersData();
-        }
-
+        $userData = $this->getAllUsersData();
         $this->setData($userData);
-
         return $this;
     }
 
