@@ -417,7 +417,7 @@ class KT_Field_Validator {
     public function regular($value) {
         $param = $this->getParam();
 
-        $regResult = preg_match($param, $value);
+        $regResult = preg_match("/" . $param . "/", $value);
 
         switch ($regResult) {
             case 1:

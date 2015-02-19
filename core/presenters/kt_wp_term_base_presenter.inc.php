@@ -67,8 +67,7 @@ class KT_WP_Term_Base_Presenter extends KT_Presenter_Base {
         }
 
         $defaultArgs = array(
-            "base" => add_query_arg("paged", "%#%"),
-            "format" => "?paged=%#%",
+            "format" => "/page/%#%",
             "current" => max(1, $paged),
             "total" => $wp_query->max_num_pages,
             "prev_text" => __("Předchozí", KT_DOMAIN),
