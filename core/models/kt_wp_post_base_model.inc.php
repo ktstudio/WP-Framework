@@ -247,17 +247,13 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         } else {
             $excerptLength = apply_filters('excerpt_length', 55);
             $excerptMore = apply_filters('excerpt_more', ' ' . '[&hellip;]');
-
             $excerpt = wp_trim_words($this->getPost()->post_content, $excerptLength, $excerptMore);
         }
-
         $excerptFilterered = apply_filters('get_the_excerpt', $excerpt);
-
-        if ($withTheFilter == false) {
-            return $excerptFilterered;
+        if ($withTheFilter) {
+            return apply_filters('the_excerpt', $excerptFilterered);
         }
-
-        return apply_filters('the_excerpt', $excerptFilterered);
+        return $excerptFilterered;
     }
 
     /**
@@ -312,7 +308,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     public function getPublishDate($dateFormat = "d.m.Y") {
         return mysql2date($dateFormat, $this->getPost()->post_date);
     }
-    
+
     /**
      * Vrátí uběhnutý čas od datumu publikace příspěvku
      * 
@@ -320,11 +316,11 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * 
      * @return string
      */
-    public function getElapsedTime(){
+    public function getElapsedTime() {
         $now = new DateTime();
         $orderCreated = new DateTime($this->getPost()->post_date);
         $diff = $now->diff($orderCreated);
-        
+
         switch ($diff->d) {
             case 1:
                 $dayString = __("den", KT_DOMAIN);
