@@ -28,7 +28,7 @@ final class KT_WP_Widget_Remover_Configurator {
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeWidget($widgetName) {
-        if (kt_isset_and_not_empty($widgetName)) {
+        if (KT::issetAndNotEmpty($widgetName)) {
             array_push($this->data, $widgetName);
         }
         return $this;

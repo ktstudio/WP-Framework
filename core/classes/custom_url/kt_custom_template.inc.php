@@ -22,7 +22,7 @@ class KT_Custom_Template {
     public function __construct($pageName, $fileName, $path, $title = '') {
         $this->setPageName($pageName);
 
-        if (kt_isset_and_not_empty($path)) {
+        if (KT::issetAndNotEmpty($path)) {
             $this->setTemplatePath($path);
         } else {
             throw new KT_Not_Set_Argument_Exception('path');
@@ -30,7 +30,7 @@ class KT_Custom_Template {
 
         $this->setFileName($fileName);
 
-        if (kt_isset_and_not_empty($title)) {
+        if (KT::issetAndNotEmpty($title)) {
             $this->setTitle($title);
         }
 
@@ -129,7 +129,7 @@ class KT_Custom_Template {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setTemplatePath($path) {
-        if (kt_not_isset_or_empty($path)) {
+        if (KT::notIssetOrEmpty($path)) {
             throw new KT_Not_Set_Argument_Exception('path');
         }
 
@@ -166,13 +166,13 @@ class KT_Custom_Template {
         global $wp_rewrite;
         $baseUrl = get_bloginfo('url');
         if ($wp_rewrite->permalink_structure) {
-            if (kt_isset_and_not_empty($id)) {
+            if (KT::issetAndNotEmpty($id)) {
                 $url = $baseUrl . "/{$pagename}/{$id}";
             } else {
                 $url = $baseUrl . "/{$pagename}";
             }
         } else {
-            if (kt_isset_and_not_empty($id)) {
+            if (KT::issetAndNotEmpty($id)) {
                 $url = $baseUrl . "/?pagename={$pagename}&id={$id}";
             } else {
                 $url = $baseUrl . "/?pagename={$pagename}";

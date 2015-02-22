@@ -47,7 +47,7 @@ abstract class KT_HTML_Tag_Base {
         $html = "";
         $attrCollection = $this->getAttributes();
 
-        if (kt_not_isset_or_empty($attrCollection)) {
+        if (KT::notIssetOrEmpty($attrCollection)) {
             return $html;
         }
 
@@ -56,7 +56,7 @@ abstract class KT_HTML_Tag_Base {
                 continue;
             }
             
-            if (kt_isset_and_not_empty($value)) {
+            if (KT::issetAndNotEmpty($value)) {
                 $html .= $key . "=\"" . htmlspecialchars($value) . "\" ";
             } else {
                 $html .= $key . " ";
@@ -181,7 +181,7 @@ abstract class KT_HTML_Tag_Base {
     public function addAttrClass($class) {
         $classes = explode(" ", $class);
         
-        if(kt_isset_and_not_empty($classes)){
+        if(KT::issetAndNotEmpty($classes)){
             $currentClasses = $this->getClasses();
             $newClasses = array_merge($classes, $currentClasses);
             $this->setClasses($newClasses);

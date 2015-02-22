@@ -40,7 +40,7 @@ class KT_Catalog_Base_Config {
                 ->setValue(KT_Switch_Field::YES)
                 ->addRule(KT_Field_Validator::REQUIRED, "Viditelnost je povinná položka");
 
-        if (kt_isset_and_not_empty($item) && $item->isInDatabase()) {
+        if (KT::issetAndNotEmpty($item) && $item->isInDatabase()) {
             $fieldset->addHidden(KT_Catalog_Base_Model::ID_COLUMN)
                     ->setValue($item->getId());
 

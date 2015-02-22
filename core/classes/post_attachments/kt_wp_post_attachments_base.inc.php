@@ -223,7 +223,7 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
      * @return boolean
      */
     public function hasFiles() {
-        if (kt_isset_and_not_empty($this->getFiles())) {
+        if (KT::issetAndNotEmpty($this->getFiles())) {
             return true;
         }
 
@@ -243,11 +243,11 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
         $html = "";
         $title = $this->getGalleryTitle();
 
-        if (kt_not_isset_or_empty($title)) {
+        if (KT::notIssetOrEmpty($title)) {
             return null;
         }
 
-        if (kt_isset_and_not_empty($this->getGalleryTitleContainer())) {
+        if (KT::issetAndNotEmpty($this->getGalleryTitleContainer())) {
             $galleryTitleContainer = $this->getGalleryTitleContainer();
             $html .= "<$galleryTitleContainer>";
             $html .= $title;

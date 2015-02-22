@@ -96,10 +96,10 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
      * @param string $class
      */
     public function theInfo($tabsCount = 0, $class = "textCenter") {
-        echo kt_get_tabs_indent($tabsCount, '<p class="' . $class . '">', true);
-        echo kt_get_tabs_indent($tabsCount + 1, __("*) Změní se pouze ty hodnoty, které jsou vyplněné a změněné.", KT_DOMAIN) . "<br />", true);
-        echo kt_get_tabs_indent($tabsCount + 1, __("**) Hesla musejí být v případě změny shodná.", KT_DOMAIN), true);
-        echo kt_get_tabs_indent($tabsCount, "</p>", true, true);
+        echo KT::getTabsIndent($tabsCount, '<p class="' . $class . '">', true);
+        echo KT::getTabsIndent($tabsCount + 1, __("*) Změní se pouze ty hodnoty, které jsou vyplněné a změněné.", KT_DOMAIN) . "<br />", true);
+        echo KT::getTabsIndent($tabsCount + 1, __("**) Hesla musejí být v případě změny shodná.", KT_DOMAIN), true);
+        echo KT::getTabsIndent($tabsCount, "</p>", true, true);
     }
 
     /**
@@ -111,7 +111,7 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
      * @return boolean
      */
     public function checkPostPassword() {
-        if (kt_isset_and_not_empty($_POST)) {
+        if (KT::issetAndNotEmpty($_POST)) {
             $form = $this->getForm();
             $form->validate();
             if (!$form->hasError()) {
@@ -120,7 +120,7 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
                 $args = array("ID" => $this->getCurrentUserId(),);
 
                 $password = $this->getPasword($_POST, $form);
-                if (kt_isset_and_not_empty($password)) {
+                if (KT::issetAndNotEmpty($password)) {
                     $args[KT_User_Profile_Config::PASSWORD] = $password;
                     $result = wp_update_user($args);
                     if (is_wp_error($result)) {
@@ -148,7 +148,7 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
      * @return boolean
      */
     public function checkPostParams() {
-        if (kt_isset_and_not_empty($_POST)) {
+        if (KT::issetAndNotEmpty($_POST)) {
             $form = $this->getForm();
             $form->validate();
             if (!$form->hasError()) {
@@ -156,21 +156,21 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
                 $args = array("ID" => $this->getCurrentUser(),);
 
                 $firstName = $_POST[KT_User_Profile_Config::USER_PROFILE_FIELDSET][KT_User_Profile_Config::FIRST_NAME];
-                if (kt_isset_and_not_empty($firstName)) {
+                if (KT::issetAndNotEmpty($firstName)) {
                     if ($currentUser->first_name != $firstName) {
                         $args[KT_User_Profile_Config::FIRST_NAME] = $firstName;
                     }
                 }
 
                 $lastName = $_POST[KT_User_Profile_Config::USER_PROFILE_FIELDSET][KT_User_Profile_Config::LAST_NAME];
-                if (kt_isset_and_not_empty($lastName)) {
+                if (KT::issetAndNotEmpty($lastName)) {
                     if ($currentUser->last_name != $lastName) {
                         $args[KT_User_Profile_Config::LAST_NAME] = $lastName;
                     }
                 }
 
                 $email = $_POST[KT_User_Profile_Config::USER_PROFILE_FIELDSET][KT_User_Profile_Config::EMAIL];
-                if (kt_isset_and_not_empty($email)) {
+                if (KT::issetAndNotEmpty($email)) {
                     if ($currentUser->user_email != $email) {
                         $args[KT_User_Profile_Config::EMAIL] = $email;
                     }
@@ -178,7 +178,7 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
 
                 $phone = $_POST[KT_User_Profile_Config::USER_PROFILE_FIELDSET][KT_User_Profile_Config::PHONE];
                 $userPhoneKey = KT_User_Profile_Config::PHONE;
-                if (kt_isset_and_not_empty($phone)) {
+                if (KT::issetAndNotEmpty($phone)) {
                     if ($currentUser->$userPhoneKey != $phone) {
                         $args[KT_User_Profile_Config::PHONE] = $phone;
                     }
@@ -205,10 +205,10 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
 
     private function getPasword(array $post, KT_Form $form) {
         $password = $post[KT_User_Profile_Config::USER_PROFILE_FIELDSET][KT_User_Profile_Config::PASSWORD];
-        if (kt_isset_and_not_empty($password)) {
+        if (KT::issetAndNotEmpty($password)) {
             $fieldset = $form->getFieldSetByName(KT_User_Profile_Config::USER_PROFILE_FIELDSET);
             $passwordConfirm = $post[KT_User_Profile_Config::USER_PROFILE_FIELDSET][KT_User_Profile_Config::PASSWORD_CONFIRM];
-            if (kt_isset_and_not_empty($passwordConfirm)) {
+            if (KT::issetAndNotEmpty($passwordConfirm)) {
                 if ($password === $passwordConfirm) { // OK
                     return $password;
                 } else { // hesla se nerovnají
@@ -232,7 +232,7 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
     }
 
     private function initPermalink($permalink) {
-        if (kt_isset_and_not_empty($permalink)) {
+        if (KT::issetAndNotEmpty($permalink)) {
             return $this->permalink = $permalink;
         } else {
             throw new KT_Not_Set_Argument_Exception("permalink");

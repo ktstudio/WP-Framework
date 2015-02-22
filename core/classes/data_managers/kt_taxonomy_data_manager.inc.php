@@ -10,10 +10,10 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
     private $optionValueType = self::FIELD_ID;
 
     function __construct($taxonomy = null, $args = null) {
-        if (kt_isset_and_not_empty($taxonomy)) {
+        if (KT::issetAndNotEmpty($taxonomy)) {
             $this->setTaxonomy($taxonomy);
         }
-        if (kt_array_isset_and_not_empty($args)) {
+        if (KT::arrayIssetAndNotEmpty($args)) {
             $this->setArgs($args);
         }
     }
@@ -27,7 +27,7 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
      */
     public function getData() {
 
-        if (kt_not_isset_or_empty(parent::getData())) {
+        if (KT::notIssetOrEmpty(parent::getData())) {
             $this->dataInit();
         }
 
@@ -135,7 +135,7 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
             $taxonomyValues[$key] = $name;
         }
 
-        if (kt_isset_and_not_empty($taxonomyValues)) {
+        if (KT::issetAndNotEmpty($taxonomyValues)) {
             $this->setData($taxonomyValues);
         }
     }

@@ -130,7 +130,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
 
         $html = "";
 
-        if (kt_not_isset_or_empty($this->getFiles())) {
+        if (KT::notIssetOrEmpty($this->getFiles())) {
             return $html;
         }
         
@@ -193,12 +193,12 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
         );
 
         $customImageIds = $this->getCustomImageIds();
-        $isCustomImageIds = kt_array_isset_and_not_empty($customImageIds);
+        $isCustomImageIds = KT::arrayIssetAndNotEmpty($customImageIds);
         if ($this->getExcludeThumbnail()) {
             $thumbnailId = get_post_thumbnail_id($this->getPost()->ID);
             $queryArgs["post__not_in"] = array($thumbnailId);
             if ($isCustomImageIds) {
-                $customImageIds = kt_array_remove_by_value($customImageIds, $thumbnailId);
+                $customImageIds = KT::arrayRemoveByValue($customImageIds, $thumbnailId);
             }
         }
         if ($isCustomImageIds) {
@@ -229,7 +229,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
      */
     private function getLinkTagToLargeImage(array $large, array $attr = array(), $title) {
 
-        if (kt_isset_and_not_empty($attr) && is_array($attr)) {
+        if (KT::issetAndNotEmpty($attr) && is_array($attr)) {
             foreach ($attr as $attrName => $attrValue) {
                 $htmlAttr = " $attrName = \"$attrValue\" ";
             }

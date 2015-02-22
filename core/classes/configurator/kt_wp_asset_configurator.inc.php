@@ -99,13 +99,13 @@ final class KT_WP_Asset_Configurator {
      */
     public function addToScriptCollection(array $scriptCollection) {
 
-        if (kt_not_isset_or_empty($scriptCollection)) {
+        if (KT::notIssetOrEmpty($scriptCollection)) {
             return $this;
         }
 
         $currentScriptCollection = $this->getScriptCollection();
 
-        if (kt_not_isset_or_empty($currentScriptCollection)) {
+        if (KT::notIssetOrEmpty($currentScriptCollection)) {
             $this->setScriptCollection($scriptCollection);
             return $this;
         }
@@ -129,13 +129,13 @@ final class KT_WP_Asset_Configurator {
      */
     public function addToStyleCollection(array $styleCollection) {
 
-        if (kt_not_isset_or_empty($styleCollection)) {
+        if (KT::notIssetOrEmpty($styleCollection)) {
             return $this;
         }
 
         $currentStyleCollection = $this->getStyleCollection();
 
-        if (kt_not_isset_or_empty($currentStyleCollection)) {
+        if (KT::notIssetOrEmpty($currentStyleCollection)) {
             $this->setStyleCollection($styleCollection);
             return $this;
         }

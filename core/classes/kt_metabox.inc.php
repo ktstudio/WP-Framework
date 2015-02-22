@@ -46,7 +46,7 @@ class KT_MetaBox implements KT_Registrable {
         $this->setTitle($title);
         $this->setScreen($screen);
         $this->setDataType(new KT_MetaBox_Data_Types($dataType));
-        if (kt_isset_and_not_empty($fieldset)) {
+        if (KT::issetAndNotEmpty($fieldset)) {
             $this->setFieldset($fieldset);
         }
     }
@@ -74,7 +74,7 @@ class KT_MetaBox implements KT_Registrable {
      * @throws KT_Not_Set_Argument_Exception
      */
     private function setId($id) {
-        if (kt_isset_and_not_empty($id)) {
+        if (KT::issetAndNotEmpty($id)) {
             $this->id = $id;
             return $this;
         }
@@ -104,7 +104,7 @@ class KT_MetaBox implements KT_Registrable {
      * @throws KT_Not_Set_Argument_Exception
      */
     private function setTitle($title) {
-        if (kt_isset_and_not_empty($title)) {
+        if (KT::issetAndNotEmpty($title)) {
             $this->title = $title;
             return $this;
         }
@@ -134,7 +134,7 @@ class KT_MetaBox implements KT_Registrable {
      * @throws KT_Not_Set_Argument_Exception
      */
     private function setScreen($screen) {
-        if (kt_isset_and_not_empty($screen)) {
+        if (KT::issetAndNotEmpty($screen)) {
             $this->screen = $screen;
             return $this;
         }
@@ -164,7 +164,7 @@ class KT_MetaBox implements KT_Registrable {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setContext($context) {
-        if (kt_isset_and_not_empty($context)) {
+        if (KT::issetAndNotEmpty($context)) {
             $this->context = $context;
             return $this;
         }
@@ -194,7 +194,7 @@ class KT_MetaBox implements KT_Registrable {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setPriority($priority) {
-        if (kt_isset_and_not_empty($priority)) {
+        if (KT::issetAndNotEmpty($priority)) {
             $this->priority = $priority;
             return $this;
         }
@@ -251,7 +251,7 @@ class KT_MetaBox implements KT_Registrable {
      * @throws KT_Not_Set_Argument_Exception
      */
     private function setFieldset(KT_Form_Fieldset $fieldset) {
-        if (kt_isset_and_not_empty($fieldset)) {
+        if (KT::issetAndNotEmpty($fieldset)) {
             $this->fieldset = $fieldset;
             return $this;
         }
@@ -339,7 +339,7 @@ class KT_MetaBox implements KT_Registrable {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setCustomCallback($customCallback) {
-        if (kt_isset_and_not_empty($customCallback)) {
+        if (KT::issetAndNotEmpty($customCallback)) {
             $this->customCallback = $customCallback;
             return $this;
         }
@@ -369,7 +369,7 @@ class KT_MetaBox implements KT_Registrable {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setClassName($className) {
-        if (kt_isset_and_not_empty($className)) {
+        if (KT::issetAndNotEmpty($className)) {
             $this->className = $className;
             return $this;
         }
@@ -399,7 +399,7 @@ class KT_MetaBox implements KT_Registrable {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setIdParamName($idParamName) {
-        if (kt_isset_and_not_empty($idParamName)) {
+        if (KT::issetAndNotEmpty($idParamName)) {
             $this->idParamName = $idParamName;
             return $this;
         }
@@ -517,7 +517,7 @@ class KT_MetaBox implements KT_Registrable {
         $fieldset = $args["args"][0];
         $form = null;
 
-        if (kt_isset_and_not_empty($fieldset) && $fieldset instanceof KT_Form_Fieldset) {
+        if (KT::issetAndNotEmpty($fieldset) && $fieldset instanceof KT_Form_Fieldset) {
             $fieldset->setTitle("");
             $form = new KT_Form();
             $form->addFieldsetByObject($fieldset);
@@ -538,10 +538,10 @@ class KT_MetaBox implements KT_Registrable {
                 break;
             case KT_MetaBox_Data_Types::CRUD:
                 $crudInstance = $this->getCrudInstance();
-                if (kt_isset_and_not_empty($crudInstance)) {
+                if (KT::issetAndNotEmpty($crudInstance)) {
                     foreach ($form->getFieldsets() as $fieldset) {
                         $postPrefix = $fieldset->getPostPrefix();
-                        if (kt_isset_and_not_empty($postPrefix)) {
+                        if (KT::issetAndNotEmpty($postPrefix)) {
                             $fieldset->setFieldsData($crudInstance->getData());
                         } else {
                             throw new KT_Not_Implemented_Exception(__("Zatím jsou podporované pouze formuláře se zadaným PostPrefixem", KT_DOMAIN));
@@ -683,7 +683,7 @@ class KT_MetaBox implements KT_Registrable {
             $idparamName = $this->getIdParamName();
             $idParamValue = htmlspecialchars($_GET["$idparamName"]);
             $className = $this->getClassName();
-            if (kt_isset_and_not_empty($idParamValue)) {
+            if (KT::issetAndNotEmpty($idParamValue)) {
                 $instance = new $className($idParamValue);
             } else {
                 $instance = new $className();
@@ -708,7 +708,7 @@ class KT_MetaBox implements KT_Registrable {
         }
 
         $pageTemplate = $this->getPageTemplate();
-        if (kt_isset_and_not_empty($pageTemplate)) { // chceme kontrolovat (aktuální) page template
+        if (KT::issetAndNotEmpty($pageTemplate)) { // chceme kontrolovat (aktuální) page template
             $currentPageTemplate = get_post_meta($post->ID, KT_WP_META_KEY_PAGE_TEMPLATE, true);
             if ($currentPageTemplate !== $pageTemplate) { // (aktuální) page template nesedí => rušíme přidání metaboxu
                 return false;

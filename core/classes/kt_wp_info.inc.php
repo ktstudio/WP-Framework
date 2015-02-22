@@ -32,7 +32,7 @@ class KT_WP_Info {
 
     public function getUserLogin() {
         $currentUser = $this->getCurrentUser();
-        if (kt_isset_and_not_empty($currentUser)) {
+        if (KT::issetAndNotEmpty($currentUser)) {
             return $this->getCurrentUser()->user_login;
         }
         return null;
@@ -40,7 +40,7 @@ class KT_WP_Info {
 
     public function getUserEmail() {
         $currentUser = $this->getCurrentUser();
-        if (kt_isset_and_not_empty($currentUser)) {
+        if (KT::issetAndNotEmpty($currentUser)) {
             return $this->getCurrentUser()->user_email;
         }
         return null;
@@ -48,7 +48,7 @@ class KT_WP_Info {
 
     public function getUserFirstName() {
         $currentUser = $this->getCurrentUser();
-        if (kt_isset_and_not_empty($currentUser)) {
+        if (KT::issetAndNotEmpty($currentUser)) {
             return $this->getCurrentUser()->user_firstname;
         }
         return null;
@@ -56,7 +56,7 @@ class KT_WP_Info {
 
     public function getUserLastName() {
         $currentUser = $this->getCurrentUser();
-        if (kt_isset_and_not_empty($currentUser)) {
+        if (KT::issetAndNotEmpty($currentUser)) {
             return $this->getCurrentUser()->user_lastname;
         }
         return null;
@@ -64,7 +64,7 @@ class KT_WP_Info {
 
     public function getUserFullName() {
         $currentUser = $this->getCurrentUser();
-        if (kt_isset_and_not_empty($currentUser)) {
+        if (KT::issetAndNotEmpty($currentUser)) {
             return $currentUser->first_name . " " . $currentUser->last_name;
         }
         return null;
@@ -72,7 +72,7 @@ class KT_WP_Info {
 
     public function getUserDisplayName() {
         $currentUser = $this->getCurrentUser();
-        if (kt_isset_and_not_empty($currentUser)) {
+        if (KT::issetAndNotEmpty($currentUser)) {
             return $this->getCurrentUser()->display_name;
         }
         return null;
@@ -80,14 +80,14 @@ class KT_WP_Info {
 
     public function getUserId() {
         $currentUser = $this->getCurrentUser();
-        if (kt_isset_and_not_empty($currentUser)) {
+        if (KT::issetAndNotEmpty($currentUser)) {
             return $this->getCurrentUser()->ID;
         }
         return null;
     }
 
     public function getCurrentUser() {
-        if (kt_isset_and_not_empty($this->currentUser)) {
+        if (KT::issetAndNotEmpty($this->currentUser)) {
             return $this->currentUser;
         }
         return ($this->currentUser = wp_get_current_user());

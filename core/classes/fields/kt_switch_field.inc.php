@@ -98,7 +98,7 @@ class KT_Switch_Field extends KT_Field {
      * @throws InvalidArgumentException
      */
     public static function convertBooleanToSwitch($value) {
-        if (kt_isset_and_not_empty($value)) {
+        if (KT::issetAndNotEmpty($value)) {
             if ($value == true) {
                 return KT_Switch_Field::YES;
             } elseif ($value == false) {
@@ -120,7 +120,7 @@ class KT_Switch_Field extends KT_Field {
      * @throws InvalidArgumentException
      */
     public static function convertSwitchToBoolean($value) {
-        if (kt_isset_and_not_empty($value)) {
+        if (KT::issetAndNotEmpty($value)) {
             if ($value == KT_Switch_Field::YES) {
                 return true;
             } elseif ($value == KT_Switch_Field::NO) {

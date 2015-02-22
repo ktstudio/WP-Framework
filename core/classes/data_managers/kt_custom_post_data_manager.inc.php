@@ -17,7 +17,7 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      */
     public function getData() {
 
-        if (kt_not_isset_or_empty(parent::getData())) {
+        if (KT::notIssetOrEmpty(parent::getData())) {
             $this->dataInit();
         }
 
@@ -150,19 +150,19 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      */
     public function dataInit() {
 
-        if (kt_not_isset_or_empty($this->getQueryArgs())) {
+        if (KT::notIssetOrEmpty($this->getQueryArgs())) {
             return;
         }
 
         $postCollection = get_posts($this->getQueryArgs());
 
-        if (kt_isset_and_not_empty($postCollection)) {
+        if (KT::issetAndNotEmpty($postCollection)) {
             foreach ($postCollection as $postItem) {
                 $options[$postItem->ID] = $this->getPrefixValue($postItem->ID) . " " . $postItem->post_title . " " . $this->getSuffixValue($postItem->ID);
             }
         }
 
-        if (kt_isset_and_not_empty($options)) {
+        if (KT::issetAndNotEmpty($options)) {
             $this->setData($options);
         }
 
@@ -181,8 +181,8 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      * @return string
      */
     private function getPrefixValue($postId) {
-        if (kt_isset_and_not_empty($this->getPrefixMetaKey())) {
-            if (kt_isset_and_not_empty($this->getPrefixMetaValue())) {
+        if (KT::issetAndNotEmpty($this->getPrefixMetaKey())) {
+            if (KT::issetAndNotEmpty($this->getPrefixMetaValue())) {
                 return $this->getPrefixMetaValue();
             }
 
@@ -205,8 +205,8 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      * @return string
      */
     private function getSuffixValue($postId) {
-        if (kt_isset_and_not_empty($this->getSuffixMetaKey())) {
-            if (kt_isset_and_not_empty($this->getSuffixMetaValue())) {
+        if (KT::issetAndNotEmpty($this->getSuffixMetaKey())) {
+            if (KT::issetAndNotEmpty($this->getSuffixMetaValue())) {
                 return $this->getSuffixMetaValue();
             }
 

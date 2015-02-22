@@ -149,8 +149,8 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      * @return \KT_Field
      */
     public function setTabindex($tabindex) {
-        $tabindex = kt_try_get_int($tabindex);
-        if(kt_is_id_format($tabindex)){
+        $tabindex = KT::tryGetInt($tabindex);
+        if(KT::isIdFormat($tabindex)){
             $this->addAttribute("tabindex", $tabindex);
         }
         
@@ -264,7 +264,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      * @return boolean
      */
     public function Validate() {
-        if (kt_not_isset_or_empty($this->getValidators())) {
+        if (KT::notIssetOrEmpty($this->getValidators())) {
             return true;
         }
 
@@ -306,7 +306,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      * @return boolean
      */
     public function hasErrorMsg() {
-        if (kt_isset_and_not_empty($this->error)) {
+        if (KT::issetAndNotEmpty($this->error)) {
             return true;
         }
         return false;
@@ -331,7 +331,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      * @return null
      */
     public function getValue() {
-        if (kt_isset_and_not_empty($this->getPostPrefix())) {
+        if (KT::issetAndNotEmpty($this->getPostPrefix())) {
             if (isset($_POST[$this->getPostPrefix()][$this->getName()])) {
                 return $_POST[$this->getPostPrefix()][$this->getName()];
             }
@@ -361,7 +361,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
         }
 
 
-        if (kt_isset_and_not_empty($this->value) || $this->value === "0" || $this->value === 0) {
+        if (KT::issetAndNotEmpty($this->value) || $this->value === "0" || $this->value === 0) {
             return $this->value;
         }
 
@@ -413,7 +413,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
         $html = "";
         $afterNameString = $this->getAfterNameValue();
 
-        if (kt_isset_and_not_empty($this->getPostPrefix())) {
+        if (KT::issetAndNotEmpty($this->getPostPrefix())) {
             $html .= "name=\"{$this->getPostPrefix()}[{$this->getName()}]$afterNameString\" ";
         } else {
             $html .= "name=\"{$this->getName()}$afterNameString\" ";
@@ -461,7 +461,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      * @return \KT_Field
      */
     protected function validatorJsonContentInit() {
-        if (!kt_isset_and_not_empty($this->getValidators())) {
+        if (!KT::issetAndNotEmpty($this->getValidators())) {
             return "";
         }
 

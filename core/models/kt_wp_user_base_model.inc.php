@@ -36,7 +36,7 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      * @return array
      */
     public function getWpUserMetas() {
-        if (kt_not_isset_or_empty($this->wpUserMetas)) {
+        if (KT::notIssetOrEmpty($this->wpUserMetas)) {
             $this->wpUserMetasInit();
         }
         return $this->wpUserMetas;
@@ -211,19 +211,19 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
 
         $query = "SELECT COUNT(*) FROM $wpdb->posts WHERE post_author = %d";
 
-        if (kt_isset_and_not_empty($postType)) {
+        if (KT::issetAndNotEmpty($postType)) {
             $query .= " AND post_type = %s";
             array_push($preparData, $postType);
         }
 
-        if (kt_isset_and_not_empty($postStatus)) {
+        if (KT::issetAndNotEmpty($postStatus)) {
             $query .= " AND post_status = %s";
             array_push($preparData, $postStatus);
         }
 
         $authorPostCount = $wpdb->get_var($wpdb->prepare($query, $preparData));
 
-        if (kt_isset_and_not_empty($authorPostCount)) {
+        if (KT::issetAndNotEmpty($authorPostCount)) {
             return $authorPostCount;
         }
 
@@ -284,11 +284,11 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
     public function wpUserInitByPostAuthor(WP_Post $post) {
         $userId = $post->post_author;
 
-        if (kt_not_isset_or_empty($userId)) {
+        if (KT::notIssetOrEmpty($userId)) {
             throw new KT_Not_Supported_Exception("Post has no post_author");
         }
 
-        if (kt_isset_and_not_empty($userId)) {
+        if (KT::issetAndNotEmpty($userId)) {
             $this->wpUserInitById($userId);
         }
 
@@ -329,13 +329,13 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
 
         $query = "SELECT meta_key, meta_value FROM {$wpdb->usermeta} WHERE user_id = %d";
 
-        if (kt_isset_and_not_empty($prefix)) {
+        if (KT::issetAndNotEmpty($prefix)) {
             $query .= " AND meta_key LIKE '$prefix%'";
         }
 
         $results = $wpdb->get_results($wpdb->prepare($query, $userId), ARRAY_A);
 
-        if (kt_isset_and_not_empty($results)) {
+        if (KT::issetAndNotEmpty($results)) {
             foreach ($results as $result) {
                 $clearResult[$result["meta_key"]] = $result["meta_value"];
             }
@@ -360,17 +360,17 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      */
     private function wpUserInitById($userId) {
 
-        if (kt_not_isset_or_empty($userId)) {
+        if (KT::notIssetOrEmpty($userId)) {
             return null;
         }
 
-        if (!kt_is_id_format($userId)) {
+        if (!KT::isIdFormat($userId)) {
             return null;
         }
 
-        $userId = kt_try_get_int($userId);
+        $userId = KT::tryGetInt($userId);
 
-        if (kt_isset_and_not_empty($userId)) {
+        if (KT::issetAndNotEmpty($userId)) {
             $wpUser = get_user_by("id", $userId);
 
             if ($wpUser) {

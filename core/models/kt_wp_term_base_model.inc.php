@@ -24,11 +24,11 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
             return;
         }
 
-        if (kt_not_isset_or_empty($taxonomy)) {
+        if (KT::notIssetOrEmpty($taxonomy)) {
             throw new KT_Not_Set_Argument_Exception("Taxonomy must be added if term is not stdClass term object");
         }
 
-        if (kt_is_id_format($term)) {
+        if (KT::isIdFormat($term)) {
             $this->initializeByTermid($term, $taxonomy);
             return;
         }
@@ -63,7 +63,7 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
      * @return \KT_WP_Term_Base_Model
      */
     public function setTerm(stdClass $term) {
-        if (kt_isset_and_not_empty($term->term_id)) {
+        if (KT::issetAndNotEmpty($term->term_id)) {
             $this->term = $term;
         }
 
@@ -201,13 +201,13 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
      * @throws InvalidArgumentException
      */
     private function initializeByTermid($termId, $taxonomy) {
-        if (!kt_is_id_format($termId)) {
+        if (!KT::isIdFormat($termId)) {
             throw new KT_Not_Supported_Exception("First parametr $termId is not an ID format");
         }
 
         $term = get_term_by(self::TERM_ID, $termId, $taxonomy);
 
-        if (kt_isset_and_not_empty($term)) {
+        if (KT::issetAndNotEmpty($term)) {
             $this->setTerm($term);
             return $this;
         }
@@ -230,7 +230,7 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
     private function initializeByTermSlug($termSlug, $taxonomy) {
         $term = get_term_by(self::TERM_SLUG, $termSlug, $taxonomy);
 
-        if (kt_isset_and_not_empty($term)) {
+        if (KT::issetAndNotEmpty($term)) {
             $this->setTerm($term);
             return $this;
         }
@@ -257,7 +257,7 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
         $modelCollection = array();
         $terms = get_terms($taxonomy, $args);
 
-        if (kt_not_isset_or_empty($terms)) {
+        if (KT::notIssetOrEmpty($terms)) {
             return $modelCollection;
         }
 

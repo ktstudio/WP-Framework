@@ -46,7 +46,7 @@ class KT_Media_Field extends KT_Field {
 
         $html .= "<div class=\"file-load-box\">";
 
-        if (kt_isset_and_not_empty($this->getValue())) {
+        if (KT::issetAndNotEmpty($this->getValue())) {
             $html .= $this->getFullSpanUrl();
         } else {
             $html .= $this->getEmptySpanUrl();
@@ -103,7 +103,7 @@ class KT_Media_Field extends KT_Field {
             $fileTag = "<img class=\"file\" src=\"{$imageData[0]}\">";
         }
 
-        if (kt_not_isset_or_empty($fileTag)) {
+        if (KT::notIssetOrEmpty($fileTag)) {
             $fileTag = "<span class=\"file\">{$attachment->post_title}</span>";
         }
 

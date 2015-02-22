@@ -163,7 +163,7 @@ class KT_CRUD_Admin_List {
      */
     public function addColumnsToCollection(array $columnCollection) {
         $currentColumnCollection = $this->getColumnList();
-        if (kt_isset_and_not_empty($columnCollection)) {
+        if (KT::issetAndNotEmpty($columnCollection)) {
             $mergedColumnCollection = array_merge($columnCollection, $currentColumnCollection);
             $this->setColumnList($mergedColumnCollection);
         } else {
@@ -242,7 +242,7 @@ class KT_CRUD_Admin_List {
      * @return string
      */
     protected function getTamplageTitleContent() {
-        if (kt_not_isset_or_empty($this->getTemplateTitle())) {
+        if (KT::notIssetOrEmpty($this->getTemplateTitle())) {
             return "";
         }
 
@@ -312,7 +312,7 @@ class KT_CRUD_Admin_List {
         $html .= "<tr>";
         foreach ($columnList as $column) {
             /** @var $column \KT_CRUD_Column */
-            $class = kt_isset_and_not_empty($column->getCssClass()) ? " class=\"{$column->getCssClass()}\"" : "";
+            $class = KT::issetAndNotEmpty($column->getCssClass()) ? " class=\"{$column->getCssClass()}\"" : "";
             $html .= "<th$class>{$column->getLabel()}</th>";
         }
         $html .= "</tr>";
@@ -345,7 +345,7 @@ class KT_CRUD_Admin_List {
             $html .= "<tr id=\"row-{$item->getId()}\"$updatedClass>";
             foreach ($columnCollection as $column) {
 
-                $class = kt_isset_and_not_empty($column->getCssClass()) ? " class=\"{$column->getCssClass()}\"" : "";
+                $class = KT::issetAndNotEmpty($column->getCssClass()) ? " class=\"{$column->getCssClass()}\"" : "";
 
                 $html .= "<td$class>";
                 $html .= $column->getCellContent($item);
@@ -369,7 +369,7 @@ class KT_CRUD_Admin_List {
      */
     protected function hasListColumns() {
         $columnList = $this->getColumnList();
-        if (kt_isset_and_not_empty($columnList)) {
+        if (KT::issetAndNotEmpty($columnList)) {
             return true;
         }
 

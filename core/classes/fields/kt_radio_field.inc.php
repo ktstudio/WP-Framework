@@ -40,7 +40,7 @@ class KT_Radio_Field extends KT_Options_Field_Base {
 
         $html = "";
 
-        if (kt_not_isset_or_empty($this->getOptionsData())) {
+        if (KT::notIssetOrEmpty($this->getOptionsData())) {
             return $html = KT_EMPTY_SYMBOL;
         }
 

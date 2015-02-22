@@ -119,7 +119,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
      */
     protected function getOption($name) {
         $options = $this->getOptions();
-        if (kt_array_isset_and_not_empty($options)) {
+        if (KT::arrayIssetAndNotEmpty($options)) {
             foreach ($options as $optionName => $optionValue) {
                 if ($optionName == $name) {
                     return $optionValue;
@@ -149,7 +149,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
         } else {
             $options = $wpdb->get_results($query);
         }
-        if (kt_isset_and_not_empty($options) && is_array($options)) {
+        if (KT::issetAndNotEmpty($options) && is_array($options)) {
             foreach ($options as $option) {
                 $results[$option["option_name"]] = $option["option_value"];
             }
@@ -189,7 +189,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
      */
     public static function getWpOption($optionName, $emptyText = true) {
         $optionValue = self::getWpOptionValue($optionName);
-        if (kt_isset_and_not_empty($optionValue)) {
+        if (KT::issetAndNotEmpty($optionValue)) {
             return $optionValue;
         }
         if ($emptyText === true) {

@@ -135,7 +135,7 @@ function kt_class_autoloader_init($name) {
                 return;
             } else { // pro třídy ještě případně hledáme všechny pod úrovně (hlouby 1)
                 $classesSubdirsNames = kt_get_subdirs_names($classesPath);
-                if (kt_isset_and_not_empty($classesSubdirsNames) && count($classesSubdirsNames) > 0) {
+                if (KT::issetAndNotEmpty($classesSubdirsNames) && count($classesSubdirsNames) > 0) {
                     foreach ($classesSubdirsNames as $classSubdirName) {
                         $subClassesPath = path_join($classesPath, $classSubdirName);
                         $subClassPath = path_join($subClassesPath, $fileName);
@@ -278,7 +278,7 @@ function kt_include_all($folder) {
  * @return string|null
  */
 function kt_get_prefixed($text) {
-    if (kt_isset_and_not_empty($text)) {
+    if (isset($text) && !empty($text)) {
         return KT_PREFIX . $text;
     }
     return null;
@@ -290,7 +290,7 @@ function kt_get_prefixed($text) {
  * @return string|null
  */
 function kt_get_form_prefixed($text) {
-    if (kt_isset_and_not_empty($text)) {
+    if (isset($text) && !empty($text)) {
         return KT_FORM_PREFIX . $text;
     }
     return null;
@@ -302,7 +302,7 @@ function kt_get_form_prefixed($text) {
  * @return boolean
  */
 function kt_is_prefixed($text) {
-    if (kt_isset_and_not_empty($text)) {
+    if (isset($text) && !empty($text)) {
         $result = strtolower(substr($text, 0, 3)) === KT_PREFIX;
         if ($result === true) {
             return true;
@@ -364,7 +364,7 @@ function kt_load_template_from_subdir($template) {
     }
 
     // --- taxonomy ---------------------------
-    if (kt_isset_and_not_empty($taxonomy)) {
+    if (KT::issetAndNotEmpty($taxonomy)) {
         $ktTemplate = KT::getTaxonomyTemplate($taxonomy);
         if ($ktTemplate) {
             return $ktTemplate;

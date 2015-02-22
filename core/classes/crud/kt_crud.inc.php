@@ -37,11 +37,11 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
             throw new KT_Not_Set_Argument_Exception("Primary key column is not a string");
         }
 
-        if (is_string($tablePrefix) && kt_isset_and_not_empty($tablePrefix)) {
+        if (is_string($tablePrefix) && KT::issetAndNotEmpty($tablePrefix)) {
             $this->setTablePrefix($tablePrefix);
         }
 
-        if (kt_isset_and_not_empty($rowId)) {
+        if (KT::issetAndNotEmpty($rowId)) {
             $this->setId($rowId);
             $this->rowDataInit();
         }
@@ -147,7 +147,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      */
     public function setData($data = array()) {
 
-        if (kt_not_isset_or_empty($data) || !is_array($data)) {
+        if (KT::notIssetOrEmpty($data) || !is_array($data)) {
             return;
         }
 
@@ -157,7 +157,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
             $rowIdFromData = $data[$this->getPrimaryKeyColumn()];
         }
 
-        if (kt_isset_and_not_empty($rowIdFromData)) {
+        if (KT::issetAndNotEmpty($rowIdFromData)) {
             $this->setId($rowIdFromData);
         }
 
@@ -183,8 +183,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
             return $this;
         }
 
-        if (kt_is_id_format($rowId)) {
-            $rowId = kt_try_get_int($rowId);
+        if (KT::isIdFormat($rowId)) {
+            $rowId = KT::tryGetInt($rowId);
             $this->primaryKeyValue = $rowId;
             return $this;
         }
@@ -244,7 +244,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * @return \KT_Crud
      */
     protected function setErrors(array $errors) {
-        if (kt_isset_and_not_empty($errors)) {
+        if (KT::issetAndNotEmpty($errors)) {
             $this->errors = $errors;
         } else {
             $this->errors = null;
@@ -285,7 +285,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * @param array $columns
      */
     public function addNewColumnsToData(array $columns) {
-        if (kt_isset_and_not_empty($columns)) {
+        if (KT::issetAndNotEmpty($columns)) {
             $currentDataCollection = $this->getData();
             $newDataCollection = array_merge($currentDataCollection, $columns);
             $this->setData($newDataCollection);
@@ -325,7 +325,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
         $sql = $wpdb->delete($this->getTable(), array($this->getPrimaryKeyColumn() => $this->getId()));
 
-        if (kt_isset_and_not_empty($sql)) {
+        if (KT::issetAndNotEmpty($sql)) {
             return $sql;
         }
 
@@ -357,7 +357,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * @return boolean
      */
     public function hasError() {
-        if (kt_isset_and_not_empty($this->getErrors())) {
+        if (KT::issetAndNotEmpty($this->getErrors())) {
             return true;
         }
         return false;
@@ -373,7 +373,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * @return boolean
      */
     public function isInDatabase() {
-        if (kt_isset_and_not_empty($this->getId())) {
+        if (KT::issetAndNotEmpty($this->getId())) {
             return true;
         }
 
@@ -405,7 +405,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      */
     private function rowDataInit() {
 
-        if (!kt_is_id_format($this->getId())) {
+        if (!KT::isIdFormat($this->getId())) {
             return;
         }
 
@@ -441,7 +441,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
         $sql = $wpdb->insert($this->getTable(), $this->getData(), $this->getArrayOfFieldsFormat());
 
-        if (kt_isset_and_not_empty($sql)) {
+        if (KT::issetAndNotEmpty($sql)) {
             $this->setId($wpdb->insert_id);
             return $this->getId();
         }

@@ -29,7 +29,7 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base {
      * @return \KT_Textarea_Field
      */
     public function setRows($rows) {
-        if (kt_isset_and_not_empty($rows)) {
+        if (KT::issetAndNotEmpty($rows)) {
             $this->addAttribute("rows", $rows);
         }
 
@@ -46,7 +46,7 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base {
      * @return \KT_Textarea_Field
      */
     public function setCols($cols) {
-        if (kt_isset_and_not_empty($cols)) {
+        if (KT::issetAndNotEmpty($cols)) {
             $this->addAttribute("cols", $cols);
         }
 

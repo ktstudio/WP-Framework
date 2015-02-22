@@ -43,7 +43,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setInputType($type) {
-        if (kt_isset_and_not_empty($type)) {
+        if (KT::issetAndNotEmpty($type)) {
 
             if ($type == self::INPUT_DATE) {
                 $this->addAttrClass("datapicker");
@@ -135,7 +135,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
     public function getConvertedValue() {
         $fieldValue = parent::getConvertedValue();
 
-        if ($this->getInputType() == self::INPUT_DATE && kt_isset_and_not_empty($fieldValue)) {
+        if ($this->getInputType() == self::INPUT_DATE && KT::issetAndNotEmpty($fieldValue)) {
             return $newFieldValue = date("d.m.Y", $fieldValue);
         }
 

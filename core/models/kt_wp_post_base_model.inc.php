@@ -20,7 +20,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @return \KT_WP_Post_Base_Model
      */
     function __construct(WP_Post $post = null, $metaPrefix = null) {
-        if (kt_isset_and_not_empty($post)) {
+        if (KT::issetAndNotEmpty($post)) {
             $this->setPost($post);
         }
         $this->metaPrefix = $metaPrefix;
@@ -61,7 +61,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @return \KT_WP_User_Base_Model
      */
     public function getAuthor() {
-        if (kt_not_isset_or_empty($this->author)) {
+        if (KT::notIssetOrEmpty($this->author)) {
             $this->initAuthor();
         }
 
@@ -72,7 +72,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @return array
      */
     public function getMetas() {
-        if (kt_not_isset_or_empty($this->metas)) {
+        if (KT::notIssetOrEmpty($this->metas)) {
             $this->initMetas();
         }
 
@@ -90,7 +90,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @return \KT_WP_Post_File_List
      */
     public function getFiles() {
-        if (kt_not_isset_or_empty($this->files)) {
+        if (KT::notIssetOrEmpty($this->files)) {
             $this->initFiles();
         }
 
@@ -102,7 +102,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @return \KT_WP_Post_Gallery
      */
     public function getGallery() {
-        if (kt_not_isset_or_empty($this->gallery)) {
+        if (KT::notIssetOrEmpty($this->gallery)) {
             $this->initGallery();
         }
 
@@ -289,7 +289,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     public function getThumbnailId() {
         $thumbnailId = $this->getMetaValue("_thumbnail_id");
 
-        if (kt_isset_and_not_empty($thumbnailId)) {
+        if (KT::issetAndNotEmpty($thumbnailId)) {
             return $thumbnailId;
         }
 
@@ -398,7 +398,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @return mixed null|array
      */
     public function getTerms($taxonomy, array $args = array()) {
-        if (kt_not_isset_or_empty($this->$taxonomy)) {
+        if (KT::notIssetOrEmpty($this->$taxonomy)) {
             $termCollection = self::getTermCollectionByPost($this->getPost(), $taxonomy, $args);
             $this->$taxonomy = $termCollection;
         }
@@ -419,7 +419,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     public function getTermsNames($taxonomy, array $args = array()) {
         $terms = $this->getTerms($taxonomy, $args);
         $termsNames = array();
-        if (kt_array_isset_and_not_empty($terms)) {
+        if (KT::arrayIssetAndNotEmpty($terms)) {
             foreach ($terms as $term) {
                 $termsNames[$term->term_id] = $term->name;
             }
@@ -441,7 +441,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     public function getTermsSlugs($taxonomy, array $args = array()) {
         $terms = $this->getTerms($taxonomy, $args);
         $termsNames = array();
-        if (kt_array_isset_and_not_empty($terms)) {
+        if (KT::arrayIssetAndNotEmpty($terms)) {
             foreach ($terms as $term) {
                 $termsNames[$term->term_id] = $term->slug;
             }
@@ -458,7 +458,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @return boolean
      */
     public function hasExcrept() {
-        if (kt_isset_and_not_empty($this->getPost()->post_excerpt)) {
+        if (KT::issetAndNotEmpty($this->getPost()->post_excerpt)) {
             return true;
         }
         return false;
@@ -473,7 +473,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @return boolean
      */
     public function hasThumbnail() {
-        if (kt_isset_and_not_empty($this->getMetaValue("_thumbnail_id"))) {
+        if (KT::issetAndNotEmpty($this->getMetaValue("_thumbnail_id"))) {
             return true;
         }
         return false;
@@ -492,7 +492,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     private function initAuthor() {
         $authorId = $this->getPost()->post_author;
 
-        if (kt_is_id_format($authorId)) {
+        if (KT::isIdFormat($authorId)) {
             $author = new KT_WP_User_Base_Model($authorId);
             $this->setAuthor($author);
         }
@@ -556,9 +556,9 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @return mixed|null|WP_Error Term Row from database
      */
     public static function getTaxonomyTerm($termId, $taxonomy) {
-        if (kt_isset_and_not_empty($termId)) {
+        if (KT::issetAndNotEmpty($termId)) {
             $term = get_term($termId, $taxonomy);
-            if (kt_isset_and_not_empty($term)) {
+            if (KT::issetAndNotEmpty($term)) {
                 return $term;
             }
         }
@@ -577,7 +577,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      */
     public static function getTaxonomyTermName($termId, $taxonomy) {
         $term = self::getTaxonomyTerm($termId, $taxonomy);
-        if (kt_isset_and_not_empty($term)) {
+        if (KT::issetAndNotEmpty($term)) {
             return $term->name;
         }
         return null;
@@ -595,7 +595,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      */
     public static function getTaxonomyTermSlug($termId, $taxonomy) {
         $term = self::getTaxonomyTerm($termId, $taxonomy);
-        if (kt_isset_and_not_empty($term)) {
+        if (KT::issetAndNotEmpty($term)) {
             return $term->slug;
         }
         return null;
@@ -615,7 +615,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     public static function getTermCollectionByPost(WP_Post $post, $taxonomy = KT_WP_CATEGORY_KEY, $args = array()) {
         $terms = wp_get_object_terms($post->ID, $taxonomy, $args);
 
-        if (kt_isset_and_not_empty($terms) && !is_wp_error($terms)) {
+        if (KT::issetAndNotEmpty($terms) && !is_wp_error($terms)) {
             return $terms;
         }
 
@@ -637,7 +637,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         global $wpdb;
         $results = array();
 
-        $post = kt_setup_post_object($postId); // nastaví post object
+        $post = KT::setupPostObject($postId); // nastaví post object
         if (is_object($post)) {
             $query = "SELECT meta_key, meta_value FROM {$wpdb->postmeta} WHERE post_id = %d";
             $prepareData[] = $post->ID;
@@ -684,7 +684,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      */
     public static function getPostMeta($postId, $metaKey, $emptyText = true) {
         $metaValue = self::getPostMetaValue($postId, $metaKey);
-        if (kt_isset_and_not_empty($metaValue)) {
+        if (KT::issetAndNotEmpty($metaValue)) {
             return $metaValue;
         }
         if ($emptyText === true) {

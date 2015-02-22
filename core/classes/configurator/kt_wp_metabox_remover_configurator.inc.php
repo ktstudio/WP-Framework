@@ -24,7 +24,7 @@ final class KT_WP_Metabox_Remover_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function removeMetabox($metaboxId, $page, $context) {
-        if (kt_isset_and_not_empty($metaboxId) && kt_isset_and_not_empty($page) && kt_isset_and_not_empty($context)) {
+        if (KT::issetAndNotEmpty($metaboxId) && KT::issetAndNotEmpty($page) && KT::issetAndNotEmpty($context)) {
             array_push($this->data, array($metaboxId, $page, $context));
         }
         return $this;

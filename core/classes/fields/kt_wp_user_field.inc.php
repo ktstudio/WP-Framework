@@ -27,7 +27,7 @@ class KT_WP_User_Field extends KT_Select_Field {
     }
 
     private function getAllUserRoles() {
-        if (kt_not_isset_or_empty($this->allUserRoles)) {
+        if (KT::notIssetOrEmpty($this->allUserRoles)) {
             $this->allUserRolesInit();
         }
 
@@ -82,7 +82,7 @@ class KT_WP_User_Field extends KT_Select_Field {
      * @return \KT_WP_User_Field
      */
     public function setUserMetaQuery(array $userMetaQuery) {
-        if (kt_isset_and_not_empty($userMetaQuery)) {
+        if (KT::issetAndNotEmpty($userMetaQuery)) {
             $this->userMetaQuery = $userMetaQuery;
         }
 
@@ -100,7 +100,7 @@ class KT_WP_User_Field extends KT_Select_Field {
      * @return type
      */
     public function getOptionContent() {
-        if (kt_isset_and_not_empty($this->getUserRole())) {
+        if (KT::issetAndNotEmpty($this->getUserRole())) {
             return $html = $this->getSelectOptionByUserRole($this->getUserRole());
         }
 
@@ -129,8 +129,8 @@ class KT_WP_User_Field extends KT_Select_Field {
 
         $usersList = $this->getUsersByRole($userRoleName);
         $fieldValue = $this->getValue();
-        if (kt_isset_and_not_empty($usersList) && count($usersList) > 0) {
-            if (kt_isset_and_not_empty($optionHead)) {
+        if (KT::issetAndNotEmpty($usersList) && count($usersList) > 0) {
+            if (KT::issetAndNotEmpty($optionHead)) {
                 $html .= "<optgroup label=\"$optionHead\">";
             }
             foreach ($usersList as $user) {
@@ -139,7 +139,7 @@ class KT_WP_User_Field extends KT_Select_Field {
                 }
                 $html .= "<option value=\"$user->ID\" $selected>$user->display_name [$user->user_login]</option>";
             }
-            if (kt_isset_and_not_empty($optionHead)) {
+            if (KT::issetAndNotEmpty($optionHead)) {
                 $html .= "</optgroup>";
             }
         }
@@ -160,7 +160,7 @@ class KT_WP_User_Field extends KT_Select_Field {
 
         $html = "";
 
-        if (kt_isset_and_not_empty($this->getAllUserRoles())) {
+        if (KT::issetAndNotEmpty($this->getAllUserRoles())) {
             foreach ($this->getAllUserRoles() as $roleSlug => $roleName) {
                 $html .= $this->getSelectOptionByUserRole($roleSlug, $roleName);
             }
@@ -193,7 +193,7 @@ class KT_WP_User_Field extends KT_Select_Field {
         );
         $userMetaQuery = $this->getUserMetaQuery();
 
-        if (kt_isset_and_not_empty($userMetaQuery) && is_array($userMetaQuery) && count($userMetaQuery) > 0) {
+        if (KT::issetAndNotEmpty($userMetaQuery) && is_array($userMetaQuery) && count($userMetaQuery) > 0) {
             $userQueryParams["meta_query"] = $userMetaQuery;
         }
 

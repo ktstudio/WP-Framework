@@ -30,7 +30,7 @@ class KT_Admin_Columns {
     private $postType;
 
     function __construct($postType) {
-        if (kt_not_isset_or_empty($postType)) {
+        if (KT::notIssetOrEmpty($postType)) {
             throw new KT_Not_Set_Argument_Exception("postType");
         }
         $this->postType = $postType;
@@ -48,7 +48,7 @@ class KT_Admin_Columns {
             $indexes = array();
             foreach ($this->columns as $key => $args) {
                 $columns[$key] = $args[self::LABEL_PARAM_KEY];
-                $index = kt_try_get_int($args[self::INDEX_PARAM_KEY]);
+                $index = KT::tryGetInt($args[self::INDEX_PARAM_KEY]);
                 if (is_numeric($index) && $index >= 0) {
                     $indexes[$key] = $index;
                 }
@@ -56,8 +56,8 @@ class KT_Admin_Columns {
             $defaults = array_merge($defaults, $columns);
             foreach ($indexes as $key => $index) { // případné repozicování na základě zadaných indexů
                 $column = $defaults[$key]; // mezipaměť pro vložení
-                $defaults = kt_array_remove_by_key($defaults, $key); // odstranění ze současné pozice
-                $defaults = kt_array_insert($defaults, $index, $key, $column); // nová požadovaná pozice
+                $defaults = KT::arrayRemoveByKey($defaults, $key); // odstranění ze současné pozice
+                $defaults = KT::arrayInsert($defaults, $index, $key, $column); // nová požadovaná pozice
             }
         }
         return $defaults;
@@ -79,7 +79,7 @@ class KT_Admin_Columns {
                 if ($args[self::SORTABLE_PARAM_KEY]) {
                     $columns[$key] = $key;
                 } else {
-                    kt_array_remove_by_key($columns, $key);
+                    KT::arrayRemoveByKey($columns, $key);
                 }
             }
         }
@@ -104,11 +104,11 @@ class KT_Admin_Columns {
                 break;
             case self::POST_PROPERTY_TYPE_KEY:
                 $post = get_post($postId);
-                if (kt_isset_and_not_empty($post)) {
+                if (KT::issetAndNotEmpty($post)) {
                     $property = $args[self::PROPERTY_PARAM_KEY];
                     $value = $post->$property;
                     $filterFunction = $args[self::FILTER_FUNCTION];
-                    if (kt_isset_and_not_empty($filterFunction)) {
+                    if (KT::issetAndNotEmpty($filterFunction)) {
                         $value = apply_filters("$filterFunction", $value);
                     }
                     echo $value;
@@ -121,7 +121,7 @@ class KT_Admin_Columns {
                 if (isset($postMeta)) {
                     $value = $postMeta;
                     $filterFunction = $args[self::FILTER_FUNCTION];
-                    if (kt_isset_and_not_empty($filterFunction)) {
+                    if (KT::issetAndNotEmpty($filterFunction)) {
                         $value = apply_filters($filterFunction, $value);
                     }
                     echo $value;
