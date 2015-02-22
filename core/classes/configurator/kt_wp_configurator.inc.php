@@ -402,15 +402,19 @@ final class KT_WP_Configurator {
             $themeSettings->setRenderSaveButton()->register();
         }
 
+        $postArchiveMenu = $this->getPostArchiveMenu();
+        // aplikace archivy post typů v menu
+        if ($postArchiveMenu === true) {
+            add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"), 10);
+        } elseif ($postArchiveMenu === false) {
+            add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"), 10);
+        }
         if (is_admin()) {
             // archivy post typů v menu
-            $postArchiveMenu = $this->getPostArchiveMenu();
             if ($postArchiveMenu === true) {
                 add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
-                add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"));
             } elseif ($postArchiveMenu === false) {
                 add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
-                add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"));
             }
         } else {
             // (images) lazy loading
@@ -872,8 +876,8 @@ final class KT_WP_Configurator {
             }
 
             wp_register_script($script->getId(), $script->getSource(), $script->getDeps(), $script->getVersion(), $script->getInFooter());
-            if(KT::issetAndNotEmpty($script->getLocalizationData())){
-                foreach($script->getLocalizationData() as $name => $data){
+            if (KT::issetAndNotEmpty($script->getLocalizationData())) {
+                foreach ($script->getLocalizationData() as $name => $data) {
                     wp_localize_script($script->getId(), $name, $data);
                 }
             }
@@ -1051,7 +1055,7 @@ final class KT_WP_Configurator {
     public function postArchivesMenuMetaBoxCallBack() {
         $postTypes = get_post_types(array("show_in_nav_menus" => true, "has_archive" => true), "object");
         if (kt_array_isset_and_not_empty($postTypes)) {
-            foreach ($postTypes as &$postType) {
+            foreach ($postTypes as $postType) {
                 $postType->classes = array();
                 $postType->type = $postType->name;
                 $postType->object_id = $postType->name;
@@ -1063,7 +1067,7 @@ final class KT_WP_Configurator {
 
             kt_the_tabs_indent(0, "<div id=\"kt-archive\" class=\"posttypediv\">", true);
             kt_the_tabs_indent(1, "<div id=\"tabs-panel-kt-archive\" class=\"tabs-panel tabs-panel-active\">", true);
-            kt_the_tabs_indent(2, "<ul id=\"ctp-archive-checklist\" class=\"categorychecklist form-no-clear\">", true);
+            kt_the_tabs_indent(2, "<ul id=\"kt-archive-checklist\" class=\"categorychecklist form-no-clear\">", true);
             kt_the_tabs_indent(3, walk_nav_menu_tree(array_map("wp_setup_nav_menu_item", $postTypes), 0, (object) array("walker" => $walker)), true);
             kt_the_tabs_indent(2, "</ul>", true);
             kt_the_tabs_indent(1, "</div>", true);
@@ -1073,7 +1077,7 @@ final class KT_WP_Configurator {
 
             kt_the_tabs_indent(0, "<p class=\"button-controls\">", true);
             kt_the_tabs_indent(1, "<span class=\"add-to-menu\">", true);
-            kt_the_tabs_indent(2, "<input type=\"submit\" id=\"submit-kt-archive\" name=\"add-ctp-archive-menu-item\" class=\"button-secondary submit-add-to-menu\" value=\"$addMenuTitle\" />", true);
+            kt_the_tabs_indent(2, "<input type=\"submit\" id=\"submit-kt-archive\" name=\"kt-add-archive-menu-item\" class=\"button-secondary submit-add-to-menu\" value=\"$addMenuTitle\" />", true);
             kt_the_tabs_indent(1, "</span>", true);
             kt_the_tabs_indent(0, "</p>", true, true);
         } else {
@@ -1088,7 +1092,7 @@ final class KT_WP_Configurator {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param string $html
+     * @param array $items
      */
     public function postArchivesMenuFilter($items) {
         if (kt_array_isset_and_not_empty($items)) {
