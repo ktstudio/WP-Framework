@@ -179,11 +179,11 @@ class KT_WP_Post_File_List extends KT_WP_Post_Attachments_Base {
             return "";
         }
 
-        if (kt_isset_and_not_empty($this->getCustomIcon())) {
+        if (KT::issetAndNotEmpty($this->getCustomIcon())) {
             return $html = "<span class=\"kt-custom-icon\"><img src=\"{$this->getCustomIcon()}\" alt=\"file-icon\"></span>";
         }
 
-        if (kt_isset_and_not_empty($this->getDashIcons())) {
+        if (KT::issetAndNotEmpty($this->getDashIcons())) {
             return $html = "<span class=\"dashicon {$this->getDashIcons()}\"></span>";
         }
 

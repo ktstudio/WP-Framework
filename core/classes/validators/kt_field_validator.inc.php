@@ -274,7 +274,7 @@ class KT_Field_Validator {
             return true;
         }
 
-        if (kt_isset_and_not_empty($this->param)) {
+        if (KT::issetAndNotEmpty($this->param)) {
             if (strlen($value) == $this->param) {
                 return true;
             }
@@ -302,7 +302,7 @@ class KT_Field_Validator {
 
         $param = $this->getParam();
 
-        if (kt_isset_and_not_empty($param) && self::integer((int) $param)) {
+        if (KT::issetAndNotEmpty($param) && self::integer((int) $param)) {
             if (strlen($value) <= $param) {
                 return true;
             }
@@ -330,7 +330,7 @@ class KT_Field_Validator {
 
         $param = $this->getParam();
 
-        if (kt_isset_and_not_empty($param) && self::integer((int) $param)) {
+        if (KT::issetAndNotEmpty($param) && self::integer((int) $param)) {
             if (strlen($value) >= $param) {
                 return true;
             }

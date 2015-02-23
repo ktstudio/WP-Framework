@@ -40,7 +40,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      */
     public function getField() {
 
-        if (kt_not_isset_or_empty($this->getOptionsData())) {
+        if (KT::notIssetOrEmpty($this->getOptionsData())) {
             return "<span class=\"input-wrap checkbox\">" . KT_EMPTY_SYMBOL . "</span>";
         }
         
@@ -54,7 +54,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
 
             $data = $this->getValue();
 
-            if (kt_isset_and_not_empty($data) && is_array($data)) {
+            if (KT::issetAndNotEmpty($data) && is_array($data)) {
                 if (in_array($key, array_keys($data))) {
                     $html .=" checked=\"checked\"";
                 }
@@ -111,7 +111,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
 
         $html = "";
 
-        if (kt_isset_and_not_empty($this->getPostPrefix())) {
+        if (KT::issetAndNotEmpty($this->getPostPrefix())) {
             $html .= "name=\"{$this->getPostPrefix()}[{$this->getName()}][$inputName]\" ";
         } else {
             $html .= "name=\"{$this->getName()}[$inputName]\" ";

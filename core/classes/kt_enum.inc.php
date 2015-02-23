@@ -19,13 +19,13 @@ abstract class KT_Enum {
     private $translates = array();
 
     function __construct($currentValue = null, $currentKey = null, array $customKeyValues = null) {
-        if (kt_isset_and_not_empty($customKeyValues)) {
+        if (KT::issetAndNotEmpty($customKeyValues)) {
             $this->setCustomKeyValues($customKeyValues);
         }
-        if (kt_isset_and_not_empty($currentKey)) {
+        if (KT::issetAndNotEmpty($currentKey)) {
             $this->setCurrentKey($currentKey);
         }
-        if (kt_isset_and_not_empty($currentValue)) {
+        if (KT::issetAndNotEmpty($currentValue)) {
             $this->setCurrentValue($currentValue);
         }
     }
@@ -148,7 +148,7 @@ abstract class KT_Enum {
      */
     public final function isValidValue($checkedValue) {
         $customKeyValues = $this->getCustomKeyValues();
-        if (kt_isset_and_not_empty($customKeyValues) && count($customKeyValues) > 0) {
+        if (KT::issetAndNotEmpty($customKeyValues) && count($customKeyValues) > 0) {
             if (in_array($checkedValue, $customKeyValues)) {
                 return true;
             }
@@ -173,7 +173,7 @@ abstract class KT_Enum {
      */
     public final function isValidKey($checkedKey) {
         $customKeyValues = $this->getCustomKeyValues();
-        if (kt_isset_and_not_empty($customKeyValues) && count($customKeyValues) > 0) {
+        if (KT::issetAndNotEmpty($customKeyValues) && count($customKeyValues) > 0) {
             if (array_key_exists($checkedKey, $customKeyValues)) {
                 return true;
             }
@@ -198,7 +198,7 @@ abstract class KT_Enum {
     public final function getAllValueKeys() {
         $values = array();
         $customKeyValues = $this->getCustomKeyValues();
-        if (kt_isset_and_not_empty($customKeyValues) && count($customKeyValues) > 0) {
+        if (KT::issetAndNotEmpty($customKeyValues) && count($customKeyValues) > 0) {
             foreach ($customKeyValues as $key => $value) {
                 $values[$value] = $key;
             }
@@ -221,7 +221,7 @@ abstract class KT_Enum {
     public final function getAllKeyValues() {
         $values = array();
         $customKeyValues = $this->getCustomKeyValues();
-        if (kt_isset_and_not_empty($customKeyValues) && count($customKeyValues) > 0) {
+        if (KT::issetAndNotEmpty($customKeyValues) && count($customKeyValues) > 0) {
             foreach ($customKeyValues as $key => $value) {
                 $values[$key] = $value;
             }

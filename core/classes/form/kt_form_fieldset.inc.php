@@ -224,7 +224,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
      */
     public function setFieldsData($fieldsData) {
 
-        if (kt_not_isset_or_empty($fieldsData) || !is_array($fieldsData)) {
+        if (KT::notIssetOrEmpty($fieldsData) || !is_array($fieldsData)) {
             return $this;
         }
 
@@ -237,12 +237,12 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
             $fieldValue = $fieldsData[$field->getName()];
 
             if ($field->getFieldType() == KT_Text_Field::FIELD_TYPE) {
-                if ($field->getInputType() == KT_Text_Field::INPUT_DATE && kt_isset_and_not_empty($fieldValue)) {
+                if ($field->getInputType() == KT_Text_Field::INPUT_DATE && KT::issetAndNotEmpty($fieldValue)) {
                     $fieldValue = date("d.m.Y", $fieldValue);
                 }
             }
 
-            if (kt_isset_and_not_empty($fieldValue) || $fieldValue === "0" || $fieldValue === 0) {
+            if (KT::issetAndNotEmpty($fieldValue) || $fieldValue === "0" || $fieldValue === 0) {
                 $field->setValue($fieldValue);
             }
         }
@@ -297,11 +297,11 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
      * @return array
      */
     public function getDataFromGet() {
-        if (kt_not_isset_or_empty($_GET)) {
+        if (KT::notIssetOrEmpty($_GET)) {
             return array();
         }
         $postPrefix = $this->getPostPrefix();
-        if (kt_isset_and_not_empty($postPrefix)) {
+        if (KT::issetAndNotEmpty($postPrefix)) {
             if (array_key_exists($postPrefix, $_GET)) {
                 return $_GET[$postPrefix];
             }
@@ -319,11 +319,11 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
      * @return array
      */
     public function getDataFromPost() {
-        if (kt_not_isset_or_empty($_POST)) {
+        if (KT::notIssetOrEmpty($_POST)) {
             return array();
         }
         $postPrefix = $this->getPostPrefix();
-        if (kt_isset_and_not_empty($postPrefix)) {
+        if (KT::issetAndNotEmpty($postPrefix)) {
             if (array_key_exists($postPrefix, $_POST)) {
                 return $_POST[$postPrefix];
             }
@@ -387,7 +387,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
     public function getInputToTr(KT_Field $field) {
         $html = "<tr>";
 
-        if (kt_isset_and_not_empty($field->getLabel())) {
+        if (KT::issetAndNotEmpty($field->getLabel())) {
             $html .= "<td><label for=\"{$field->getName()}\">{$field->getLabel()}</label></td>";
         }
 
@@ -420,7 +420,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
 
             $html .= "<div class=\"kt-field-simple-container\">";
 
-            if (kt_isset_and_not_empty($fieldLabel) && $displayLables) {
+            if (KT::issetAndNotEmpty($fieldLabel) && $displayLables) {
                 $html .= "<label for=\"{$field->getName()}\">{$fieldLabel}</label>";
             }
 
@@ -445,14 +445,14 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
     public function getStartHtmlOfFieldSet($fieldsetTag = true) {
         $html = "<div {$this->getAttributeString()}>";
 
-        if (kt_isset_and_not_empty($this->getTitle())) {
+        if (KT::issetAndNotEmpty($this->getTitle())) {
             $html .= "<div class=\"panel-heading\"><h2 class=\"panel-title\">{$this->getTitle()}</h2></div>";
         }
 
         $tag = $fieldsetTag ? "fieldset" : "div";
 
         $html .= "<$tag class=\"panel-body\">";
-        if (kt_isset_and_not_empty($this->getDescription())) {
+        if (KT::issetAndNotEmpty($this->getDescription())) {
             $html .= "<p class=\"fieldset-description\">{$this->getDescription()}</p>";
         }
 
@@ -504,14 +504,14 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
                 continue;
             }
 
-            if (kt_isset_and_not_empty($field->getUnit())) {
+            if (KT::issetAndNotEmpty($field->getUnit())) {
                 $unit = $field->getUnit();
             }
 
             $fieldContent .= $this->getInputDataToTr($field);
         }
 
-        if (kt_isset_and_not_empty($fieldContent)) {
+        if (KT::issetAndNotEmpty($fieldContent)) {
             $html .= $this->getStartHtmlOfFieldSet(false);
             $html .= "<table id=\"{$this->getName()}\" class=\"kt-fieldset-data-table $class\">";
             $html .= $fieldContent;
@@ -533,7 +533,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
      * @return bol
      */
     public function hasFields() {
-        if (kt_isset_and_not_empty($this->getFields())) {
+        if (KT::issetAndNotEmpty($this->getFields())) {
             return true;
         }
 
@@ -768,7 +768,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
      * @return \KT_Form_Fieldset
      */
     private function setPostPrefixToAllFields() {
-        if ($this->hasFields() && kt_isset_and_not_empty($this->postPrefix)) {
+        if ($this->hasFields() && KT::issetAndNotEmpty($this->postPrefix)) {
             foreach ($this->fields as $field) {
                 $field->setPostPrefix($this->postPrefix);
             }
@@ -826,7 +826,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
         if ($field->getFieldType() == KT_Checkbox_Field::FIELD_TYPE) {
             $fieldOption = $field->getDataManager()->getData();
             $fieldData = $field->getValue();
-            if (kt_isset_and_not_empty($fieldOption) && kt_isset_and_not_empty($fieldData)) {
+            if (KT::issetAndNotEmpty($fieldOption) && KT::issetAndNotEmpty($fieldData)) {
                 $value = "";
                 foreach ($fieldOption as $key => $optionText) {
                     if (in_array($key, $fieldData)) {
@@ -838,7 +838,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
             }
         }
 
-        if (kt_not_isset_or_empty($value)) {
+        if (KT::notIssetOrEmpty($value)) {
             return;
         }
 

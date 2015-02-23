@@ -10,9 +10,11 @@ abstract class KT_Presenter_Base implements KT_Presentable {
 
     private $model = null;
 
-    public function __construct(KT_Modelable $model) {
+    public function __construct(KT_Modelable $model = null) {
         kt_check_loaded(); // kontrola KT Frameworku
-        $this->setModel($model);
+        if (KT::issetAndNotEmpty($model)) {
+            $this->setModel($model);
+        }
     }
 
     public function getModel() {

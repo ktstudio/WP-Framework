@@ -55,7 +55,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setTitle($title) {
-        if (kt_isset_and_not_empty($title)) {
+        if (KT::issetAndNotEmpty($title)) {
             $this->addNewColumnToData(self::TITLE_COLUMN, $title);
             return $this;
         }
@@ -111,7 +111,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setCode($code) {
-        if (kt_isset_and_not_empty($code)) {
+        if (KT::issetAndNotEmpty($code)) {
             $this->addNewColumnToData(self::CODE_COLUMN, $code);
             return $this;
         }

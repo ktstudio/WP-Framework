@@ -24,7 +24,7 @@ class KT_CRUD_Data_Manager extends KT_Data_Manager_Base {
     // --- gettery a settery ------------------
 
     public function getData() {
-        if (kt_not_isset_or_empty(parent::getData())) {
+        if (KT::notIssetOrEmpty(parent::getData())) {
             $this->initData();
         }
         return parent::getData();
@@ -127,7 +127,7 @@ class KT_CRUD_Data_Manager extends KT_Data_Manager_Base {
 
         $modelName = $this->getModelName();
 
-        if (kt_not_isset_or_empty($table)) {
+        if (KT::notIssetOrEmpty($table)) {
             $table = $modelName::TABLE;
         }
 
@@ -152,15 +152,15 @@ class KT_CRUD_Data_Manager extends KT_Data_Manager_Base {
         $keyColumnName = $this->getKeyColumn();
         $labelColumnName = $this->getLabelColumn();
 
-        if (kt_not_isset_or_empty($keyColumnName)) {
+        if (KT::notIssetOrEmpty($keyColumnName)) {
             throw new KT_Not_Set_Argument_Exception("keyColumnName is not set");
         }
 
-        if (kt_not_isset_or_empty($labelColumnName)) {
+        if (KT::notIssetOrEmpty($labelColumnName)) {
             throw new KT_Not_Set_Argument_Exception("labelColumnName is not set");
         }
 
-        if (kt_not_isset_or_empty($items)) {
+        if (KT::notIssetOrEmpty($items)) {
             return this;
         }
 

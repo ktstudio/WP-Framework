@@ -13,7 +13,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return \kt_post_type_presenter_base
      */
     function __construct(WP_Post $post = null) {
-        if (kt_isset_and_not_empty($post)) {
+        if (KT::issetAndNotEmpty($post)) {
             $postModel = new KT_WP_Post_Base_Model($post);
             $this->setModel($postModel);
         }
@@ -47,7 +47,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         $html = "";
         $terms = $this->getModel()->getTerms($taxonomy, $args);
 
-        if (kt_isset_and_not_empty($terms)) {
+        if (KT::issetAndNotEmpty($terms)) {
             foreach ($terms as $term) {
                 $html .= $before . $term->name . $after;
             }
@@ -73,7 +73,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         $html = "";
         $terms = $this->getModel()->getTerms($taxonomy, $args);
 
-        if (kt_isset_and_not_empty($terms)) {
+        if (KT::issetAndNotEmpty($terms)) {
             foreach ($terms as $term) {
                 $termUrl = get_term_link($term);
                 $html .= $before . "<a href=\"$termUrl\" class=\"kt-term-link $term->slug $taxonomy term-id-{$term->term_id}\" title=\"$term->name\">" . $term->name . "</a>" . $after;
@@ -93,7 +93,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      */
     public function getExcerpt() {
         if ($this->getModel()->hasExcrept()) {
-            return $html = "<p class=\"perex\">{$this->getModel()->getExcerpt()}</p>";
+            return $html = "<p class=\"perex\">{$this->getModel()->getExcerpt(false)}</p>";
         }
         return null;
     }
@@ -130,11 +130,11 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             $titleAttribute = $this->getModel()->getTitleAttribute();
             $image = $this->getThumbnailImage($imageSize, array("class" => "img-responsive", "alt" => $titleAttribute));
             $linkImage = wp_get_attachment_image_src($this->getModel()->getThumbnailId(), KT_WP_IMAGE_SIZE_LARGE);
-            $html = kt_get_tabs_indent(0, "<div id=\"$tagId\" class=\"$tagClass\">", true);
-            $html .= kt_get_tabs_indent(1, "<a href=\"{$linkImage[0]}\" class=\"fbx-link\" title=\"$titleAttribute\">", true);
-            $html .= kt_get_tabs_indent(2, $image, true);
-            $html .= kt_get_tabs_indent(1, "</a>", true);
-            $html .= kt_get_tabs_indent(0, "</div>", true, true);
+            $html = KT::getTabsIndent(0, "<div id=\"$tagId\" class=\"$tagClass\">", true);
+            $html .= KT::getTabsIndent(1, "<a href=\"{$linkImage[0]}\" class=\"fbx-link\" title=\"$titleAttribute\">", true);
+            $html .= KT::getTabsIndent(2, $image, true);
+            $html .= KT::getTabsIndent(1, "</a>", true);
+            $html .= KT::getTabsIndent(0, "</div>", true, true);
             return $html;
         }
         return null;
@@ -183,9 +183,9 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     public static function getImageHtmlTag($imageSrc, array $imageAttr = array()) {
         $attr = "";
 
-        if (kt_isset_and_not_empty($imageSrc)) {
+        if (KT::issetAndNotEmpty($imageSrc)) {
             $parseAttr = wp_parse_args($imageAttr);
-            if (kt_isset_and_not_empty($parseAttr)) {
+            if (KT::issetAndNotEmpty($parseAttr)) {
                 foreach ($parseAttr as $attrName => $attrValue) {
                     $attr .= " $attrName=\"$attrValue\"";
                 }

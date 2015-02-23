@@ -74,7 +74,7 @@ class KT_Mailer {
      * @return string
      */
     private function getHeader() {
-        if (kt_not_isset_or_empty($this->header)) {
+        if (KT::notIssetOrEmpty($this->header)) {
             $this->setupHeader();
         }
 
@@ -114,10 +114,9 @@ class KT_Mailer {
      * @return \KT_Mailer
      */
     public function setSubject($subject) {
-        if (kt_isset_and_not_empty($subject)) {
+        if (KT::issetAndNotEmpty($subject)) {
             $this->subject = strip_tags(htmlspecialchars($subject));
         }
-        
         return $this;
     }
 
@@ -138,7 +137,6 @@ class KT_Mailer {
             $this->recipients = self::getHeaderEmail($recipientEmail, $recipientName);
             return $this;
         }
-
         throw new InvalidArgumentException(__("Příjmence \"$recipientEmail\" není platnný e-mail!", KT_DOMAIN));
     }
 
@@ -167,16 +165,33 @@ class KT_Mailer {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz  
      * 
-     * @param type $sender_name
+     * @param type $senderName
      * @return \KT_Mailer
      * @throws KT_Not_Set_Argument_Exception
      */
-    public function setSenderName($sender_name) {
-        if (kt_isset_and_not_empty($sender_name)) {
-            $this->senderName = $sender_name;
+    public function setSenderName($senderName) {
+        if (KT::issetAndNotEmpty($senderName)) {
+            $this->senderName = $senderName;
             return $this;
         }
-        throw new KT_Not_Set_Argument_Exception('sender_name');
+        throw new KT_Not_Set_Argument_Exception('senderName');
+    }
+
+    /**
+     * Nastaví odesílatele: email + jméno najednou
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz 
+     * 
+     * @param string $senderEmail
+     * @param string $senderName
+     * @return \KT_ITH_Mailer
+     * @throws KT_ITH_Not_Set_Argument_Exception
+     */
+    public function setSender($senderEmail, $senderName) {
+        $this->setSenderEmail($senderEmail);
+        $this->setSenderName($senderName);
+        return $this;
     }
 
     /**
@@ -267,7 +282,7 @@ class KT_Mailer {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function addContent($html) {
-        if (kt_isset_and_not_empty($html)) {
+        if (KT::issetAndNotEmpty($html)) {
             $content = $this->getContent();
             $content .= $html . "<br />";
             $this->setContent($content);
@@ -291,7 +306,6 @@ class KT_Mailer {
             array_push($currentAttachmentCollection, $attachment);
             $this->setAttachments($currentAttachmentCollection);
         }
-
         return $this;
     }
 
@@ -305,19 +319,16 @@ class KT_Mailer {
      * @return \KT_Mailer
      */
     public function addAtachments(array $attachments) {
-        if (kt_not_isset_or_empty($attachments)) {
+        if (KT::notIssetOrEmpty($attachments)) {
             return $this;
         }
-
         $currentAttachmentCollection = $this->getAttachments();
-
-        if (kt_isset_and_not_empty($currentAttachmentCollection)) {
+        if (KT::issetAndNotEmpty($currentAttachmentCollection)) {
             $newAttachmentCollection = array_merge($currentAttachmentCollection, $attachments);
             $this->setAttachments($newAttachmentCollection);
         } else {
             $this->setAttachments($attachments);
         }
-
         return $this;
     }
 
@@ -336,11 +347,10 @@ class KT_Mailer {
      */
     public function send() {
         $this->validate();
-
         $content = $this->getContent();
-        if (kt_isset_and_not_empty($content) && KT_Content_Replacer::check($content)) { // pokud je zadaný obsah a exitují v něm tagy
+        if (KT::issetAndNotEmpty($content) && KT_Content_Replacer::check($content)) { // pokud je zadaný obsah a exitují v něm tagy
             $contentReplacer = $this->getContentReplacer();
-            if (kt_isset_and_not_empty($contentReplacer)) { // a je zadán nahrazovač obsahu
+            if (KT::issetAndNotEmpty($contentReplacer)) { // a je zadán nahrazovač obsahu
                 $content = $contentReplacer->update($content); // tak nahradit tagy
             }
         }
@@ -368,9 +378,7 @@ class KT_Mailer {
         $header .= "From: " . self::getHeaderEmail($this->getSenderEmail(), $this->getSenderName()) . "\r\n";
         $header .= "Reply-To: {$this->getSenderEmail()}\r\n";
         $header .= "Return-Path: {$this->getSenderEmail()}\r\n";
-
         $this->setHeader($header);
-
         return $this;
     }
 
@@ -384,10 +392,9 @@ class KT_Mailer {
      * @throws KT_Not_Set_Argument_Exception
      */
     private function validate() {
-        $mustBeSetup = array('recipients', 'content');
-
+        $mustBeSetup = array("recipients", "content");
         foreach ($mustBeSetup as $value) {
-            if (kt_not_isset_or_empty($this->$value)) {
+            if (KT::notIssetOrEmpty($this->$value)) {
                 throw new KT_Not_Set_Argument_Exception($value);
             }
         }
@@ -402,7 +409,7 @@ class KT_Mailer {
      * @return boolean
      */
     public static function isEmail($value) {
-        if (kt_isset_and_not_empty($value) && is_email($value)) {
+        if (KT::issetAndNotEmpty($value) && is_email($value)) {
             return true;
         }
         return false;
@@ -420,14 +427,12 @@ class KT_Mailer {
      */
     public static function getHeaderEmail($email, $name = null) {
         $result = null;
-
-        if (kt_isset_and_not_empty($email)) {
-            if (kt_isset_and_not_empty($name)) {
+        if (KT::issetAndNotEmpty($email)) {
+            if (KT::issetAndNotEmpty($name)) {
                 $result .= "$name ";
             }
             $result .= "<$email>";
         }
-
         return $result;
     }
 

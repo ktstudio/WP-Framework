@@ -132,19 +132,19 @@ class KT_Google_Chart {
 
     private function getOptions() {
         $options = array();
-        if (kt_isset_and_not_empty($this->title)) {
+        if (KT::issetAndNotEmpty($this->title)) {
             $options["title"] = $this->title;
         }
-        if (kt_isset_and_not_empty($this->colors)) {
+        if (KT::issetAndNotEmpty($this->colors)) {
             $options["colors"] = $this->colors;
         }
-        if (kt_isset_and_not_empty($this->theme)) {
+        if (KT::issetAndNotEmpty($this->theme)) {
             $options["theme"] = $this->theme;
         }
-        if (kt_isset_and_not_empty($this->width)) {
+        if (KT::issetAndNotEmpty($this->width)) {
             $options["width"] = $this->width;
         }
-        if (kt_isset_and_not_empty($this->height)) {
+        if (KT::issetAndNotEmpty($this->height)) {
             $options["height"] = $this->height;
         }
         return $options;

@@ -60,7 +60,7 @@ abstract class KT_Placeholder_Field_base extends KT_Field {
      */
     public function isPlaceholder() {
         $placeholder = $this->getPlaceholder();
-        return kt_isset_and_not_empty($placeholder);
+        return KT::issetAndNotEmpty($placeholder);
     }
 
 }

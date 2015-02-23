@@ -22,7 +22,7 @@ abstract class KT_Shortcode_Base implements KT_Registrable {
      * @param string $tag
      */
     function __construct($tag, $buttonKey = null, $buttonScriptPath = null) {
-        if (kt_isset_and_not_empty($tag)) {
+        if (KT::issetAndNotEmpty($tag)) {
             $this->tag = $tag;
         } else {
             throw new KT_Not_Set_Argument_Exception("tag");
@@ -93,7 +93,7 @@ abstract class KT_Shortcode_Base implements KT_Registrable {
         add_shortcode($this->getTag(), array(&$this, "handler"));
         $buttonKey = $this->getButtonKey();
         $buttonScriptPath = $this->getButtonScriptPath();
-        if (kt_isset_and_not_empty($buttonKey) && kt_isset_and_not_empty($buttonScriptPath)) {
+        if (KT::issetAndNotEmpty($buttonKey) && KT::issetAndNotEmpty($buttonScriptPath)) {
             add_action("admin_init", array(&$this, "adminInitAction"));
         }
     }

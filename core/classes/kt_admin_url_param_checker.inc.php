@@ -98,7 +98,7 @@ class KT_Admin_URL_Param_Checker {
             return false;
         }
         
-        if(kt_not_isset_or_empty($this->getParamCollection())){
+        if(KT::notIssetOrEmpty($this->getParamCollection())){
             return $this->getResult();
         }
         
@@ -131,7 +131,7 @@ class KT_Admin_URL_Param_Checker {
             return false;
         }
         
-        if(kt_not_isset_or_empty($paramValue)){
+        if(KT::notIssetOrEmpty($paramValue)){
             return true;
         }
         

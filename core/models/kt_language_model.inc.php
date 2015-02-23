@@ -52,7 +52,7 @@ class KT_Language_Model extends KT_Catalog_Base_Model {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setDecimalPoint($decimalPoint) {
-        if (kt_isset_and_not_empty($decimalPoint)) {
+        if (KT::issetAndNotEmpty($decimalPoint)) {
             $this->decimal_point = $decimalPoint;
             return $this;
         }
@@ -82,7 +82,7 @@ class KT_Language_Model extends KT_Catalog_Base_Model {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setThousandsSeparator($thousandsSeparator) {
-        if (kt_isset_and_not_empty($thousandsSeparator)) {
+        if (KT::issetAndNotEmpty($thousandsSeparator)) {
             $this->thousands_separator = $thousandsSeparator;
             return $this;
         }
@@ -116,7 +116,7 @@ class KT_Language_Model extends KT_Catalog_Base_Model {
      * @return mixed float|null
      */
     public static function getFormatedNumber($number, $decimals = KT_CURRENCY_DECIMAL_COUNT, $decimalPoint = KT_LANGUAGE_DECIMAL_POINT, $thousandsSeparator = KT_LANGUAGE_THOUSANDS_SEPARATOR) {
-        if (kt_isset_and_not_empty($number) && is_numeric($number) && is_numeric($decimals)) {
+        if (KT::issetAndNotEmpty($number) && is_numeric($number) && is_numeric($decimals)) {
             return number_format($number, intval($decimals), $decimalPoint, $thousandsSeparator);
         }
         return null;

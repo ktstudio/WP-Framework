@@ -56,13 +56,13 @@ class KT_WP_Term_Base_Presenter extends KT_Presenter_Base {
      * @return string
      */
     public static function getPagination(WP_Query $wp_query = null, $userArgs = array()) {
-        if (kt_not_isset_or_empty($wp_query)) {
+        if (KT::notIssetOrEmpty($wp_query)) {
             global $wp_query;
         }
 
         $paged = get_query_var("paged");
 
-        if (kt_not_isset_or_empty($paged)) {
+        if (KT::notIssetOrEmpty($paged)) {
             $paged = htmlspecialchars($paged);
         }
 
@@ -96,7 +96,7 @@ class KT_WP_Term_Base_Presenter extends KT_Presenter_Base {
      * @throws KT_Not_Set_Argument_Exception
      */
     public static function getAllTermsByTaxonomy($taxonomyName) {
-        if (kt_isset_and_not_empty($taxonomyName)) {
+        if (KT::issetAndNotEmpty($taxonomyName)) {
             global $wpdb;
             $query = "SELECT DISTINCT {$wpdb->terms}.term_id as ID, {$wpdb->terms}.slug as slug, {$wpdb->terms}.name as name
 					  FROM {$wpdb->terms}

@@ -90,10 +90,10 @@ class KT_CRUD_Admin_Column {
      * @return \KT_CRUD_Admin_Column
      */
     public function setPosition($position) {
-        if( ! kt_try_get_int($position)){
+        if( ! KT::tryGetInt($position)){
             throw new InvalidArgumentException("position have to by an int type");
         }
-        $this->position = kt_try_get_int($position);
+        $this->position = KT::tryGetInt($position);
         return $this;
     }
     
@@ -273,7 +273,7 @@ class KT_CRUD_Admin_Column {
      * @throws InvalidArgumentException
      */
     public function getCellContent( $item ){      
-        if(kt_not_isset_or_empty($item)){
+        if(KT::notIssetOrEmpty($item)){
             return "";
         }
         
@@ -441,7 +441,7 @@ class KT_CRUD_Admin_Column {
      * @return string
      */
     private function getPrefixContent(){
-        if(kt_isset_and_not_empty($this->getPrefix())){
+        if(KT::issetAndNotEmpty($this->getPrefix())){
             return $this->getPrefix();
         }
         
@@ -458,7 +458,7 @@ class KT_CRUD_Admin_Column {
      * @return string
      */
     private function getSuffixContent(){
-        if(kt_isset_and_not_empty($this->getSuffix())){
+        if(KT::issetAndNotEmpty($this->getSuffix())){
             return $this->getSuffix();
         }
         

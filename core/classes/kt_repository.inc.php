@@ -241,8 +241,8 @@ class KT_Repository {
      * @return \KT_Repository
      */
     private function setIterator($iterator) {
-        if (kt_is_id_format($iterator)) {
-            $iterator = kt_try_get_int($iterator);
+        if (KT::isIdFormat($iterator)) {
+            $iterator = KT::tryGetInt($iterator);
             $this->iterator = $iterator;
         }
 
@@ -338,8 +338,8 @@ class KT_Repository {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setLimit($limit) {
-        if (kt_is_id_format($limit)) {
-            $limit = kt_try_get_int($limit);
+        if (KT::isIdFormat($limit)) {
+            $limit = KT::tryGetInt($limit);
             $this->limit = $limit;
         }
 
@@ -426,8 +426,8 @@ class KT_Repository {
      * @return \KT_Repository
      */
     protected function setCountItems($countItems) {
-        if (kt_is_id_format($countItems)) {
-            $countItems = kt_try_get_int($countItems);
+        if (KT::isIdFormat($countItems)) {
+            $countItems = KT::tryGetInt($countItems);
             $this->countItems = $countItems;
         }
 
@@ -452,7 +452,7 @@ class KT_Repository {
 
         $prepareQuery = $wpdb->prepare($query, $prepareStatmentData);
 
-        if (kt_isset_and_not_empty($prepareQuery)) {
+        if (KT::issetAndNotEmpty($prepareQuery)) {
             $this->setQuery($prepareQuery);
             return $this;
         }
@@ -544,7 +544,7 @@ class KT_Repository {
     public function selectData() {
         global $wpdb;
 
-        if (kt_not_isset_or_empty($this->getQuery())) {
+        if (KT::notIssetOrEmpty($this->getQuery())) {
             $this->createQuery();
         }
 
@@ -618,7 +618,7 @@ class KT_Repository {
      */
     private function createConditionsQuery() {
 
-        if (kt_not_isset_or_empty($this->getQueryParams())) {
+        if (KT::notIssetOrEmpty($this->getQueryParams())) {
             return "";
         }
 
@@ -631,7 +631,7 @@ class KT_Repository {
 
         foreach ($this->getQueryParams() as $key => $value) {
 
-            if (kt_isset_and_not_empty($value['condition'])) {
+            if (KT::issetAndNotEmpty($value['condition'])) {
                 $query .= "{$value['column']} {$value['condition']} {$this->getValueTypeForDbQuery($value['value'])}";
                 array_push($preparedData, $value['value']);
             }
@@ -666,17 +666,17 @@ class KT_Repository {
 
         $conditionData = $this->createConditionsQuery();
 
-        if (kt_isset_and_not_empty($conditionData)) {
+        if (KT::issetAndNotEmpty($conditionData)) {
             $query .= $conditionData["query"];
             $preparData = array_merge($preparData, $conditionData["prepareData"]);
         }
 
-        if (kt_isset_and_not_empty($this->getOrderby())) {
+        if (KT::issetAndNotEmpty($this->getOrderby())) {
             $query .= " ORDER BY {$this->getOrderby()} {$this->getOrder()}";
         }
 
-        if (kt_isset_and_not_empty($this->getLimit())) {
-            if (kt_isset_and_not_empty($this->getOffset())) {
+        if (KT::issetAndNotEmpty($this->getLimit())) {
+            if (KT::issetAndNotEmpty($this->getOffset())) {
                 $offset = "%d ,";
                 array_push($preparData, $this->getOffset());
             }
@@ -684,7 +684,7 @@ class KT_Repository {
             array_push($preparData, $this->getLimit());
         }
         
-        if(kt_isset_and_not_empty($preparData)){
+        if(KT::issetAndNotEmpty($preparData)){
             $this->setQuery($wpdb->prepare($query, $preparData));
             return $this;
         }
@@ -706,7 +706,7 @@ class KT_Repository {
     private function getCoutOfAllItemsInDb() {
         global $wpdb;
 
-        if (kt_not_isset_or_empty($this->getQuery())) {
+        if (KT::notIssetOrEmpty($this->getQuery())) {
             $this->createQuery('COUNT(*)');
         }
 

@@ -29,7 +29,7 @@ abstract class KT_Current_User_Presenter_Base {
      * @return \KT_WP_User_Base_Model
      */
     public function getCurrentUser() {
-        if (kt_isset_and_not_empty($this->currentUser)) {
+        if (KT::issetAndNotEmpty($this->currentUser)) {
             return $this->currentUser;
         } else {
             return $this->initCurrentUser();
@@ -46,7 +46,7 @@ abstract class KT_Current_User_Presenter_Base {
      */
     public function getCurrentUserId() {
         $currentUser = getCurrentUser();
-        if (kt_isset_and_not_empty($currentUser)) {
+        if (KT::issetAndNotEmpty($currentUser)) {
             return $currentUser->ID;
         }
         return null;
@@ -62,7 +62,7 @@ abstract class KT_Current_User_Presenter_Base {
      */
     public function getCurrentUserFirstName() {
         $currentUser = getCurrentUser();
-        if (kt_isset_and_not_empty($currentUser)) {
+        if (KT::issetAndNotEmpty($currentUser)) {
             return $currentUser->first_name;
         }
         return null;
@@ -78,7 +78,7 @@ abstract class KT_Current_User_Presenter_Base {
      */
     public function getCurrentUserLastName() {
         $currentUser = getCurrentUser();
-        if (kt_isset_and_not_empty($currentUser)) {
+        if (KT::issetAndNotEmpty($currentUser)) {
             return $currentUser->last_name;
         }
         return null;
@@ -94,7 +94,7 @@ abstract class KT_Current_User_Presenter_Base {
      */
     public function getCurrentUserEmail() {
         $currentUser = getCurrentUser();
-        if (kt_isset_and_not_empty($currentUser)) {
+        if (KT::issetAndNotEmpty($currentUser)) {
             return $currentUser->user_email;
         }
         return null;
@@ -124,7 +124,7 @@ abstract class KT_Current_User_Presenter_Base {
      */
     public function getCurrentUserFeedLink($feed = "") {
         $id = $this->getCurrentUserId();
-        if (kt_is_id_format($id)) {
+        if (KT::isIdFormat($id)) {
             return get_author_feed_link($id, $feed);
         }
         return null;
@@ -154,11 +154,11 @@ abstract class KT_Current_User_Presenter_Base {
         }
         $firstName = $currentUser->first_name;
         $lastName = $currentUser->last_name;
-        if (kt_isset_and_not_empty($firstName) && kt_isset_and_not_empty($lastName)) {
+        if (KT::issetAndNotEmpty($firstName) && KT::issetAndNotEmpty($lastName)) {
             return "$firstName $lastName$suffix";
         }
         //$nickName = $currentUser->nickname;
-        //if ( kt_isset_and_not_empty( $nickName ) ) {
+        //if ( KT::issetAndNotEmpty( $nickName ) ) {
         //	return "$nickName $suffix";
         //}
         $displayName = $currentUser->display_name;

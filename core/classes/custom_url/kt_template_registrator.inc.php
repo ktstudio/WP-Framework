@@ -26,7 +26,7 @@ class KT_Template_Registrator {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function addUrl($pagename, $filename, $path, $title = '') {
-        if (kt_isset_and_not_empty($pagename)) {
+        if (KT::issetAndNotEmpty($pagename)) {
             $url = new KT_Custom_Template($pagename, $filename, $path, $title);
             $this->urls[$url->getPageName()] = $url;
             return $this;
@@ -73,7 +73,7 @@ class KT_Template_Registrator {
         global $wp_query;
         $pagename = $wp_query->query_vars["pagename"];
 
-        if (kt_not_isset_or_empty($pagename)) {
+        if (KT::notIssetOrEmpty($pagename)) {
             return $template;
         }
 
@@ -107,7 +107,7 @@ class KT_Template_Registrator {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function getUrlObject($name) {
-        if (kt_isset_and_not_empty($this->urls[$name])) {
+        if (KT::issetAndNotEmpty($this->urls[$name])) {
             return $this->urls[$name];
         }
         throw new KT_Not_Set_Argument_Exception('name');

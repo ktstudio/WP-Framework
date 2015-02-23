@@ -31,7 +31,7 @@ class KT_Content_Replacer {
     );
 
     function __construct(array $currentTags = null, KT_Identifiable $identifiable = null) {
-        if (kt_isset_and_not_empty($currentTags)) {
+        if (KT::issetAndNotEmpty($currentTags)) {
             $this->currentTags = $currentTags;
         } else {
             error_log("Empty Current Tags for KT_Content_Replacer");
@@ -45,7 +45,7 @@ class KT_Content_Replacer {
      * @return \KT_Content_Replacer
      */
     public function setItem(KT_Identifiable $identifiable = null) {
-        if (kt_isset_and_not_empty($identifiable)) {
+        if (KT::issetAndNotEmpty($identifiable)) {
             $this->identifiable = $identifiable;
         }
         return $this;
@@ -58,9 +58,9 @@ class KT_Content_Replacer {
      * @throws InvalidArgumentException
      */
     public function update($content) {
-        if (kt_isset_and_not_empty($content) && is_string($content)) {
+        if (KT::issetAndNotEmpty($content) && is_string($content)) {
             $identifiable = $this->identifiable;
-            if (kt_isset_and_not_empty($identifiable)) {
+            if (KT::issetAndNotEmpty($identifiable)) {
                 // aktuální tagy
                 $content = self::updateContentByTags($this->currentTags, $content, $identifiable);
             }
@@ -77,9 +77,9 @@ class KT_Content_Replacer {
      * @return boolean ověření existence
      */
     public static function check($content) {
-        if (kt_isset_and_not_empty($content) && is_string($content)) {
-            $tagPrefixContains = kt_string_contains($content, self::TagPrefix);
-            $tagSuffixContains = kt_string_contains($content, self::TagSuffix);
+        if (KT::issetAndNotEmpty($content) && is_string($content)) {
+            $tagPrefixContains = KT::stringContains($content, self::TagPrefix);
+            $tagSuffixContains = KT::stringContains($content, self::TagSuffix);
             return $tagPrefixContains && $tagSuffixContains;
         }
         return false;
@@ -110,7 +110,7 @@ class KT_Content_Replacer {
     }
 
     private function getGlobalInfo() {
-        if (kt_isset_and_not_empty($this->globalInfo)) {
+        if (KT::issetAndNotEmpty($this->globalInfo)) {
             return $this->globalInfo;
         }
         return ($this->globalInfo = new KT_WP_Info());
@@ -120,7 +120,7 @@ class KT_Content_Replacer {
         foreach ($tags as $key => $value) {
             try {
                 $tag = self::TagPrefix . $value . self::TagSuffix;
-                if (kt_string_contains($content, $tag)) {
+                if (KT::stringContains($content, $tag)) {
                     $result = self::getItemValueResult($item, $key);
                     $content = str_ireplace($tag, $result, $content);
                 }
@@ -136,7 +136,7 @@ class KT_Content_Replacer {
         $result = $item;
         foreach ($methods as $method) {
             $result = $result->$method();
-            if (kt_isset_and_not_empty($result)) {
+            if (KT::issetAndNotEmpty($result)) {
                 continue;
             } else {
                 return null;

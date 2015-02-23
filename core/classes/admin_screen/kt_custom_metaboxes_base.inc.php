@@ -104,7 +104,7 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function setNumberColumns($numberColumns) {
 
-        if (!kt_is_id_format($numberColumns) && $numberColumns > self::KT_COLUMN_TWO) {
+        if (!KT::isIdFormat($numberColumns) && $numberColumns > self::KT_COLUMN_TWO) {
             return $this;
         }
 
@@ -280,7 +280,7 @@ abstract class KT_Custom_Metaboxes_Base {
     public function register() {
         add_action('admin_menu', array($this, 'initPage'));
 
-        if (kt_isset_and_not_empty($this->getMetaboxCollection())) {
+        if (KT::issetAndNotEmpty($this->getMetaboxCollection())) {
             KT_metabox::registerMultiple($this->getMetaboxCollection());
         }
     }
@@ -321,7 +321,7 @@ abstract class KT_Custom_Metaboxes_Base {
     public function getCallbackFunctionByActionScreen() {
         $screenActionCollection = $this->getScreenCollection();
 
-        if (kt_isset_and_not_empty($screenActionCollection)) {
+        if (KT::issetAndNotEmpty($screenActionCollection)) {
             foreach ($screenActionCollection as $screenAction) {
 
                 $actionValue = $screenAction->getActionValue();
@@ -333,7 +333,7 @@ abstract class KT_Custom_Metaboxes_Base {
 
                 $getValue = $_GET[$actionName];
 
-                if (kt_isset_and_not_empty($getValue) && $actionValue == $getValue) {
+                if (KT::issetAndNotEmpty($getValue) && $actionValue == $getValue) {
                     $callbackFunction = $screenAction->getCallBackFunction();
                     if ($callbackFunction == self::KT_METABOX_SCREEN){
                         return array($this, 'renderPage');
@@ -400,7 +400,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * @link http://www.ktstudio.cz  
      */
     public function renderCrudListPage(){
-        if(kt_not_isset_or_empty($this->getCrudList())){
+        if(KT::notIssetOrEmpty($this->getCrudList())){
             throw new KT_Not_Set_Argument_Exception("KT_CRUD_List is emapty fro CRUD List page screen");
         }
         
