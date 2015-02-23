@@ -12,7 +12,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
     private $options = array();
     private $initialized;
 
-    public function __construct($metaPrefix = null) {
+    public function __construct($metaPrefix) {
         $this->setOptionsPrefix($metaPrefix);
     }
 
@@ -117,9 +117,9 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
      * @param string $name
      * @return string|null
      */
-    protected function getOption($name) {
+    public function getOption($name) {
         $options = $this->getOptions();
-        if (kt_array_isset_and_not_empty($options)) {
+        if (KT::arrayIssetAndNotEmpty($options)) {
             foreach ($options as $optionName => $optionValue) {
                 if ($optionName == $name) {
                     return $optionValue;
@@ -140,7 +140,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
      * @param string $prefix
      * @return array
      */
-    public static function getWpOptions($prefix = null) {
+    public static function getWpOptions($prefix) {
         global $wpdb;
         $query = "SELECT option_name, option_value FROM {$wpdb->options}";
         if (isset($prefix)) {
@@ -160,23 +160,6 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
     }
 
     /**
-     * Získání případní konkrétní hodnoty option podle názvu (klíče)
-     *
-     * @author Martin Hlaváč
-     * @link http://www.ktstudio.cz
-     *
-     * @global WP_Database $wpdb
-     * @param int $postId
-     * @param string $optionName
-     * @return string|null
-     */
-    public static function getWpOptionValue($optionName) {
-        global $wpdb;
-        $value = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $optionName));
-        return $value;
-    }
-
-    /**
      * Získání případné konkrétní hodnoty option podle názvu (klíče) nebo KT_EMPTY_TEXT, či null
      *
      * @author Martin Hlaváč
@@ -188,8 +171,8 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
      * @return string
      */
     public static function getWpOption($optionName, $emptyText = true) {
-        $optionValue = self::getWpOptionValue($optionName);
-        if (kt_isset_and_not_empty($optionValue)) {
+        $optionValue = get_option($optionName);
+        if (KT::issetAndNotEmpty($optionValue)) {
             return $optionValue;
         }
         if ($emptyText === true) {
