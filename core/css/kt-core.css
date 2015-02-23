@@ -168,11 +168,6 @@ table.kt-form-table tr td textarea
     min-height: 150px;
 }
 
-div.postbox label
-{
-    display: block;
-}
-
 div.postbox input#kt-form-submit
 {
     margin: 20px 0 10px 0;
