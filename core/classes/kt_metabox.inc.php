@@ -475,11 +475,13 @@ class KT_MetaBox implements KT_Registrable {
         $fieldset = $this->getFieldset();
         $fieldset->setTitle("");
         $form = new KT_Form();
-        $form->addFieldSetByObject($fieldset);
-
+        $form->addFieldSetByObject($fieldset);      
+        
         $form->validate();
-
+        
         if ($isDefaultAutoSave && $form->isFormSend() && !$form->hasError()) {
+            do_action("kt_before_metabox_save_crud", $crudInstance);
+            
             $fieldset->setFieldsData($fieldset->getDataFromPost());
             foreach ($fieldset->getFields() as $field) {
                 $crudInstance->addNewColumnToData($field->getName(), $field->getValue());
@@ -487,13 +489,15 @@ class KT_MetaBox implements KT_Registrable {
             
             $crudInstance->saveRow();
             
-            if(array_key_exists("page", $_GET)){
+            if (array_key_exists("page", $_GET)) {
                 $pageSlug = $_GET["page"];
                 $redirectUrl = menu_page_url($pageSlug, false) . "&" . $crudInstance::ID_COLUMN . "=" . $crudInstance->getid();
             } else {
-                wp_die(__("Snažíte se podvádět?!", KT_DOMAIN));
+                wp_die(__("Snažíte se podvádět!?", KT_DOMAIN));
             }
-           
+            
+            do_action("kt_after_metabox_save_crud", $crudInstance);
+            
             wp_redirect($redirectUrl);
             exit;
         }

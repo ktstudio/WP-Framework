@@ -10,4 +10,4 @@ Vytvářejte WP šablony rychle, snadno, efektivně a přehledně!
 - [O projektu](http://www.wpframework.cz/o-projektu/)
 
 
-Copyright © [KTStudio.cz](http://www.ktstudio.cz/) 2014
+Copyright © [KTStudio.cz](http://www.ktstudio.cz/) 2014-2015
