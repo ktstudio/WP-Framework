@@ -2,6 +2,8 @@
 
 define("KT_LOADED", TRUE);
 
+define("KT_VERSION", "1.0-rc3");
+
 define("KT_BASE_PATH", path_join(TEMPLATEPATH, "kt"));
 define("KT_BASE_URL", get_template_directory_uri() . "/kt");
 define("KT_FILE_PREFIX", "kt_");

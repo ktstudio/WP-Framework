@@ -301,7 +301,7 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
-     * Nastaví název) šablony stránky
+     * Nastaví název šablony stránky
      * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované stránkám, které mají právě zadanou šablonu (template)
      *
      * @author Martin Hlaváč
