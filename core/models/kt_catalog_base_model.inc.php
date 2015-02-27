@@ -15,6 +15,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
     const TITLE_COLUMN = "title";
     const DESCRIPTION_COLUMN = "description";
     const CODE_COLUMN = "code";
+    const MENU_ORDER_COLUMN = "menu_order";
     const VISIBILITY_COLUMN = "visibility";
     
     /**
@@ -118,6 +119,36 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
         throw new KT_Not_Set_Argument_Exception("code");
     }
 
+    /**
+     * Vrátí (povinné volitelné) pořadí (pokud je používáno)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getMenuOrder() {
+        return $menuOrder = $this->getColumnValue(self::MENU_ORDER_COLUMN);
+    }
+
+    /**
+     * Nastaví (povinné volitelné) pořadí (pokud je používáno)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $menuOrder
+     * @return \KT_Catalog_Base_Model
+     * @throws KT_Not_Set_Argument_Exception
+     */
+    public function setMenuOrder($menuOrder) {
+        if (KT::issetAndNotEmpty($menuOrder)) {
+            $this->addNewColumnToData(self::MENU_ORDER_COLUMN, $menuOrder);
+            return $this;
+        }
+        throw new KT_Not_Set_Argument_Exception("menu_order");
+    }
+    
     /**
      * Vrátí (povinnou) viditelnost (pokud je používána)
      *

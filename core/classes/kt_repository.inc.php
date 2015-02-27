@@ -4,14 +4,15 @@ class KT_Repository {
 
     const DEFAULT_LIMIT = 30;
     const DEFAULT_RELATION = 'AND';
+    const ORDER_ASC = "ASC";
+    const ORDER_DESC = "DESC";
 
     private $currentItem = null;
     private $iterator = 0;
     private $items = array();
     private $table = null;
     private $relation = self::DEFAULT_RELATION;
-    private $orderby = null;
-    private $order = "ASC";
+    private $orders = array();
     private $limit = null;
     private $offset = null;
     private $queryParams = array();
@@ -110,27 +111,35 @@ class KT_Repository {
     }
 
     /**
-     * Vrátí název sloupce, podle kterého se bude výsledek dotazu v repositáři řadit
+     * Vrátí výčet zadaných řazení (podle hodnot a případně i směrů)
      * 
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return array
+     */
+    protected function getOrders() {
+        return $this->orders;
+    }
+
+    /**
+     * Vrátí obsah ORDER BY příkazu na základě zadaných řazení
+     * 
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
      * @return string
      */
-    protected function getOrderby() {
-        return $this->orderby;
-    }
-
-    /**
-     * Vrátí, zda se má dotaz řadit ASC nebo DESC
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     * 
-     * @return type
-     */
-    protected function getOrder() {
-        return $this->order;
+    protected function getOrderBy() {
+        $orders = array();
+        foreach ($this->orders as $orderby => $direction) {
+            if (KT::issetAndNotEmpty($direction)) {
+                array_push($orders, "$orderby $direction");
+            } else {
+                array_push($orders, "$orderby");
+            }
+        }
+        return implode(",", $orders);
     }
 
     /**
@@ -295,36 +304,21 @@ class KT_Repository {
     }
 
     /**
-     * Nastaví, podle kterého sloupce má být kolekce itemů seřazena při dotazu repositáře
+     * Nastavení řazení podle hodnoty případně vč. směru nebo i bez
      * 
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param type $orderby
-     * @return \KT_Repository
-     */
-    public function setOrderby($orderby) {
-        $this->orderby = $orderby;
-        return $this;
-    }
-
-    /**
-     * Nastavení řazení order hodnoty pro dotaz repositáře
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param string $order // ASCE | DESC
+     * @param string $orderBy
+     * @param string $direction ASC | DESC
      * @return \KT_Repository
      * @throws KT_Not_Supported_Exception
+     * @throws KT_Null_Reference_Exception
      */
-    public function setOrder($order = "DESC") {
-        if ($order == "ASC" || $order == "DESC") {
-            $this->order = $order;
-            return $this;
-        }
-
-        throw new KT_Not_Supported_Exception("Order have to by string - ASC or DESC");
+    public function setOrder($orderBy, $direction = NULL) {
+        $this->orders = array();
+        $this->addOrder($orderBy, $direction);
+        return $this;
     }
 
     /**
@@ -533,6 +527,35 @@ class KT_Repository {
     }
 
     /**
+     * Přidá řazení podle hodnoty případně vč. směru nebo i bez
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $orderBy
+     * @param string $direction ASC | DESC
+     * @return \KT_Repository
+     * @throws KT_Not_Supported_Exception
+     * @throws KT_Null_Reference_Exception
+     */
+    public function addOrder($orderBy, $direction = null) {
+        if (KT::issetAndNotEmpty($orderBy)) {
+            if (KT::issetAndNotEmpty($direction)) {
+                if ($direction == self::ORDER_ASC || $direction == self::ORDER_DESC) {
+                    $this->orders[$orderBy] = $direction;
+                    return $this;
+                } else {
+                    throw new KT_Not_Supported_Exception("Order direction: \"$order\" != ASC | DESC");
+                }
+            } else {
+                $this->orders[$orderBy] = null;
+                return $this;
+            }
+        }
+        throw new KT_Null_Reference_Exception("orderBy");
+    }
+
+    /**
      * Naplní kolekci items příslušnými ID záznamů v DB
      *
      * @author Tomáš Kocifaj
@@ -552,7 +575,7 @@ class KT_Repository {
         $countItems = $this->getCoutOfAllItemsInDb();
         $this->setCountItems($countItems);
 
-        $result = $wpdb->get_col($query);        
+        $result = $wpdb->get_col($query);
 
         if ($result === false) {
             $this->addError('Při selekci dat se vyskytla chyba', $wpdb->last_error);
@@ -658,11 +681,11 @@ class KT_Repository {
 
         $preparData = array();
         $offset = "";
-        
+
         $className = $this->getClassName();
         $crudClass = new $className();
 
-        $query = "SELECT ". $crudClass->getPrimaryKeyColumn() ." FROM {$this->getTable()}";
+        $query = "SELECT " . $crudClass->getPrimaryKeyColumn() . " FROM {$this->getTable()}";
 
         $conditionData = $this->createConditionsQuery();
 
@@ -671,8 +694,8 @@ class KT_Repository {
             $preparData = array_merge($preparData, $conditionData["prepareData"]);
         }
 
-        if (KT::issetAndNotEmpty($this->getOrderby())) {
-            $query .= " ORDER BY {$this->getOrderby()} {$this->getOrder()}";
+        if (KT::issetAndNotEmpty($this->getOrderBy())) {
+            $query .= " ORDER BY {$this->getOrderBy()}";
         }
 
         if (KT::issetAndNotEmpty($this->getLimit())) {
@@ -683,8 +706,8 @@ class KT_Repository {
             $query .= " LIMIT $offset %d";
             array_push($preparData, $this->getLimit());
         }
-        
-        if(KT::issetAndNotEmpty($preparData)){
+
+        if (KT::issetAndNotEmpty($preparData)) {
             $this->setQuery($wpdb->prepare($query, $preparData));
             return $this;
         }
