@@ -132,7 +132,7 @@ table.kt-rez-table thead tr th#title
 table.item-list td.sortable
 {
     width: 20px;
-    cursor: pointer;
+    cursor: move;
 }
 
 table.item-list tr.ui-sortable-helper

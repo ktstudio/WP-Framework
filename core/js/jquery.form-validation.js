@@ -48,7 +48,7 @@
                 return value % 1 === 0;
             },
             float: function ( value, param ) {
-                var regexFloatPattern = /^\d{0,8}(\.\d{1,2})?$/;
+                var regexFloatPattern = /^[-+]\d{0,8}(\.\d{1,2})?$/;
                 return regexFloatPattern.test( value );
             },
             email: function ( value, param ) {
@@ -60,8 +60,10 @@
                 return regexp.test( value );
             },
             range: function ( value, param ) {
+                
+                console.log(!methods.float( value ));
 
-                if ( !methods.float( value, param ) ) {
+                if ( !methods.float( value ) ) {
                     return false;
                 }
 

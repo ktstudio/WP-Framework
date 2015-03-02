@@ -36,11 +36,6 @@ class KT_Catalog_Base_Config {
         $fieldset->addText(KT_Catalog_Base_Model::CODE_COLUMN, __("Kód: ", KT_DOMAIN))
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Kód může mít maximálně 30 znaků"), 30);
 
-        $fieldset->addText(KT_Catalog_Base_Model::MENU_ORDER_COLUMN, __("Pořadí: ", KT_DOMAIN))
-                ->setInputType(KT_Text_Field::INPUT_NUMBER)
-                //->addRule(KT_Field_Validator::REQUIRED, "Pořadí je povinná položka")
-                ->addRule(KT_Field_Validator::RANGE, __("Pořadí musí v rozmezí od -99 do +99"), array(-99, 99));
-
         $fieldset->addSwitch(KT_Catalog_Base_Model::VISIBILITY_COLUMN, __("Viditelnost: ", KT_DOMAIN))
                 ->setValue(KT_Switch_Field::YES)
                 ->addRule(KT_Field_Validator::REQUIRED, "Viditelnost je povinná položka");
