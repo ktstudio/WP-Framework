@@ -9,6 +9,7 @@ class KT_CRUD_Admin_List {
     private $columnList = array();
     private $newItemButton = false;
     private $repository = null;
+    private $sortable = false;
     private $templateTitle = null;
 
     /**
@@ -133,7 +134,29 @@ class KT_CRUD_Admin_List {
         $this->templateTitle = $templateTitle;
         return $this;
     }
+    
+    /**
+     * @return type
+     */
+    private function getSortable() {
+        return $this->sortable;
+    }
 
+    /**
+     * Nastaví, zda se má být seznam řaditelný pomocí DragAndDrop technologie
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstduio.cz
+     * 
+     * @param boolean $sortable
+     * @return \KT_CRUD_Admin_List
+     */
+    public function setSortable($sortable = true) {
+        $this->sortable = $sortable;
+        return $this;
+    }
+
+    
     // --- veřejné funkce ------------------
 
     /**
@@ -230,6 +253,18 @@ class KT_CRUD_Admin_List {
 
         return $html;
     }
+    
+    /**
+     * Vrátí, TRUE | FALSE zda je aktivované řazení položek pomocí DragAndDrop
+     * 
+     * @author Tomáš Kocifaj
+     * @link www.ktstduio.cz
+     * 
+     * @return type
+     */
+    public function isSortable(){
+        return $this->getSortable();
+    }
 
     // --- protected funkce ------------------
 
@@ -281,14 +316,19 @@ class KT_CRUD_Admin_List {
      */
     protected function getTable() {
         $html = "";
+        $sortableActivate = "sortableTable";
 
         if (!$this->hasListColumns()) {
             return $html;
         }
+        
+        if($this->isSortable()){
+            $sortableActivate = "data-sortable=\"true\"";
+        }
 
         $tableId = strtolower($this->getClassName());
 
-        $html .= "<table id=\"{$tableId}\" class=\"wp-list-table widefat fixed item-list\" cellspacing=\"0\">";
+        $html .= "<table id=\"{$tableId}\" class=\"wp-list-table widefat item-list\" data-class-name=\"{$this->getClassName()}\" $sortableActivate cellspacing=\"0\">";
         $html .= $this->getTableHeader();
         $html .= $this->getTableBody();
         $html .= "</table>";
@@ -310,6 +350,11 @@ class KT_CRUD_Admin_List {
 
         $html .= "<thead>";
         $html .= "<tr>";
+        
+        if($this->isSortable()){
+            $html .= "<th>". __("Pořadí", KT_DOMAIN)."</th>";
+        }
+        
         foreach ($columnList as $column) {
             /** @var $column \KT_CRUD_Column */
             $class = KT::issetAndNotEmpty($column->getCssClass()) ? " class=\"{$column->getCssClass()}\"" : "";
@@ -321,6 +366,11 @@ class KT_CRUD_Admin_List {
         return $html;
     }
 
+    /**
+     * Vrátí HTML tělo na základě zadané kolekce sloupců
+     * 
+     * @return string
+     */
     protected function getTableBody() {
         $html = "";
         $columnCollection = $this->getColumnList();
@@ -342,7 +392,12 @@ class KT_CRUD_Admin_List {
 
             $updatedClass = $item->getId() == $updatedRowId ? " class=\"updated\"" : "";
 
-            $html .= "<tr id=\"row-{$item->getId()}\"$updatedClass>";
+            $html .= "<tr id=\"row-{$item->getId()}\"$updatedClass data-item-id=\"{$item->getId()}\">";
+            
+            if($this->isSortable()){
+                $html .= "<td class=\"sortable\"><span class=\"dashicons dashicons-menu\"></span></td>";
+            }
+            
             foreach ($columnCollection as $column) {
 
                 $class = KT::issetAndNotEmpty($column->getCssClass()) ? " class=\"{$column->getCssClass()}\"" : "";

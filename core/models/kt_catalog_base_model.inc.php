@@ -142,7 +142,8 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setMenuOrder($menuOrder) {
-        if (KT::issetAndNotEmpty($menuOrder)) {
+        $menuOrder = KT::tryGetInt($menuOrder);
+        if (is_integer($menuOrder)) {
             $this->addNewColumnToData(self::MENU_ORDER_COLUMN, $menuOrder);
             return $this;
         }

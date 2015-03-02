@@ -41,3 +41,24 @@ function kt_edit_crud_list_switch_field_callback() {
 
     die(1);
 }
+
+add_action("wp_ajax_kt_edit_sorting_crud_list", "kt_edit_sorting_crud_list_callback");
+
+/**
+ * Funkce obslouží ajax dotaz, který má provést uložení pořadí itemů po Sortable
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
+function kt_edit_sorting_crud_list_callback(){
+    $itemCollection = $_REQUEST["data"];
+    $className = $_REQUEST["class_name"];
+    if(KT::arrayIssetAndNotEmpty($itemCollection)){
+        foreach($itemCollection as $index => $itemId){
+            $crudClassObject = new $className($itemId);
+            if($crudClassObject->isInDatabase()){
+                $crudClassObject->setMenuOrder($index)->saveRow();
+            }
+        }
+    }
+}

@@ -169,4 +169,36 @@ jQuery(document).ready(function() {
             input.attr('value', '1');
         }
     }
+    
+    // Sortable číselníku vycházející z KT_Catalog_Base_Modelu
+    var sortableTablefixHelper = function(e, ui) {
+	ui.children().each(function() {
+            jQuery(this).width(jQuery(this).width());
+	});
+	return ui;
+    };
+    
+    var sortableTableSave = function(e, ui) {
+        var sortingBody = jQuery("table[data-sortable='true'] tbody");
+        var sortedItems = {};
+        var className = sortingBody.parent("table").data("class-name");
+        
+        sortingBody.find("tr").each(function(i){
+            sortedItems[i] = jQuery(this).data("item-id");
+        });
+        
+        data = {
+            action: "kt_edit_sorting_crud_list",
+            data: sortedItems,
+            class_name: className
+        };
+        
+        jQuery.post(ajaxurl, data);
+    };
+    
+    jQuery("table[data-sortable='true'] tbody").sortable({
+        helper: sortableTablefixHelper,
+        stop: sortableTableSave
+    }).disableSelection();
+    
 });
