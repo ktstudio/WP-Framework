@@ -36,7 +36,7 @@ class KT_Form extends KT_HTML_Tag_Base {
                 ->setAttrId($id)
                 ->setSuccessMessage(__("Data byla uložena", KT_DOMAIN))
                 ->setErrorMessage(__("Ve formuláři se vyskytla chyba", KT_DOMAIN));
-        
+
         $this->addAttribute("data-validate", "jquery");
 
         return $this;
@@ -286,13 +286,13 @@ class KT_Form extends KT_HTML_Tag_Base {
      * @param string $class
      * @return \KT_Form
      */
-    /*public function addClass($class) {
-        if (KT::issetAndNotEmpty($class)) {
-            $this->formClasses .= ' ' . $class;
-        }
+    /* public function addClass($class) {
+      if (KT::issetAndNotEmpty($class)) {
+      $this->formClasses .= ' ' . $class;
+      }
 
-        return $this;
-    }
+      return $this;
+      }
      * 
      */
 
@@ -464,7 +464,7 @@ class KT_Form extends KT_HTML_Tag_Base {
 
         if ($this->hasFieldset()) {
             foreach ($this->fieldsets as $fieldSet) {
-                $html .= $fieldSet->getInputsToTable( $class );
+                $html .= $fieldSet->getInputsToTable($class);
             }
         }
 
@@ -572,10 +572,10 @@ class KT_Form extends KT_HTML_Tag_Base {
 
         foreach ($this->getFieldsets() as $fieldset) {
             /* @var $fieldset \KT_Form_Fieldset */
-            if(in_array($fieldset->getName(), $excludeFieldsets)){
+            if (in_array($fieldset->getName(), $excludeFieldsets)) {
                 continue;
             }
-            
+
             $html .= $fieldset->getInputsDataToTable($class);
         }
 
@@ -1031,11 +1031,14 @@ class KT_Form extends KT_HTML_Tag_Base {
 
         foreach ($fieldset->getFields() as $field) {
             if (!in_array($field->getName(), $exludeFields) && KT::issetAndNotEmpty($field->getValue())) {
-                $fieldsetData[$field->getName()] = $field->getValue();
+                $fieldValue = $field->getValue();
+                if ($fieldValue != "" || $fieldValue === 0 || $fieldValue === "0") {
+                    $fieldsetData[$field->getName()] = $field->getValue();
+                }
             }
         }
 
-        if ($fieldValue != "" || $fieldValue === 0 || $fieldValue === "0") {
+        if (KT::arrayIssetAndNotEmpty($fieldsetData)) {
             update_option($fieldset->getName(), $fieldsetData);
         } else {
             delete_option($fieldset->getName());
@@ -1067,8 +1070,8 @@ class KT_Form extends KT_HTML_Tag_Base {
 
             $old = get_post_meta($postId, $field->getName(), true);
             $new = $field->getValue();
-            
-            if($new === ''){
+
+            if ($new === '') {
                 delete_post_meta($postId, $field->getName());
                 continue;
             }
