@@ -536,7 +536,9 @@ class KT_MetaBox implements KT_Registrable {
                 break;
             case KT_MetaBox_Data_Types::OPTIONS:
                 if ($isDefaultAutoSave) {
+                    do_action("kt_before_metabox_save_options", $form);
                     $form->saveFieldsetToOptionTable();
+                    do_action("kt_after_metabox_save_options", $form);
                 }
                 $form->loadDataFromWpOption();
                 break;
