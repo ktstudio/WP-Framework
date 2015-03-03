@@ -48,8 +48,8 @@
                 return value % 1 === 0;
             },
             float: function ( value, param ) {
-                var regexFloatPattern = /^[-+]\d{0,8}(\.\d{1,2})?$/;
-                return regexFloatPattern.test( value );
+                 var RE = /^-{0,1}\d*\.{0,1}\d+$/;
+                return (RE.test(value));
             },
             email: function ( value, param ) {
                 var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;

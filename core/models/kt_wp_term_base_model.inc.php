@@ -211,8 +211,6 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
             $this->setTerm($term);
             return $this;
         }
-
-        throw new InvalidArgumentException("Taxonomy : $taxonomy doesn't exist");
     }
 
     /**
@@ -234,8 +232,6 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
             $this->setTerm($term);
             return $this;
         }
-
-        throw new InvalidArgumentException("Taxonomy : $taxonomy doesn't exist");
     }
 
     // --- statické funkce ---------
