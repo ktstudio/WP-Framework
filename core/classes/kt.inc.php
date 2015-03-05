@@ -4,6 +4,9 @@
  * Třída nahrazující obecné soubory s funkcemi a klasickým volání pomocí statických metod
  */
 class KT {
+
+    const CRAWLERS = "Bloglines subscriber|Dumbot|Sosoimagespider|QihooBot|FAST-WebCrawler|Superdownloads Spiderman|LinkWalker|msnbot|ASPSeek|WebAlta Crawler|Lycos|FeedFetcher-Google|Yahoo|YoudaoBot|AdsBot-Google|Googlebot|Scooter|Gigabot|Charlotte|eStyle|AcioRobot|GeonaBot|msnbot-media|Baidu|CocoCrawler|Google|Charlotte t|Yahoo! Slurp China|Sogou web spider|YodaoBot|MSRBOT|AbachoBOT|Sogou head spider|AltaVista|IDBot|Sosospider|Yahoo! Slurp|Java VM|DotBot|LiteFinder|Yeti|Rambler|Scrubby|Baiduspider|accoona";
+
     // --- POLE - ARRAY ---------------------------
 
     /**
@@ -232,6 +235,24 @@ class KT {
     }
 
     /**
+     * Vrátí hodnotu pro zadaný klíč pokud existuje nebo null
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array
+     * @return mixed type|null
+     */
+    public static function arrayTryGetValue(array $array, $key) {
+        if (KT::issetAndNotEmpty($key)) {
+            if (array_key_exists($key, $array)) {
+                return $array[$key];
+            }
+        }
+        return null;
+    }
+
+    /**
      * Očistí pole od hodnot "." a ".." při scandiru
      *
      * @author Tomáš Kocifaj
@@ -355,6 +376,21 @@ class KT {
             wp_die(__("Nemáte dostatečná oprávnění k přístupu na tuto stránku.", KT_DOMAIN));
             return false;
         }
+    }
+
+    /**
+     * Základní kontrola, zda je zadaný user agent (ze serverového pole) znamý robot
+     * 
+     * @author Jay Paroline, Mike
+     * @link http://wanderr.com/jay/detect-crawlers-with-php-faster/2009/04/08/
+     * 
+     * @param string $userAgent
+     * @return boolean
+     */
+    public static function checkIsCrawler($userAgent) {
+        $crawlers = self::CRAWLERS;
+        $isCrawler = (preg_match("/$crawlers/i", $userAgent) > 0); // i - case-insensitive
+        return $isCrawler;
     }
 
     /**
