@@ -9,6 +9,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     private $gallery = null;
     private $files = null;
     private $data = array();
+    private $permalink = null;
 
     /**
      * Základní model pro práci s daty post_typu
@@ -259,12 +260,16 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Vrátí URL pro zobrazení detailu postu
      *
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      *
      * @return string
      */
     public function getPermalink() {
-        return $permalink = get_the_permalink($this->getPost());
+        $permalink = $this->permalink;
+        if (KT::issetAndNotEmpty($permalink)) {
+            return $permalink;
+        }
+        return $this->permalink = get_the_permalink($this->getPostId());
     }
 
     /**

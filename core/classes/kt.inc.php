@@ -205,6 +205,22 @@ class KT {
     }
 
     /**
+     * Kontrola, zda je zadaný řetězec zaserializované pole
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $string
+     * @return boolean
+     */
+    public static function arrayIsSerialized($string) {
+        if (KT::issetAndNotEmpty($string) && is_string($string)) {
+            return (@unserialize($string) !== false || $string == "b:0;");
+        }
+        return false;
+    }
+
+    /**
      * Vrátí první klíč v poli
      * 
      * @author Martin Hlaváč
@@ -283,7 +299,7 @@ class KT {
      * @param string $timeStampText
      * @return date
      */
-    public static function dateGetNow($format = "Y-m-d H:i:s", $timeStampText = null) {
+    public static function dateNow($format = "Y-m-d H:i:s", $timeStampText = null) {
         if (self::issetAndNotEmpty($timeStampText)) {
             return date($format, strtotime($timeStampText));
         }
