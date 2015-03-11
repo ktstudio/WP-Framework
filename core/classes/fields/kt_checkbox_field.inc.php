@@ -43,13 +43,13 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
         if (KT::notIssetOrEmpty($this->getOptionsData())) {
             return "<span class=\"input-wrap checkbox\">" . KT_EMPTY_SYMBOL . "</span>";
         }
-        
+
         $html = "";
 
         foreach ($this->getOptionsData() as $key => $val) {
             $html .= "<span class=\"input-wrap\">";
             $html .= "<input type=\"checkbox\" ";
-            $html .= $this->getBasicHtml( $key );
+            $html .= $this->getBasicHtml($key);
             $html .= " value=\"$key\" ";
 
             $data = $this->getValue();
@@ -75,8 +75,16 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
     public function getFieldType() {
         return self::FIELD_TYPE;
     }
-    
-     /**
+
+    public function getValue() {
+        $value = parent::getValue();
+        if (KT::arrayIsSerialized($value)) {
+            return unserialize($value);
+        }
+        return $value;
+    }
+
+    /**
      * Vrátí základní HTML prvky pro všechny fieldy
      * Class, Name, ID, Title(tooltip), validator jSON
      *
@@ -86,18 +94,18 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      * @param string $inputName
      * @return string
      */
-    public function getBasicHtml( $inputName = null ) {
+    public function getBasicHtml($inputName = null) {
 
         $html = "";
-        
+
         $this->validatorJsonContentInit();
         $this->setAttrId($this->getName() . "-" . $inputName);
-        $html .= $this->getNameAttribute( $inputName );
+        $html .= $this->getNameAttribute($inputName);
         $html .= $this->getAttributeString();
 
         return $html;
     }
-    
+
     /**
      * Vrátí HTML s attributem name fieldu
      * 
@@ -107,7 +115,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      * @param string $inputName
      * @return string
      */
-    protected function getNameAttribute( $inputName = null ) {
+    protected function getNameAttribute($inputName = null) {
 
         $html = "";
 
