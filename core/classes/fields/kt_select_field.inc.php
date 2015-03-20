@@ -164,10 +164,12 @@ class KT_Select_Field extends KT_Options_Field_Base {
      * @return string
      */
     private function getSignleOptionItem($optionKey, $optionValue) {
-        if ($optionKey == $this->getValue() && $this->getValue() !== null && $this->getValue() !== '') {
-            $selected = "selected=\"selected\"";
+        $selected = null;
+        $value = $this->getValue();
+        if ($optionKey == $value && $value !== null && $value !== '') {
+            $selected = " selected=\"selected\"";
         }
-        return $html = "<option value=\"$optionKey\" $selected>$optionValue</option>";
+        return $html = "<option value=\"$optionKey\"$selected>$optionValue</option>";
     }
 
 }

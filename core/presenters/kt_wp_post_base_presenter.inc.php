@@ -99,6 +99,55 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     }
 
     /**
+     * Vrátí informace o autorovi, pokud jsou dostupné (nadpis + popis + případně i avatar)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param bool $withAvatar
+     * @return mixed null|string (HTML)
+     */
+    public function getAuthorBio($withAvatar = false) {
+        $description = $this->getModel()->getAuthor()->getDescription();
+        if (KT::issetAndNotEmpty($description)) {
+            $title = sprintf(__("O autorovi: %s", KT_DOMAIN), $this->getModel()->getAuthor()->getDisplayName());
+            $html = "<h2>$title</h2>";
+            if ($withAvatar) {
+                $avatar = $this->getModel()->getAuthor()->getAvatar();
+                $html .= "<div class=\"author-avatar\">$avatar</div>";
+            }
+            return $html .= "<p class=\"author-description\">$description</p>";
+        }
+        return null;
+    }
+
+    /**
+     * Vrátí odkaz na předchozí příspěvěk
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param bool $inSameCategory
+     * @return mixed null|string (HTML)
+     */
+    public function getPreviousPostLink($inSameCategory = false) {
+        return previous_post("&laquo; %", "", "yes", ($inSameCategory ? "yes" : "no"));
+    }
+
+    /**
+     * Vrátí odkaz na následující příspěvěk
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param bool $inSameCategory
+     * @return mixed null|string (HTML)
+     */
+    public function getNextPostLink($inSameCategory = false) {
+        return next_post("% &raquo;", "", "yes", ($inSameCategory ? "yes" : "no"));
+    }
+
+    /**
      * Vrátí HTML tag img s náhledovým obrázkem zadaného postu dle specifikace parametrů
      *
      * @author Tomáš Kocifaj
