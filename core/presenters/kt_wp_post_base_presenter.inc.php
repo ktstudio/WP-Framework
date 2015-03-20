@@ -125,7 +125,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * 
      * @return mixed null|string (HTML)
      */
-    public function getThumbnailImageWithSelfLink($imageSize = KT_WP_IMAGE_SIZE_MEDIUM, $tagId = "serviceThumbImage", $tagClass = "gallery") {
+    public function getThumbnailImageWithSelfLink($imageSize = KT_WP_IMAGE_SIZE_MEDIUM, $tagId = "thumbImage", $tagClass = "gallery") {
         if ($this->getModel()->hasThumbnail()) {
             $titleAttribute = $this->getModel()->getTitleAttribute();
             $image = $this->getThumbnailImage($imageSize, array("class" => "img-responsive", "alt" => $titleAttribute));
