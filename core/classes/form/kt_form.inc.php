@@ -1,6 +1,6 @@
 <?php
 
-class KT_Form extends KT_HTML_Tag_Base {
+class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
     const DISPLAY_TYPE_TABLE = 'table';
     const DISPLAY_TYPE_SIMPLE = 'simple';
@@ -41,6 +41,35 @@ class KT_Form extends KT_HTML_Tag_Base {
 
         return $this;
     }
+    
+    // --- arrayAcces -----------------------------
+    
+    public function offsetExists( $offset ){
+        $fieldsetCollection = $this->getFieldsets();
+        
+        foreach($fieldsetCollection as $fieldset){
+            if(isset($fieldset[$offset])){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public function offsetGet ( $offset ){
+        $fieldsetCollection = $this->getFieldsets();
+        
+        foreach($fieldsetCollection as $fieldset){
+            if(isset($fieldset[$offset])){
+                return $fieldset[$offset];
+            }
+        }
+        
+        return null;
+    }
+    
+    public function offsetSet ( $offset , $value ){}
+    public function offsetUnset ( $offset ){}
 
     // ---- gettery -----------------------------
 

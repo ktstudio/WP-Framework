@@ -1,6 +1,6 @@
 <?php
 
-class KT_Form_Fieldset extends KT_HTML_Tag_Base {
+class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess{
 
     private $title = null;
     private $description = null;
@@ -18,6 +18,28 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base {
 
         return $this;
     }
+    
+    // --- arrayAccess ------------------
+    
+     public function offsetExists( $offset ){
+        $fields = $this->getFields();
+        return array_key_exists($offset, $fields);
+    }
+    
+    public function offsetGet ( $offset ){
+        if($this->offsetExists($offset)){
+            $fields = $this->getFields();
+            return $fields[$offset];
+        }
+        
+        return null;
+    }
+    
+    public function offsetUnset ( $offset ){
+        $this->removeFieldByName($offset);
+    }
+    
+    public function offsetSet ( $offset , $value ){}
 
     // --- gettery ------------------
 
