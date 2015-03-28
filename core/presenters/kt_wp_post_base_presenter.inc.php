@@ -13,6 +13,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return \kt_post_type_presenter_base
      */
     function __construct(WP_Post $post = null) {
+        parent::__construct();
         if (KT::issetAndNotEmpty($post)) {
             $postModel = new KT_WP_Post_Base_Model($post);
             $this->setModel($postModel);

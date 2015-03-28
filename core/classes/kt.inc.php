@@ -793,7 +793,7 @@ class KT {
      * @return integer|null
      */
     public static function tryGetBool($value) {
-        if (KT_ITH::issetAndNotEmpty($value)) {
+        if (KT::issetAndNotEmpty($value)) {
             if (is_bool($value)) {
                 return $value;
             }
