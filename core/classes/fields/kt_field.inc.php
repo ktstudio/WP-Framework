@@ -222,8 +222,6 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
         return $this->validators;
     }
 
-   
-
     // --- abstraktní funkce ---------------
 
     abstract function renderField();
@@ -233,6 +231,31 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
     abstract function getFieldType();
 
     // --- veřejné funkce ------------------
+    
+    /**
+     * Vrátí HTML s <label> a samotný fieldem
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public function getControlHtml(){
+        $html = $this->getLabel();
+        return $html .= $this->getField();
+    }
+    
+    /**
+     * Vrátí HTML element <label> pro daný field
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public function getLabelHtml(){
+        return "<label for=\"". $this->getAttrValueByName("id") ."\">". $this->getLabel() ."</label>";
+    }
   
 
     /**
