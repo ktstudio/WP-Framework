@@ -775,7 +775,22 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess{
     public function addWpUsers($name, $label) {
         $field = $this->fields[$name] = new KT_WP_User_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
-
+        return $field;
+    }
+    
+    /**
+     * Přidá nový typ fieldu KT_Slider_Field - výběr čísla pomocí slideru jQuery UI
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $name
+     * @param string $label
+     * @return \KT_Slider_Field
+     */
+    public function addSliderNumber($name, $label){
+        $field = $this->fields[$name] = new KT_Slider_Field($name, $label);
+        $field->setPostPrefix($this->postPrefix);
         return $field;
     }
 

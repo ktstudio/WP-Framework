@@ -6,6 +6,7 @@ define("KT_JQUERY_MAGNIFIC_POPUP_SCRIPT", "jquery-magnific-popup-script");
 define("KT_JQUERY_UNVEIL_SCRIPT", "jquery-unveil-script");
 define("KT_MAGNIFIC_POPUP_SCRIPT", "kt-magnific-popup-script");
 define("KT_GOOGLE_MAP_SCRIPT", "kt-google-map-script");
+define("KT_JQUERY_UI_SLIDER_SCRIPT", "jquery-ui-slider");
 define("KT_CORE_STYLE", "kt-core-style");
 define("KT_JQUERY_UI_STYLE", "jquery-ui-style");
 define("KT_MAGNIFIC_POPUP_STYLE", "magnific-popup-style");
@@ -21,6 +22,7 @@ function kt_core_admin_scripts_callback() {
     wp_enqueue_style(KT_JQUERY_UI_STYLE);
     // sripts
     wp_enqueue_script(KT_FORM_VALIDATION_SCRIPT);
+    wp_enqueue_script(KT_JQUERY_UI_SLIDER_SCRIPT);
     wp_enqueue_script(KT_CORE_SCRIPT);
 }
 

@@ -324,6 +324,51 @@ label.switch-toggle.hidden
     display: none;
 }
 
+/** slider field **/
+.sliderInputElement
+{
+    background: #afc4d0;
+    height: 8px;
+    width: 89%;
+    border-radius: 3px;
+    position: relative;
+    margin-bottom: 35px;
+    margiN: 0 8px;
+}
+
+.sliderInputElement input.hidden
+{
+    display: none;
+}
+
+.sliderInputElement span.min
+{
+    display: block;
+    float: left;
+}
+
+.sliderInputElement span.ui-slider-handle
+{
+    text-align: center;
+    font-size: 12px;
+    background: #2ea2cc;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 4px;
+    width: auto;
+    border: 0;
+    color: #fff;
+    outline: none;
+    cursor: pointer;
+    transition: padding 0.2s ease;
+}
+
+.sliderInputElement span.ui-slider-handle.ui-state-active
+{
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
 /** form notifikace **/
 
 p.kt-no-error,
