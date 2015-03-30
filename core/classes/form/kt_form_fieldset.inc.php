@@ -788,7 +788,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess{
      * @param string $label
      * @return \KT_Slider_Field
      */
-    public function addSliderNumber($name, $label){
+    public function addSlider($name, $label){
         $field = $this->fields[$name] = new KT_Slider_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
         return $field;

@@ -218,7 +218,7 @@ jQuery(document).ready(function () {
             max: max,
             value: min,
             slide: function (event, ui) {
-                var parent = slider.parent("div.rangerContainer");
+                var parent = slider.parent("div.sliderContainer");
                 parent.find("span.ui-slider-handle").text(ui.value);
                 slider.find("input.inputMin").val(ui.value);
             },
