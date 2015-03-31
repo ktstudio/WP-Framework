@@ -41,7 +41,7 @@ jQuery(document).ready(function () {
     // Inicializace switchFieldu
     jQuery('.switch').each(function () {
         var input = jQuery(this).children('input[type=hidden]');
-        var toggle = jQuery(this).children('label.switch-toggle');
+        var toggle = jQuery(this).children('span.switch-toggle');
 
         if (input.length) {
             input.addClass('hidden');
@@ -200,14 +200,18 @@ jQuery(document).ready(function () {
     }).disableSelection();
 
     // Slider input - jQuery UI
-
-    
     
     jQuery(".sliderInputElement").each(function () {
         var slider = jQuery(this);
+        var input = slider.find("input");
         var min = slider.data("min");
         var max = slider.data("max");
         var step = slider.data("step");
+        var value = min;
+        
+        if(input.val() != min){
+            value = input.val();
+        }
         
         jQuery(this).find("input").addClass("hidden");
 
@@ -216,14 +220,14 @@ jQuery(document).ready(function () {
             step: step,
             min: min,
             max: max,
-            value: min,
+            value: value,
             slide: function (event, ui) {
                 var parent = slider.parent("div.sliderContainer");
                 parent.find("span.ui-slider-handle").text(ui.value);
                 slider.find("input.inputMin").val(ui.value);
             },
             create: function( event, ui ) {
-                jQuery(this).find("span.ui-slider-handle").text(min);
+                jQuery(this).find("span.ui-slider-handle").text(value);
             }
         });
     });

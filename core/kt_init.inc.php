@@ -59,6 +59,7 @@ define("KT_WP_IMAGE_SIZE_ORIGINAL", "original");
 // --- scripts ------------------------
 define("KT_WP_JQUERY_SCRIPT", "jquery");
 define("KT_WP_JQUERY_UI_DATEPICKER_SCRIPT", "jquery-ui-datepicker");
+define("KT_WP_JQUERY_UI_SLIDER_SCRIPT", "jquery-ui-slider");
 define("KT_WP_JQUERY_UI_TOOLTIP_SCRIPT", "jquery-ui-tooltip");
 
 // --- inicializace ------------------------

@@ -72,8 +72,9 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      * @return \KT_Field
      */
     public function setPostPrefix($postPrefix) {
-        $this->postPrefix = $postPrefix;
-        
+        if(KT::issetAndNotEmpty($postPrefix)){
+            $this->postPrefix = $postPrefix;
+        }
         return $this;
     }
 
@@ -241,7 +242,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      * @return string
      */
     public function getControlHtml(){
-        $html = $this->getLabel();
+        $html = $this->getLabelHtml();
         return $html .= $this->getField();
     }
     
@@ -434,7 +435,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
     protected function getNameAttribute() {
 
         $html = "";
-        $afterNameString = $this->getAfterNameValue();
+        $afterNameString = static::getAfterNameValue();
 
         if (KT::issetAndNotEmpty($this->getPostPrefix())) {
             $html .= "name=\"{$this->getPostPrefix()}[{$this->getName()}]$afterNameString\" ";
