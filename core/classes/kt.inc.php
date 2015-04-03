@@ -306,6 +306,21 @@ class KT {
         return date($format);
     }
 
+    /**
+     * Převede zadaný datum na požadovaný (nový) formát
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $value (datum)
+     * @param string $format
+     * @return string (datum)
+     */
+    public static function dateConvert($value, $format = "d.m.Y") {
+        return date($format, strtotime($value));
+    }
+
+
     // --- GENERÁLNÍ FUNKCE ---------------------------
 
     /**

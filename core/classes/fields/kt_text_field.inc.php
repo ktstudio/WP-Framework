@@ -136,7 +136,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
         $fieldValue = parent::getConvertedValue();
 
         if ($this->getInputType() == self::INPUT_DATE && KT::issetAndNotEmpty($fieldValue)) {
-            return $newFieldValue = date("d.m.Y", $fieldValue);
+            return $newFieldValue = KT::dateConvert($fieldValue);
         }
 
         return $fieldValue;

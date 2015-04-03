@@ -169,22 +169,29 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param string $imageSize
+     * @param string $imageClass
      * @param string $tagId
      * @param string $tagClass
+     * @param string $imageSize
+
      * 
      * @return mixed null|string (HTML)
      */
-    public function getThumbnailImageWithSelfLink($imageSize = KT_WP_IMAGE_SIZE_MEDIUM, $tagId = "thumbImage", $tagClass = "gallery") {
+    public function getThumbnailImageWithSelfLink($imageSize = KT_WP_IMAGE_SIZE_MEDIUM, $tagId = "thumbImage", $tagClass = "gallery", $imageClass = "img-responsive") {
         if ($this->getModel()->hasThumbnail()) {
             $titleAttribute = $this->getModel()->getTitleAttribute();
-            $image = $this->getThumbnailImage($imageSize, array("class" => "img-responsive", "alt" => $titleAttribute));
+            $image = $this->getThumbnailImage($imageSize, array("class" => $imageClass, "alt" => $titleAttribute));
             $linkImage = wp_get_attachment_image_src($this->getModel()->getThumbnailId(), KT_WP_IMAGE_SIZE_LARGE);
-            $html = KT::getTabsIndent(0, "<div id=\"$tagId\" class=\"$tagClass\">", true);
+            $isTagContainer = (KT::issetAndNotEmpty($tagId) && KT::issetAndNotEmpty($tagClass));
+            if ($isTagContainer) {
+                $html = KT::getTabsIndent(0, "<div id=\"$tagId\" class=\"$tagClass\">", true);
+            }
             $html .= KT::getTabsIndent(1, "<a href=\"{$linkImage[0]}\" class=\"fbx-link\" title=\"$titleAttribute\">", true);
             $html .= KT::getTabsIndent(2, $image, true);
             $html .= KT::getTabsIndent(1, "</a>", true);
-            $html .= KT::getTabsIndent(0, "</div>", true, true);
+            if ($isTagContainer) {
+                $html .= KT::getTabsIndent(0, "</div>", true, true);
+            }
             return $html;
         }
         return null;
@@ -210,9 +217,13 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             $thumbnailId = get_post_thumbnail_id($post->ID);
             $image = wp_get_attachment_image_src($thumbnailId, $imageSize);
             $imageSrc = $image[0];
-            $imageAttr["width"] = $image[1];
-            $imageAttr["height"] = $image[2];
-            $imageAttr["alt"] = $post->post_title;
+            if (!array_key_exists("class", $imageAttr) || !KT::stringContains($imageAttr["class"], "img-responsive")) { // pro responzivní obrázky nechceme pevné rozměry
+                $imageAttr["width"] = $image[1];
+                $imageAttr["height"] = $image[2];
+            }
+            if (!array_key_exists("alt", $imageAttr)) { // jen když nebyl zadán vlastní popisek
+                $imageAttr["alt"] = $post->post_title;
+            }
         } else {
             $imageSrc = $defaultImageSrc;
         }

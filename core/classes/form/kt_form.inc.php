@@ -41,35 +41,40 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         return $this;
     }
-    
+
     // --- arrayAcces -----------------------------
-    
-    public function offsetExists( $offset ){
+
+    public function offsetExists($offset) {
         $fieldsetCollection = $this->getFieldsets();
-        
-        foreach($fieldsetCollection as $fieldset){
-            if(isset($fieldset[$offset])){
+
+        foreach ($fieldsetCollection as $fieldset) {
+            if (isset($fieldset[$offset])) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
-    public function offsetGet ( $offset ){
+
+    public function offsetGet($offset) {
         $fieldsetCollection = $this->getFieldsets();
-        
-        foreach($fieldsetCollection as $fieldset){
-            if(isset($fieldset[$offset])){
+
+        foreach ($fieldsetCollection as $fieldset) {
+            if (isset($fieldset[$offset])) {
                 return $fieldset[$offset];
             }
         }
-        
+
         return null;
     }
-    
-    public function offsetSet ( $offset , $value ){}
-    public function offsetUnset ( $offset ){}
+
+    public function offsetSet($offset, $value) {
+        
+    }
+
+    public function offsetUnset($offset) {
+        
+    }
 
     // ---- gettery -----------------------------
 
@@ -1109,7 +1114,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 $fieldType = get_class($field);
                 if ($fieldType == "KT_Text_Field") {
                     if ($field->getInputType() == KT_Text_Field::INPUT_DATE) {
-                        $new = strtotime($new);
+                        $new = date("Y-m-d", strtotime($new));
                     }
                 }
                 update_post_meta($postId, $field->getName(), $new);
@@ -1181,7 +1186,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 $fieldType = get_class($field);
                 if ($fieldType == "KT_Text_Field") {
                     if ($field->getInputType() == KT_Text_Field::INPUT_DATE) {
-                        $new = strtotime($new);
+                        $new = date("Y-m-d", strtotime($new));
                     }
                 }
 

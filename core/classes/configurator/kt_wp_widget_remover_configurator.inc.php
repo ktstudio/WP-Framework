@@ -170,7 +170,7 @@ final class KT_WP_Widget_Remover_Configurator {
      * @param bool $withoutText - vše kromě textového widgetu
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeAllSystemWidgets($withoutText = false) {
+    public function removeAllSystemWidgets($withoutText = false, $withoutMenu = false) {
         $this->removePagesWidget()
                 ->removeCalendarWidget()
                 ->removeArchivesWidget()
@@ -181,10 +181,12 @@ final class KT_WP_Widget_Remover_Configurator {
                 ->removeRecentPostsWidget()
                 ->removeRecentCommentsWidget()
                 ->removeRssWidget()
-                ->removeTagCloudWidget()
-                ->removeNavMenuWidget();
+                ->removeTagCloudWidget();
         if (!$withoutText) {
             $this->removeTextWidget();
+        }
+        if (!$withoutText) {
+            $this->removeNavMenuWidget();
         }
         return $this;
     }
