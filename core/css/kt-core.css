@@ -341,13 +341,13 @@ span.switch-toggle.hidden
     display: none;
 }
 
-.sliderInputElement span.min
+.sliderInputElement .min
 {
     display: block;
     float: left;
 }
 
-.sliderInputElement span.ui-slider-handle
+.sliderInputElement.ui-widget-content .ui-slider-handle
 {
     text-align: center;
     font-size: 12px;
@@ -361,9 +361,10 @@ span.switch-toggle.hidden
     outline: none;
     cursor: pointer;
     transition: padding 0.2s ease;
+    text-decoration: none;
 }
 
-.sliderInputElement span.ui-slider-handle.ui-state-active
+.sliderInputElement.ui-widget-content .ui-slider-handle.ui-state-active
 {
     padding-left: 8px;
     padding-right: 8px;

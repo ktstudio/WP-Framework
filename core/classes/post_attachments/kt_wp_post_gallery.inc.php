@@ -134,11 +134,11 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
             return $html;
         }
         
-        if(KT_Functions::notIssetOrEmpty($this->getAttrValueByName("id"))){
+        if(KT::notIssetOrEmpty($this->getAttrValueByName("id"))){
             $this->setAttrId("ktGalleryContainer");
         }
         
-        if(KT_Functions::notIssetOrEmpty($this->getAttrClassString())){
+        if(KT::notIssetOrEmpty($this->getAttrClassString())){
             $this->addAttrClass("ktGallery");
         }
         

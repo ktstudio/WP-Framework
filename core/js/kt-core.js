@@ -223,11 +223,11 @@ jQuery(document).ready(function () {
             value: value,
             slide: function (event, ui) {
                 var parent = slider.parent("div.sliderContainer");
-                parent.find("span.ui-slider-handle").text(ui.value);
+                parent.find(".ui-slider-handle").text(ui.value);
                 slider.find("input.inputMin").val(ui.value);
             },
             create: function( event, ui ) {
-                jQuery(this).find("span.ui-slider-handle").text(value);
+                jQuery(this).find(".ui-slider-handle").text(value);
             }
         });
     });
