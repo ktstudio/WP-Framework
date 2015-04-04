@@ -17,31 +17,31 @@ class KT_Catalog_Base_Config {
      *
      * @param string $name
      * @param string $prefix
-     * @param KT_Catalog_Base_Model $item
+     * @param KT_Catalog_Model_Base $item
      * @return \KT_Form_Fieldset
      */
-    public static function getCatalogBaseFieldset($name, $prefix, $title = null, KT_Catalog_Base_Model $item = null) {
+    public static function getCatalogBaseFieldset($name, $prefix, $title = null, KT_Catalog_Model_Base $item = null) {
         $fieldset = new KT_Form_Fieldset($name, $title);
         $fieldset->setPostPrefix($prefix);
 
-        $fieldset->addText(KT_Catalog_Base_Model::TITLE_COLUMN, __("Název: ", KT_DOMAIN))
+        $fieldset->addText(KT_Catalog_Model_Base::TITLE_COLUMN, __("Název: ", KT_DOMAIN))
                 ->addRule(KT_Field_Validator::REQUIRED, "Název je povinná položka")
                 ->addRule(KT_Field_Validator::MIN_LENGTH, __("Název musí mít alespoň 3 znaky"), 3)
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Název může mít maximálně 50 znaků"), 50);
 
-        $fieldset->addTextarea(KT_Catalog_Base_Model::DESCRIPTION_COLUMN, __("Popis: ", KT_DOMAIN))
+        $fieldset->addTextarea(KT_Catalog_Model_Base::DESCRIPTION_COLUMN, __("Popis: ", KT_DOMAIN))
                 ->setRows(5)
                 ->setTooltip(__("Doplňující údaj informačního charakteru...", KT_DOMAIN));
 
-        $fieldset->addText(KT_Catalog_Base_Model::CODE_COLUMN, __("Kód: ", KT_DOMAIN))
+        $fieldset->addText(KT_Catalog_Model_Base::CODE_COLUMN, __("Kód: ", KT_DOMAIN))
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Kód může mít maximálně 30 znaků"), 30);
 
-        $fieldset->addSwitch(KT_Catalog_Base_Model::VISIBILITY_COLUMN, __("Viditelnost: ", KT_DOMAIN))
+        $fieldset->addSwitch(KT_Catalog_Model_Base::VISIBILITY_COLUMN, __("Viditelnost: ", KT_DOMAIN))
                 ->setValue(KT_Switch_Field::YES)
                 ->addRule(KT_Field_Validator::REQUIRED, "Viditelnost je povinná položka");
 
         if (KT::issetAndNotEmpty($item) && $item->isInDatabase()) {
-            $fieldset->addHidden(KT_Catalog_Base_Model::ID_COLUMN)
+            $fieldset->addHidden(KT_Catalog_Model_Base::ID_COLUMN)
                     ->setValue($item->getId());
 
             $fieldset->setFieldsData($item->getData());
@@ -67,7 +67,7 @@ class KT_Catalog_Base_Config {
         $crudList = new KT_CRUD_Admin_List($className, $tableName);
         $crudList->setTemplateTitle($templateTitle);
 
-        $crudList->addColumn(KT_Catalog_Base_Model::TITLE_COLUMN)
+        $crudList->addColumn(KT_Catalog_Model_Base::TITLE_COLUMN)
                 ->setType(KT_CRUD_Admin_Column::EDIT_LINK_TYPE)
                 ->setDeletable()
                 ->setLabel(__("Titulek", KT_DOMAIN));
@@ -75,21 +75,21 @@ class KT_Catalog_Base_Config {
         //$crudList->addColumn(KT_Catalog_Base_Model::DESCRIPTION_COLUMN)
         //        ->setLabel(__("Popisek", KT_DOMAIN));
 
-        $crudList->addColumn(KT_Catalog_Base_Model::CODE_COLUMN)
+        $crudList->addColumn(KT_Catalog_Model_Base::CODE_COLUMN)
                 ->setLabel(__("Kód", KT_DOMAIN));
 
         //$crudList->addColumn(KT_Catalog_Base_Model::MENU_ORDER_COLUMN)
         //        ->setLabel(__("Pořadí", KT_DOMAIN));
 
-        $crudList->addColumn(KT_Catalog_Base_Model::VISIBILITY_COLUMN)
+        $crudList->addColumn(KT_Catalog_Model_Base::VISIBILITY_COLUMN)
                 ->setType(KT_CRUD_Admin_Column::SWITCH_BUTTON_TYPE)
                 ->setPosition(99)
                 ->setLabel(__("Viditelnost", KT_DOMAIN));
 
         // výchozí řazení
         $crudList->getRepository()
-                ->addOrder(KT_Catalog_Base_Model::MENU_ORDER_COLUMN, KT_Repository::ORDER_ASC)
-                ->addOrder(KT_Catalog_Base_Model::TITLE_COLUMN, KT_Repository::ORDER_ASC);
+                ->addOrder(KT_Catalog_Model_Base::MENU_ORDER_COLUMN, KT_Repository::ORDER_ASC)
+                ->addOrder(KT_Catalog_Model_Base::TITLE_COLUMN, KT_Repository::ORDER_ASC);
 
         return $crudList;
     }

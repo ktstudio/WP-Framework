@@ -320,7 +320,6 @@ class KT {
         return date($format, strtotime($value));
     }
 
-
     // --- GENERÁLNÍ FUNKCE ---------------------------
 
     /**
@@ -825,6 +824,41 @@ class KT {
     }
 
     // --- STRÁNKOVÁNÍ ---------------------------
+
+    /**
+     * Vytvoří stránkování odkazy
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @global WP_Query $wp_query
+     * @param WP_Query $wpQuery
+     * @param array $userArgs // pro paginate_links (@link http://codex.wordpress.org/Function_Reference/paginate_links)
+     * @return string
+     */
+    public static function getPaginationLinks(WP_Query $wp_query = null, $userArgs = array()) {
+        if (KT::notIssetOrEmpty($wp_query)) {
+            global $wp_query;
+        }
+
+        $paged = get_query_var("paged");
+
+        if (KT::notIssetOrEmpty($paged)) {
+            $paged = htmlspecialchars($paged);
+        }
+
+        $defaultArgs = array(
+            "format" => "/page/%#%",
+            "current" => max(1, $paged),
+            "total" => $wp_query->max_num_pages,
+            "prev_text" => __("Předchozí", KT_DOMAIN),
+            "next_text" => __("Další", KT_DOMAIN)
+        );
+
+        $argsPagination = wp_parse_args($userArgs, $defaultArgs);
+
+        return paginate_links($argsPagination);
+    }
 
     /**
      * Vypíše stránkování určené pro WP loopu v bootstrap stylu

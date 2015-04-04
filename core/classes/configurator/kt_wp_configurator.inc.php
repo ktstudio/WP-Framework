@@ -1059,7 +1059,7 @@ final class KT_WP_Configurator {
                 $postType->classes = array();
                 $postType->type = $postType->name;
                 $postType->object_id = $postType->name;
-                $postType->title = $postType->labels->name . " " . __("Archiv", KT_DOMAIN);
+                $postType->title = $postType->labels->name;
                 $postType->object = self::POST_TYPE_ARCHIVE_OBJECT_KEY;
             }
 

@@ -16,13 +16,19 @@ class KT_WP_Term_Base_Presenter extends KT_Presenter_Base {
         $this->termModelInit($term, $taxonomy);
     }
 
-    // --- veřejné funkce -----------
+    // --- getry & setry -----------
 
     /**
      * @return \KT_WP_Term_Base_Model
      */
     public function getModel() {
         return parent::getModel();
+    }
+
+    // --- veřejné funkce -----------
+
+    public function getPaginationLinks(WP_Query $wp_query = null, $userArgs = array()) {
+        return KT::getPaginationLinks($wp_query, $userArgs);
     }
 
     // --- privátní funkce ----------
@@ -46,42 +52,6 @@ class KT_WP_Term_Base_Presenter extends KT_Presenter_Base {
     }
 
     // --- statické funkce ----------
-
-    /**
-     * Vytvoří stránkování
-     *
-     * @global WP_Query $wp_query
-     * @param WP_Query $wpQuery
-     * @param array $userArgs // pro paginate_links (@link http://codex.wordpress.org/Function_Reference/paginate_links)
-     * @return string
-     */
-    public static function getPagination(WP_Query $wp_query = null, $userArgs = array()) {
-        if (KT::notIssetOrEmpty($wp_query)) {
-            global $wp_query;
-        }
-
-        $paged = get_query_var("paged");
-
-        if (KT::notIssetOrEmpty($paged)) {
-            $paged = htmlspecialchars($paged);
-        }
-
-        $defaultArgs = array(
-            "format" => "/page/%#%",
-            "current" => max(1, $paged),
-            "total" => $wp_query->max_num_pages,
-            "prev_text" => __("Předchozí", KT_DOMAIN),
-            "next_text" => __("Další", KT_DOMAIN)
-        );
-
-        $argsPagination = wp_parse_args($userArgs, $defaultArgs);
-
-        $html = "<div id=\"ktPagination\">";
-        $html .= paginate_links($argsPagination);
-        $html .= "</div>";
-
-        return $html;
-    }
 
     /**
      * Vytažení všech termů pro zadané taxonomy vlastním způsobem ve formátu [ID, slug, name]

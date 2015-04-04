@@ -9,7 +9,7 @@
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
+abstract class KT_Catalog_Model_Base extends KT_Crud implements KT_Modelable {
 
     const ID_COLUMN = "id";
     const TITLE_COLUMN = "title";
@@ -17,7 +17,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
     const CODE_COLUMN = "code";
     const MENU_ORDER_COLUMN = "menu_order";
     const VISIBILITY_COLUMN = "visibility";
-    
+
     /**
      * Výchozí konstruktor ala @see KT_Crud = DB table (row)
      *
@@ -52,7 +52,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @link http://www.ktstudio.cz
      *
      * @param string $title
-     * @return \KT_Catalog_Base_Model
+     * @return \KT_Catalog_Model_Base
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setTitle($title) {
@@ -82,7 +82,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @link http://www.ktstudio.cz
      *
      * @param string $description
-     * @return \KT_Catalog_Base_Model
+     * @return \KT_Catalog_Model_Base
      */
     public function setDescription($description = null) {
         $this->addNewColumnToData(self::DESCRIPTION_COLUMN, $description);
@@ -108,7 +108,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @link http://www.ktstudio.cz
      *
      * @param string|integer $code
-     * @return \KT_Catalog_Base_Model
+     * @return \KT_Catalog_Model_Base
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setCode($code) {
@@ -138,7 +138,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @link http://www.ktstudio.cz
      *
      * @param string $menuOrder
-     * @return \KT_Catalog_Base_Model
+     * @return \KT_Catalog_Model_Base
      * @throws KT_Not_Set_Argument_Exception
      */
     public function setMenuOrder($menuOrder) {
@@ -149,7 +149,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
         }
         throw new KT_Not_Set_Argument_Exception("menu_order");
     }
-    
+
     /**
      * Vrátí (povinnou) viditelnost (pokud je používána)
      *
@@ -169,7 +169,7 @@ class KT_Catalog_Base_Model extends KT_Crud implements KT_Modelable {
      * @link http://www.ktstudio.cz
      *
      * @param boolean $visibility
-     * @return \KT_Catalog_Base_Model
+     * @return \KT_Catalog_Model_Base
      * @throws InvalidArgumentException
      * @throws KT_Not_Set_Argument_Exception
      */

@@ -169,18 +169,21 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param string $imageClass
+     * @param string $imageSize
      * @param string $tagId
      * @param string $tagClass
-     * @param string $imageSize
+     * @param string $imageAttr
 
      * 
      * @return mixed null|string (HTML)
      */
-    public function getThumbnailImageWithSelfLink($imageSize = KT_WP_IMAGE_SIZE_MEDIUM, $tagId = "thumbImage", $tagClass = "gallery", $imageClass = "img-responsive") {
+    public function getThumbnailImageWithSelfLink($imageSize = KT_WP_IMAGE_SIZE_MEDIUM, $tagId = "thumbImage", $tagClass = "gallery", $imageAttr = array("class" => "img-responsive")) {
         if ($this->getModel()->hasThumbnail()) {
             $titleAttribute = $this->getModel()->getTitleAttribute();
-            $image = $this->getThumbnailImage($imageSize, array("class" => $imageClass, "alt" => $titleAttribute));
+            if (!array_key_exists("alt", $imageAttr)) {
+                $imageAttr["alt"] = $titleAttribute;
+            }
+            $image = $this->getThumbnailImage($imageSize, $imageAttr);
             $linkImage = wp_get_attachment_image_src($this->getModel()->getThumbnailId(), KT_WP_IMAGE_SIZE_LARGE);
             $isTagContainer = (KT::issetAndNotEmpty($tagId) && KT::issetAndNotEmpty($tagClass));
             if ($isTagContainer) {
@@ -217,13 +220,12 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             $thumbnailId = get_post_thumbnail_id($post->ID);
             $image = wp_get_attachment_image_src($thumbnailId, $imageSize);
             $imageSrc = $image[0];
+            $defaults = array("alt" => $post->post_title);
             if (!array_key_exists("class", $imageAttr) || !KT::stringContains($imageAttr["class"], "img-responsive")) { // pro responzivní obrázky nechceme pevné rozměry
-                $imageAttr["width"] = $image[1];
-                $imageAttr["height"] = $image[2];
+                $defaults["width"] = $image[1];
+                $defaults["height"] = $image[2];
             }
-            if (!array_key_exists("alt", $imageAttr)) { // jen když nebyl zadán vlastní popisek
-                $imageAttr["alt"] = $post->post_title;
-            }
+            $imageAttr = wp_parse_args($imageAttr, $defaults);
         } else {
             $imageSrc = $defaultImageSrc;
         }

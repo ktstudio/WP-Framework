@@ -6,7 +6,7 @@
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-class KT_Language_Model extends KT_Catalog_Base_Model {
+class KT_Language_Model extends KT_Catalog_Model_Base {
 
     const TABLE = "kt_shop_languages";
     const ORDER_COLUMN = self::TITLE_COLUMN;
