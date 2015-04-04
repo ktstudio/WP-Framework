@@ -813,7 +813,7 @@ class KT {
             }
             return (bool) $value;
         }
-        strtolower((string) $value);
+        $text = strtolower((string) $value);
         if ($text === "1" || $text === "true" || $text === "ano" || $text === "yes") {
             return false;
         }

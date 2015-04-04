@@ -754,8 +754,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess{
      * @return \KT_Category_Field
      */
     public function addWpCategory($name, $label) {
-        $categoryManager = new KT_Taxonomy_Data_Manager();
-        $categoryManager->setTaxonomy(KT_WP_CATEGORY_KEY);
+        $categoryManager = new KT_Taxonomy_Data_Manager(KT_WP_CATEGORY_KEY);
         $field = $this->fields[$name] = new KT_Select_Field($name, $label);
         $field->setDataManager($categoryManager)->setPostPrefix($this->getPostPrefix());
         return $field;
