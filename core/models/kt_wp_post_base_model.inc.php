@@ -647,7 +647,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
             $query = "SELECT meta_key, meta_value FROM {$wpdb->postmeta} WHERE post_id = %d";
             $prepareData[] = $post->ID;
             if (isset($prefix)) {
-                $query .= " AND meta_key LIKE '%s'";
+                $query .= " AND meta_key LIKE '%s' OR meta_key = '_thumbnail_id'";
                 $prepareData[] = $prefix . "%";
             }
             $postMetas = $wpdb->get_results($wpdb->prepare($query, $prepareData), ARRAY_A);

@@ -317,7 +317,10 @@ class KT {
      * @return string (datum)
      */
     public static function dateConvert($value, $format = "d.m.Y") {
-        return date($format, strtotime($value));
+        if (KT::issetAndNotEmpty($value)) {
+            return date($format, strtotime($value));
+        }
+        return null;
     }
 
     // --- GENERÁLNÍ FUNKCE ---------------------------

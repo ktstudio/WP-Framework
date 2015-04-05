@@ -26,6 +26,7 @@ abstract class KT_Multi_Presenter_Base extends KT_Presenter_Base {
             while ($query->have_posts()) : $query->the_post();
                 get_template_part("loops/loop", $loopName);
             endwhile;
+            wp_reset_postdata();
         }
     }
 

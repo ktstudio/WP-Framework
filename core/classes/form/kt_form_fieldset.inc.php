@@ -1,6 +1,6 @@
 <?php
 
-class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess{
+class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
 
     private $title = null;
     private $description = null;
@@ -18,28 +18,30 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess{
 
         return $this;
     }
-    
+
     // --- arrayAccess ------------------
-    
-     public function offsetExists( $offset ){
+
+    public function offsetExists($offset) {
         $fields = $this->getFields();
         return array_key_exists($offset, $fields);
     }
-    
-    public function offsetGet ( $offset ){
-        if($this->offsetExists($offset)){
+
+    public function offsetGet($offset) {
+        if ($this->offsetExists($offset)) {
             $fields = $this->getFields();
             return $fields[$offset];
         }
-        
+
         return null;
     }
-    
-    public function offsetUnset ( $offset ){
+
+    public function offsetUnset($offset) {
         $this->removeFieldByName($offset);
     }
-    
-    public function offsetSet ( $offset , $value ){}
+
+    public function offsetSet($offset, $value) {
+        
+    }
 
     // --- gettery ------------------
 
@@ -776,7 +778,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess{
         $field->setPostPrefix($this->postPrefix);
         return $field;
     }
-    
+
     /**
      * Přidá nový typ fieldu KT_Slider_Field - výběr čísla pomocí slideru jQuery UI
      *
@@ -787,7 +789,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess{
      * @param string $label
      * @return \KT_Slider_Field
      */
-    public function addSlider($name, $label){
+    public function addSlider($name, $label) {
         $field = $this->fields[$name] = new KT_Slider_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
         return $field;
@@ -849,12 +851,9 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess{
 
         $value = $field->getValue();
 
-        if (
-                $field->getFieldType() == KT_Select_Field::FIELD_TYPE ||
-                $field->getFieldType() == KT_Radio_Field::FIELD_TYPE
-        ) {
+        if ($field->getFieldType() == KT_Select_Field::FIELD_TYPE || $field->getFieldType() == KT_Radio_Field::FIELD_TYPE) {
             $fieldOption = $field->getDataManager()->getData();
-            if(array_key_exists($field->getValue(), $fieldOption)){
+            if (array_key_exists($field->getValue(), $fieldOption)) {
                 $value = $fieldOption[$field->getValue()];
             }
         }
