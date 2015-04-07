@@ -24,7 +24,8 @@ abstract class KT_Multi_Presenter_Base extends KT_Presenter_Base {
     public function theLoops(WP_Query $query, $loopName) {
         if (KT::issetAndNotEmpty($query) && $query->have_posts()) {
             while ($query->have_posts()) : $query->the_post();
-                get_template_part("loops/loop", $loopName);
+                global $post;
+                include(locate_template("loops/loop-" . $loopName . ".php"));
             endwhile;
             wp_reset_postdata();
         }
