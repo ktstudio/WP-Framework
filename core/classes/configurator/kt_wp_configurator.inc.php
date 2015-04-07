@@ -323,6 +323,7 @@ final class KT_WP_Configurator {
      */
     public function setImagesLazyLoading($imagesLazyLoading) {
         $this->imagesLazyLoading = $imagesLazyLoading;
+        return $this;
     }
 
     // --- veřejné funkce ---------------
