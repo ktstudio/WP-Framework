@@ -683,11 +683,15 @@ class KT_MetaBox implements KT_Registrable {
      * @return \KT_Crud
      */
     private function getCrudInstance() {
+        $idparamName = null;
+        $idParamValue = null;
         $dataType = $this->getDataType();
         $currentValue = $dataType->getCurrentValue();
         if ($currentValue === KT_MetaBox_Data_Types::CRUD) {
             $idparamName = $this->getIdParamName();
-            $idParamValue = htmlspecialchars($_GET["$idparamName"]);
+            if(array_key_exists($idparamName, $_GET)){
+                $idParamValue = htmlspecialchars($_GET["$idparamName"]);
+            }
             $className = $this->getClassName();
             if (KT::issetAndNotEmpty($idParamValue)) {
                 $instance = new $className($idParamValue);

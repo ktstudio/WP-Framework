@@ -373,6 +373,7 @@ class KT_CRUD_Admin_List {
      */
     protected function getTableBody() {
         $html = "";
+        $updatedRowId = null;
         $columnCollection = $this->getColumnList();
         $repository = $this->getRepository()->selectData();
 
