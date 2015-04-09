@@ -168,7 +168,7 @@ jQuery(document).ready(function () {
         }
     }
 
-    // Sortable číselníku vycházející z KT_Catalog_Base_Modelu
+    // Sortable číselníku vycházející z KT_Catalog_Model_Base
     var sortableTablefixHelper = function (e, ui) {
         ui.children().each(function () {
             jQuery(this).width(jQuery(this).width());

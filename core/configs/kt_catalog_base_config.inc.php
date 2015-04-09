@@ -72,14 +72,8 @@ class KT_Catalog_Base_Config {
                 ->setDeletable()
                 ->setLabel(__("Titulek", KT_DOMAIN));
 
-        //$crudList->addColumn(KT_Catalog_Base_Model::DESCRIPTION_COLUMN)
-        //        ->setLabel(__("Popisek", KT_DOMAIN));
-
         $crudList->addColumn(KT_Catalog_Model_Base::CODE_COLUMN)
-                ->setLabel(__("Kód", KT_DOMAIN));
-
-        //$crudList->addColumn(KT_Catalog_Base_Model::MENU_ORDER_COLUMN)
-        //        ->setLabel(__("Pořadí", KT_DOMAIN));
+                ->setLabel(__("Kód", KT_DOMAIN));;
 
         $crudList->addColumn(KT_Catalog_Model_Base::VISIBILITY_COLUMN)
                 ->setType(KT_CRUD_Admin_Column::SWITCH_BUTTON_TYPE)

@@ -667,14 +667,13 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * */
     public function loadDataFromPostMeta($postId) {
 
-        if (!KT::isIdFormat($postId)) {
+        if (!KT::isIdFormat($postId) || !$this->hasFieldset()) {
             return $this;
         }
-
-        if (!$this->hasFieldset()) {
-            return $this;
-        }
-
+        
+        $transientName = null;
+        $transientData = null;
+                
         if (is_admin()) {
             $transientName = $this->getCurrentTransientName();
             $transientData = get_transient($transientName);

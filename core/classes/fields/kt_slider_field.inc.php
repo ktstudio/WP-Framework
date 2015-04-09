@@ -88,8 +88,8 @@ class KT_Slider_Field extends KT_Slider_Field_Base {
      */
     public function getField() {
         $this->validatorJsonContentInit();
-              
-        $html .= "<div " . $this->getAttributeString() . ">";
+         
+        $html = "<div " . $this->getAttributeString() . ">";
         $html .= "<div class=\"sliderInputElement\" data-min=\"{$this->getMinValue()}\" data-max=\"{$this->getMaxValue()}\" data-step=\"{$this->getStep()}\">";
 
         $html .= "<input type=\"number\"";
