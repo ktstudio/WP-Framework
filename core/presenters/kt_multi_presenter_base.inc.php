@@ -14,6 +14,7 @@ abstract class KT_Multi_Presenter_Base extends KT_Presenter_Base {
 
     // --- getry & setry ------------------------ 
     // --- veřejné funkce ---------------------
+    // --- neveřejné funkce ---------------------
 
     /**
      * Výpis postů podle zadané query v zadané loopě
@@ -21,7 +22,7 @@ abstract class KT_Multi_Presenter_Base extends KT_Presenter_Base {
      * @param WP_Query $query
      * @param string $loopName
      */
-    public function theLoops(WP_Query $query, $loopName) {
+    protected function theQueryLoops(WP_Query $query, $loopName) {
         if (KT::issetAndNotEmpty($query) && $query->have_posts()) {
             while ($query->have_posts()) : $query->the_post();
                 global $post;
@@ -31,5 +32,31 @@ abstract class KT_Multi_Presenter_Base extends KT_Presenter_Base {
         }
     }
 
-    // --- neveřejné funkce ---------------------
+    /**
+     * Výpis postů podle zadané query v zadané loopě
+     * 
+     * @param WP_Query $query
+     * @param string $loopName
+     * @param mixed int|null $count
+     * @param mixed int|null $offset
+     */
+    protected function theItemsLoops(array $items, $loopName, $count = null, $offset = null) {
+        if (KT::arrayIssetAndNotEmpty($items)) {
+            $index = 0;
+            if (KT::tryGetInt($offset) > 0) {
+                $items = array_slice($items, $offset);
+            }
+            if (KT::tryGetInt($count) > 0) {
+                $items = array_slice($items, 0, $count);
+            }
+            foreach ($items as $item) {
+                global $post;
+                $post = $item;
+                include(locate_template("loops/loop-$loopName.php"));
+                $index++;
+            }
+            wp_reset_postdata();
+        }
+    }
+
 }
