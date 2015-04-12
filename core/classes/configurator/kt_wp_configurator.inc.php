@@ -34,6 +34,7 @@ final class KT_WP_Configurator {
     private $imagesLazyLoading = null;
     private $postArchiveMenu = null;
     private $sessionEnable = false;
+    private $facebookManager = null;
 
     // --- gettery ----------------------
 
@@ -148,6 +149,17 @@ final class KT_WP_Configurator {
      */
     private function getSessionEnable() {
         return $this->sessionEnable;
+    }
+    
+    /**
+     * @return \KT_WP_Facebook_Data_Configurator
+     */
+    public function getFacebookManager(){
+        if(KT::notIssetOrEmpty($this->facebookManager)){
+            $this->setFacebookManager(new KT_WP_Facebook_Data_Configurator());
+        }
+        
+        return $this->facebookManager;
     }
 
     // --- settery ----------------------
@@ -325,6 +337,20 @@ final class KT_WP_Configurator {
         $this->imagesLazyLoading = $imagesLazyLoading;
         return $this;
     }
+    
+    /**
+     * Nastaví facebook data manager do configurátoru
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param KT_WP_Facebook_Data_Configurator $facebookManager
+     * @return \KT_WP_Configurator
+     */
+    private function setFacebookManager(KT_WP_Facebook_Data_Configurator $facebookManager){
+        $this->facebookManager = $facebookManager;
+        return $this;
+    }
 
     // --- veřejné funkce ---------------
 
@@ -436,6 +462,11 @@ final class KT_WP_Configurator {
             add_action('init', array($this, 'startSesson'), 1);
             add_action('wp_logout', array($this, 'endSession'));
             add_action('wp_login', array($this, 'endSession'));
+        }
+        
+        // facebookManager
+        if($this->getFacebookManager()->getModulEnable()){
+            add_action("wp_head", array($this, 'facebookTagsInit'));
         }
     }
 
@@ -1108,6 +1139,17 @@ final class KT_WP_Configurator {
             }
         }
         return $items;
+    }
+    
+    /**
+     * Provede inicializaci facebook modulu a výpíše OG tagy do hlavičky webu
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     */
+    public function facebookTagsInit(){
+        $this->getFacebookManager()->renderHeaderTags();
     }
 
     /**
