@@ -659,14 +659,18 @@ class KT {
      * @param string $themeLocation
      * @param int $depth
      */
-    public static function theWpNavMenu($themeLocation, $depth = 0) {
-        wp_nav_menu(array(
+    public static function theWpNavMenu($themeLocation, $depth = 0, $customWalker = null) {
+        $args = array(
             "theme_location" => $themeLocation,
             "container" => false,
             "depth" => $depth,
             "items_wrap" => '%3$s',
-            "fallback_cb" => false
-        ));
+            "fallback_cb" => false,
+        );
+        if (KT::issetAndNotEmpty($customWalker)) {
+            $args["walker"] = $customWalker;
+        }
+        wp_nav_menu($args);
     }
 
     // --- NUMBERS - ČÍSLA ---------------------------

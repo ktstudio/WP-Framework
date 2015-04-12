@@ -189,7 +189,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             if ($isTagContainer) {
                 $html = KT::getTabsIndent(0, "<div id=\"$tagId\" class=\"$tagClass\">", true);
             }
-            $html .= KT::getTabsIndent(1, "<a href=\"{$linkImage[0]}\" class=\"fbx-link\" title=\"$titleAttribute\">", true);
+            $html .= KT::getTabsIndent(1, "<a href=\"{$linkImage[0]}\" title=\"$titleAttribute\" class=\"fbx-link\" rel=\"lightbox\">", true);
             $html .= KT::getTabsIndent(2, $image, true);
             $html .= KT::getTabsIndent(1, "</a>", true);
             if ($isTagContainer) {
