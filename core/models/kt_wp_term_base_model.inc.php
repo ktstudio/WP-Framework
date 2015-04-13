@@ -115,7 +115,7 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
     public function getPermalink() {
         return $permalink = get_term_link($this->getTerm());
     }
-    
+
     /**
      * Vrátí URL pro zobrazení feedu z daného termu
      * 
@@ -125,7 +125,7 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
      * @param string $feed
      * @return string
      */
-    public function getFeedLink( $feed = "rss2" ){
+    public function getFeedLink($feed = "rss2") {
         return get_term_feed_link($this->getId(), $this->getTaxonomy(), $feed);
     }
 

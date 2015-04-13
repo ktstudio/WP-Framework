@@ -11,7 +11,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
 
     public function __construct($name, $title = null, $description = null) {
         $this->setName($name)
-                ->addAttrClass("kt_fieldset")
+                ->addAttrClass("kt_fieldset panel")
                 ->setAttrId($name)
                 ->setTitle($title)
                 ->setDescription($description);

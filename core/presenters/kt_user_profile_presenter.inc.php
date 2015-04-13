@@ -92,14 +92,13 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @param integer $tabsCount
      * @param string $class
      */
-    public function theInfo($tabsCount = 0, $class = "textCenter") {
-        echo KT::getTabsIndent($tabsCount, '<p class="' . $class . '">', true);
-        echo KT::getTabsIndent($tabsCount + 1, __("*) Změní se pouze ty hodnoty, které jsou vyplněné a změněné.", KT_DOMAIN) . "<br />", true);
-        echo KT::getTabsIndent($tabsCount + 1, __("**) Hesla musejí být v případě změny shodná.", KT_DOMAIN), true);
-        echo KT::getTabsIndent($tabsCount, "</p>", true, true);
+    public function theInfo($class = "textCenter") {
+        echo KT::getTabsIndent(0, '<p class="' . $class . '">', true);
+        echo KT::getTabsIndent(1, __("*) Změní se pouze ty hodnoty, které jsou vyplněné a změněné.", KT_DOMAIN) . "<br />", true);
+        echo KT::getTabsIndent(1, __("**) Hesla musejí být v případě změny shodná.", KT_DOMAIN), true);
+        echo KT::getTabsIndent(0, "</p>", true, true);
     }
 
     /**

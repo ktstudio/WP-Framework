@@ -19,13 +19,13 @@ abstract class KT_Enum {
     private $translates = array();
 
     function __construct($currentValue = null, $currentKey = null, array $customKeyValues = null) {
-        if (KT::issetAndNotEmpty($customKeyValues)) {
+        if (isset($customKeyValues)) {
             $this->setCustomKeyValues($customKeyValues);
         }
-        if (KT::issetAndNotEmpty($currentKey)) {
+        if (isset($currentKey)) {
             $this->setCurrentKey($currentKey);
         }
-        if (KT::issetAndNotEmpty($currentValue)) {
+        if (isset($currentValue)) {
             $this->setCurrentValue($currentValue);
         }
     }
