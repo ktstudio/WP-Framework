@@ -10,7 +10,7 @@ jQuery(document).ready(function () {
                 "</div>";
 
         if (validationResult === false) {
-            jQuery("div.wrap h2").after(formNotice);
+            jQuery("div.wrap h2.screenTitle").after(formNotice);
         }
 
         return validationResult;

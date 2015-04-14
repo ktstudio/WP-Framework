@@ -8,6 +8,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     private $postPrefix = null;
     private $fields = array();
     private $serializeSave = false;
+    private $afterFieldsetContent = null;
 
     public function __construct($name, $title = null, $description = null) {
         $this->setName($name)
@@ -85,6 +86,13 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function getSeralizeSave() {
         return $this->serializeSave;
+    }
+
+    /**
+     * @return string
+     */
+    function getAfterFieldsetContent() {
+        return $this->afterFieldsetContent;
     }
 
     // --- settery ------------------
@@ -178,7 +186,21 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
 
         return $this;
     }
-
+    
+    /**
+     * Nastaví HTML / String, který se vypíše na konci fieldsetu
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $afterFieldsetContent
+     * @return \KT_Form_Fieldset
+     */
+    public function setAfterFieldsetContent($afterFieldsetContent = null) {
+        $this->afterFieldsetContent = $afterFieldsetContent;
+        return $this;
+    }
+    
     // --- veřejné funkce -------------------------
 
     /**
@@ -492,8 +514,12 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return string HTML
      */
     public function getEndHtmlOfFieldSet($fieldsetTag = true) {
+        $html = "";
+        if(KT::issetAndNotEmpty($this->getAfterFieldsetContent())){
+            $html .= "<div class=\"fieldsetAfterContent\">{$this->getAfterFieldsetContent()}</div>";
+        }
         $tag = $fieldsetTag ? "fieldset" : "div";
-        return "</$tag></div>";
+        return $html .= "</$tag></div>";
     }
 
     /**
