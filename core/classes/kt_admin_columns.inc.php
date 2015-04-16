@@ -18,6 +18,8 @@ class KT_Admin_Columns {
     const TAXONOMY_PARAM_KEY = "taxonomy";
     const PROPERTY_PARAM_KEY = "property";
     const METAKEY_PARAM_KEY = "meta_key";
+    const METAKEY_VALUE_KEY = "meta_value";
+    const METAKEY_VALUE_NUM_KEY = "meta_value_num";
     const FILTER_FUNCTION = "filter_function";
     const SORTABLE_PARAM_KEY = "sortable";
     const TYPE_PARAM_KEY = "type";
