@@ -185,7 +185,7 @@ final class KT_WP_Widget_Remover_Configurator {
         if (!$withoutText) {
             $this->removeTextWidget();
         }
-        if (!$withoutText) {
+        if (!$withoutMenu) {
             $this->removeNavMenuWidget();
         }
         return $this;

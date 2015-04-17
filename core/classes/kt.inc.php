@@ -512,6 +512,22 @@ class KT {
     }
 
     /**
+     * Vrátí hodnotu zadaného URL paramteru pokud existuje
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $key
+     * @return mixed string|null
+     */
+    public static function getUrlParamValue($key) {
+        if (KT::arrayIssetAndNotEmpty($_GET) && array_key_exists($key, $_GET)) {
+            return $_GET[$key];
+        }
+        return null;
+    }
+
+    /**
      * Na základě zadané adresy vrátí GPS souřadnice pomocí Google API pokud je možné
      * 
      * @author Martin Hlaváč

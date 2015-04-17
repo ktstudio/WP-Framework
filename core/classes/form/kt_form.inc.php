@@ -539,9 +539,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         $html = $this->getFormHeader();
 
-        if ($this->isFormSend() && $this->getShowNotice()) {
-            $html .= $this->getFormNotice();
-        }
+        $html .= $this->tryGetFormNotice();
 
         switch ($type) {
             case self::DISPLAY_TYPE_TABLE:
@@ -567,11 +565,26 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @return type
+     * @return string (HTML)
      */
     public function getFormHeader() {
         $html = "<form " . $this->getAttributeString() . ">";
         return $html;
+    }
+
+    /**
+     * Vrátí hlášku (zprávu) pokud je zadána a k dispozici
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return mixed null|string (HTML)
+     */
+    public function tryGetFormNotice() {
+        if ($this->isFormSend() && $this->getShowNotice()) {
+            return $this->getFormNotice();
+        }
+        return null;
     }
 
     /**
@@ -670,10 +683,10 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         if (!KT::isIdFormat($postId) || !$this->hasFieldset()) {
             return $this;
         }
-        
+
         $transientName = null;
         $transientData = null;
-                
+
         if (is_admin()) {
             $transientName = $this->getCurrentTransientName();
             $transientData = get_transient($transientName);
