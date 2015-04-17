@@ -15,7 +15,7 @@ class KT_WP_Facebook_Data_Configurator {
     private $imageUrl = null;
     private $url = null;
     private $description = null;
-    private $modulEnable = true;
+    private $moduleEnabled = false;
 
     public function __construct() {
         
@@ -153,8 +153,8 @@ class KT_WP_Facebook_Data_Configurator {
     /**
      * @return boolean
      */
-    public function getModulEnable() {
-        return $this->modulEnable;
+    public function getModuleEnabled() {
+        return $this->moduleEnabled;
     }
 
     /**
@@ -166,8 +166,8 @@ class KT_WP_Facebook_Data_Configurator {
      * @param type $modulEnable
      * @return \KT_WP_Facebook_Data_Configurator
      */
-    public function setModulEnable($modulEnable = false) {
-        $this->modulEnable = $modulEnable;
+    public function setModuleEnabled($modulEnable = false) {
+        $this->moduleEnabled = $modulEnable;
         return $this;
     }
 
@@ -209,6 +209,11 @@ class KT_WP_Facebook_Data_Configurator {
             return $this;
         }
 
+        if (is_search()) {
+            $this->setTitle(sprintf(__("Vyhledávání pro výraz: %s", KT_DOMAIN), trim(esc_attr(get_search_query()))));
+            return $this;
+        }
+
         if (is_category() || is_tax() || is_tag()) {
             $this->termDataInit();
             return $this;
@@ -225,8 +230,7 @@ class KT_WP_Facebook_Data_Configurator {
         }
 
         if (is_404()) {
-            $title = __("Chyba 404", KT_DOMAIN) . " - " . $this->getTitle();
-            $this->setTitle($title);
+            $this->setTitle(sprintf(__("Chyba 404 - %s", KT_DOMAIN), $this->getTitle()));
             return $this;
         }
 

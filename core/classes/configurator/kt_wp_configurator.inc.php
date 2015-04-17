@@ -150,15 +150,15 @@ final class KT_WP_Configurator {
     private function getSessionEnable() {
         return $this->sessionEnable;
     }
-    
+
     /**
      * @return \KT_WP_Facebook_Data_Configurator
      */
-    public function getFacebookManager(){
-        if(KT::notIssetOrEmpty($this->facebookManager)){
+    public function getFacebookManager() {
+        if (KT::notIssetOrEmpty($this->facebookManager)) {
             $this->setFacebookManager(new KT_WP_Facebook_Data_Configurator());
         }
-        
+
         return $this->facebookManager;
     }
 
@@ -337,7 +337,7 @@ final class KT_WP_Configurator {
         $this->imagesLazyLoading = $imagesLazyLoading;
         return $this;
     }
-    
+
     /**
      * Nastaví facebook data manager do configurátoru
      * 
@@ -347,7 +347,7 @@ final class KT_WP_Configurator {
      * @param KT_WP_Facebook_Data_Configurator $facebookManager
      * @return \KT_WP_Configurator
      */
-    private function setFacebookManager(KT_WP_Facebook_Data_Configurator $facebookManager){
+    private function setFacebookManager(KT_WP_Facebook_Data_Configurator $facebookManager) {
         $this->facebookManager = $facebookManager;
         return $this;
     }
@@ -459,14 +459,14 @@ final class KT_WP_Configurator {
 
         // session
         if ($this->getSessionEnable() === true) {
-            add_action('init', array($this, 'startSesson'), 1);
-            add_action('wp_logout', array($this, 'endSession'));
-            add_action('wp_login', array($this, 'endSession'));
+            add_action("init", array($this, "startSesson"), 1);
+            add_action("wp_logout", array($this, "endSession"));
+            add_action("wp_login", array($this, "endSession"));
         }
-        
+
         // facebookManager
-        if($this->getFacebookManager()->getModulEnable()){
-            add_action("wp_head", array($this, 'facebookTagsInit'));
+        if ($this->getFacebookManager()->getModuleEnabled()) {
+            add_action("wp_head", array($this, "facebookTagsInit"), 99);
         }
     }
 
@@ -1140,7 +1140,7 @@ final class KT_WP_Configurator {
         }
         return $items;
     }
-    
+
     /**
      * Provede inicializaci facebook modulu a výpíše OG tagy do hlavičky webu
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
@@ -1148,7 +1148,7 @@ final class KT_WP_Configurator {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
-    public function facebookTagsInit(){
+    public function facebookTagsInit() {
         $this->getFacebookManager()->renderHeaderTags();
     }
 
