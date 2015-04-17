@@ -2,13 +2,14 @@
 
 abstract class KT_Custom_Metaboxes_Base {
 
-    const KT_METABOX_SCREEN = "metaboxes";
-    const KT_CRUD_LIST_SCREEN = "crud-list";
-    const KT_COLUMN_ONE = 1;
-    const KT_COLUMN_TWO = 2;
+    const METABOX_SCREEN = "metaboxes";
+    const CRUD_LIST_SCREEN = "crud-list";
+    const COLUMN_ONE = 1;
+    const COLUMN_TWO = 2;
+    const UPDATED_GET_KEY = "redirect";
 
     private $renderSaveButton = false;
-    private $NumberColumns = self::KT_COLUMN_TWO;
+    private $NumberColumns = self::COLUMN_TWO;
     private $screenCollection = array();
     private $defaultCallbackFunction = array();
     private $metaboxCollection = array();
@@ -104,7 +105,7 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function setNumberColumns($numberColumns) {
 
-        if (!KT::isIdFormat($numberColumns) && $numberColumns > self::KT_COLUMN_TWO) {
+        if (!KT::isIdFormat($numberColumns) && $numberColumns > self::COLUMN_TWO) {
             return $this;
         }
 
@@ -307,6 +308,46 @@ abstract class KT_Custom_Metaboxes_Base {
         add_screen_option('layout_columns', array('max' => 2, 'default' => $this->NumberColumns));
         wp_enqueue_script('postbox');
         wp_enqueue_media();
+        
+        if(!array_key_exists(self::UPDATED_GET_KEY, $_GET)){
+            return;
+        }        
+        
+        switch ($_GET[self::UPDATED_GET_KEY]) {
+            case "false":
+                add_action( "admin_notices", array($this, "adminNoticesError"));
+                break;
+
+            default:
+                add_action( "admin_notices", array($this, "adminNoticesSuccuess"));
+                break;
+        }
+    }
+    
+    /**
+     * Zobrazí obsah chybové hlášky při uložení informací
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     */
+    public function adminNoticesError(){
+        echo "<div class=\"error\">";
+        echo "<p>" . __( 'Error! - některá data nebyla uložena. Zkontroluje vstupní informace a proces opakujte', KT_DOMAIN ) . "</p>";
+        echo "</div>";
+    }
+    
+    /**
+     * Zobrazí obsah hlášky při úspěšném uložení informací
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     */
+    public function adminNoticesSuccuess(){
+        echo "<div class=\"updated\">";
+        echo "<p>" . __( 'Informace byly úspěšně uloženy.', KT_DOMAIN ) . "</p>";
+        echo "</div>";
     }
 
     /**
@@ -335,7 +376,7 @@ abstract class KT_Custom_Metaboxes_Base {
 
                 if (KT::issetAndNotEmpty($getValue) && $actionValue == $getValue) {
                     $callbackFunction = $screenAction->getCallBackFunction();
-                    if ($callbackFunction == self::KT_METABOX_SCREEN){
+                    if ($callbackFunction == self::METABOX_SCREEN){
                         return array($this, 'renderPage');
                     }
 
@@ -344,7 +385,7 @@ abstract class KT_Custom_Metaboxes_Base {
             }
         }
         
-        if($this->getDefaultCallbackFunction() == self::KT_CRUD_LIST_SCREEN){
+        if($this->getDefaultCallbackFunction() == self::CRUD_LIST_SCREEN){
             return array($this, "renderCrudListPage");
         }
 
@@ -362,7 +403,7 @@ abstract class KT_Custom_Metaboxes_Base {
         <div class="wrap kt-custom-screen-page">
             <h2 class="screenTitle"> <?php echo esc_html($this->getTitle()); ?> </h2>
             <form id="kt-custom-page-screen" class="<?php echo $this->getSlug(); ?>" name="kt-custom-page-screen" method="post">
-                <input type="hidden" name="kt-action" value="kt-action-<?php $this->getSlug(); ?>">
+                <input type="hidden" name="kt-admin-screen-action" value="kt-action-<?php $this->getSlug(); ?>">
                 <?php
                 wp_nonce_field('kt-action-nonce');
 
@@ -443,6 +484,28 @@ abstract class KT_Custom_Metaboxes_Base {
     public function saveMetaboxCallback() {
         do_action("kt_theme_setting_box_" . KT_WP_Configurator::getThemeSettingSlug());
         echo "<button type=\"submit\" class=\"button button-primary button-large\">" . __('Uložit nastavení', KT_DOMAIN) . "</button>";
+    }
+    
+    // --- protected functions ------------------
+    
+    /**
+     * Prověří, zda je daná stránka otevřena a jsou na ní odeslány data pomocí POST metody
+     * pokud ano, zavede příslušnou akci a provede redirect
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $screenName
+     */
+    protected function screenUpdatingRedirect($screenName){
+        if(array_key_exists("kt-admin-screen-action", $_POST) && array_key_exists("page", $_GET)){
+            $pageSlug = $_GET["page"];
+            if($pageSlug == $this->getSlug()){
+                do_action("kt-custom-metabox-save-$screenName");
+                wp_redirect(add_query_arg(array(self::UPDATED_GET_KEY => "true"), KT::getRequestUrl()));
+                exit;
+            }
+        }
     }
 
 }

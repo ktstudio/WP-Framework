@@ -20,6 +20,11 @@ img.kt-loading-image
     font-size: 15px;
 }
 
+.kt-custom-screen-page div.updated
+{
+    margin-top: 15px;
+}
+
 .kt-custom-screen-page table.wp-list-table
 {
     margin-top: 15px;

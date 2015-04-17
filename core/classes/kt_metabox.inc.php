@@ -414,13 +414,18 @@ class KT_MetaBox implements KT_Registrable {
      */
     public function register() {
         $screen = $this->getScreen();
+        
         add_action("add_meta_boxes_$screen", array($this, "add"));
         if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::POST_META) {
             add_action("save_post_$screen", array($this, "savePost"));
         }
 
         if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::CRUD) {
-            add_action("load-$screen", array($this, "saveCrud"));
+            add_action("kt-custom-metabox-save-$screen", array($this, "saveCrud"));
+        }
+        
+        if($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::OPTIONS){
+            add_action("kt-custom-metabox-save-$screen", array($this, "saveOptions"));
         }
     }
 
@@ -486,21 +491,33 @@ class KT_MetaBox implements KT_Registrable {
             foreach ($fieldset->getFields() as $field) {
                 $crudInstance->addNewColumnToData($field->getName(), $field->getValue());
             }
-            
             $crudInstance->saveRow();
-            
-            if (array_key_exists("page", $_GET)) {
-                $pageSlug = $_GET["page"];
-                $redirectUrl = menu_page_url($pageSlug, false) . "&" . $crudInstance::ID_COLUMN . "=" . $crudInstance->getid();
-            } else {
-                wp_die(__("Snažíte se podvádět!?", KT_DOMAIN));
-            }
-            
             do_action("kt_after_metabox_save_crud", $crudInstance);
-            
-            wp_redirect($redirectUrl);
-            exit;
         }
+    }
+    
+    /**
+     * Provede uložení dat poslané metaboxem do tabulky wp_options
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     */
+    public function saveOptions(){
+        $isDefaultAutoSave = $this->getIsDefaultAutoSave();
+        $fieldset = $this->getFieldset();
+        $form = new KT_Form();
+        $form->addFieldSetByObject($fieldset);
+        $form->validate();
+        
+        KT::pr($fieldset->getName());
+        
+        if(!$form->isFormSend() || $form->hasError() || !$isDefaultAutoSave){
+            return;
+        }
+        
+        do_action("kt_before_metabox_save_options", $form);
+        $form->saveFieldsetToOptionTable();
+        do_action("kt_after_metabox_save_options", $form);
     }
 
     /**
@@ -535,11 +552,6 @@ class KT_MetaBox implements KT_Registrable {
                 $form->loadDataFromPostMeta($post->ID);
                 break;
             case KT_MetaBox_Data_Types::OPTIONS:
-                if ($isDefaultAutoSave) {
-                    do_action("kt_before_metabox_save_options", $form);
-                    $form->saveFieldsetToOptionTable();
-                    do_action("kt_after_metabox_save_options", $form);
-                }
                 $form->loadDataFromWpOption();
                 break;
             case KT_MetaBox_Data_Types::CRUD:
@@ -562,7 +574,7 @@ class KT_MetaBox implements KT_Registrable {
             default:
                 throw new KT_Not_Implemented_Exception(__("Datový typ MetaBoxu: $currentValue", KT_DOMAIN));
         }
-        if ($form->isFormSend() && $form->getShowNotice()) {
+        if ($form->isFormSend() && $form->getShowNotice() && $this->getIsDefaultAutoSave()) {
             echo $form->getFormNotice();
         }
 

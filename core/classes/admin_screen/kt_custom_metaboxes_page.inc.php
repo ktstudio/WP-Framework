@@ -212,6 +212,8 @@ class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
         $screenId = add_menu_page(
                 $this->getTitle(), $this->getMenuTitle(), $this->getCapability(), $this->getSlug(), $callBackScreenFunction, $this->getIcon(), $this->getPosition()
         );
+        
+        $this->screenUpdatingRedirect($screenId);
 
         if (is_array($callBackScreenFunction)) {
             add_action('load-' . $screenId, array($this, 'doPageAction'), 9);

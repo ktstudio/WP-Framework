@@ -172,6 +172,8 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
         $callBackScreenFunction = $this->getCallbackFunctionByActionScreen();
         $screenId = add_submenu_page($this->getParentPage(), $this->getTitle(), $this->getMenuTitle(), $this->getCapability(), $this->getSlug(), $callBackScreenFunction);
         $this->setPage($screenId);
+        
+        $this->screenUpdatingRedirect($screenId);
 
         if (is_array($callBackScreenFunction)) {
             add_action('load-' . $this->getPage(), array($this, 'doPageAction'), 9);
