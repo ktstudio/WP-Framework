@@ -509,8 +509,6 @@ class KT_MetaBox implements KT_Registrable {
         $form->addFieldSetByObject($fieldset);
         $form->validate();
         
-        KT::pr($fieldset->getName());
-        
         if(!$form->isFormSend() || $form->hasError() || !$isDefaultAutoSave){
             return;
         }
