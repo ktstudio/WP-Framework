@@ -19,6 +19,43 @@ abstract class KT_Widget_Base extends WP_Widget implements KT_Registrable {
         $this->description = $description;
     }
 
+    // --- getry & setry ------------------------ 
+
+    /**
+     * Vrátí unikátní identifikátor widgetu, či v terminologie \WP_Widget id
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * Vrátí číslo (v podstatě ID) právě na základě ID property, resp. její číselné přípony
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public function getNumber() {
+        $id = $this->getId();
+        if (KT::issetAndNotEmpty($id)) {
+            $parts = explode("-", $id);
+            $parts = array_reverse($parts);
+            $number = KT::tryGetInt($parts[0]);
+            if (KT::isIdFormat($number)) {
+                return $number;
+            } else {
+                return next_widget_id_number($this->getName());
+            }
+        }
+        return 0;
+    }
+
     /**
      * Vrátí zadaný název, či v terminologie \WP_Widget base_id
      * 
@@ -27,7 +64,7 @@ abstract class KT_Widget_Base extends WP_Widget implements KT_Registrable {
      * 
      * @return string
      */
-    function getName() {
+    public function getName() {
         return $this->id_base;
     }
 
@@ -39,7 +76,7 @@ abstract class KT_Widget_Base extends WP_Widget implements KT_Registrable {
      * 
      * @return string
      */
-    function getTitle() {
+    public function getTitle() {
         return $this->name;
     }
 
@@ -51,9 +88,11 @@ abstract class KT_Widget_Base extends WP_Widget implements KT_Registrable {
      * 
      * @return string
      */
-    function getDescription() {
+    public function getDescription() {
         return $this->description;
     }
+
+    // --- veřejné funkce ------------------------ 
 
     /**
      * Základní (ne)formulář, resp. výpis zadaného popisku a informace, že není dostupná konfigurace widgetu
