@@ -180,6 +180,11 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     public function getThumbnailImageWithSelfLink($imageSize = KT_WP_IMAGE_SIZE_MEDIUM, $tagId = "thumbImage", $tagClass = "gallery", $imageAttr = array("class" => "img-responsive")) {
         if ($this->getModel()->hasThumbnail()) {
             $titleAttribute = $this->getModel()->getTitleAttribute();
+            $attachment = get_post($this->getModel()->getThumbnailId());
+            
+            if(KT::issetAndNotEmpty($attachment->post_title)){
+                $imageAttr["alt"] = $attachment->post_title;
+            }
             if (!array_key_exists("alt", $imageAttr)) {
                 $imageAttr["alt"] = $titleAttribute;
             }

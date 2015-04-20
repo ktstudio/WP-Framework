@@ -267,7 +267,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * @param string $value
      * @return \KT_Crud
      */
-    public function addNewColumnToData($name, $value = null) {
+    public function addNewColumnToData($name, $value = null) { 
         $currentDataCollection = $this->getData();
         $currentDataCollection[$name] = $value;
         $this->setData($currentDataCollection);
@@ -484,7 +484,6 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * @link http://www.ktstudio.cz
      *
      * @return array
-     * @throws InvalidArgumentException
      */
     private function getArrayOfFieldsFormat() {
 
@@ -497,11 +496,9 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
             } elseif (is_float($value)) {
                 $formats[] = "%f";
                 continue;
-            } elseif (is_string($value)) {
-                $formats[] = "%s";
-                continue;
             }
-            throw new InvalidArgumentException($key);
+            
+            $formats[] = "%s";
         }
 
         return $formats;
