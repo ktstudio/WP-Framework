@@ -431,6 +431,12 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return string
      */
     public function getInputToTr(KT_Field $field) {
+        
+        if($field->getFieldType() === KT_WP_Editor_Field::FIELD_TYPE){
+            $field->getField();
+            return "";
+        }
+        
         $html = "<tr>";
 
         if (KT::issetAndNotEmpty($field->getLabel())) {
@@ -817,6 +823,23 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addSlider($name, $label) {
         $field = $this->fields[$name] = new KT_Slider_Field($name, $label);
+        $field->setPostPrefix($this->postPrefix);
+        return $field;
+    }
+    
+    /**
+     * Přidá typ Fieldu KT_WP_Editor_Field, který na pozadí vykreslí textareu, a pomocí
+     * JS překreslí na WYSIWYG editor WordPressu
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $name
+     * @param string $label
+     * @return \KT_WP_Editor_Field
+     */
+    public function addWpEditor($name, $label){
+        $field = $this->fields[$name] = new KT_WP_Editor_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
         return $field;
     }
