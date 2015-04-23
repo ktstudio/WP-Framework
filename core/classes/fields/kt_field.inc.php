@@ -385,7 +385,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
         }
 
 
-        if (KT::issetAndNotEmpty($this->value) || $this->value === "0" || $this->value === 0) {
+        if ($this->value !== "" && isset($this->value)) {
             return $this->value;
         }
 

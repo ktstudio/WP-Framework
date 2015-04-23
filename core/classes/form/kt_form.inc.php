@@ -660,7 +660,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
             foreach ($fieldset->getFields() as $field) {
                 $value = get_option($field->getName());
-                if (KT::issetAndNotEmpty($value)) {
+                if ($value !== "" && isset($value)) {
                     $field->setValue($value);
                 }
             }
@@ -1050,7 +1050,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         foreach ($fieldSet->getFields() as $field) {
             if (!in_array($field->getName(), $exludeFields)) {
                 $fieldValue = $field->getValue();
-                if ($fieldValue != "" || $fieldValue === 0 || $fieldValue === "0") {
+                if ($fieldValue !== "" && isset($fieldValue)) {
                     update_option($field->getName(), $field->getValue());
                 } else {
                     delete_option($field->getName());
@@ -1117,7 +1117,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
             $old = get_post_meta($postId, $field->getName(), true);
             $new = $field->getValue();
 
-            if ($new === '') {
+            if ($new === '' || !isset($new)) {
                 delete_post_meta($postId, $field->getName());
                 continue;
             }
@@ -1192,9 +1192,10 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
             if (in_array($field->getName(), $excludeFields)) {
                 continue;
             }
+            
+            $fieldValue = $field->getValue();
 
-            if (KT::issetAndNotEmpty($field->getValue())) {
-
+            if ($fieldValue !== "" && isset($fieldValue)) {
                 $fieldType = get_class($field);
                 if ($fieldType == "KT_Text_Field") {
                     if ($field->getInputType() == KT_Text_Field::INPUT_DATE) {

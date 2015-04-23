@@ -166,6 +166,7 @@ class KT_Select_Field extends KT_Options_Field_Base {
     private function getSignleOptionItem($optionKey, $optionValue) {
         $selected = null;
         $value = $this->getValue();
+        
         if ($optionKey == $value && $value !== null && $value !== '') {
             $selected = " selected=\"selected\"";
         }

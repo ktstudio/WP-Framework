@@ -288,7 +288,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
                 }
             }
 
-            if (KT::issetAndNotEmpty($fieldValue) || $fieldValue === "0" || $fieldValue === 0) {
+            if ($fieldValue !== "" && isset($fieldValue)) {
                 $field->setValue($fieldValue);
             }
         }
