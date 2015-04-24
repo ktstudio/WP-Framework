@@ -414,18 +414,18 @@ class KT_MetaBox implements KT_Registrable {
      */
     public function register() {
         $screen = $this->getScreen();
-        
+
         add_action("add_meta_boxes_$screen", array($this, "add"));
         if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::POST_META) {
             add_action("save_post_$screen", array($this, "savePost"));
         }
 
         if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::CRUD) {
-            add_action("kt-custom-metabox-save-$screen", array($this, "saveCrud"));
+            add_filter("kt-custom-metabox-save-$screen", array($this, "saveCrud"));
         }
-        
-        if($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::OPTIONS){
-            add_action("kt-custom-metabox-save-$screen", array($this, "saveOptions"));
+
+        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::OPTIONS) {
+            add_filter("kt-custom-metabox-save-$screen", array($this, "saveOptions"));
         }
     }
 
@@ -474,45 +474,62 @@ class KT_MetaBox implements KT_Registrable {
      * 
      * @author Tomáš Kocifaj
      */
-    public function saveCrud() {
+    public function saveCrud(array $saveResult) {
         $crudInstance = $this->getCrudInstance();
         $isDefaultAutoSave = $this->getIsDefaultAutoSave();
         $fieldset = $this->getFieldset();
         $fieldset->setTitle("");
         $form = new KT_Form();
-        $form->addFieldSetByObject($fieldset);      
-        
+        $form->addFieldSetByObject($fieldset);
+
         $form->validate();
-        
+
         if ($isDefaultAutoSave && $form->isFormSend() && !$form->hasError()) {
             do_action("kt_before_metabox_save_crud", $crudInstance);
-            
-            $fieldset->setFieldsData($fieldset->getDataFromPost());
+
             foreach ($fieldset->getFields() as $field) {
-                $crudInstance->addNewColumnToData($field->getName(), $field->getValue());
+                $fieldValue = $field->getValue();
+                if ($field->getFieldType() == KT_Text_Field::FIELD_TYPE) {
+                    if ($field->getInputType() == KT_Text_Field::INPUT_DATE && KT::issetAndNotEmpty($fieldValue)) {
+                        $fieldValue = KT::dateConvert($fieldValue, "Y-m-d");
+                    }
+                }
+                
+                $crudInstance->addNewColumnValue($field->getName(), $fieldValue);
             }
             $crudInstance->saveRow();
+
+            if ($crudInstance->hasError()) {
+                $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = false;
+                return $saveResult;
+            }
+
             do_action("kt_after_metabox_save_crud", $crudInstance);
+            $saveResult["crud"] = $crudInstance;
+            return $saveResult;
         }
+
+        $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = false;
+        return $saveResult;
     }
-    
+
     /**
      * Provede uložení dat poslané metaboxem do tabulky wp_options
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
-    public function saveOptions(){
+    public function saveOptions() {
         $isDefaultAutoSave = $this->getIsDefaultAutoSave();
         $fieldset = $this->getFieldset();
         $form = new KT_Form();
         $form->addFieldSetByObject($fieldset);
         $form->validate();
-        
-        if(!$form->isFormSend() || $form->hasError() || !$isDefaultAutoSave){
+
+        if (!$form->isFormSend() || $form->hasError() || !$isDefaultAutoSave) {
             return;
         }
-        
+
         do_action("kt_before_metabox_save_options", $form);
         $form->saveFieldsetToOptionTable();
         do_action("kt_after_metabox_save_options", $form);
@@ -571,9 +588,6 @@ class KT_MetaBox implements KT_Registrable {
                 return;
             default:
                 throw new KT_Not_Implemented_Exception(__("Datový typ MetaBoxu: $currentValue", KT_DOMAIN));
-        }
-        if ($form->isFormSend() && $form->getShowNotice() && $this->getIsDefaultAutoSave()) {
-            echo $form->getFormNotice();
         }
 
         echo $form->getInputsToTable();
@@ -699,7 +713,7 @@ class KT_MetaBox implements KT_Registrable {
         $currentValue = $dataType->getCurrentValue();
         if ($currentValue === KT_MetaBox_Data_Types::CRUD) {
             $idparamName = $this->getIdParamName();
-            if(array_key_exists($idparamName, $_GET)){
+            if (array_key_exists($idparamName, $_GET)) {
                 $idParamValue = htmlspecialchars($_GET["$idparamName"]);
             }
             $className = $this->getClassName();

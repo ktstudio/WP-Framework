@@ -7,6 +7,7 @@ abstract class KT_Custom_Metaboxes_Base {
     const COLUMN_ONE = 1;
     const COLUMN_TWO = 2;
     const UPDATED_GET_KEY = "redirect";
+    const SAVE_RESULT_KEY = "result";
 
     private $renderSaveButton = false;
     private $NumberColumns = self::COLUMN_TWO;
@@ -318,7 +319,7 @@ abstract class KT_Custom_Metaboxes_Base {
                 add_action( "admin_notices", array($this, "adminNoticesError"));
                 break;
 
-            default:
+            case "true":
                 add_action( "admin_notices", array($this, "adminNoticesSuccuess"));
                 break;
         }
@@ -501,9 +502,28 @@ abstract class KT_Custom_Metaboxes_Base {
         if(array_key_exists("kt-admin-screen-action", $_POST) && array_key_exists("page", $_GET)){
             $pageSlug = $_GET["page"];
             if($pageSlug == $this->getSlug()){
-                do_action("kt-custom-metabox-save-$screenName");
-                wp_redirect(add_query_arg(array(self::UPDATED_GET_KEY => "true"), KT::getRequestUrl()));
-                exit;
+                $saveResult = array(self::SAVE_RESULT_KEY => true);
+                $saveResult = apply_filters("kt-custom-metabox-save-$screenName", $saveResult);
+                
+                if($saveResult[self::SAVE_RESULT_KEY] !== true){
+                    add_action("admin_notices", array($this, "adminNoticesError"));
+                    return;
+                }
+                
+                if(array_key_exists("crud", $saveResult)){
+                    $crudInstance = $saveResult["crud"];
+                    $urlParams = array(
+                        "page" => $_GET["page"],
+                        "action" => "update",
+                        $crudInstance::ID_COLUMN => $crudInstance->getId(),
+                        self::UPDATED_GET_KEY => true
+                    );
+                    
+                    $adminPermlink = get_admin_url(null, "admin.php");
+                    $redirectLink = add_query_arg($urlParams, $adminPermlink);
+                    wp_redirect($redirectLink);
+                    exit;
+                }                
             }
         }
     }

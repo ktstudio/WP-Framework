@@ -37,7 +37,7 @@ function kt_edit_crud_list_switch_field_callback() {
     $columnValue = $_REQUEST["value"];
 
     $classModel = new $className($itemId);
-    $classModel->addNewColumnToData($columnName, $columnValue)->saveRow();
+    $classModel->addNewColumnValue($columnName, $columnValue)->saveRow();
 
     die(1);
 }

@@ -57,7 +57,7 @@ abstract class KT_Catalog_Model_Base extends KT_Crud implements KT_Modelable {
      */
     public function setTitle($title) {
         if (KT::issetAndNotEmpty($title)) {
-            $this->addNewColumnToData(self::TITLE_COLUMN, $title);
+            $this->addNewColumnValue(self::TITLE_COLUMN, $title);
             return $this;
         }
         throw new KT_Not_Set_Argument_Exception("title");
@@ -85,7 +85,7 @@ abstract class KT_Catalog_Model_Base extends KT_Crud implements KT_Modelable {
      * @return \KT_Catalog_Model_Base
      */
     public function setDescription($description = null) {
-        $this->addNewColumnToData(self::DESCRIPTION_COLUMN, $description);
+        $this->addNewColumnValue(self::DESCRIPTION_COLUMN, $description);
         return $this;
     }
 
@@ -113,7 +113,7 @@ abstract class KT_Catalog_Model_Base extends KT_Crud implements KT_Modelable {
      */
     public function setCode($code) {
         if (KT::issetAndNotEmpty($code)) {
-            $this->addNewColumnToData(self::CODE_COLUMN, $code);
+            $this->addNewColumnValue(self::CODE_COLUMN, $code);
             return $this;
         }
         throw new KT_Not_Set_Argument_Exception("code");
@@ -144,7 +144,7 @@ abstract class KT_Catalog_Model_Base extends KT_Crud implements KT_Modelable {
     public function setMenuOrder($menuOrder) {
         $menuOrder = KT::tryGetInt($menuOrder);
         if (is_integer($menuOrder)) {
-            $this->addNewColumnToData(self::MENU_ORDER_COLUMN, $menuOrder);
+            $this->addNewColumnValue(self::MENU_ORDER_COLUMN, $menuOrder);
             return $this;
         }
         throw new KT_Not_Set_Argument_Exception("menu_order");
@@ -176,15 +176,32 @@ abstract class KT_Catalog_Model_Base extends KT_Crud implements KT_Modelable {
     public function setVisibility($visibility) {
         if (isset($visibility)) {
             if ($visibility === true || $visibility == 1) {
-                $this->addNewColumnToData(self::VISIBILITY_COLUMN, 1);
+                $this->addNewColumnValue(self::VISIBILITY_COLUMN, 1);
                 return $this;
             } elseif ($visibility === false || $visibility == 0) {
-                $this->addNewColumnToData(self::VISIBILITY_COLUMN, 0);
+                $this->addNewColumnValue(self::VISIBILITY_COLUMN, 0);
                 return $this;
             }
             throw new InvalidArgumentException("visibility");
         }
         throw new KT_Not_Set_Argument_Exception("visibility");
+    }
+    
+    // --- veřejné funkce ------------------------
+    
+    /**
+     * Provede inicializaci sloupců v DB
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     */
+    public function initColumns() {
+        $this->addColumn(self::ID_COLUMN, KT_CRUD_Column::INT);
+        $this->addColumn(self::TITLE_COLUMN);
+        $this->addColumn(self::DESCRIPTION_COLUMN);
+        $this->addColumn(self::CODE_COLUMN, KT_CRUD_Column::TEXT, true);
+        $this->addColumn(self::MENU_ORDER_COLUMN, KT_CRUD_Column::INT);
+        $this->addColumn(self::VISIBILITY_COLUMN, KT_CRUD_Column::INT);
     }
 
 }

@@ -1,13 +1,13 @@
 <?php
 
-abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
+abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
 
     private $table = null; // Název tabulky, kde se bude provádět CRUD
     private $tablePrefix = ""; // Prefix sloupců v tabulce
     private $primaryKeyValue = null; // ID záznamu z tabulky v DB
     private $primaryKeyColumn = null; // Název sloupce, který je v tabulce určen jako primární klíč
-    private $data = array(); // Pole s daty 'column_name' => 'value'
     private $errors = array(); // Pole s chybami
+    private $columns = array(); // Seznam sloupců v DB
 
     /**
      * Rozšíření objektu o možnost CRUD pro práci s WP DB
@@ -24,7 +24,6 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      */
 
     public function __construct($table, $primaryKeyColumn, $tablePrefix = null, $rowId = null) {
-
         if (is_string($table)) {
             $this->setTable($table);
         } else {
@@ -40,6 +39,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
         if (is_string($tablePrefix) && KT::issetAndNotEmpty($tablePrefix)) {
             $this->setTablePrefix($tablePrefix);
         }
+        
+        $this->initColumns();
 
         if (KT::issetAndNotEmpty($rowId)) {
             $this->setId($rowId);
@@ -51,13 +52,13 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
     public function __set($name, $value) {
         $key = $this->getColumnNameWithTablePrefix($name);
-        $this->data[$key] = $value;
+        $this->addNewColumnValue($name, $value);
     }
 
     public function __get($name) {
         $key = $this->getColumnNameWithTablePrefix($name);
-        if (array_key_exists($key, $this->data)) {
-            return $this->data[$key];
+        if (array_key_exists($key, $this->columns)) {
+            return $this->getColumnByName($key)->getValue();
         }
 
         $trace = debug_backtrace();
@@ -70,13 +71,42 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
     public function __isset($name) {
         $key = $this->getColumnNameWithTablePrefix($name);
-        return isset($this->data[$key]);
+        return isset($this->columns[$key]);
     }
 
     public function __unset($name) {
         $key = $this->getColumnNameWithTablePrefix($name);
-        unset($this->data[$key]);
+        unset($this->columns[$key]);
     }
+
+    // --- arrayAcces -----------------------------
+
+    public function offsetExists($offset) {
+        if (array_key_exists($offset, $this->columns)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param string $offset
+     * @return \KT_CRUD_Column
+     */
+    public function offsetGet($offset) {
+        return $this->getColumnByName($offset);
+    }
+
+    public function offsetSet($offset, $value) {
+        
+    }
+
+    public function offsetUnset($offset) {
+        
+    }
+    
+    // --- abstraktní funkce ------------------
+    
+    abstract function initColumns();
 
     // --- gettery ---------------------------
 
@@ -86,7 +116,14 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * @return array
      */
     public function getData() {
-        return $this->data;
+        if(!KT::arrayIssetAndNotEmpty($this->columns)){
+            return array();
+        }
+        $columnsData = array();
+        foreach($this->columns as $column){
+            $columnsData[$column->getName()] = $column->getValue();
+        }
+        return $columnsData;
     }
 
     /**
@@ -134,6 +171,15 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
         return $this->errors;
     }
 
+    /**
+     * Vrátí kolekci všech sloupců v DB, které danému modelu patří
+     * 
+     * @return type
+     */
+    protected function getColumns() {
+        return $this->columns;
+    }
+
     // --- settery ---------------------------
 
     /**
@@ -161,7 +207,13 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
             $this->setId($rowIdFromData);
         }
 
-        $this->data = wp_parse_args($data, $this->data);
+        foreach ($this->getColumns() as $column) {
+            if (array_key_exists($column->getName(), $data)) {
+                $column->setValue($data[$column->getName()]);
+                continue;
+            }
+            $column->setValue("");
+        }
 
         return $this;
     }
@@ -253,7 +305,56 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
         return $this;
     }
 
+    /**
+     * Nastaví kolekci sloupců CRUD modelů pro DB
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array $columns
+     * @return \KT_Crud
+     */
+    protected function setColumns(array $columns) {
+        if (KT::arrayIssetAndNotEmpty($columns)) {
+            $this->columns = $columns;
+        }
+
+        return $this;
+    }
+
     // --- veřejné funkce ----------------------
+
+    /**
+     * Do kolekce sloupců přidá nový sloupec pro komunikaci s DB
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $name - název sloupce v DB
+     * @param string $type - typ sloupce @see KT_CRUD_Column
+     * @param boolean $nullable
+     * @return \KT_CRUD_Column
+     */
+    public function addColumn($name, $type = KT_CRUD_Column::TEXT, $nullable = false) {
+        return $this->columns[$name] = new KT_CRUD_Column($name, $type, false);
+    }
+
+    /**
+     * Vrátí DB sloupec na základě jeho jméno
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $name
+     * @return \KT_CRUD_Column
+     */
+    public function getColumnByName($name) {
+        if (array_key_exists($name, $this->columns)) {
+            return $this->columns[$name];
+        }
+
+        return null;
+    }
 
     /**
      * Přidá jeden sloupec s hodnotou pro uložení dat
@@ -267,28 +368,32 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      * @param string $value
      * @return \KT_Crud
      */
-    public function addNewColumnToData($name, $value = null) { 
-        $currentDataCollection = $this->getData();
-        $currentDataCollection[$name] = $value;
-        $this->setData($currentDataCollection);
+    public function addNewColumnValue($name, $value = null) {
+        $column = $this->getColumnByName($name);
+        if (KT::issetAndNotEmpty($column)) {
+            $column->setValue($value);
+        }
 
         return $this;
     }
 
     /**
      * Přiřadí novou sadu sloupců do kolekce stávajících dat.
-     * Nepřepíše původní, provede merge dat.
+     * Nepřepíše původní, provede merge dat. Přepíše hodnoty stejných sloupců
+     * které jsou již v kolekci přiřazeny
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param array $columns
      */
-    public function addNewColumnsToData(array $columns) {
-        if (KT::issetAndNotEmpty($columns)) {
-            $currentDataCollection = $this->getData();
-            $newDataCollection = array_merge($currentDataCollection, $columns);
-            $this->setData($newDataCollection);
+    public function addNewColumnsToValue(array $columns) {
+        if (!KT::arrayIssetAndNotEmpty($columns)) {
+            return $this;
+        }
+
+        foreach ($columns as $columnName => $columnValue) {
+            $this->addNewColumnValue($columnName, $columnValue);
         }
 
         return $this;
@@ -439,7 +544,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
         global $wpdb;
 
-        $sql = $wpdb->insert($this->getTable(), $this->getData(), $this->getArrayOfFieldsFormat());
+        $updateValue = $this->getColumnsWithFormatsData();
+        $sql = $wpdb->insert($this->getTable(), $updateValue->columns, $updateValue->formats);
 
         if (KT::issetAndNotEmpty($sql)) {
             $this->setId($wpdb->insert_id);
@@ -467,7 +573,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
 
         global $wpdb;
 
-        $sql = $wpdb->update($this->getTable(), $this->getData(), array($this->getPrimaryKeyColumn() => $this->getId()));
+        $updateValue = $this->getColumnsWithFormatsData();
+        $sql = $wpdb->update($this->getTable(), $updateValue->columns, array($this->getPrimaryKeyColumn() => $this->getId()), $updateValue->formats);
 
         if ($sql) {
             return $sql;
@@ -485,23 +592,50 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable {
      *
      * @return array
      */
-    private function getArrayOfFieldsFormat() {
-
+    private function getColumnsWithFormatsData() {
         $formats = array();
-
-        foreach ($this->data as $key => $value) {
-            if (is_int($value)) {
-                $formats[] = "%d";
-                continue;
-            } elseif (is_float($value)) {
-                $formats[] = "%f";
+        $columns = array();
+        
+        foreach($this->getColumns() as $column){
+            $type = $column->getType();
+            $value = $column->getValue();
+            
+            if($column->getNullable() && $value === ""){
+                $formats[] = "NULL";
+                $column[$column->getName()] = "NULL";
                 continue;
             }
             
-            $formats[] = "%s";
+            switch ($type) {
+                case KT_CRUD_Column::INT:
+                    $formats[] = "%d";                    
+                    $columns[$column->getName()] = KT::tryGetInt($value);
+                    break;
+                
+                case KT_CRUD_Column::FLOAT:
+                    $formats[] = "%f";
+                    $columns[$column->getName()] = KT::tryGetFloat($value);
+                    break;
+                
+                case KT_CRUD_Column::DATE:
+                    $formats[] = "%s";
+                    $columns[$column->getName()] = KT::dateConvert($value, "Y-m-d");
+                    
+                case KT_CRUD_Column::DATETIME:
+                    $formats[] = "%s";
+                    $columns[$column->getName()] = KT::dateConvert($value, "Y-m-d H:i:s");
+
+                default:
+                    $formats[] = "%s";
+                    $column[$column->getName()] = $value;
+                    break;
+            }
         }
 
-        return $formats;
+        $data = new stdClass();
+        $data->formats = $formats;
+        $data->columns = $column;
+        return $data;
     }
 
     /**
