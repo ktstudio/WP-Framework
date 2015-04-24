@@ -336,7 +336,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
      * @return \KT_CRUD_Column
      */
     public function addColumn($name, $type = KT_CRUD_Column::TEXT, $nullable = false) {
-        return $this->columns[$name] = new KT_CRUD_Column($name, $type, false);
+        return $this->columns[$name] = new KT_CRUD_Column($name, $type, $nullable);
     }
 
     /**
@@ -498,6 +498,10 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         return $this->getTablePrefix() . $columnName;
     }
 
+    public function nullUpdateFilterCallback($query) {
+        return str_ireplace("'NULL'", "NULL", $query);
+    }
+
     // --- privátní funkce ------------
 
     /**
@@ -545,7 +549,11 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         global $wpdb;
 
         $updateValue = $this->getColumnsWithFormatsData();
+
+        // Povolení filtru, který ze "NULL" strinogové hodnoty udělá v SQL dotazu běžný NULL pro nullable sloupce
+        add_filter("query", array($this, "nullUpdateFilterCallback"));
         $sql = $wpdb->insert($this->getTable(), $updateValue->columns, $updateValue->formats);
+        remove_filter("query", array($this, "nullUpdateFilterCallback"));// Zrušení předešlého filtru
 
         if (KT::issetAndNotEmpty($sql)) {
             $this->setId($wpdb->insert_id);
@@ -574,14 +582,20 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         global $wpdb;
 
         $updateValue = $this->getColumnsWithFormatsData();
+
+        // Povolení filtru, který ze "NULL" strinogové hodnoty udělá v SQL dotazu běžný NULL pro nullable sloupce
+        add_filter("query", array($this, "nullUpdateFilterCallback"));
         $sql = $wpdb->update($this->getTable(), $updateValue->columns, array($this->getPrimaryKeyColumn() => $this->getId()), $updateValue->formats);
+        remove_filter("query", array($this, "nullUpdateFilterCallback"));// Zrušení předešlého filtru
 
         if ($sql) {
             return $sql;
         }
-
-        $this->addError("Došlo k chybě při změně dat v DB", $wpdb->last_error);
-        return false;
+        if (KT::issetAndNotEmpty($wpdb->last_error)) {
+            $this->addError("Došlo k chybě při změně dat v DB", $wpdb->last_error);
+            return false;
+        }
+        return true; // nedošlo ke změnám
     }
 
     /**
@@ -600,11 +614,12 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
             $type = $column->getType();
             $value = $column->getValue();
 
-            if ($column->getNullable() && $value === "") {
-                $formats[] = "NULL";
-                $column[$column->getName()] = "NULL";
+            if ($column->getNullable() && $value == "") {
+                $formats[] = "%s";
+                $columns[$column->getName()] = "NULL";
                 continue;
             }
+
 
             switch ($type) {
                 case KT_CRUD_Column::INT:
@@ -618,9 +633,11 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
                 case KT_CRUD_Column::DATE:
                     $formats[] = "%s";
                     $columns[$column->getName()] = KT::dateConvert($value, "Y-m-d");
+                    break;
                 case KT_CRUD_Column::DATETIME:
                     $formats[] = "%s";
                     $columns[$column->getName()] = KT::dateConvert($value, "Y-m-d H:i:s");
+                    break;
                 default:
                     $formats[] = "%s";
                     $columns[$column->getName()] = $value;
@@ -630,7 +647,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
 
         $data = new stdClass();
         $data->formats = $formats;
-        $data->columns = $column;
+        $data->columns = $columns;
         return $data;
     }
 

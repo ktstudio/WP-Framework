@@ -489,14 +489,9 @@ class KT_MetaBox implements KT_Registrable {
 
             foreach ($fieldset->getFields() as $field) {
                 $fieldValue = $field->getValue();
-                if ($field->getFieldType() == KT_Text_Field::FIELD_TYPE) {
-                    if ($field->getInputType() == KT_Text_Field::INPUT_DATE && KT::issetAndNotEmpty($fieldValue)) {
-                        $fieldValue = KT::dateConvert($fieldValue, "Y-m-d");
-                    }
-                }
-                
                 $crudInstance->addNewColumnValue($field->getName(), $fieldValue);
             }
+            
             $crudInstance->saveRow();
 
             if ($crudInstance->hasError()) {

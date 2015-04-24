@@ -315,11 +315,11 @@ abstract class KT_Custom_Metaboxes_Base {
         }        
         
         switch ($_GET[self::UPDATED_GET_KEY]) {
-            case "false":
+            case 0:
                 add_action( "admin_notices", array($this, "adminNoticesError"));
                 break;
 
-            case "true":
+            case 1:
                 add_action( "admin_notices", array($this, "adminNoticesSuccuess"));
                 break;
         }
@@ -334,7 +334,7 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function adminNoticesError(){
         echo "<div class=\"error\">";
-        echo "<p>" . __( 'Error! - některá data nebyla uložena. Zkontroluje vstupní informace a proces opakujte', KT_DOMAIN ) . "</p>";
+        echo "<p>" . __( 'POZOR! - K žádné zásadní chybě při operaci nedošlo, ale něco bylo špatně. Zkontrolujte prosím data nebo kontaktujte provozovatele serveru.', KT_DOMAIN ) . "</p>";
         echo "</div>";
     }
     
