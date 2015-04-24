@@ -85,7 +85,7 @@ class KT_CRUD_Column {
      * 
      * @return boolean
      */
-    protected function getNullable() {
+    public function getNullable() {
         return $this->nullable;
     }
 

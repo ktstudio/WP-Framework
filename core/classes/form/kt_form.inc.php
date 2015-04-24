@@ -1126,7 +1126,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 $fieldType = get_class($field);
                 if ($fieldType == "KT_Text_Field") {
                     if ($field->getInputType() == KT_Text_Field::INPUT_DATE) {
-                        $new = date("Y-m-d", strtotime($new));
+                        $new = KT::dateConvert($new, "Y-m-d");
                     }
                 }
                 update_post_meta($postId, $field->getName(), $new);
@@ -1199,7 +1199,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 $fieldType = get_class($field);
                 if ($fieldType == "KT_Text_Field") {
                     if ($field->getInputType() == KT_Text_Field::INPUT_DATE) {
-                        $new = date("Y-m-d", strtotime($new));
+                        $new = KT::dateConvert($new, "Y-m-d");
                     }
                 }
 

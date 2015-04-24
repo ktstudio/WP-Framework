@@ -39,7 +39,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         if (is_string($tablePrefix) && KT::issetAndNotEmpty($tablePrefix)) {
             $this->setTablePrefix($tablePrefix);
         }
-        
+
         $this->initColumns();
 
         if (KT::issetAndNotEmpty($rowId)) {
@@ -103,9 +103,9 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
     public function offsetUnset($offset) {
         
     }
-    
+
     // --- abstraktní funkce ------------------
-    
+
     abstract function initColumns();
 
     // --- gettery ---------------------------
@@ -116,11 +116,11 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
      * @return array
      */
     public function getData() {
-        if(!KT::arrayIssetAndNotEmpty($this->columns)){
+        if (!KT::arrayIssetAndNotEmpty($this->columns)) {
             return array();
         }
         $columnsData = array();
-        foreach($this->columns as $column){
+        foreach ($this->columns as $column) {
             $columnsData[$column->getName()] = $column->getValue();
         }
         return $columnsData;
@@ -595,39 +595,35 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
     private function getColumnsWithFormatsData() {
         $formats = array();
         $columns = array();
-        
-        foreach($this->getColumns() as $column){
+
+        foreach ($this->getColumns() as $column) {
             $type = $column->getType();
             $value = $column->getValue();
-            
-            if($column->getNullable() && $value === ""){
+
+            if ($column->getNullable() && $value === "") {
                 $formats[] = "NULL";
                 $column[$column->getName()] = "NULL";
                 continue;
             }
-            
+
             switch ($type) {
                 case KT_CRUD_Column::INT:
-                    $formats[] = "%d";                    
+                    $formats[] = "%d";
                     $columns[$column->getName()] = KT::tryGetInt($value);
                     break;
-                
                 case KT_CRUD_Column::FLOAT:
                     $formats[] = "%f";
                     $columns[$column->getName()] = KT::tryGetFloat($value);
                     break;
-                
                 case KT_CRUD_Column::DATE:
                     $formats[] = "%s";
                     $columns[$column->getName()] = KT::dateConvert($value, "Y-m-d");
-                    
                 case KT_CRUD_Column::DATETIME:
                     $formats[] = "%s";
                     $columns[$column->getName()] = KT::dateConvert($value, "Y-m-d H:i:s");
-
                 default:
                     $formats[] = "%s";
-                    $column[$column->getName()] = $value;
+                    $columns[$column->getName()] = $value;
                     break;
             }
         }

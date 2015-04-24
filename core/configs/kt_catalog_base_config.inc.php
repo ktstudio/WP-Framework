@@ -34,6 +34,7 @@ class KT_Catalog_Base_Config {
                 ->setTooltip(__("Doplňující údaj informačního charakteru...", KT_DOMAIN));
 
         $fieldset->addText(KT_Catalog_Model_Base::CODE_COLUMN, __("Kód: ", KT_DOMAIN))
+                ->addAttribute("maxlength", 30)
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Kód může mít maximálně 30 znaků"), 30);
 
         $fieldset->addSwitch(KT_Catalog_Model_Base::VISIBILITY_COLUMN, __("Viditelnost: ", KT_DOMAIN))
@@ -73,7 +74,7 @@ class KT_Catalog_Base_Config {
                 ->setLabel(__("Titulek", KT_DOMAIN));
 
         $crudList->addColumn(KT_Catalog_Model_Base::CODE_COLUMN)
-                ->setLabel(__("Kód", KT_DOMAIN));;
+                ->setLabel(__("Kód", KT_DOMAIN));
 
         $crudList->addColumn(KT_Catalog_Model_Base::VISIBILITY_COLUMN)
                 ->setType(KT_CRUD_Admin_Column::SWITCH_BUTTON_TYPE)
