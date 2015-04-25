@@ -106,7 +106,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
 
     // --- abstraktní funkce ------------------
 
-    abstract function initColumns();
+    protected abstract function initColumns();
 
     // --- gettery ---------------------------
 

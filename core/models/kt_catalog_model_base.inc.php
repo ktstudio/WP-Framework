@@ -186,16 +186,16 @@ abstract class KT_Catalog_Model_Base extends KT_Crud implements KT_Modelable {
         }
         throw new KT_Not_Set_Argument_Exception("visibility");
     }
-    
-    // --- veřejné funkce ------------------------
-    
+
+    // --- neveřejné funkce ------------------------
+
     /**
      * Provede inicializaci sloupců v DB
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
-    public function initColumns() {
+    protected function initColumns() {
         $this->addColumn(self::ID_COLUMN, KT_CRUD_Column::INT);
         $this->addColumn(self::TITLE_COLUMN);
         $this->addColumn(self::DESCRIPTION_COLUMN);

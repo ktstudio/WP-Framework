@@ -58,7 +58,7 @@ class KT_Language_Model extends KT_Catalog_Model_Base {
         }
         throw new KT_Not_Set_Argument_Exception("decimalPoint");
     }
-    
+
     // --- veřejné funkce ------------------
 
     /**
@@ -104,19 +104,6 @@ class KT_Language_Model extends KT_Catalog_Model_Base {
     public function getCurrentFormatedNumber($number, $decimals) {
         return self::getFormatedNumber($number, $decimals, $this->getDecimalPoint(), $this->getThousandsSeparator());
     }
-    
-    /**
-     * Provede inicializaci sloupců v DB
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     * 
-     */
-    public function initColumns() {
-        parent::initColumns();
-        $this->addColumn(self::DECIMAL_POINTS_COLUMN, KT_CRUD_Column::FLOAT);
-        $this->addColumn(self::THOUSANDS_SEPARATOR);
-    }
 
     /**
      * Zformátování zadaného čísla podle zadných parametrů
@@ -135,6 +122,21 @@ class KT_Language_Model extends KT_Catalog_Model_Base {
             return number_format($number, intval($decimals), $decimalPoint, $thousandsSeparator);
         }
         return null;
+    }
+
+    // --- neveřejné funkce ------------------
+
+    /**
+     * Provede inicializaci sloupců v DB
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     */
+    protected function initColumns() {
+        parent::initColumns();
+        $this->addColumn(self::DECIMAL_POINTS_COLUMN, KT_CRUD_Column::FLOAT);
+        $this->addColumn(self::THOUSANDS_SEPARATOR);
     }
 
 }
