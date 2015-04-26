@@ -53,7 +53,7 @@ abstract class KT_Custom_Metaboxes_Base {
     /**
      * @return array
      */
-    public function getDefaultCallbackFunction() {      
+    public function getDefaultCallbackFunction() {
         return $this->defaultCallbackFunction;
     }
 
@@ -63,7 +63,7 @@ abstract class KT_Custom_Metaboxes_Base {
     public function getMetaboxCollection() {
         return $this->metaboxCollection;
     }
-    
+
     /**
      * @return \KT_CRUD_Admin_List
      */
@@ -71,7 +71,6 @@ abstract class KT_Custom_Metaboxes_Base {
         return $this->crudList;
     }
 
-    
     // --- settery ----------------------
 
     /**
@@ -163,7 +162,7 @@ abstract class KT_Custom_Metaboxes_Base {
 
         return $this;
     }
-    
+
     /**
      * Nastaví KT_CRUD_List objekt pro zobrazení tabulky s daty
      * 
@@ -173,7 +172,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * @param KT_CRUD_Admin_List $crudList
      * @return \KT_Custom_Metaboxes_Base
      */
-    public function setCrudList(KT_CRUD_Admin_List $crudList){
+    public function setCrudList(KT_CRUD_Admin_List $crudList) {
         $this->crudList = $crudList;
         return $this;
     }
@@ -189,7 +188,7 @@ abstract class KT_Custom_Metaboxes_Base {
     abstract function getSlug();
 
     // --- veřejné funkce funkce ------------
-    
+
     /**
      * Přidá
      * 
@@ -197,7 +196,7 @@ abstract class KT_Custom_Metaboxes_Base {
      * @param type $tableName
      * @return type
      */
-    public function addCrudList($className, $tableName){
+    public function addCrudList($className, $tableName) {
         $crudList = new KT_CRUD_Admin_List($className, $tableName);
         $this->setCrudList($crudList);
         return $this->getCrudList();
@@ -309,22 +308,22 @@ abstract class KT_Custom_Metaboxes_Base {
         add_screen_option('layout_columns', array('max' => 2, 'default' => $this->NumberColumns));
         wp_enqueue_script('postbox');
         wp_enqueue_media();
-        
-        if(!array_key_exists(self::UPDATED_GET_KEY, $_GET)){
+
+        if (!array_key_exists(self::UPDATED_GET_KEY, $_GET)) {
             return;
-        }        
-        
+        }
+
         switch ($_GET[self::UPDATED_GET_KEY]) {
             case 0:
-                add_action( "admin_notices", array($this, "adminNoticesError"));
+                add_action("admin_notices", array($this, "adminNoticesError"));
                 break;
 
             case 1:
-                add_action( "admin_notices", array($this, "adminNoticesSuccuess"));
+                add_action("admin_notices", array($this, "adminNoticesSuccuess"));
                 break;
         }
     }
-    
+
     /**
      * Zobrazí obsah chybové hlášky při uložení informací
      * 
@@ -332,12 +331,12 @@ abstract class KT_Custom_Metaboxes_Base {
      * @link http://www.ktstudio.cz
      * 
      */
-    public function adminNoticesError(){
+    public function adminNoticesError() {
         echo "<div class=\"error\">";
-        echo "<p>" . __( 'POZOR! - K žádné zásadní chybě při operaci nedošlo, ale něco bylo špatně. Zkontrolujte prosím data nebo kontaktujte provozovatele serveru.', KT_DOMAIN ) . "</p>";
+        echo "<p>" . __('POZOR! - K žádné zásadní chybě při operaci nedošlo, ale něco bylo špatně. Zkontrolujte prosím data nebo kontaktujte provozovatele serveru.', KT_DOMAIN) . "</p>";
         echo "</div>";
     }
-    
+
     /**
      * Zobrazí obsah hlášky při úspěšném uložení informací
      * 
@@ -345,9 +344,9 @@ abstract class KT_Custom_Metaboxes_Base {
      * @link http://www.ktstudio.cz
      * 
      */
-    public function adminNoticesSuccuess(){
+    public function adminNoticesSuccuess() {
         echo "<div class=\"updated\">";
-        echo "<p>" . __( 'Informace byly úspěšně uloženy.', KT_DOMAIN ) . "</p>";
+        echo "<p>" . __('Informace byly úspěšně uloženy.', KT_DOMAIN) . "</p>";
         echo "</div>";
     }
 
@@ -377,7 +376,7 @@ abstract class KT_Custom_Metaboxes_Base {
 
                 if (KT::issetAndNotEmpty($getValue) && $actionValue == $getValue) {
                     $callbackFunction = $screenAction->getCallBackFunction();
-                    if ($callbackFunction == self::METABOX_SCREEN){
+                    if ($callbackFunction == self::METABOX_SCREEN) {
                         return array($this, 'renderPage');
                     }
 
@@ -385,8 +384,8 @@ abstract class KT_Custom_Metaboxes_Base {
                 }
             }
         }
-        
-        if($this->getDefaultCallbackFunction() == self::CRUD_LIST_SCREEN){
+
+        if ($this->getDefaultCallbackFunction() == self::CRUD_LIST_SCREEN) {
             return array($this, "renderCrudListPage");
         }
 
@@ -434,18 +433,18 @@ abstract class KT_Custom_Metaboxes_Base {
         </div><!-- .wrap -->
         <?php
     }
-    
+
     /**
      * Vykreslí obsah pro stránku s KT_CRUD_List
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz  
      */
-    public function renderCrudListPage(){
-        if(KT::notIssetOrEmpty($this->getCrudList())){
+    public function renderCrudListPage() {
+        if (KT::notIssetOrEmpty($this->getCrudList())) {
             throw new KT_Not_Set_Argument_Exception("KT_CRUD_List is emapty fro CRUD List page screen");
         }
-        
+
         echo "<div class=\"wrap kt-custom-screen-page\">";
         echo $this->getCrudList()->getContent();
         echo "</div>";
@@ -486,9 +485,9 @@ abstract class KT_Custom_Metaboxes_Base {
         do_action("kt_theme_setting_box_" . KT_WP_Configurator::getThemeSettingSlug());
         echo "<button type=\"submit\" class=\"button button-primary button-large\">" . __('Uložit nastavení', KT_DOMAIN) . "</button>";
     }
-    
+
     // --- protected functions ------------------
-    
+
     /**
      * Prověří, zda je daná stránka otevřena a jsou na ní odeslány data pomocí POST metody
      * pokud ano, zavede příslušnou akci a provede redirect
@@ -498,32 +497,33 @@ abstract class KT_Custom_Metaboxes_Base {
      * 
      * @param string $screenName
      */
-    protected function screenUpdatingRedirect($screenName){
-        if(array_key_exists("kt-admin-screen-action", $_POST) && array_key_exists("page", $_GET)){
+    protected function screenUpdatingRedirect($screenName) {
+        if (array_key_exists("kt-admin-screen-action", $_POST) && array_key_exists("page", $_GET)) {
             $pageSlug = $_GET["page"];
-            if($pageSlug == $this->getSlug()){
+            if ($pageSlug == $this->getSlug()) {
                 $saveResult = array(self::SAVE_RESULT_KEY => true);
                 $saveResult = apply_filters("kt-custom-metabox-save-$screenName", $saveResult);
-                
-                if($saveResult[self::SAVE_RESULT_KEY] !== true){
+
+                if ($saveResult[self::SAVE_RESULT_KEY] !== true) {
                     add_action("admin_notices", array($this, "adminNoticesError"));
                     return;
                 }
-                
-                if(array_key_exists("crud", $saveResult)){
+
+                $urlParams = array(
+                    "page" => $_GET["page"],
+                    self::UPDATED_GET_KEY => true
+                );
+
+                if (array_key_exists("crud", $saveResult)) {
                     $crudInstance = $saveResult["crud"];
-                    $urlParams = array(
-                        "page" => $_GET["page"],
-                        "action" => "update",
-                        $crudInstance::ID_COLUMN => $crudInstance->getId(),
-                        self::UPDATED_GET_KEY => true
-                    );
-                    
-                    $adminPermlink = get_admin_url(null, "admin.php");
-                    $redirectLink = add_query_arg($urlParams, $adminPermlink);
-                    wp_redirect($redirectLink);
-                    exit;
-                }                
+                    $urlParams[$crudInstance::ID_COLUMN] = $crudInstance->getId();
+                    $urlParams["action"] = "update";
+                }
+                
+                $adminPermlink = get_admin_url(null, "admin.php");
+                $redirectLink = add_query_arg($urlParams, $adminPermlink);
+                wp_redirect($redirectLink);
+                exit;
             }
         }
     }

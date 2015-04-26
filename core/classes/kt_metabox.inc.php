@@ -514,7 +514,7 @@ class KT_MetaBox implements KT_Registrable {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
-    public function saveOptions() {
+    public function saveOptions( $saveResult ) {
         $isDefaultAutoSave = $this->getIsDefaultAutoSave();
         $fieldset = $this->getFieldset();
         $form = new KT_Form();
@@ -522,12 +522,17 @@ class KT_MetaBox implements KT_Registrable {
         $form->validate();
 
         if (!$form->isFormSend() || $form->hasError() || !$isDefaultAutoSave) {
-            return;
+            $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = false;
+            return $saveResult;
         }
 
         do_action("kt_before_metabox_save_options", $form);
         $form->saveFieldsetToOptionTable();
         do_action("kt_after_metabox_save_options", $form);
+        
+        $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = true;
+        
+        return $saveResult;
     }
 
     /**

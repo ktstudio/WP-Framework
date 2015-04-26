@@ -1,3 +1,21 @@
+jQuery(document).ready(function () {
+// Validování formuláře pomocí jQuery globálně na základě data attributu, který vpisován defaulntě KT_Form třídou
+    jQuery("[data-validate=\"jquery\"]").submit(function () {
+        jQuery("#jquery-kt-validator").remove();
+
+        var validationResult = jQuery(this).formValidation();
+        var formNotice = "<div id=\"jquery-kt-validator\" class=\"error\">" +
+                "<p> Ve formuláři se vyskytla chyba.</p>" +
+                "</div>";
+
+        if (validationResult === false) {
+            jQuery(this).before(formNotice);
+        }
+
+        return validationResult;
+    });
+});
+
 ( function ( $ ) {
 
     /**
