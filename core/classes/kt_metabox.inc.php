@@ -560,8 +560,6 @@ class KT_MetaBox implements KT_Registrable {
             $form->validate();
         }
 
-        $isDefaultAutoSave = $this->getIsDefaultAutoSave();
-
         switch ($currentValue) {
             case KT_MetaBox_Data_Types::POST_META:
                 $form->loadDataFromPostMeta($post->ID);

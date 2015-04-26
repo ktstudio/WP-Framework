@@ -646,12 +646,13 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         foreach ($this->getFieldsets() as $fieldset) {
             /* @var $fieldset \KT_Form_Fieldset */
+            
+            
             if (!$fieldset->hasFields()) {
                 continue;
             }
 
             if ($fieldset->getSeralizeSave()) {
-
                 $fieldsetData = get_option($fieldset->getName());
                 $fieldset->setFieldsData($fieldsetData);
 
@@ -660,7 +661,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
             foreach ($fieldset->getFields() as $field) {
                 $value = get_option($field->getName());
-                if ($value !== "" && isset($value)) {
+                if ($value !== "" && isset($value) && $value !== false) {
                     $field->setValue($value);
                 }
             }
