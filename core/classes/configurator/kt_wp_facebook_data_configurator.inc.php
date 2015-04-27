@@ -354,7 +354,7 @@ class KT_WP_Facebook_Data_Configurator {
         if (KT::notIssetOrEmpty($content)) {
             return;
         }
-        echo "<meta property=\"$tagType\" content=\"$content\">\n";
+        echo "<meta property=\"$tagType\" content=\"$content\" />\n";
     }
 
 }

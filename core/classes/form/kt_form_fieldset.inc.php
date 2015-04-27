@@ -186,7 +186,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
 
         return $this;
     }
-    
+
     /**
      * Nastaví HTML / String, který se vypíše na konci fieldsetu
      * 
@@ -200,7 +200,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         $this->afterFieldsetContent = $afterFieldsetContent;
         return $this;
     }
-    
+
     // --- veřejné funkce -------------------------
 
     /**
@@ -431,12 +431,12 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return string
      */
     public function getInputToTr(KT_Field $field) {
-        
-        if($field->getFieldType() === KT_WP_Editor_Field::FIELD_TYPE){
+
+        if ($field->getFieldType() === KT_WP_Editor_Field::FIELD_TYPE) {
             $field->getField();
             return "";
         }
-        
+
         $html = "<tr>";
 
         if (KT::issetAndNotEmpty($field->getLabel())) {
@@ -498,7 +498,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         $html = "<div {$this->getAttributeString()}>";
 
         if (KT::issetAndNotEmpty($this->getTitle())) {
-            $html .= "<div class=\"panel-heading\"><h2 class=\"panel-title\">{$this->getTitle()}</h2></div>";
+            $html .= "<div class=\"panel-heading\"><h3 class=\"panel-title\">{$this->getTitle()}</h3></div>";
         }
 
         $tag = $fieldsetTag ? "fieldset" : "div";
@@ -521,7 +521,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function getEndHtmlOfFieldSet($fieldsetTag = true) {
         $html = "";
-        if(KT::issetAndNotEmpty($this->getAfterFieldsetContent())){
+        if (KT::issetAndNotEmpty($this->getAfterFieldsetContent())) {
             $html .= "<div class=\"fieldsetAfterContent\">{$this->getAfterFieldsetContent()}</div>";
         }
         $tag = $fieldsetTag ? "fieldset" : "div";
@@ -826,7 +826,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         $field->setPostPrefix($this->postPrefix);
         return $field;
     }
-    
+
     /**
      * Přidá typ Fieldu KT_WP_Editor_Field, který na pozadí vykreslí textareu, a pomocí
      * JS překreslí na WYSIWYG editor WordPressu
@@ -838,7 +838,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_WP_Editor_Field
      */
-    public function addWpEditor($name, $label){
+    public function addWpEditor($name, $label) {
         $field = $this->fields[$name] = new KT_WP_Editor_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
         return $field;
