@@ -414,17 +414,18 @@ class KT_MetaBox implements KT_Registrable {
      */
     public function register() {
         $screen = $this->getScreen();
+        $isDefaultAutoSave = $this->getIsDefaultAutoSave();
 
         add_action("add_meta_boxes_$screen", array($this, "add"));
         if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::POST_META) {
             add_action("save_post_$screen", array($this, "savePost"));
         }
 
-        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::CRUD) {
+        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::CRUD && $isDefaultAutoSave) {
             add_filter("kt-custom-metabox-save-$screen", array($this, "saveCrud"));
         }
 
-        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::OPTIONS) {
+        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::OPTIONS && $isDefaultAutoSave) {
             add_filter("kt-custom-metabox-save-$screen", array($this, "saveOptions"));
         }
     }
