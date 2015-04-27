@@ -317,11 +317,11 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         if (KT::arrayIssetAndNotEmpty($columns)) {
             return $this;
         }
-        
+
         $this->columns = $columns;
-        
-        foreach($columns as $column){
-            if($column->getName() == $this->getPrimaryKeyColumn()){
+
+        foreach ($columns as $column) {
+            if ($column->getName() == $this->getPrimaryKeyColumn()) {
                 $this->setId($column->getValue());
                 break;
             }
@@ -379,7 +379,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
     public function addNewColumnValue($name, $value = null) {
         $column = $this->getColumnByName($name);
         if (KT::issetAndNotEmpty($column)) {
-            if($column->getName() == $this->getPrimaryKeyColumn()){
+            if ($column->getName() == $this->getPrimaryKeyColumn()) {
                 $this->setId($value);
             }
             $column->setValue($value);
@@ -564,7 +564,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         // Povolení filtru, který ze "NULL" strinogové hodnoty udělá v SQL dotazu běžný NULL pro nullable sloupce
         add_filter("query", array($this, "nullUpdateFilterCallback"));
         $sql = $wpdb->insert($this->getTable(), $updateValue->columns, $updateValue->formats);
-        remove_filter("query", array($this, "nullUpdateFilterCallback"));// Zrušení předešlého filtru
+        remove_filter("query", array($this, "nullUpdateFilterCallback")); // Zrušení předešlého filtru
 
         if (KT::issetAndNotEmpty($sql)) {
             $this->setId($wpdb->insert_id);
@@ -597,7 +597,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         // Povolení filtru, který ze "NULL" strinogové hodnoty udělá v SQL dotazu běžný NULL pro nullable sloupce
         add_filter("query", array($this, "nullUpdateFilterCallback"));
         $sql = $wpdb->update($this->getTable(), $updateValue->columns, array($this->getPrimaryKeyColumn() => $this->getId()), $updateValue->formats);
-        remove_filter("query", array($this, "nullUpdateFilterCallback"));// Zrušení předešlého filtru
+        remove_filter("query", array($this, "nullUpdateFilterCallback")); // Zrušení předešlého filtru
 
         if ($sql) {
             return $sql;
@@ -622,6 +622,11 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         $columns = array();
 
         foreach ($this->getColumns() as $column) {
+
+            if ($column->getName() == $this->getPrimaryKeyColumn()) {
+                continue;
+            }
+
             $type = $column->getType();
             $value = $column->getValue();
 
