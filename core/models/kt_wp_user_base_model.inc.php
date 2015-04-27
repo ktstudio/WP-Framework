@@ -9,7 +9,8 @@
 class KT_WP_User_Base_Model extends KT_Model_Base {
 
     private $wpUser = null;
-    private $wpUserMetas = array();
+    private $metas = array();
+    private $metaPrefix;
 
     /**
      * Sestavení základního modelu pro práci s uživatelem a jeho daty podle ID
@@ -19,8 +20,9 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      *
      * @param integer $userId
      */
-    function __construct($userId) {
+    function __construct($userId, $metaPrefix = null) {
         $this->wpUserInitById($userId);
+        $this->metaPrefix = $metaPrefix;
     }
 
     // --- gettery ------------------------
@@ -33,13 +35,32 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
     }
 
     /**
+     * @return int
+     */
+    public function getUserId() {
+        return $this->getWpUser()->ID;
+    }
+
+    /**
+     * Vrátí sadu usermetas
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return array
      */
-    public function getWpUserMetas() {
-        if (KT::notIssetOrEmpty($this->wpUserMetas)) {
-            $this->wpUserMetasInit();
+    public function getMetas() {
+        if (KT::notIssetOrEmpty($this->metas)) {
+            $this->initMetas();
         }
-        return $this->wpUserMetas;
+        return $this->metas;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaPrefix() {
+        return $this->metaPrefix;
     }
 
     // --- settery ------------------------
@@ -59,13 +80,14 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
     /**
      * Nastaví modelu sadu usermetas
      *
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @param array $wpUserMetas
+     * @param array $metas
      */
-    public function setWpUserMetas(array $wpUserMetas) {
-        $this->wpUserMetas = $wpUserMetas;
+    private function setMetas(array $metas) {
+        $this->metas = $metas;
+        return $this;
     }
 
     // --- veřejné metody ------------------------
@@ -325,16 +347,18 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @param string $metaKey
+     * @param string $key
      * @return string
      */
-    public function getMetaValueByKey($metaKey) {
-        $userMetas = $this->getWpUserMetas();
-        if (array_key_exists($metaKey, $userMetas)) {
-            return $userMetas[$metaKey];
+    public function getMetaValueByKey($key) {
+        $metas = $this->getMetas();
+        if (array_key_exists($key, $metas)) {
+            $value = $metas[$key];
+            if (isset($value)) {
+                return $value;
+            }
         }
-
-        return "";
+        return null;
     }
 
     /**
@@ -348,7 +372,7 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      * @param string $prefix
      * @return array
      */
-    public static function getAllUserMeta($userId, $prefix = null) {
+    public static function getUserMetas($userId, $prefix = null) {
         global $wpdb;
 
         $query = "SELECT meta_key, meta_value FROM {$wpdb->usermeta} WHERE user_id = %d";
@@ -413,10 +437,11 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
-    private function wpUserMetasInit() {
-        $userId = $this->getWpUser()->ID;
-        $userMetas = self::getAllUserMeta($userId);
-        $this->setWpUserMetas($userMetas);
+    private function initMetas() {
+        $metaNamePrefix = $this->getMetaPrefix();
+        $metas = self::getUserMetas($this->getUserId(), $metaNamePrefix);
+        $this->setMetas($metas);
+        return $this;
     }
 
 }

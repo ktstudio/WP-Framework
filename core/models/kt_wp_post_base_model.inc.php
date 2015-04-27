@@ -515,7 +515,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      */
     private function initMetas() {
         $metaNamePrefix = $this->getMetaPrefix();
-        $metas = self::getPostMetas($this->getPost()->ID, $metaNamePrefix);
+        $metas = self::getPostMetas($this->getPostId(), $metaNamePrefix);
         $this->setMetas($metas);
         return $this;
     }
