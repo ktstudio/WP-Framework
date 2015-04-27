@@ -498,7 +498,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         $html = "<div {$this->getAttributeString()}>";
 
         if (KT::issetAndNotEmpty($this->getTitle())) {
-            $html .= "<div class=\"panel-heading\"><h3 class=\"panel-title\">{$this->getTitle()}</h3></div>";
+            $html .= "<div class=\"panel-heading\"><h2 class=\"panel-title\">{$this->getTitle()}</h2></div>";
         }
 
         $tag = $fieldsetTag ? "fieldset" : "div";

@@ -212,7 +212,6 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
                 $column->setValue($data[$column->getName()]);
                 continue;
             }
-            $column->setValue("");
         }
 
         return $this;
@@ -316,7 +315,16 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
      */
     protected function setColumns(array $columns) {
         if (KT::arrayIssetAndNotEmpty($columns)) {
-            $this->columns = $columns;
+            return $this;
+        }
+        
+        $this->columns = $columns;
+        
+        foreach($columns as $column){
+            if($column->getName() == $this->getPrimaryKeyColumn()){
+                $this->setId($column->getValue());
+                break;
+            }
         }
 
         return $this;
@@ -371,6 +379,9 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
     public function addNewColumnValue($name, $value = null) {
         $column = $this->getColumnByName($name);
         if (KT::issetAndNotEmpty($column)) {
+            if($column->getName() == $this->getPrimaryKeyColumn()){
+                $this->setId($value);
+            }
             $column->setValue($value);
         }
 
