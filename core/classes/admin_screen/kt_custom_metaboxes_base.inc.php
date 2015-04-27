@@ -509,20 +509,21 @@ abstract class KT_Custom_Metaboxes_Base {
                     return;
                 }
 
+                $urlParams = array(
+                    "page" => $_GET["page"],
+                    self::UPDATED_GET_KEY => true
+                );
+
                 if (array_key_exists("crud", $saveResult)) {
                     $crudInstance = $saveResult["crud"];
-                    $urlParams = array(
-                        "page" => $_GET["page"],
-                        "action" => "update",
-                        $crudInstance::ID_COLUMN => $crudInstance->getId(),
-                        self::UPDATED_GET_KEY => true
-                    );
-
-                    $adminPermlink = get_admin_url(null, "admin.php");
-                    $redirectLink = add_query_arg($urlParams, $adminPermlink);
-                    wp_redirect($redirectLink);
-                    exit;
+                    $urlParams[$crudInstance::ID_COLUMN] = $crudInstance->getId();
+                    $urlParams["action"] = "update";
                 }
+
+                $adminPermlink = get_admin_url(null, "admin.php");
+                $redirectLink = add_query_arg($urlParams, $adminPermlink);
+                wp_redirect($redirectLink);
+                exit;
             }
         }
     }
