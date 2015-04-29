@@ -398,6 +398,23 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         return null;
     }
+    
+    /**
+     * Odstraní z kolekce fieldstů fieldset s daným názvem.
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $name
+     * @return \KT_Form
+     */
+    public function removeFieldsetByName($name){
+        if(array_key_exists($name, $this->fieldsets)){
+            unset($this->fieldsets[$name]);
+        }
+        
+        return $this;
+    }
 
     /**
      * Pokud formulář nemá žádné chyby ve validací, vrácí false
@@ -903,7 +920,6 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return \KT_Form
      */
     public function saveFieldsetToUserMeta($userId, array $excludeFields = array()) {
-
         if (!$this->isFormSend() || $this->hasError()) {
             return $this;
         }
@@ -1204,7 +1220,10 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                     }
                 }
 
-                update_user_meta($userId, $field->getName(), $field->getValue());
+                $result = update_user_meta($userId, $field->getName(), $field->getValue());
+                
+                var_dump($result);
+                
             } else {
                 delete_user_meta($userId, $field->getName());
             }
