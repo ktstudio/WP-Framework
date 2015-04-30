@@ -273,10 +273,10 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         if (KT::notIssetOrEmpty($fieldsData) || !is_array($fieldsData)) {
             return $this;
         }
-
+       
         foreach ($this->getFields() as $field) {
             /** @var $field \KT_Field */
-            if (!isset($fieldsData[$field->getName()])) {
+            if (!array_key_exists($field->getName(), $fieldsData)) {
                 continue;
             }
 

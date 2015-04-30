@@ -151,6 +151,19 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
     public function getEmail() {
         return $this->getWpUser()->user_email;
     }
+    
+    /**
+     * Vrátí datum registrace uživatele dle zadaného formářu
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param type $format
+     * @return type
+     */
+    public function getRegistredDate($format = "d.m.Y"){
+        return KT::dateConvert($this->getWpUser()->user_registered, $format);
+    }
 
     /**
      * Vrátí jméno uživatele

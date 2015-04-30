@@ -17,6 +17,9 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         if (KT::issetAndNotEmpty($post)) {
             $postModel = new KT_WP_Post_Base_Model($post);
             $this->setModel($postModel);
+            if(is_singular($post->post_type)){
+                static::singularDetailPostProcess();
+            }
         }
     }
 
@@ -203,6 +206,19 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             return $html;
         }
         return null;
+    }
+    // --- protected funkce ------------------
+    
+    /**
+     * Funkce je volána v konstruktoru presenteru a zavolá se pouze tehdy, pokud se jedná
+     * o detail daného modelu. Funkce je připravená pro autmoatické zavádění funkcí právě
+     * pro danou entitu.
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     */
+    protected function singularDetailPostProcess() {
+        
     }
 
     // --- static public function ---------------------------
