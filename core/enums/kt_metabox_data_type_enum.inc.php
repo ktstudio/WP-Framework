@@ -1,6 +1,6 @@
 <?php
 
-class KT_MetaBox_Data_Types extends KT_Enum {
+class KT_MetaBox_Data_Type_Enum extends KT_Enum {
 
     const NONE = 0;
     const POST_META = 1;

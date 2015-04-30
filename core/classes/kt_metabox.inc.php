@@ -45,7 +45,7 @@ class KT_MetaBox implements KT_Registrable {
         $this->setId($id);
         $this->setTitle($title);
         $this->setScreen($screen);
-        $this->setDataType(new KT_MetaBox_Data_Types($dataType));
+        $this->setDataType(new KT_MetaBox_Data_Type_Enum($dataType));
         if (KT::issetAndNotEmpty($fieldset)) {
             $this->setFieldset($fieldset);
         }
@@ -207,7 +207,7 @@ class KT_MetaBox implements KT_Registrable {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @return KT_MetaBox_Data_Types
+     * @return KT_MetaBox_Data_Type_Enum
      */
     public function getDataType() {
         return $this->dataType;
@@ -220,9 +220,9 @@ class KT_MetaBox implements KT_Registrable {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @param KT_MetaBox_Data_Types $dataType
+     * @param KT_MetaBox_Data_Type_Enum $dataType
      */
-    private function setDataType(KT_MetaBox_Data_Types $dataType) {
+    private function setDataType(KT_MetaBox_Data_Type_Enum $dataType) {
         $this->dataType = $dataType;
         return $this;
     }
@@ -417,15 +417,15 @@ class KT_MetaBox implements KT_Registrable {
         $isDefaultAutoSave = $this->getIsDefaultAutoSave();
 
         add_action("add_meta_boxes_$screen", array($this, "add"));
-        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::POST_META) {
+        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Type_Enum::POST_META) {
             add_action("save_post_$screen", array($this, "savePost"));
         }
 
-        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::CRUD && $isDefaultAutoSave) {
+        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Type_Enum::CRUD && $isDefaultAutoSave) {
             add_filter("kt-custom-metabox-save-$screen", array($this, "saveCrud"));
         }
 
-        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Types::OPTIONS && $isDefaultAutoSave) {
+        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Type_Enum::OPTIONS && $isDefaultAutoSave) {
             add_filter("kt-custom-metabox-save-$screen", array($this, "saveOptions"));
         }
     }
@@ -562,13 +562,13 @@ class KT_MetaBox implements KT_Registrable {
         }
 
         switch ($currentValue) {
-            case KT_MetaBox_Data_Types::POST_META:
+            case KT_MetaBox_Data_Type_Enum::POST_META:
                 $form->loadDataFromPostMeta($post->ID);
                 break;
-            case KT_MetaBox_Data_Types::OPTIONS:
+            case KT_MetaBox_Data_Type_Enum::OPTIONS:
                 $form->loadDataFromWpOption();
                 break;
-            case KT_MetaBox_Data_Types::CRUD:
+            case KT_MetaBox_Data_Type_Enum::CRUD:
                 $crudInstance = $this->getCrudInstance();
                 if (KT::issetAndNotEmpty($crudInstance)) {
                     foreach ($form->getFieldsets() as $fieldset) {
@@ -581,7 +581,7 @@ class KT_MetaBox implements KT_Registrable {
                     }
                 }
                 break;
-            case KT_MetaBox_Data_Types::CUSTOM:
+            case KT_MetaBox_Data_Type_Enum::CUSTOM:
                 $customCallback = $this->getCustomCallback();
                 call_user_func_array("$customCallback", array($post, $form ? : $args));
                 return;
@@ -652,7 +652,7 @@ class KT_MetaBox implements KT_Registrable {
     public static function createCrud(KT_Form_Fieldset $fieldset, $screen, $className, $idParamName, $register = true) {
         $id = $fieldset->getName();
         $title = $fieldset->getTitle();
-        $metaBox = new KT_MetaBox($id, $title, $screen, KT_MetaBox_Data_Types::CRUD, $fieldset);
+        $metaBox = new KT_MetaBox($id, $title, $screen, KT_MetaBox_Data_Type_Enum::CRUD, $fieldset);
         $metaBox->setClassName($className);
         $metaBox->setIdParamName($idParamName);
         if ($register) {
@@ -675,7 +675,7 @@ class KT_MetaBox implements KT_Registrable {
      * @return \KT_MetaBox
      */
     public static function createCustom($id, $title, $screen, $customCallback, $register = true) {
-        $metaBox = new KT_MetaBox($id, $title, $screen, KT_MetaBox_Data_Types::CUSTOM);
+        $metaBox = new KT_MetaBox($id, $title, $screen, KT_MetaBox_Data_Type_Enum::CUSTOM);
         $metaBox->setCustomCallback($customCallback);
         if ($register) {
             $metaBox->Register();
@@ -710,7 +710,7 @@ class KT_MetaBox implements KT_Registrable {
         $idParamValue = null;
         $dataType = $this->getDataType();
         $currentValue = $dataType->getCurrentValue();
-        if ($currentValue === KT_MetaBox_Data_Types::CRUD) {
+        if ($currentValue === KT_MetaBox_Data_Type_Enum::CRUD) {
             $idparamName = $this->getIdParamName();
             if (array_key_exists($idparamName, $_GET)) {
                 $idParamValue = htmlspecialchars($_GET["$idparamName"]);
