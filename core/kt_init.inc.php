@@ -20,11 +20,16 @@ define("KT_CORE_INTERFACES_URL", path_join(KT_CORE_URL, "interfaces"));
 define("KT_CORE_JS_URL", path_join(KT_CORE_URL, "js"));
 define("KT_CORE_REQUIRES_URL", path_join(KT_CORE_URL, "requires"));
 
+// --- logování ------------------------
+define("KT_CORE_LOG_MIN_LEVEL", KT_Log_Level_Enum::INFO);
+define("KT_CORE_LOG_ONLY_SIGNED_USERS", true);
+
 // --- export ------------------------
 define("KT_WP_UPLOADS_PATH", path_join(WP_CONTENT_DIR, "uploads"));
 define("KT_WP_UPLOADS_URL", path_join(WP_CONTENT_URL, "uploads"));
 define("KT_UPLOADS_EXPORT_PATH", path_join(KT_WP_UPLOADS_PATH, "kt"));
 define("KT_UPLOADS_EXPORT_URL", path_join(KT_WP_UPLOADS_URL, "kt"));
+
 // --- WORDPRESS ------------------------
 // --- post types ------------------------
 define("KT_WP_POST_KEY", "post");

@@ -38,7 +38,7 @@ class KT_MetaBox implements KT_Registrable {
      * @param string $id
      * @param string $title
      * @param string $screen
-     * @param integer $dataType @see KT_MetaBox_Data_Types
+     * @param integer $dataType @see KT_MetaBox_Data_Type_Enum
      * @param KT_Form_Fieldset $fieldset - nepovinný pouze v případě "custom" modu, jinak je třeba zadat
      */
     public function __construct($id, $title, $screen, $dataType, KT_Form_Fieldset $fieldset = null) {
@@ -202,7 +202,7 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
-     * Vrátí datový typ pro MetaBox, resp. @see KT_MetaBox_Data_Types s konkrétní vybranou hodnotou
+     * Vrátí datový typ pro MetaBox, resp. @see KT_MetaBox_Data_Type_Enum s konkrétní vybranou hodnotou
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -214,8 +214,8 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
-     * Nastaví datový typ pro MetaBox, musí se jednat o konkrétní hodnotu @see KT_MetaBox_Data_Types
-     * Pozn. dochází k automatickému "překladu" na @see KT_MetaBox_Data_Types
+     * Nastaví datový typ pro MetaBox, musí se jednat o konkrétní hodnotu @see KT_MetaBox_Data_Type_Enum
+     * Pozn. dochází k automatickému "překladu" na @see KT_MetaBox_Data_Type_Enum
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -347,7 +347,7 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
-     * Vrátí název případné vlastní třídy ve spojitosti s datovým typem: KT_MetaBox_Data_Types::CRUD
+     * Vrátí název případné vlastní třídy ve spojitosti s datovým typem: KT_MetaBox_Data_Type_Enum::CRUD
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -359,7 +359,7 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
-     * Nastaví název případné vlastní třídy ve spojitosti s datovým typem: KT_MetaBox_Data_Types::CRUD
+     * Nastaví název případné vlastní třídy ve spojitosti s datovým typem: KT_MetaBox_Data_Type_Enum::CRUD
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -377,7 +377,7 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
-     * Vrátí název ID (URL) parametru případné vlastní třídy ve spojitosti s datovým typem: KT_MetaBox_Data_Types::CRUD
+     * Vrátí název ID (URL) parametru případné vlastní třídy ve spojitosti s datovým typem: KT_MetaBox_Data_Type_Enum::CRUD
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -389,7 +389,7 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
-     * Nastaví název ID (URL) parametru případné vlastní třídy ve spojitosti s datovým typem: KT_MetaBox_Data_Types::CRUD
+     * Nastaví název ID (URL) parametru případné vlastní třídy ve spojitosti s datovým typem: KT_MetaBox_Data_Type_Enum::CRUD
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -447,7 +447,7 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
-     * Callback pro akci save_post pokud je aktivní datový typ příspěvků @see KT_MetaBox_Data_Types::POST
+     * Callback pro akci save_post pokud je aktivní datový typ příspěvků @see KT_MetaBox_Data_Type_Enum::POST
      * Pozn.: není třeba volat "ručně", jedná se o automatickou systémovou funkci
      *
      * @author Martin Hlaváč
@@ -470,7 +470,7 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
-     * Callback pro akci load-$screen pokud je aktivní datový typ CRUD @see KT_MetaBox_Data_Types::CRUD
+     * Callback pro akci load-$screen pokud je aktivní datový typ CRUD @see KT_MetaBox_Data_Type_Enum::CRUD
      * Pozn.: Není třeba volat "ručně", jedná se o automatickou systémovou funkci
      * 
      * @author Tomáš Kocifaj
@@ -600,7 +600,7 @@ class KT_MetaBox implements KT_Registrable {
      *
      * @param KT_Form_Fieldset $fieldset
      * @param string $screen
-     * @param integer $dataType @see KT_MetaBox_Data_Types
+     * @param integer $dataType @see KT_MetaBox_Data_Type_Enum
      * @param boolean $register Označení, zda se po vytvoření MetaBoxů rovnou zavolat i registrace (do systému)
      * @return \KT_MetaBox
      */
@@ -622,7 +622,7 @@ class KT_MetaBox implements KT_Registrable {
      *
      * @param array $fieldsets @see KT_Form_Fieldset
      * @param string $screen
-     * @param integer $dataType @see KT_MetaBox_Data_Types
+     * @param integer $dataType @see KT_MetaBox_Data_Type_Enum
      * @param boolean $register Označení, zda se po vytvoření MetaBoxů rovnou zavolat i registrace (do systému)
      * @return array @see \KT_MetaBox
      */
@@ -637,7 +637,7 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
-     * Vytvoří metabox na základě @see KT_Form_Fieldset a dalších pouze nutných parametrů pro datový typ KT_MetaBox_Data_Types::CRUD i s případnou registrací
+     * Vytvoří metabox na základě @see KT_Form_Fieldset a dalších pouze nutných parametrů pro datový typ KT_MetaBox_Data_Type_Enum::CRUD i s případnou registrací
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz

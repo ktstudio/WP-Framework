@@ -3,7 +3,7 @@
 class KT_Repository {
 
     const DEFAULT_LIMIT = 30;
-    const DEFAULT_RELATION = 'AND';
+    const DEFAULT_RELATION = "AND";
     const ORDER_ASC = "ASC";
     const ORDER_DESC = "DESC";
 
@@ -38,13 +38,13 @@ class KT_Repository {
         if (is_string($table)) {
             $this->table = $table;
         } else {
-            throw new KT_Not_Supported_Exception('table is not a string');
+            throw new KT_Not_Supported_Exception("table is not a string");
         }
 
         if (is_string($table)) {
             $this->className = $className;
         } else {
-            throw new KT_Not_Supported_Exception('className is not a string');
+            throw new KT_Not_Supported_Exception("className is not a string");
         }
     }
 
@@ -287,7 +287,7 @@ class KT_Repository {
     }
 
     /**
-     * Nastaví relační podmínku pro Where dotazy - default 'AND'
+     * Nastaví relační podmínku pro Where dotazy - default "AND"
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
@@ -451,7 +451,7 @@ class KT_Repository {
             return $this;
         }
 
-        throw new KT_Not_Supported_Exception("Query or prepare dadta error");
+        throw new KT_Not_Supported_Exception("Query or prepare data error");
     }
 
     /**
@@ -465,11 +465,11 @@ class KT_Repository {
      * @param string $condition // = < > =< => <> - běžné DB MySQL conditions
      * @return \KT_Repository
      */
-    public function addWhereParam($column, $value, $condition = '=') {
+    public function addWhereParam($column, $value, $condition = "=") {
         $newWhereParams = array(
-            'column' => $column,
-            'value' => $value,
-            'condition' => $condition
+            "column" => $column,
+            "value" => $value,
+            "condition" => $condition
         );
 
         $currentWhereParams = $this->getQueryParams();
@@ -491,8 +491,8 @@ class KT_Repository {
      */
     public function addWhereIsNotNull($column) {
         $newWhereParams = array(
-            'column' => $column,
-            'value' => " IS NOT NULL "
+            "column" => $column,
+            "value" => " IS NOT NULL "
         );
 
         $currentWhereParams = $this->getQueryParams();
@@ -514,8 +514,8 @@ class KT_Repository {
      */
     public function addWhereIsNull($column) {
         $newWhereParams = array(
-            'column' => $column,
-            'value' => " IS NULL "
+            "column" => $column,
+            "value" => " IS NULL "
         );
 
         $currentWhereParams = $this->getQueryParams();
@@ -578,7 +578,7 @@ class KT_Repository {
         $result = $wpdb->get_col($query);
 
         if ($result === false) {
-            $this->addError('Při selekci dat se vyskytla chyba', $wpdb->last_error);
+            $this->addError("Při selekci dat se vyskytla chyba", $wpdb->last_error);
         }
 
         if (count($result) > 0) {
@@ -654,9 +654,9 @@ class KT_Repository {
 
         foreach ($this->getQueryParams() as $key => $value) {
 
-            if (KT::issetAndNotEmpty($value['condition'])) {
-                $query .= "{$value['column']} {$value['condition']} {$this->getValueTypeForDbQuery($value['value'])}";
-                array_push($preparedData, $value['value']);
+            if (KT::issetAndNotEmpty($value["condition"])) {
+                $query .= "{$value["column"]} {$value["condition"]} {$this->getValueTypeForDbQuery($value["value"])}";
+                array_push($preparedData, $value["value"]);
             }
 
             if ($paramsCount != $key && $paramsCount > 0) {
@@ -730,13 +730,13 @@ class KT_Repository {
         global $wpdb;
 
         if (KT::notIssetOrEmpty($this->getQuery())) {
-            $this->createQuery('COUNT(*)');
+            $this->createQuery("COUNT(*)");
         }
 
         $result = $wpdb->get_var($this->getQuery());
 
         if ($result === false) {
-            $this->addError('Při selekci dat se vyskytla chyba', $wpdb->last_error);
+            $this->addError("Při selekci dat se vyskytla chyba", $wpdb->last_error);
         }
 
         return $result;
