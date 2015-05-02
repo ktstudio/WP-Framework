@@ -98,11 +98,9 @@ class KT_Custom_Template {
      * @throws InvalidArgumentException
      */
     public function setFileName($fileName) {
+        $this->fileName = $fileName;
         $file = $this->getFullFilePath();
-        if (is_file($file)) {
-            $this->fileName = $fileName;
-            return $this;
-        } else {
+        if ( ! is_file($file)) {
             $this->fileName = '';
             throw new InvalidArgumentException(__("Tento soubor $file neexistuje!", KT_DOMAIN));
         }
@@ -152,7 +150,7 @@ class KT_Custom_Template {
      * @return type
      * @throws InvalidArgumentException
      */
-    protected function getFullFilePath() {
+    public function getFullFilePath() {
         if (is_dir($this->templatePath)) {
             $fileName = "{$this->fileName}.tmp.php";
             return path_join($this->templatePath, $fileName);
