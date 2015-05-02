@@ -2,10 +2,14 @@
 
 /**
  * Třída nahrazující obecné soubory s funkcemi a klasickým volání pomocí statických metod
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
  */
 class KT {
 
     const CRAWLERS = "Bloglines subscriber|Dumbot|Sosoimagespider|QihooBot|FAST-WebCrawler|Superdownloads Spiderman|LinkWalker|msnbot|ASPSeek|WebAlta Crawler|Lycos|FeedFetcher-Google|Yahoo|YoudaoBot|AdsBot-Google|Googlebot|Scooter|Gigabot|Charlotte|eStyle|AcioRobot|GeonaBot|msnbot-media|Baidu|CocoCrawler|Google|Charlotte t|Yahoo! Slurp China|Sogou web spider|YodaoBot|MSRBOT|AbachoBOT|Sogou head spider|AltaVista|IDBot|Sosospider|Yahoo! Slurp|Java VM|DotBot|LiteFinder|Yeti|Rambler|Scrubby|Baiduspider|accoona";
+    const CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     // --- POLE - ARRAY ---------------------------
 
@@ -424,6 +428,20 @@ class KT {
         $crawlers = self::CRAWLERS;
         $isCrawler = (preg_match("/$crawlers/i", $userAgent) > 0); // i - case-insensitive
         return $isCrawler;
+    }
+
+    /**
+     * Vrátí náhodný řetezec poskládaný s malých a velkých písmen a čísel zadané délky
+     * Pozn.: vhodné pro jednoduché kódy nebo hesla...
+     * 
+     * @author BSQ <http://stackoverflow.com/users/1008675/bsq>
+     * @link http://stackoverflow.com/a/12210409
+     * 
+     * @param int $length
+     * @return string
+     */
+    public static function getRandomString($length = 6) {
+        return substr(str_shuffle(self::CHARS), 0, $length);
     }
 
     /**
