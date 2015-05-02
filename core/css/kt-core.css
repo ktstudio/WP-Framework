@@ -383,6 +383,7 @@ p.kt-error
     padding: 10px 5px;
     display: inline-block;
     margin: 15px 0;
+    width: 100%;
 }
 
 p.kt-error
