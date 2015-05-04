@@ -376,9 +376,9 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
      * @param string $value
      * @return \KT_Crud
      */
-    public function addNewColumnValue($name, $value = null) {
+    public function setColumnValue($name, $value = null) {
         $column = $this->getColumnByName($name);
-        if (KT::issetAndNotEmpty($column)) {
+        if (isset($column)) {
             if ($column->getName() == $this->getPrimaryKeyColumn()) {
                 $this->setId($value);
             }
@@ -386,6 +386,15 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         }
 
         return $this;
+    }
+
+    /**
+     * Staré volání, použijte @see setColumnValue
+     * 
+     * @deprecated since version 1.0+
+     */
+    public function addNewColumnValue($name, $value = null) {
+        return $this->setColumnValue($name, $value);
     }
 
     /**
