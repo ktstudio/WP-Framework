@@ -11,6 +11,8 @@ class KT {
     const CRAWLERS = "Bloglines subscriber|Dumbot|Sosoimagespider|QihooBot|FAST-WebCrawler|Superdownloads Spiderman|LinkWalker|msnbot|ASPSeek|WebAlta Crawler|Lycos|FeedFetcher-Google|Yahoo|YoudaoBot|AdsBot-Google|Googlebot|Scooter|Gigabot|Charlotte|eStyle|AcioRobot|GeonaBot|msnbot-media|Baidu|CocoCrawler|Google|Charlotte t|Yahoo! Slurp China|Sogou web spider|YodaoBot|MSRBOT|AbachoBOT|Sogou head spider|AltaVista|IDBot|Sosospider|Yahoo! Slurp|Java VM|DotBot|LiteFinder|Yeti|Rambler|Scrubby|Baiduspider|accoona";
     const CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
+    private static $dateGmtOffset;
+
     // --- POLE - ARRAY ---------------------------
 
     /**
@@ -300,14 +302,10 @@ class KT {
      * @link http://www.ktstudio.cz
      * 
      * @param string $format
-     * @param string $timeStampText
      * @return date
      */
-    public static function dateNow($format = "Y-m-d H:i:s", $timeStampText = null) {
-        if (self::issetAndNotEmpty($timeStampText)) {
-            return date($format, strtotime($timeStampText));
-        }
-        return date($format);
+    public static function dateNow($format = "Y-m-d H:i:s") {
+        return date($format, current_time("timestamp"));
     }
 
     /**
@@ -320,11 +318,31 @@ class KT {
      * @param string $format
      * @return string (datum)
      */
-    public static function dateConvert($value, $format = "d.m.Y") {
+    public static function dateConvert($value, $format = "d.m.Y", $withGmt = true) {
         if (KT::issetAndNotEmpty($value)) {
-            return date($format, strtotime($value));
+            $timeStamp = strtotime($value);
+            if ($withGmt) {
+                $timeStamp += (self::dateGmtOffset() * HOUR_IN_SECONDS);
+            }
+            return date($format, $timeStamp);
         }
         return null;
+    }
+
+    /**
+     * Vrátí časové pásmo, resp. časovou zónu zadanou v administraci (cachovanou per request)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public static function dateGmtOffset() {
+        $dateGmtOffset = self::$dateGmtOffset;
+        if (isset($dateGmtOffset)) {
+            return $dateGmtOffset;
+        }
+        return self::$dateGmtOffset = KT::tryGetInt(get_option("gmt_offset"));
     }
 
     // --- GENERÁLNÍ FUNKCE ---------------------------
