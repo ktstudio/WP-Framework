@@ -354,6 +354,7 @@ class KT_WP_Facebook_Data_Configurator {
         if (KT::notIssetOrEmpty($content)) {
             return;
         }
+        $content = strip_tags($content);
         echo "<meta property=\"$tagType\" content=\"$content\" />\n";
     }
 
