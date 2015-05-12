@@ -522,7 +522,7 @@ class KT_MetaBox implements KT_Registrable {
         $form->addFieldSetByObject($fieldset);
         $form->validate();
 
-        if (!$form->isFormSend() || $form->hasError() || !$isDefaultAutoSave) {
+        if ( $form->hasError() || !$isDefaultAutoSave) {
             $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = false;
             return $saveResult;
         }

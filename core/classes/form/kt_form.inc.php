@@ -781,12 +781,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return \KT_Form
      */
     public function validate() {
-        if (!$this->isFormSend()) {
-            $this->setError(true);
-            return $this;
-        }
-
-        if (!$this->hasFieldset()) {
+         if (!$this->hasFieldset()) {
             $this->setError(false);
             return $this;
         }
@@ -888,7 +883,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return \KT_Form
      */
     public function saveFieldsetToOptionTable(array $exludeFields = array()) {
-        if (!$this->isFormSend() || $this->hasError()) {
+        if ($this->hasError()) {
             return $this;
         }
 
@@ -907,7 +902,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         return $this;
     }
-
+    
     /**
      * Funkce uloží všechny fieldy z formuláře do wp_usermeta klíč field->name
      * Funkce si sama provede kontrolu, zda
@@ -1063,10 +1058,9 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     private function saveFieldsetToOptionOneByOne(KT_Form_Fieldset $fieldSet, array $exludeFields = array()) {
         /* @var $field \KT_Field */
-
         foreach ($fieldSet->getFields() as $field) {
             if (!in_array($field->getName(), $exludeFields)) {
-                $fieldValue = $field->getValue();
+                $fieldValue = $field->getValue();  
                 if ($fieldValue !== "" && isset($fieldValue)) {
                     update_option($field->getName(), $field->getValue());
                 } else {
