@@ -558,7 +558,10 @@ class KT_MetaBox implements KT_Registrable {
             $fieldset->setTitle("");
             $form = new KT_Form();
             $form->addFieldsetByObject($fieldset);
-            $form->validate();
+            
+            if($form->isFormSend()){
+                $form->validate();
+            }
         }
 
         switch ($currentValue) {

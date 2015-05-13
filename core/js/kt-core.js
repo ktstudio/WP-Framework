@@ -150,6 +150,13 @@ jQuery(document).ready(function () {
             input.attr('value', '1');
         }
     }
+    
+    if(jQuery("table[data-sortable='true'] tbody").lenght > 0){
+        jQuery("table[data-sortable='true'] tbody").sortable({
+            helper: sortableTablefixHelper,
+            stop: sortableTableSave
+        }).disableSelection();
+    }
 
     // Sortable číselníku vycházející z KT_Catalog_Model_Base
     var sortableTablefixHelper = function (e, ui) {
@@ -175,12 +182,7 @@ jQuery(document).ready(function () {
         };
 
         jQuery.post(ajaxurl, data);
-    };
-
-    jQuery("table[data-sortable='true'] tbody").sortable({
-        helper: sortableTablefixHelper,
-        stop: sortableTableSave
-    }).disableSelection();
+    };  
 
     // Slider input - jQuery UI
     
