@@ -23,6 +23,7 @@ define("KT_CORE_REQUIRES_URL", path_join(KT_CORE_URL, "requires"));
 // --- logování ------------------------
 define("KT_CORE_LOG_MIN_LEVEL", KT_Log_Level_Enum::INFO);
 define("KT_CORE_LOG_ONLY_SIGNED_USERS", true);
+define("KT_CORE_LOG_TOOLS_ADMIN_PAGE", true);
 
 // --- export ------------------------
 define("KT_WP_UPLOADS_PATH", path_join(WP_CONTENT_DIR, "uploads"));

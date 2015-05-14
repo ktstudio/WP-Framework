@@ -9,7 +9,7 @@
 class KT_Log_Model extends KT_Crud implements KT_Modelable {
 
     const TABLE = "kt_logs";
-    const ORDER_COLUMN = self::TITLE_COLUMN;
+    const ORDER_COLUMN = self::ID_COLUMN;
     const PREFIX = "kt_log";
     const FORM_PREFIX = "kt-log";
     // sloupce v DB
@@ -25,7 +25,6 @@ class KT_Log_Model extends KT_Crud implements KT_Modelable {
 
     public function __construct($rowId = null) {
         parent::__construct(self::TABLE, self::ID_COLUMN, null, $rowId);
-        $this->post = get_post($this->getProductId());
     }
 
     // --- gettery & settery ------------------------
