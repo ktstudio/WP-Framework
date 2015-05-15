@@ -1,6 +1,6 @@
 <?php
 
-if (is_admin() && KT_CORE_LOG_TOOLS_ADMIN_PAGE) {
+if (KT_CORE_LOG_TOOLS_ADMIN_PAGE) {
 
     $template = new KT_Custom_Metaboxes_Subpage(
             "tools.php", __("Výpis (KT) logů", KT_DOMAIN), __("(KT) Logy", KT_DOMAIN), "edit_theme_options", KT_Log_Model::FORM_PREFIX

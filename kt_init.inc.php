@@ -11,6 +11,7 @@ define("KT_PREFIX", "kt_");
 define("KT_FORM_PREFIX", "kt-");
 define("KT_DOMAIN", "KT");
 define("KT_PHP_FILE_SUFFIX", ".inc.php");
+define("KT_PHP_ADMIN_FILE_SUFFIX", ".admin.inc.php");
 define("KT_INIT_MODULE_FILE", "kt_init.inc.php");
 define("KT_BASE_STATIC_CLASS", "KT");
 define("KT_EMPTY_SYMBOL", __("---", KT_DOMAIN));
@@ -255,6 +256,7 @@ function kt_initialize_module($modulePrefix, $folder = "yours", $withIncludeAll 
  */
 function kt_include_all($folder) {
     if (isset($folder) && is_dir($folder)) {
+        $isAdmin = is_admin();
         $subdirsNames = kt_get_subdirs_names($folder, false);
         foreach ($subdirsNames as $subdirName) {
             $modulePath = path_join($folder, $subdirName);
@@ -263,7 +265,12 @@ function kt_include_all($folder) {
             } elseif (is_file($modulePath)) {
                 $moduleBaseName = basename($modulePath); // název souboru včetně koncovky
                 $startsWith = (strpos($moduleBaseName, KT_FILE_PREFIX) === 0); // kontrola jestli soubor začíná KT prefixem
-                $endsWith = (strpos(strrev($moduleBaseName), strrev(KT_PHP_FILE_SUFFIX)) === 0); // kontrola jestli soubor končí inc příponou (php)
+                $moduleBaseNameReversed = strrev($moduleBaseName);
+                $endsWith = (strpos($moduleBaseNameReversed, strrev(KT_PHP_FILE_SUFFIX)) === 0); // kontrola jestli soubor končí inc příponou (php)
+                $endsWithAdmin = (strpos($moduleBaseNameReversed, strrev(KT_PHP_ADMIN_FILE_SUFFIX)) === 0); // kontrola jestli soubor končí admin inc příponou (php)
+                if ($endsWithAdmin && !$isAdmin) { // zajištění načtení admin souborů pouze v administraci
+                    continue;
+                }
                 if ($startsWith && $endsWith) {
                     require_once $modulePath;
                 }
