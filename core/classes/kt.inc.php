@@ -1029,23 +1029,26 @@ class KT {
     }
 
     /**
-     * Ořízně zadaný řetezec, pokud je delší než požadovaná maximální délka včetně případné přípony
+     * Ořízně zadaný text (řetezec), pokud je delší než požadovaná maximální délka včetně případné přípony
      * 
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param string $text
-     * @param int $maxLength
-     * @param string $suffix
+     * @param string $text - text ke zkrácení
+     * @param int $maxLength - požadovaná maxiální délka (ořezu)
+     * @param boolean $fromBeginOrEnd - true od začátku, false od konce
+     * @param string $suffixPrefix - ukončovácí přípona/předpona navíc (podle parametru $fromBeginOrEnd)
      * @return string
      */
-    public static function stringCrop($text, $maxLength, $suffix = "...") {
+    public static function stringCrop($text, $maxLength, $fromBeginOrEnd = true, $suffixPrefix = "...") {
         $maxLength = self::tryGetInt($maxLength);
         $currentLength = strlen($text);
         if ($maxLength > 0 && $currentLength > $maxLength) {
-            $text = strip_tags($text);
-            $text = mb_substr($text, 0, $maxLength);
-            $text .= $suffix;
+            if ($fromBeginOrEnd) {
+                $text = mb_substr($text, 0, $maxLength) . $suffixPrefix;
+            } else {
+                $text = $suffixPrefix . mb_substr($text, ($currentLength - $maxLength), $currentLength);
+            }
         }
         return $text;
     }

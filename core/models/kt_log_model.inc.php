@@ -15,6 +15,7 @@ class KT_Log_Model extends KT_Crud implements KT_Modelable {
     // sloupce v DB
     const ID_COLUMN = "id";
     const LEVEL_ID_COLUMN = "level_id";
+    const SCOPE_COLUMN = "scope";
     const MESSAGE_COLUMN = "message";
     const DATE_COLUMN = "date";
     const LOGGED_USER_NAME_COLUMN = "logged_user_name";
@@ -48,6 +49,20 @@ class KT_Log_Model extends KT_Crud implements KT_Modelable {
     }
 
     /**
+     * @return string
+     */
+    public function getScope() {
+        return $scope = $this->getColumnValue(self::SCOPE_COLUMN);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage() {
+        return $message = $this->getColumnValue(self::MESSAGE_COLUMN);
+    }
+
+    /**
      * @return datetime
      */
     public function getDate() {
@@ -76,6 +91,29 @@ class KT_Log_Model extends KT_Crud implements KT_Modelable {
     }
 
     // --- veřejné funkce ------------------------
+
+    public function getLevelColumnValue() {
+        $levelId = $this->getLevelId();
+        $level = $this->getLevel();
+        $levelKey = $level->getCurrentKey();
+        $levelClass = "kt-log-" . strtolower($levelKey);
+        return "<span title=\"$levelId\" class=\"kt-tooltip $levelClass\">$levelKey</span>";
+    }
+
+    public function getMessageColumnValue() {
+        $message = $this->getMessage();
+        $cropedMessage = KT::stringCrop($message, 30);
+        return "<span title=\"$message\" class=\"kt-tooltip\">$cropedMessage</span>";
+    }
+
+    public function getFileColumnValue() {
+        $file = $this->getFile();
+        $dirName = dirname($file);
+        $fileName = basename($file);
+        $cropedFile = KT::stringCrop($file, 30, false);
+        return "<span title=\"$dirName - $fileName\" class=\"kt-tooltip\">$cropedFile</span>";
+    }
+
     // --- neveřejné funkce ------------------------
 
     /**
@@ -84,6 +122,7 @@ class KT_Log_Model extends KT_Crud implements KT_Modelable {
     protected function initColumns() {
         $this->addColumn(self::ID_COLUMN, KT_CRUD_Column::INT);
         $this->addColumn(self::LEVEL_ID_COLUMN, KT_CRUD_Column::INT);
+        $this->addColumn(self::SCOPE_COLUMN, KT_CRUD_Column::TEXT, true);
         $this->addColumn(self::MESSAGE_COLUMN);
         $this->addColumn(self::DATE_COLUMN, KT_CRUD_Column::DATETIME);
         $this->addColumn(self::LOGGED_USER_NAME_COLUMN, KT_CRUD_Column::TEXT, true);

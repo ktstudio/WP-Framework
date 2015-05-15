@@ -142,8 +142,8 @@ table.item-list td.sortable
 
 table.item-list tr.ui-sortable-helper
 {
-   border: 1px dashed #c7c7c7;
-   background: rgba(199, 199, 199, 0.7);
+    border: 1px dashed #c7c7c7;
+    background: rgba(199, 199, 199, 0.7);
 }
 
 /**** FORM BASIC STYLES ****/
@@ -398,7 +398,17 @@ p.kt-no-error
     color: #000;
 }
 
+/* logy */
+
+span.kt-log-error, span.kt-log-warning, span.kt-log-info, span.kt-log-debug, span.kt-log-trace { font-weight: bold; }
+span.kt-log-error { color: #B30000; }
+span.kt-log-warning { color: #B3B300; }
+span.kt-log-info { color: #005A00; }
+span.kt-log-debug {color: #1919B3; }
+span.kt-log-trace { color: #5A005A; }
+
 /* clearfix */
+
 .kt-clearfix:before,
 .kt-clearfix:after,
 .postbox .inside:before,
