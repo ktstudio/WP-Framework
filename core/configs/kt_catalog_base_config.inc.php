@@ -24,7 +24,7 @@ class KT_Catalog_Base_Config {
         $fieldset = new KT_Form_Fieldset($name, $title);
         $fieldset->setPostPrefix($prefix);
 
-        $fieldset->addText(KT_Catalog_Model_Base::TITLE_COLUMN, __("Název: ", KT_DOMAIN))
+        $fieldset->addText(KT_Catalog_Model_Base::TITLE_COLUMN, __("Název*: ", KT_DOMAIN))
                 ->addRule(KT_Field_Validator::REQUIRED, "Název je povinná položka")
                 ->addRule(KT_Field_Validator::MIN_LENGTH, __("Název musí mít alespoň 3 znaky"), 3)
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Název může mít maximálně 50 znaků"), 50);
@@ -37,7 +37,7 @@ class KT_Catalog_Base_Config {
                 ->addAttribute("maxlength", 30)
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Kód může mít maximálně 30 znaků"), 30);
 
-        $fieldset->addSwitch(KT_Catalog_Model_Base::VISIBILITY_COLUMN, __("Viditelnost: ", KT_DOMAIN))
+        $fieldset->addSwitch(KT_Catalog_Model_Base::VISIBILITY_COLUMN, __("Viditelnost*: ", KT_DOMAIN))
                 ->setValue(KT_Switch_Field::YES)
                 ->addRule(KT_Field_Validator::REQUIRED, "Viditelnost je povinná položka");
 

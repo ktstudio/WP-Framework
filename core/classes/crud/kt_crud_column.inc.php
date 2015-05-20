@@ -1,26 +1,26 @@
 <?php
 
 class KT_CRUD_Column {
-    
+
     const TEXT = "text";
     const INT = "int";
     const FLOAT = "float";
     const DATE = "date";
     const DATETIME = "datetime";
-    
+
     private $name = null;
     private $type = null;
     private $nullable = false;
     private $value = null;
-    
+
     public function __construct($name, $type = self::TEXT, $nullable = false) {
         $this->setName($name)
                 ->setType($type)
                 ->setNullable($nullable);
     }
-    
+
     // --- gettery a settery ------------------
-    
+
     /**
      * Vrátí název sloupce modelu v DB
      * 
@@ -29,7 +29,7 @@ class KT_CRUD_Column {
     public function getName() {
         return $this->name;
     }
-    
+
     /**
      * Nastaví název sloupce modelu v DB
      * 
@@ -42,7 +42,7 @@ class KT_CRUD_Column {
     protected function setName($name) {
         $this->name = $name;
         return $this;
-    }   
+    }
 
     /**
      * Vrátí typ sloupce v DB - řídí se konstanty třídy
@@ -52,7 +52,7 @@ class KT_CRUD_Column {
     public function getType() {
         return $this->type;
     }
-    
+
     /**
      * Nastaví typ sloupce v DB - řídí se konstanty třídy
      * 
@@ -75,7 +75,7 @@ class KT_CRUD_Column {
                 $this->type = self::TEXT;
                 break;
         }
-        
+
         return $this;
     }
 
@@ -103,16 +103,16 @@ class KT_CRUD_Column {
         $this->nullable = $nullable;
         return $this;
     }
-    
+
     /**
      * Nastaví hodnotu sloupce která je v DB nebo má být nastavena v DB
      * 
      * @return mixed
      */
-    public function getValue(){
+    public function getValue() {
         return $this->value;
     }
-    
+
     /**
      * Nastaví hodnotu sloupce která je v DB nebo má být nastavena v DB
      * 
@@ -122,12 +122,13 @@ class KT_CRUD_Column {
      * @param mixed $value
      * @return \KT_CRUD_Column
      */
-    public function setValue($value){
-        if($this->getNullable() && $value === ""){
+    public function setValue($value) {
+        if ($this->getNullable() && $value === "") {
             $this->value = null;
         } else {
             $this->value = $value;
         }
         return $this;
     }
+
 }

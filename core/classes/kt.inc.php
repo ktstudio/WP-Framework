@@ -1053,6 +1053,22 @@ class KT {
         return $text;
     }
 
+    /**
+     * Odstranění všech mezer ze zadaného textu
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $text
+     * @return string
+     */
+    public static function stringRemoveSpaces($text) {
+        if (KT::issetAndNotEmpty($text)) {
+            return str_replace(' ', '', trim($text));
+        }
+        return null;
+    }
+
     // --- TEMPLATE LOAD ---------------------------
 
     /**

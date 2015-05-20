@@ -1216,7 +1216,6 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
                 $result = update_user_meta($userId, $field->getName(), $field->getValue());
                 
-                var_dump($result);
                 
             } else {
                 delete_user_meta($userId, $field->getName());
