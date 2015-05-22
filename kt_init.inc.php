@@ -1,8 +1,8 @@
-<?php
+﻿<?php
 
 define("KT_LOADED", TRUE);
 
-define("KT_VERSION", "1.0");
+define("KT_VERSION", "1.0.1");
 
 define("KT_BASE_PATH", path_join(TEMPLATEPATH, "kt"));
 define("KT_BASE_URL", get_template_directory_uri() . "/kt");

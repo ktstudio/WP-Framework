@@ -907,7 +907,7 @@ class KT {
         }
 
         $defaultArgs = array(
-            "format" => "/page/%#%",
+            "format" => "page/%#%",
             "current" => max(1, $paged),
             "total" => $wp_query->max_num_pages,
             "prev_text" => __("Předchozí", KT_DOMAIN),
@@ -1065,6 +1065,47 @@ class KT {
     public static function stringRemoveSpaces($text) {
         if (KT::issetAndNotEmpty($text)) {
             return str_replace(' ', '', trim($text));
+        }
+        return null;
+    }
+
+    /**
+     * Na základě odřádkování rozdělí zadaný text do pole (tzn. po řádcích)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $text
+     * @return string
+     */
+    public static function textLinesToArray($text) {
+        if (KT::issetAndNotEmpty($text)) {
+            return explode(PHP_EOL, $text);
+        }
+        return null;
+    }
+
+    /**
+     * Na základě odřádkování (tzn. po řádcích) rozdělí zadaný text a vrátí jako HTML seznam zadaného tagu
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $text
+     * @param string $tag HTML tag pro jednotlivé řádky
+     * @param string $class CSS třída pro jednotlivé HTML tagy
+     * @return string (HTML)
+     */
+    public static function textLinesToHtml($text, $tag, $class = null) {
+        $lines = self::textLinesToArray($text);
+        if (KT::arrayIssetAndNotEmpty($lines)) {
+            if (KT::issetAndNotEmpty($class)) {
+                $classPart = " class=\"{$class}\"";
+            }
+            foreach ($lines as $line) {
+                $output .= "<{$tag}{$classPart}>{$line}</{$tag}>";
+            }
+            return $output;
         }
         return null;
     }

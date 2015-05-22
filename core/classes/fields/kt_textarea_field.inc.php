@@ -71,7 +71,7 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base {
     public function getField() {
         $html = "";
         $html .= "<textarea " . $this->getBasicHtml() . ">";
-        $html .= $this->getValue();
+        $html .= htmlentities($this->getValue());
         $html .= "</textarea>";
 
         if ($this->hasErrorMsg()) {
