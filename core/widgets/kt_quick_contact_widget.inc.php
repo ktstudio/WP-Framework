@@ -39,7 +39,7 @@ class KT_Quick_Contact_Widget extends KT_Widget_Base {
         }
         $skype = htmlspecialchars(trim($instance[self::SKYPE_KEY]));
         if (isset($skype) && !empty($skype)) {
-            $skypeTitle = __("Zavolat na Skype");
+            $skypeTitle = __("Zavolat na Skype", KT_DOMAIN);
             $skypeLink = "<a href=\"skype:echo123?call\" title=\"$skypeTitle\">$skypeTitle</a>";
             kt_the_tabs_indent(2, "<li class=\"list-group-item\">$skypeLink</li>", true);
         }

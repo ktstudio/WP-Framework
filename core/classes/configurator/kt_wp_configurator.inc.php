@@ -1105,7 +1105,7 @@ final class KT_WP_Configurator {
             KT::theTabsIndent(1, "</div>", true);
             KT::theTabsIndent(0, "</div>", true, true);
 
-            $addMenuTitle = htmlspecialchars(__("Add to Menu"));
+            $addMenuTitle = htmlspecialchars(__("Přidat do menu", KT_DOMAIN));
 
             KT::theTabsIndent(0, "<p class=\"button-controls\">", true);
             KT::theTabsIndent(1, "<span class=\"add-to-menu\">", true);

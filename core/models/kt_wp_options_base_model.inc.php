@@ -129,6 +129,27 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
         return null;
     }
 
+        /**
+     * Vrátí překlad hodnoty (pokud je to možné) pro zadaný název (klíč) pokud existuje ve výčtu získaných options hodnot (podle dříve zadaného případného prefixu)
+     * Pozn.: překlad je spajt s pluginem WPML
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $name
+     * @param string $context
+     * @return string|null
+     */
+    public function getTranslateOption($name, $context) {
+        if (function_exists("icl_t")) {
+            $translate = icl_t($context, $name);
+            if (KT::issetAndNotEmpty($translate)) {
+                return $translate;
+            }
+        }
+        return $this->getOption($name);
+    }
+    
     /**
      * Funkcí vrátí všechny option podle případného prefixu ve tvaru název (klíč) => hodnota
      *

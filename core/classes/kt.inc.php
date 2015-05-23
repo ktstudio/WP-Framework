@@ -257,21 +257,23 @@ class KT {
     }
 
     /**
-     * Vrátí hodnotu pro zadaný klíč pokud existuje nebo null
+     * Vrátí hodnotu pro zadaný klíč pokud existuje nebo výchozí zadanou hodnotu (NULL)
      * 
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param array
+     * @param array $array
+     * @param string $key
+     * @param string $defaultValue
      * @return mixed type|null
      */
-    public static function arrayTryGetValue(array $array, $key) {
+    public static function arrayTryGetValue(array $array, $key, $defaultValue = null) {
         if (KT::issetAndNotEmpty($key)) {
             if (array_key_exists($key, $array)) {
                 return $array[$key];
             }
         }
-        return null;
+        return $defaultValue;
     }
 
     /**
