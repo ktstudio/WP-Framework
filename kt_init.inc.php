@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 define("KT_LOADED", TRUE);
 
