@@ -2,7 +2,7 @@
 
 class KT_Media_Field extends KT_Field {
 
-    const FIELD_TYPE = 'media';
+    const FIELD_TYPE = "media";
 
     /**
      * Založení objektu typu image loader - pouze Admin sekce
@@ -46,11 +46,7 @@ class KT_Media_Field extends KT_Field {
 
         $html .= "<div class=\"file-load-box\">";
 
-        if (KT::issetAndNotEmpty($this->getValue())) {
-            $html .= $this->getFullSpanUrl();
-        } else {
-            $html .= $this->getEmptySpanUrl();
-        }
+        $html .= $this->getFullSpanUrl();
 
         $html .= "<input type=\"hidden\" ";
         $html .= $this->getBasicHtml();
@@ -73,18 +69,6 @@ class KT_Media_Field extends KT_Field {
     // --- privátní funkce --------------
 
     /**
-     * Vrátí prázdný content pro field bez nastaveného attachmentu
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     * 
-     * @return string
-     */
-    private function getEmptySpanUrl() {
-        return $html = "<span class=\"{$this->getAttrValueByName("id")} span-url\"></span>";
-    }
-
-    /**
      * Vrátí obsah s daty pro field v případě, že je attachment nastaven
      * V případě obrázku vrátí jeho thumbnail v případě souboru pouze název
      * 
@@ -94,20 +78,25 @@ class KT_Media_Field extends KT_Field {
      * @return string
      */
     private function getFullSpanUrl() {
-
-        $attachment = get_post($this->getValue());
-        $removeFileTag = "<a class=\"remove-file\"><span class=\"dashicons dashicons-no\"></span></a>";
-
-        if (self::isFileImageType($attachment)) {
-            $imageData = wp_get_attachment_image_src($attachment->ID, KT_WP_IMAGE_SIZE_THUBNAIL);
-            $fileTag = "<img class=\"file\" src=\"{$imageData[0]}\">";
+        $value = $this->getValue();
+        if (KT::issetAndNotEmpty($value)) {
+            $attachment = get_post($this->getValue());
+            if (KT::issetAndNotEmpty($attachment)) {
+                if (self::isFileImageType($attachment)) {
+                    $imageData = wp_get_attachment_image_src($attachment->ID, KT_WP_IMAGE_SIZE_THUBNAIL);
+                    $fileTag = "<img class=\"file\" src=\"{$imageData[0]}\">";
+                }
+                if (KT::notIssetOrEmpty($fileTag)) {
+                    $fileTag = "<span class=\"file\">{$attachment->post_title}</span>";
+                }
+                $removeFileTag = "<a class=\"remove-file\"><span class=\"dashicons dashicons-no\"></span></a>";
+                return $html = "<span class=\"{$this->getAttrValueByName("id")} span-url full\">$fileTag $removeFileTag</span>";
+            } else {
+                return "<span class=\"file\">" . __("Obrázek byl smazán", KT_DOMAIN) . "</span>";
+            }
+        } else {
+            return $html = "<span class=\"{$this->getAttrValueByName("id")} span-url\"></span>";
         }
-
-        if (KT::notIssetOrEmpty($fileTag)) {
-            $fileTag = "<span class=\"file\">{$attachment->post_title}</span>";
-        }
-
-        return $html = "<span class=\"{$this->getAttrValueByName("id")} span-url full\">$fileTag $removeFileTag</span>";
     }
 
     // --- statické funkce ------------
@@ -127,9 +116,9 @@ class KT_Media_Field extends KT_Field {
 
         $ext = preg_match('/\.([^.]+)$/', $file, $matches) ? strtolower($matches[1]) : false;
 
-        $image_exts = array('jpg', 'jpeg', 'jpe', 'gif', 'png');
+        $image_exts = array("jpg", "jpeg", "gif", "png", "bmp", "tiff");
 
-        if ('image/' == substr($attachment->post_mime_type, 0, 6) || $ext && 'import' == $attachment->post_mime_type && in_array($ext, $image_exts)) {
+        if ("image/" == substr($attachment->post_mime_type, 0, 6) || $ext && "import" == $attachment->post_mime_type && in_array($ext, $image_exts)) {
             return true;
         }
 
