@@ -602,7 +602,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         global $wpdb;
 
         $updateValue = $this->getColumnsWithFormatsData();
-
+        
         // Povolení filtru, který ze "NULL" strinogové hodnoty udělá v SQL dotazu běžný NULL pro nullable sloupce
         add_filter("query", array($this, "nullUpdateFilterCallback"));
         $sql = $wpdb->update($this->getTable(), $updateValue->columns, array($this->getPrimaryKeyColumn() => $this->getId()), $updateValue->formats);

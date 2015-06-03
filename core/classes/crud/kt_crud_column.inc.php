@@ -12,6 +12,7 @@ class KT_CRUD_Column {
     private $type = null;
     private $nullable = false;
     private $value = null;
+    private $allowStripSlashed = false;
 
     public function __construct($name, $type = self::TEXT, $nullable = false) {
         $this->setName($name)
@@ -47,10 +48,39 @@ class KT_CRUD_Column {
     /**
      * Vrátí typ sloupce v DB - řídí se konstanty třídy
      * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
      * @return string
      */
     public function getType() {
         return $this->type;
+    }
+
+    /**
+     * Vrátí, zda je na sloupci povoleno ukládání hodnoty s uvozovkami
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public function getAllowStripSlashed() {
+        return $this->allowStripSlashed;
+    }
+
+    /**
+     * Nastaví, zda se má na sloupci povolit ukládání hodnoty s uvozovkami
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param type $allowStripSlashed
+     * @return \KT_CRUD_Column
+     */
+    public function setAllowStripSlashed($allowStripSlashed) {
+        $this->allowStripSlashed = $allowStripSlashed;
+        return $this;
     }
 
     /**
@@ -126,7 +156,11 @@ class KT_CRUD_Column {
         if ($this->getNullable() && $value === "") {
             $this->value = null;
         } else {
-            $this->value = $value;
+            if ($this->getAllowStripSlashed()) {
+                $this->value = stripslashes($value);
+            } else {
+                $this->value = $value;
+            }
         }
         return $this;
     }
