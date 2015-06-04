@@ -450,10 +450,12 @@ final class KT_WP_Configurator {
                 add_filter("post_thumbnail_html", array($this, "htmlImageLazyLoadingFilter"), 11);
                 add_filter("get_avatar", array($this, "htmlImageLazyLoadingFilter"), 11);
                 add_filter("the_content", array($this, "htmlImageLazyLoadingFilter"), 99);
+                add_filter("kt_image_prepare_lazyload", array($this, "htmlImageLazyLoadingFilter"), 42);
             } elseif ($imagesLazyLoading === false) {
                 remove_filter("post_thumbnail_html", array($this, "htmlImageLazyLoadingFilter"), 11);
                 remove_filter("get_avatar", array($this, "htmlImageLazyLoadingFilter"), 11);
                 remove_filter("the_content", array($this, "htmlImageLazyLoadingFilter"), 99);
+                remove_filter("kt_image_prepare_lazyload", array($this, "htmlImageLazyLoadingFilter"), 42);
             }
         }
 

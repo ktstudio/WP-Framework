@@ -677,6 +677,27 @@ class KT {
         return $html;
     }
 
+    /**
+     * Vratí html tag img připravený na lazy load
+     * 
+     * @author Jan Pokorný
+     * 
+     * @param string $fileName Název / cesta k souboru
+     * @param array $attrs Další html atributy
+     * 
+     */
+    public static function imageGetHtml($fileName, array $attrs = null) {
+        $fileUrl = KT::imageGetUrlFromTheme($fileName);
+        $htmlAttrs = "";
+        if ($attrs) {
+            foreach ($attrs as $param => $value) {
+                $htmlAttrs .= sprintf(' %s="%s"', $param, $value);
+            }
+        }
+        $html = sprintf('<img src="%s"%s />', $fileUrl, $htmlAttrs);
+        return apply_filters("kt_image_prepare_lazyload", $html);
+    }
+
     // --- MENU ---------------------------
 
     /**
