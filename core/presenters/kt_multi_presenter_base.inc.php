@@ -2,6 +2,9 @@
 
 /**
  * Základní "Multi" presenter pro všechny přehledy, úvodní a další složené stránky apod.
+ * Původní funkce pro výpis loop přesunuty staticky na @see \KT_Presenter_Base
+ * 
+ * @deprecated since version 1.2
  * 
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz

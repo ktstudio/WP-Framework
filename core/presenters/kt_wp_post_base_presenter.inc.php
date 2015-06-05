@@ -211,7 +211,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     
     /**
      * Funkce je volána v konstruktoru presenteru a zavolá se pouze tehdy, pokud se jedná
-     * o detail daného modelu. Funkce je připravená pro autmoatické zavádění funkcí právě
+     * o detail daného modelu. Funkce je připravená pro automatické zavádění funkcí právě
      * pro danou entitu.
      * 
      * @author Tomáš Kocifaj

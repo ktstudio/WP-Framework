@@ -8,6 +8,7 @@ if (KT_CORE_LOG_TOOLS_ADMIN_PAGE) {
 
     $crudList = new KT_CRUD_Admin_List("KT_Log_Model", KT_Log_Model::TABLE);
     $crudList->setTemplateTitle(__("Přehled zaznamenaných (KT) logů", KT_DOMAIN));
+    $crudList->getRepository()->setOrder(KT_Log_Model::DATE_COLUMN, KT_Repository::ORDER_DESC);
 
     $crudList->addColumn(KT_Log_Model::LEVEL_ID_COLUMN)
             ->setLabel(__("Level", KT_DOMAIN))
