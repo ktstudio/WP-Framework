@@ -8,6 +8,12 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
     private $prefixMetaValue = null;
     private $suffixMetaValue = null;
 
+    function __construct(array $queryArgs = null) {
+        if (KT::arrayIssetAndNotEmpty($queryArgs)) {
+            $this->setQueryArgs($queryArgs);
+        }
+    }
+
     // --- gettery -----------
 
     /**

@@ -391,7 +391,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
     /**
      * Staré volání, použijte @see setColumnValue
      * 
-     * @deprecated since version 1.0+
+     * @deprecated since version 1.1
      */
     public function addNewColumnValue($name, $value = null) {
         return $this->setColumnValue($name, $value);
