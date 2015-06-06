@@ -240,19 +240,25 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
+     * @param boolean $withTheFilter
+     * @param int $customExcerptLength
+     * 
      * @return string
      */
-    public function getExcerpt($withTheFilter = true) {
+    public function getExcerpt($withTheFilter = true, $customExcerptLength = null) {
         if ($this->hasExcrept()) {
             $excerpt = $this->getPost()->post_excerpt;
         } else {
-            $excerptLength = apply_filters('excerpt_length', 55);
-            $excerptMore = apply_filters('excerpt_more', ' ' . '[&hellip;]');
+            $excerptLength = apply_filters("excerpt_length", 55);
+            if (KT::isIdFormat($customExcerptLength)) {
+                $excerptLength = $customExcerptLength;
+            }
+            $excerptMore = apply_filters("excerpt_more", " [&hellip;]");
             $excerpt = wp_trim_words($this->getPost()->post_content, $excerptLength, $excerptMore);
         }
-        $excerptFilterered = apply_filters('get_the_excerpt', $excerpt);
+        $excerptFilterered = apply_filters("get_the_excerpt", $excerpt);
         if ($withTheFilter) {
-            return apply_filters('the_excerpt', $excerptFilterered);
+            return apply_filters("the_excerpt", $excerptFilterered);
         }
         return $excerptFilterered;
     }
