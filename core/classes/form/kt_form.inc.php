@@ -398,7 +398,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         return null;
     }
-    
+
     /**
      * Odstraní z kolekce fieldstů fieldset s daným názvem.
      * 
@@ -408,11 +408,11 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $name
      * @return \KT_Form
      */
-    public function removeFieldsetByName($name){
-        if(array_key_exists($name, $this->fieldsets)){
+    public function removeFieldsetByName($name) {
+        if (array_key_exists($name, $this->fieldsets)) {
             unset($this->fieldsets[$name]);
         }
-        
+
         return $this;
     }
 
@@ -663,8 +663,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         foreach ($this->getFieldsets() as $fieldset) {
             /* @var $fieldset \KT_Form_Fieldset */
-            
-            
+
+
             if (!$fieldset->hasFields()) {
                 continue;
             }
@@ -781,7 +781,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return \KT_Form
      */
     public function validate() {
-         if (!$this->hasFieldset()) {
+
+        if (!$this->hasFieldset()) {
             $this->setError(false);
             return $this;
         }
@@ -902,7 +903,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         return $this;
     }
-    
+
     /**
      * Funkce uloží všechny fieldy z formuláře do wp_usermeta klíč field->name
      * Funkce si sama provede kontrolu, zda
@@ -1060,7 +1061,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         /* @var $field \KT_Field */
         foreach ($fieldSet->getFields() as $field) {
             if (!in_array($field->getName(), $exludeFields)) {
-                $fieldValue = $field->getValue();  
+                $fieldValue = $field->getValue();
                 if ($fieldValue !== "" && isset($fieldValue)) {
                     update_option($field->getName(), $field->getValue());
                 } else {
@@ -1203,7 +1204,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
             if (in_array($field->getName(), $excludeFields)) {
                 continue;
             }
-            
+
             $fieldValue = $field->getValue();
 
             if ($fieldValue !== "" && isset($fieldValue)) {
@@ -1215,8 +1216,6 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 }
 
                 $result = update_user_meta($userId, $field->getName(), $field->getValue());
-                
-                
             } else {
                 delete_user_meta($userId, $field->getName());
             }

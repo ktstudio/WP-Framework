@@ -108,7 +108,7 @@ class KT_MetaBox implements KT_Registrable {
             $this->title = $title;
             return $this;
         }
-        //throw new KT_Not_Set_Argument_Exception( "title" );
+//throw new KT_Not_Set_Argument_Exception( "title" );
     }
 
     /**
@@ -456,10 +456,10 @@ class KT_MetaBox implements KT_Registrable {
      * @param integer $postId
      */
     public function savePost($postId) {
-        if (wp_is_post_revision($postId)) {
-            return;
+        if (wp_is_post_revision($postId) || wp_is_post_autosave($postId)) {
+            return $postId;
         }
-        if ($this->CheckCanHandlePostRequest($postId)) {
+        if (KT::arrayIssetAndNotEmpty($_POST) && $this->CheckCanHandlePostRequest($postId)) {
             $isDefaultAutoSave = $this->getIsDefaultAutoSave();
             $form = new KT_form();
             $form->addFieldSetByObject($this->getFieldset());
@@ -468,6 +468,7 @@ class KT_MetaBox implements KT_Registrable {
                 $form->saveFieldsetToPostMeta($postId);
             }
         }
+        return $postId;
     }
 
     /**
@@ -523,7 +524,7 @@ class KT_MetaBox implements KT_Registrable {
         $form->addFieldSetByObject($fieldset);
         $form->validate();
 
-        if ( $form->hasError() || !$isDefaultAutoSave) {
+        if ($form->hasError() || !$isDefaultAutoSave) {
             $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = false;
             return $saveResult;
         }
@@ -559,8 +560,8 @@ class KT_MetaBox implements KT_Registrable {
             $fieldset->setTitle("");
             $form = new KT_Form();
             $form->addFieldsetByObject($fieldset);
-            
-            if($form->isFormSend()){
+
+            if ($form->isFormSend()) {
                 $form->validate();
             }
         }
