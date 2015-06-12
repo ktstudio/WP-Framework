@@ -17,7 +17,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         if (KT::issetAndNotEmpty($post)) {
             $postModel = new KT_WP_Post_Base_Model($post);
             $this->setModel($postModel);
-            if(is_singular($post->post_type)){
+            if (is_singular($post->post_type)) {
                 static::singularDetailPostProcess();
             }
         }
@@ -184,20 +184,20 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         if ($this->getModel()->hasThumbnail()) {
             $titleAttribute = $this->getModel()->getTitleAttribute();
             $attachment = get_post($this->getModel()->getThumbnailId());
-            
-            if(KT::issetAndNotEmpty($attachment->post_title)){
+
+            if (KT::issetAndNotEmpty($attachment->post_title)) {
                 $imageAttr["alt"] = $attachment->post_title;
             }
             if (!array_key_exists("alt", $imageAttr)) {
                 $imageAttr["alt"] = $titleAttribute;
             }
             $image = $this->getThumbnailImage($imageSize, $imageAttr);
-            $linkImage = wp_get_attachment_image_src($this->getModel()->getThumbnailId(), KT_WP_IMAGE_SIZE_LARGE);
+            $linkImage = $this->getThumbnailImagePermalink();
             $isTagContainer = (KT::issetAndNotEmpty($tagId) && KT::issetAndNotEmpty($tagClass));
             if ($isTagContainer) {
                 $html = KT::getTabsIndent(0, "<div id=\"$tagId\" class=\"$tagClass\">", true);
             }
-            $html .= KT::getTabsIndent(1, "<a href=\"{$linkImage[0]}\" title=\"$titleAttribute\" class=\"fbx-link\" rel=\"lightbox\">", true);
+            $html .= KT::getTabsIndent(1, "<a href=\"$linkImage\" title=\"$titleAttribute\" class=\"fbx-link\" rel=\"lightbox\">", true);
             $html .= KT::getTabsIndent(2, $image, true);
             $html .= KT::getTabsIndent(1, "</a>", true);
             if ($isTagContainer) {
@@ -207,8 +207,22 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         }
         return null;
     }
+
+    /**
+     * Vrátí URL pro odkaz na (velký) obrázek (thumb)
+     * 
+     * @return string (URL)
+     */
+    public function getThumbnailImagePermalink() {
+        $src = wp_get_attachment_image_src($this->getModel()->getThumbnailId(), KT_WP_IMAGE_SIZE_LARGE);
+        if (KT::arrayIssetAndNotEmpty($src)) {
+            return $src[0];
+        }
+        return null;
+    }
+
     // --- protected funkce ------------------
-    
+
     /**
      * Funkce je volána v konstruktoru presenteru a zavolá se pouze tehdy, pokud se jedná
      * o detail daného modelu. Funkce je připravená pro automatické zavádění funkcí právě
