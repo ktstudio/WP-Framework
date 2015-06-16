@@ -534,7 +534,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     public function getInputsToSimpleHtml($displayLables = false) {
         if ($this->hasFieldset()) {
             foreach ($this->fieldsets as $fieldSet) {
-                $html .= $fieldSet->getInputsToSimpleHtml($displayLables);
+                $html = $fieldSet->getInputsToSimpleHtml($displayLables);
             }
 
             return $html;
@@ -572,7 +572,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         $html .= self::getSubmitButton($this->getButtonValue(), $this->getButtonClass());
         $html .= "</form>";
-
+        
         return $html;
     }
 

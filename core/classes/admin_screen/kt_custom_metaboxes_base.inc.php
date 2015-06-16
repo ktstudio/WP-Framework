@@ -8,6 +8,7 @@ abstract class KT_Custom_Metaboxes_Base {
     const COLUMN_TWO = 2;
     const UPDATED_GET_KEY = "redirect";
     const SAVE_RESULT_KEY = "result";
+    const REDIRECT_ALLOWED = "redirect-allowed";
 
     private $renderSaveButton = false;
     private $NumberColumns = self::COLUMN_TWO;
@@ -503,6 +504,10 @@ abstract class KT_Custom_Metaboxes_Base {
             if ($pageSlug == $this->getSlug()) {
                 $saveResult = array(self::SAVE_RESULT_KEY => true);
                 $saveResult = apply_filters("kt-custom-metabox-save-$screenName", $saveResult);
+                
+                if($saveResult[self::REDIRECT_ALLOWED] == false){
+                    return;
+                }
 
                 if ($saveResult[self::SAVE_RESULT_KEY] !== true) {
                     add_action("admin_notices", array($this, "adminNoticesError"));
