@@ -212,7 +212,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
     /**
      * @return string
      */
-    private function getError() {
+    public function getError() {
         return $this->error;
     }
      
