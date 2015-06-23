@@ -1,19 +1,26 @@
 <?php
 
+/**
+ * GUI prvek pro výběr barvy
+ * 
+ * @deprecated ve vývoji
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_Color_Field extends KT_Field {
-    
+
     const FIELD_TYPE = "color";
-    
+
     private $defaultColor = null;
-    
+
     public function __construct($name, $label) {
         parent::__construct($name, $label);
         $this->addAttrClass("colorField");
     }
-    
-    
+
     // --- gettery & settery ------------------
-    
+
     /**
      * Vrátí nastavenou výchozí barvu
      * 
@@ -38,7 +45,7 @@ class KT_Color_Field extends KT_Field {
     public function setDefaultColor($defaultColor) {
         $this->defaultColor = $defaultColor;
         return $this;
-    }    
+    }
 
     /**
      * Vrátí typ fieldu
@@ -48,16 +55,16 @@ class KT_Color_Field extends KT_Field {
      *
      * @return string
      */
-    public function getFieldType(){
+    public function getFieldType() {
         return self::FIELD_TYPE;
     }
-    
+
     // --- veřejné funkce ------------------
-    
-    public function renderField(){
+
+    public function renderField() {
         echo $this->getField();
     }
-    
+
     /**
      * Vrátí HTML strukturu pro zobrazní fieldu
      *
@@ -73,13 +80,13 @@ class KT_Color_Field extends KT_Field {
         $value = htmlentities($this->getValue());
 
         $html .= "<input type=\"text\" ";
-        $html .= $this->getBasicHtml();      
+        $html .= $this->getBasicHtml();
         $html .= " value=\"{$value}\" ";
-        
-        if(KT::notIssetOrEmpty($this->getDefaultColor())){
+
+        if (KT::notIssetOrEmpty($this->getDefaultColor())) {
             $html .= " data-default-color=\"{$this->getDefaultColor()}\"";
         }
-        
+
         $html .= "/>";
 
         if ($this->hasErrorMsg()) {
@@ -88,5 +95,5 @@ class KT_Color_Field extends KT_Field {
 
         return $html;
     }
-    
+
 }

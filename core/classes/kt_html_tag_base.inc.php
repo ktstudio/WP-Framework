@@ -33,9 +33,9 @@ abstract class KT_HTML_Tag_Base {
         $this->attributes = $attributes;
         return $this;
     }
-    
+
     // --- protected funkce ------------------
-    
+
     /**
      * Připraví string se zadanými attributy
      * 
@@ -52,22 +52,22 @@ abstract class KT_HTML_Tag_Base {
         }
 
         foreach ($attrCollection as $key => $value) {
-            if($key == self::CLASS_KEY){
+            if ($key == self::CLASS_KEY) {
                 continue;
             }
-            
+
             if (KT::issetAndNotEmpty($value)) {
                 $html .= $key . "=\"" . htmlspecialchars($value) . "\" ";
             } else {
                 $html .= $key . " ";
             }
         }
-        
+
         $html .= $this->getAttrClassString();
 
         return $html;
     }
-    
+
     /**
      * Vrítí string se všemi CSS class zadané danému elementu.
      * 
@@ -75,18 +75,18 @@ abstract class KT_HTML_Tag_Base {
      * 
      * @return string
      */
-    protected function getAttrClassString(){
+    protected function getAttrClassString() {
         $html = "";
-        if(array_key_exists(self::CLASS_KEY, $this->getAttributes())){
+        if (array_key_exists(self::CLASS_KEY, $this->getAttributes())) {
             $classString = "";
 
-            foreach($this->getClasses() as $class){
+            foreach ($this->getClasses() as $class) {
                 $classString .= $class . " ";
             }
-            
+
             $html .= self::CLASS_KEY . "=\"$classString\"";
         }
-        
+
         return $html;
     }
 
@@ -98,7 +98,7 @@ abstract class KT_HTML_Tag_Base {
     protected function renderAttributeString() {
         echo $this->getAttributeString();
     }
-    
+
     /**
      * Vrátí hodnotu nastaveného attributu
      * 
@@ -107,8 +107,8 @@ abstract class KT_HTML_Tag_Base {
      * @param string $attrName
      * @return string | array
      */
-    protected function getAttrValueByName($attrName){ 
-        if(array_key_exists($attrName, $this->getAttributes())){
+    protected function getAttrValueByName($attrName) {
+        if (array_key_exists($attrName, $this->getAttributes())) {
             return $this->attributes[$attrName];
         }
     }
@@ -171,6 +171,19 @@ abstract class KT_HTML_Tag_Base {
     }
 
     /**
+     * Nastaví HTML attr MAXLENGTH danému elementu
+     * 
+     * @author Tomáš Kocifaj
+     * 
+     * @param int $maxlength
+     * @return \KT_HTML_Tag_Base
+     */
+    public function setAttrMaxlength($maxlength) {
+        $this->addAttribute("maxlength", $maxlength);
+        return $this;
+    }
+
+    /**
      * Přidá jednu class do HTML attr CLASS danému elementu
      * 
      * @author Tomáš Kocifaj
@@ -180,14 +193,14 @@ abstract class KT_HTML_Tag_Base {
      */
     public function addAttrClass($class) {
         $classes = explode(" ", $class);
-        
-        if(KT::issetAndNotEmpty($classes)){
+
+        if (KT::issetAndNotEmpty($classes)) {
             $currentClasses = $this->getClasses();
             $newClasses = array_merge($classes, $currentClasses);
             $this->setClasses($newClasses);
             return $this;
         }
-        
+
         if (array_key_exists(self::CLASS_KEY, $this->attributes)) {
             array_push($this->attributes[self::CLASS_KEY], $class);
             return $this;
@@ -221,13 +234,13 @@ abstract class KT_HTML_Tag_Base {
      * @return array
      */
     private function getClasses() {
-        if(array_key_exists(self::CLASS_KEY, $this->getAttributes())){
+        if (array_key_exists(self::CLASS_KEY, $this->getAttributes())) {
             return $this->attributes[self::CLASS_KEY];
         }
-        
+
         return array();
     }
-    
+
     /**
      * Nastaví kolekci všech CSS tříd, které danému elementu patří.
      * 
@@ -235,7 +248,7 @@ abstract class KT_HTML_Tag_Base {
      * 
      * @param array $classes
      */
-    private function setClasses(array $classes = array()){
+    private function setClasses(array $classes = array()) {
         $this->attributes[self::CLASS_KEY] = $classes;
     }
 

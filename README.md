@@ -9,5 +9,8 @@ Vytvářejte WP šablony rychle, snadno, efektivně a přehledně!
 - [Dokumentace](http://www.wpframework.cz/dokumentace/)
 - [O projektu](http://www.wpframework.cz/o-projektu/)
 
+Třetí strany:
+
+- [Magnific Popup](http://dimsemenov.com/plugins/magnific-popup/)
 
 Copyright © [KTStudio.cz](http://www.ktstudio.cz/) 2014-2015
