@@ -683,10 +683,12 @@ class KT {
      * @author Jan Pokorný
      * 
      * @param string $fileName Název / cesta k souboru
+     * @param int $width Šířka obrázku
+     * @param int $height Výška obrázku
      * @param array $attrs Další html atributy
      * 
      */
-    public static function imageGetHtml($fileName, array $attrs = null) {
+    public static function imageGetHtml($fileName, $width, $height, array $attrs = null) {
         $fileUrl = KT::imageGetUrlFromTheme($fileName);
         $htmlAttrs = "";
         if ($attrs) {
@@ -694,7 +696,7 @@ class KT {
                 $htmlAttrs .= sprintf(' %s="%s"', $param, $value);
             }
         }
-        $html = sprintf('<img src="%s"%s />', $fileUrl, $htmlAttrs);
+        $html = sprintf('<img src="%s" width="%d" height="%d" %s />', $fileUrl, $width, $height, $htmlAttrs);
         return apply_filters("kt_image_prepare_lazyload", $html);
     }
 
