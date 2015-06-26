@@ -669,7 +669,9 @@ class KT {
                 }
                 array_push($processedImages, $oldSrc);
                 $newSrc = KT_CORE_IMAGES_URL . "/transparent.png";
-                $html = str_replace("src=\"$oldSrc\"", "src=\"$newSrc\" data-src=\"$oldSrc\"", $html);
+                if ($oldSrc !== $newSrc) {
+                    $html = str_replace("src=\"$oldSrc\"", "src=\"$newSrc\" data-src=\"$oldSrc\"", $html);
+                }
             }
             libxml_clear_errors();
             libxml_use_internal_errors($libxmlInternalErrorsState);
