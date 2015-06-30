@@ -2,9 +2,9 @@
 
 class KT_Select_Field extends KT_Options_Field_Base {
 
-    const FIELD_TYPE = 'select';
+    const FIELD_TYPE = "select";
     const OPTION_GROUP_NAME = "optgroup";
-    
+
     private $firstEmpty = false; // Má se v SELECTU nabídnout možnost, která nevybere nic
 
     /**
@@ -12,32 +12,17 @@ class KT_Select_Field extends KT_Options_Field_Base {
      *
      * @param string $name - hash v poli
      * @param string $label - popisek v html
-     * @return self
      */
 
     public function __construct($name, $label) {
         parent::__construct($name, $label);
-
-        return $this;
     }
 
-    // --- settery ------------------------
+    // --- getter & settery ------------------------
 
-    /**
-     * Nastavuje se, zda má mít select možnost vybrat první položku jako prázdnou - odešle null
-     * 
-     * @param bolean $firstEmpty
-     * @return \KT_Select_Field
-     */
-    function setFirstEmpty($firstEmpty = true) {
-        if (is_bool($firstEmpty)) {
-            $this->firstEmpty = $firstEmpty;
-        }
-
-        return $this;
+    public function getFieldType() {
+        return self::FIELD_TYPE;
     }
-
-    // --- getter ------------------------
 
     /**
      * @return boolean
@@ -46,7 +31,21 @@ class KT_Select_Field extends KT_Options_Field_Base {
         return $this->firstEmpty;
     }
 
-    // --- veřejné funkce -----------------
+    /**
+     * Nastavuje se, zda má mít select možnost vybrat první položku jako prázdnou - odešle null
+     * 
+     * @param bolean $firstEmpty
+     * @return \KT_Select_Field
+     */
+    public function setFirstEmpty($firstEmpty = true) {
+        if (is_bool($firstEmpty)) {
+            $this->firstEmpty = $firstEmpty;
+        }
+
+        return $this;
+    }
+
+    // --- veřejné funkce ------------------------
 
     /**
      * Provede výpis fieldu pomocí echo $this->getField()
@@ -68,21 +67,12 @@ class KT_Select_Field extends KT_Options_Field_Base {
      * @return string
      */
     public function getField() {
-
-        $html = "";
-
-        $html .= "<select ";
-        $html .= $this->getBasicHtml();
-        $html .= ">";
-
-        $html .= static::getOptionContent();
-
+        $html = "<select {$this->getBasicHtml()}>";
+        $html .= static::getOptionsContent();
         $html .= "</select>";
-
         if ($this->hasErrorMsg()) {
             $html .= parent::getHtmlErrorMsg();
         }
-
         return $html;
     }
 
@@ -94,7 +84,7 @@ class KT_Select_Field extends KT_Options_Field_Base {
      * 
      * @return string
      */
-    public function getOptionContent() {
+    public function getOptionsContent() {
         $html = "";
 
         $emptyOption = "<option value=\"\">" . KT_EMPTY_SYMBOL . "</option>";
@@ -103,7 +93,7 @@ class KT_Select_Field extends KT_Options_Field_Base {
         }
 
         foreach ($this->getOptionsData() as $optionKey => $optionValue) {
-            if(KT::arrayIssetAndNotEmpty($optionValue)){
+            if (KT::arrayIssetAndNotEmpty($optionValue)) {
                 $html .= $this->getOptionsGroupContent($optionValue);
             } else {
                 $html .= $this->getSignleOptionItem($optionKey, $optionValue);
@@ -113,11 +103,7 @@ class KT_Select_Field extends KT_Options_Field_Base {
         return $html;
     }
 
-    public function getFieldType() {
-        return self::FIELD_TYPE;
-    }
-
-    // --- privátní funkce ------------------
+    // --- privátní funkce ------------------------
 
     /**
      * Vrátí HTML se skupinou (<optgroup>) všech options, které do skupiny patří
@@ -130,26 +116,26 @@ class KT_Select_Field extends KT_Options_Field_Base {
      * @param array $optionGroupData
      * @return string
      */
-    private function getOptionsGroupContent(array $optionGroupData = array()) {
+    protected function getOptionsGroupContent(array $optionGroupData = array()) {
         $html = "";
-        
-        if( ! KT::arrayIssetAndNotEmpty($optionGroupData)){
+
+        if (!KT::arrayIssetAndNotEmpty($optionGroupData)) {
             return $html;
         }
-        
-        if(array_key_exists(self::OPTION_GROUP_NAME, $optionGroupData)){
+
+        if (array_key_exists(self::OPTION_GROUP_NAME, $optionGroupData)) {
             $groupLable = $optionGroupData[self::OPTION_GROUP_NAME];
             unset($optionGroupData[self::OPTION_GROUP_NAME]);
         } else {
             return $html;
         }
-        
+
         $html .= "<optgroup label=\"$groupLable\">";
-        foreach($optionGroupData as $optionKey => $optionValue){
+        foreach ($optionGroupData as $optionKey => $optionValue) {
             $html .= $this->getSignleOptionItem($optionKey, $optionValue);
         }
         $html .= "</optgroup>";
-        
+
         return $html;
     }
 
@@ -163,10 +149,9 @@ class KT_Select_Field extends KT_Options_Field_Base {
      * @param string $optionValue
      * @return string
      */
-    private function getSignleOptionItem($optionKey, $optionValue) {
+    protected function getSignleOptionItem($optionKey, $optionValue) {
         $selected = null;
         $value = $this->getValue();
-        
         if ($optionKey == $value && $value !== null && $value !== '') {
             $selected = " selected=\"selected\"";
         }

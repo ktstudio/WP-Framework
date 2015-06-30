@@ -273,7 +273,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         if (KT::notIssetOrEmpty($fieldsData) || !is_array($fieldsData)) {
             return $this;
         }
-       
+
         foreach ($this->getFields() as $field) {
             /** @var $field \KT_Field */
             if (!array_key_exists($field->getName(), $fieldsData)) {
@@ -610,10 +610,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return \KT_Text_Field
      */
     public function addText($name, $label) {
-
         $field = $this->fields[$name] = new KT_Text_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
-
         return $field;
     }
 
@@ -629,10 +627,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return \KT_File_Field
      */
     public function addFile($name, $label) {
-
         $field = $this->fields[$name] = new KT_File_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
-
         return $field;
     }
 
@@ -649,7 +645,6 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     public function addHidden($name, $label = NULL) {
         $field = $this->fields[$name] = new KT_Hidden_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
-
         return $field;
     }
 
@@ -667,7 +662,6 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     public function addCheckbox($name, $label) {
         $field = $this->fields[$name] = new KT_Checkbox_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
-
         return $field;
     }
 
@@ -685,7 +679,6 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     public function addRadio($name, $label) {
         $field = $this->fields[$name] = new KT_Radio_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
-
         return $field;
     }
 
@@ -702,7 +695,22 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     public function addSelect($name, $label = "") {
         $field = $this->fields[$name] = new KT_Select_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
+        return $field;
+    }
 
+    /**
+     * Funkce přidá nový typ fieldu KT_Multi_Select_Field
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $name
+     * @param string $label
+     * @return \KT_Select_Field
+     */
+    public function addMultiSelect($name, $label = "") {
+        $field = $this->fields[$name] = new KT_Multi_Select_Field($name, $label);
+        $field->setPostPrefix($this->postPrefix);
         return $field;
     }
 
@@ -720,7 +728,6 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     public function addMedia($name, $label) {
         $field = $this->fields[$name] = new KT_Media_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
-
         return $field;
     }
 
@@ -755,7 +762,6 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     public function addTextarea($name, $label) {
         $field = $this->fields[$name] = new KT_Textarea_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
-
         return $field;
     }
 
@@ -773,7 +779,6 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     public function addWpPage($name, $label) {
         $field = $this->fields[$name] = new KT_Page_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
-
         return $field;
     }
 
@@ -843,7 +848,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         $field->setPostPrefix($this->postPrefix);
         return $field;
     }
-    
+
     /**
      * Přidá nový typ fieldu, který umožní uživatli vybrat barvu.
      * 
@@ -854,7 +859,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Color_Field
      */
-    public function addColor($name, $label){
+    public function addColor($name, $label) {
         $field = $this->fields[$name] = new KT_Color_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
         return $field;

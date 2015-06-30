@@ -8,6 +8,7 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
     private $taxonomy;
     private $args = array();
     private $optionValueType = self::FIELD_ID;
+    private $withParentSuffix = false;
 
     function __construct($taxonomy = null, $args = null) {
         if (KT::issetAndNotEmpty($taxonomy)) {
@@ -53,6 +54,22 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
      */
     public function getOptionValueType() {
         return $this->optionValueType;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getWithParentSuffix() {
+        return $this->withParentSuffix;
+    }
+
+    /**
+     * @param boolean $withParentSuffix
+     * @return \KT_Taxonomy_Data_Manager
+     */
+    public function setWithParentSuffix($withParentSuffix) {
+        $this->withParentSuffix = $withParentSuffix;
+        return $this;
     }
 
     // --- settery -----------------
@@ -114,29 +131,39 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
      * @link http://www.ktstudio.cz 
      */
     private function dataInit() {
-        $taxonomyValues = array();
+        $results = array();
 
-        $taxonomyItems = get_terms($this->getTaxonomy(), $this->getArgs());
-        if (is_wp_error($taxonomyItems)) {
+        $terms = get_terms($this->getTaxonomy(), $this->getArgs());
+        if (is_wp_error($terms)) {
             return;
         }
 
-        foreach ($taxonomyItems as $taxItem) {
+        foreach ($terms as $term) {
             switch ($this->getOptionValueType()) {
                 case self::FIELD_SLUG:
-                    $key = $taxItem->slug;
+                    $key = $term->slug;
                     break;
                 case self::FIELD_ID:
-                    $key = $taxItem->term_id;
+                    $key = $term->term_id;
                     break;
             }
-
-            $name = $taxItem->name;
-            $taxonomyValues[$key] = $name;
+            $name = $term->name;
+            if ($this->getWithParentSuffix()) {
+                $parentId = $term->parent;
+                if ($parentId > 0) {
+                    foreach ($terms as $parent) {
+                        if ($parent->term_id === $parentId) {
+                            $name .= " ({$parent->name})";
+                            break;
+                        }
+                    }
+                }
+            }
+            $results[$key] = $name;
         }
 
-        if (KT::issetAndNotEmpty($taxonomyValues)) {
-            $this->setData($taxonomyValues);
+        if (KT::issetAndNotEmpty($results)) {
+            $this->setData($results);
         }
     }
 

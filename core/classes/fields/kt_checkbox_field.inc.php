@@ -2,22 +2,33 @@
 
 class KT_Checkbox_Field extends KT_Options_Field_Base {
 
-    const FIELD_TYPE = 'checkbox';
+    const FIELD_TYPE = "checkbox";
 
     /**
      * Založení objektu typu Checkbox
      *
      * @param string $name - hash v poli
      * @param string $label - popisek v html
-     * @return self
      */
     public function __construct($name, $label) {
         parent::__construct($name, $label);
-
-        return $this;
     }
 
-    // --- veřejné funkce ------------
+    // --- getry & settery ------------------------
+
+    public function getFieldType() {
+        return self::FIELD_TYPE;
+    }
+
+    public function getValue() {
+        $value = parent::getValue();
+        if (KT::arrayIsSerialized($value)) {
+            return unserialize($value);
+        }
+        return $value;
+    }
+
+    // --- veřejné funkce ------------------------
 
     /**
      * Provede výpis fieldu pomocí echo $this->getField()
@@ -44,6 +55,8 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
             return "<span class=\"input-wrap checkbox\">" . KT_EMPTY_SYMBOL . "</span>";
         }
 
+        $data = $this->getValue();
+
         $html = "";
 
         foreach ($this->getOptionsData() as $key => $val) {
@@ -51,8 +64,6 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
             $html .= "<input type=\"checkbox\" ";
             $html .= $this->getBasicHtml($key);
             $html .= " value=\"$key\" ";
-
-            $data = $this->getValue();
 
             if (KT::issetAndNotEmpty($data) && is_array($data)) {
                 if (in_array($key, array_keys($data))) {
@@ -70,18 +81,6 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
         }
 
         return $html;
-    }
-
-    public function getFieldType() {
-        return self::FIELD_TYPE;
-    }
-
-    public function getValue() {
-        $value = parent::getValue();
-        if (KT::arrayIsSerialized($value)) {
-            return unserialize($value);
-        }
-        return $value;
     }
 
     /**
@@ -105,6 +104,8 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
 
         return $html;
     }
+
+    // --- privátní funkce ------------------
 
     /**
      * Vrátí HTML s attributem name fieldu

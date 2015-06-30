@@ -13,14 +13,16 @@ class KT_WP_User_Field extends KT_Select_Field {
      *
      * @param string $name - hash v poli
      * @param string $label - popisek v html
-     * @return self
      */
     public function __construct($name, $label) {
         parent::__construct($name, $label);
-        return $this;
     }
 
     // --- gettery -------------
+
+    public function getFieldType() {
+        return self::FIELD_TYPE;
+    }
 
     private function getUserRole() {
         return $this->userRole;
@@ -99,16 +101,12 @@ class KT_WP_User_Field extends KT_Select_Field {
      * 
      * @return type
      */
-    public function getOptionContent() {
+    public function getOptionsContent() {
         if (KT::issetAndNotEmpty($this->getUserRole())) {
             return $html = $this->getSelectOptionByUserRole($this->getUserRole());
         }
 
         return $html = $this->getSelectOptionOfAllUser();
-    }
-
-    public function getFieldType() {
-        return self::FIELD_TYPE;
     }
 
     // --- privátní funkce --------

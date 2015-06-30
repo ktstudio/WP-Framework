@@ -19,10 +19,13 @@ class KT_Page_Field extends KT_Select_Field {
     public function __construct($name, $label) {
         $this->pageQueryArgsInit();
         parent::__construct($name, $label);
-        return $this;
     }
 
-    // -- gettery ----------------
+    // --- gettery & settery ---------------------
+
+    public function getFieldType() {
+        return self::FIELD_TYPE;
+    }
 
     /**
      * @return int
@@ -30,8 +33,6 @@ class KT_Page_Field extends KT_Select_Field {
     private function getParentPage() {
         return $this->parentPage;
     }
-
-    // -- settery ----------------
 
     /**
      * Nastaví případnou parent_page, jejížš děti budou nabídnuty v selectu
@@ -49,13 +50,8 @@ class KT_Page_Field extends KT_Select_Field {
         return $this;
     }
 
-    // --- veřejné funkce ----------
-
-    public function getFieldType() {
-        return self::FIELD_TYPE;
-    }
-
-    // --- privátní funkce ----------
+    // --- veřejné funkce ---------------------
+    // --- privátní funkce ---------------------
 
     /**
      * Objektu automaticky nastaví query po selekci stránek
@@ -66,7 +62,9 @@ class KT_Page_Field extends KT_Select_Field {
         $args = array(
             "post_type" => KT_WP_PAGE_KEY,
             "posts_per_page" => self::DEFAUL_PAGE_COUNT,
-            "post_status" => "publish"
+            "post_status" => "publish",
+            "orderby" => "parent title",
+            "order" => KT_Repository::ORDER_ASC,
         );
 
         if (KT::issetAndNotEmpty($this->getParentPage())) {

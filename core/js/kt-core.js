@@ -150,7 +150,7 @@ jQuery(document).ready(function () {
             toggle.removeClass('off');
             input.attr('value', '1');
         }
-    }   
+    }
 
     // Sortable číselníku vycházející z KT_Catalog_Model_Base
     var sortableTablefixHelper = function (e, ui) {
@@ -176,9 +176,9 @@ jQuery(document).ready(function () {
         };
 
         jQuery.post(ajaxurl, data);
-    };  
-    
-    if(jQuery("table[data-sortable='true'] tbody").length > 0){
+    };
+
+    if (jQuery("table[data-sortable='true'] tbody").length > 0) {
         jQuery("table[data-sortable='true'] tbody").sortable({
             helper: sortableTablefixHelper,
             stop: sortableTableSave,
@@ -186,7 +186,7 @@ jQuery(document).ready(function () {
     }
 
     // Slider input - jQuery UI
-    
+
     jQuery(".sliderInputElement").each(function () {
         var slider = jQuery(this);
         var input = slider.find("input");
@@ -194,11 +194,11 @@ jQuery(document).ready(function () {
         var max = slider.data("max");
         var step = slider.data("step");
         var value = min;
-        
-        if(input.val() != min){
+
+        if (input.val() != min) {
             value = input.val();
         }
-        
+
         jQuery(this).find("input").addClass("hidden");
 
         jQuery(this).slider({
@@ -212,11 +212,19 @@ jQuery(document).ready(function () {
                 parent.find(".ui-slider-handle").text(ui.value);
                 slider.find("input.inputMin").val(ui.value);
             },
-            create: function( event, ui ) {
+            create: function (event, ui) {
                 jQuery(this).find(".ui-slider-handle").text(value);
             }
         });
     });
-    
+
+    // chosen - multi select
+    jQuery(".multiSelect").chosen({
+        disable_search_threshold: 10,
+        no_results_text: "Žádné výsledky pro",
+        placeholder_text_multiple: "Prázdný výběr",
+        placeholder_text_single: "Prázdný výběr",
+        width: "90%"
+    });
 
 });
