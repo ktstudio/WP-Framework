@@ -1268,6 +1268,8 @@ class KT {
         return false;
     }
 
+    // --- TAXONOMY ---------------------
+
     /**
      * Funkce vrátí taxonomy templatu ze subdir - taxonomies
      *
@@ -1301,6 +1303,76 @@ class KT {
         }
 
         return false;
+    }
+
+    // --- TERMS ---------------------
+
+    /**
+     * Vrátí ID rodičovského termu pro ten zadaný pokud je to možné
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param int $termId
+     * @param string $taxonomy
+     * @return int
+     */
+    public static function getTermParentId($termId, $taxonomy) {
+        $term = get_term($termId, $taxonomy);
+        if (KT::issetAndNotEmpty($term)) {
+            $parentId = $term->parent;
+            if ($parentId > 0) {
+                return self::getTermParentId($parentId, $taxonomy);
+            }
+            return $term->term_id;
+        }
+        return null;
+    }
+
+    /**
+     * Naplní výčet větve termů na pro zadané ID termu směrem nahoru (k rodiči)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param int $termId
+     * @param string $taxonomy
+     * @param array $results
+     */
+    public static function fillTermTreeNode($termId, $taxonomy, array &$results) {
+        $term = get_term($termId, $taxonomy);
+        if (KT::issetAndNotEmpty($term)) {
+            array_push($results, $term);
+            $parentId = $term->parent;
+            if ($parentId > 0) {
+                self::fillTermTreeNode($parentId, $taxonomy, $results);
+            }
+        }
+    }
+
+    /**
+     * Kontrola, zda je ID termu v zadaném výčtu poslední (nejníže v hierarchii)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param int $termId
+     * @param array $terms
+     * @return boolean
+     */
+    public static function isLastTerm($termId, array $terms) {
+        if (KT::issetAndNotEmpty($termId)) {
+            foreach ($terms as $id => $term) {
+                if ($id == $termId) {
+                    continue;
+                }
+                if ($term->parent == $termId) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return null;
     }
 
 }

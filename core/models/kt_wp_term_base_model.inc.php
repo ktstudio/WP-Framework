@@ -6,6 +6,8 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
     const TERM_ID = "id";
 
     private $term = null;
+    private $metas = array();
+    private $metaPrefix;
 
     /**
      * Základní model pro práci s termem
@@ -18,26 +20,23 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
      * @throws KT_Not_Set_Argument_Exception
      * @throws KT_Not_Supported_Exception
      */
-    public function __construct($term, $taxonomy = null) {
+    public function __construct($term, $taxonomy = null, $metaPrefix = null) {
+        $this->metaPrefix = $metaPrefix;
         if ($term instanceof stdClass) {
             $this->setTerm($term);
             return;
         }
-
         if (KT::notIssetOrEmpty($taxonomy)) {
             throw new KT_Not_Set_Argument_Exception("Taxonomy must be added if term is not stdClass term object");
         }
-
         if (KT::isIdFormat($term)) {
             $this->initializeByTermid($term, $taxonomy);
             return;
         }
-
         if (is_string($term)) {
             $this->initializeByTermSlug($term, $taxonomy);
             return;
         }
-
         throw new KT_Not_Supported_Exception("Initializace of term is not correct");
     }
 
@@ -48,6 +47,24 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
      */
     public function getTerm() {
         return $this->term;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMetas() {
+        if (KT::notIssetOrEmpty($this->metas)) {
+            $this->initMetas();
+        }
+
+        return $this->metas;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaPrefix() {
+        return $this->metaPrefix;
     }
 
     // --- settery -----------------
@@ -67,6 +84,20 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
             $this->term = $term;
         }
 
+        return $this;
+    }
+
+    /**
+     * Nastavení (post) metas daného příspěvku
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param array $metas
+     * @return \KT_WP_Post_Base_Model
+     */
+    private function setMetas(array $metas) {
+        $this->metas = $metas;
         return $this;
     }
 
@@ -127,6 +158,26 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
      */
     public function getFeedLink($feed = "rss2") {
         return get_term_feed_link($this->getId(), $this->getTaxonomy(), $feed);
+    }
+
+    /**
+     * Vrátí hodnotu z $wpdb->kttermmeta na základě zadaného meta_key
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $key
+     * @return string|null
+     */
+    public function getMetaValue($key) {
+        $metas = $this->getMetas();
+        if (array_key_exists($key, $metas)) {
+            $value = $metas[$key];
+            if (isset($value)) {
+                return $value;
+            }
+        }
+        return null;
     }
 
     /**
@@ -232,6 +283,20 @@ class KT_WP_Term_Base_Model extends KT_Model_Base {
             $this->setTerm($term);
             return $this;
         }
+    }
+
+    /**
+     * Inicializuje pole (post) metas na základě prefixu nebo všechny
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_Post_Type_Presenter_Base
+     */
+    private function initMetas() {
+        $metas = KT_Termmeta::getAllData($this->getId(), $this->getMetaPrefix());
+        $this->setMetas($metas);
+        return $this;
     }
 
     // --- statické funkce ---------

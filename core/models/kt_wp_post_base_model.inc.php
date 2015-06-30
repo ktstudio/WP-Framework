@@ -143,7 +143,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     /**
      * Nastavení (post) metas daného příspěvku
      *
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
      * @param array $metas
@@ -520,8 +520,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @return \KT_Post_Type_Presenter_Base
      */
     private function initMetas() {
-        $metaNamePrefix = $this->getMetaPrefix();
-        $metas = self::getPostMetas($this->getPostId(), $metaNamePrefix);
+        $metas = self::getPostMetas($this->getPostId(), $this->getMetaPrefix());
         $this->setMetas($metas);
         return $this;
     }
@@ -647,14 +646,13 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     public static function getPostMetas($postId = null, $prefix = null) {
         global $wpdb;
         $results = array();
-
         $post = KT::setupPostObject($postId); // nastaví post object
         if (is_object($post)) {
             $query = "SELECT meta_key, meta_value FROM {$wpdb->postmeta} WHERE post_id = %d";
             $prepareData[] = $post->ID;
             if (isset($prefix)) {
                 $query .= " AND meta_key LIKE '%s' OR meta_key = '_thumbnail_id'";
-                $prepareData[] = $prefix . "%";
+                $prepareData[] = "{$prefix}%";
             }
             $postMetas = $wpdb->get_results($wpdb->prepare($query, $prepareData), ARRAY_A);
             foreach ($postMetas as $postMeta) {
