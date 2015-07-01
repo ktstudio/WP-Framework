@@ -502,7 +502,12 @@ abstract class KT_Custom_Metaboxes_Base {
         if (array_key_exists("kt-admin-screen-action", $_POST) && array_key_exists("page", $_GET)) {
             $pageSlug = $_GET["page"];
             if ($pageSlug == $this->getSlug()) {
-                $saveResult = array(self::SAVE_RESULT_KEY => true);
+                
+                $saveResult = array(
+                    self::SAVE_RESULT_KEY => true,
+                    self::REDIRECT_ALLOWED =>true
+                );
+                
                 $saveResult = apply_filters("kt-custom-metabox-save-$screenName", $saveResult);
                 
                 if($saveResult[self::REDIRECT_ALLOWED] == false){
