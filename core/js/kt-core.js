@@ -111,11 +111,16 @@ jQuery(document).ready(function () {
         var button = jQuery(this);
         var deleteButtonContent = '<a class="remove-file"><span class="dashicons dashicons-no"></span></a>';
         var fileContent = "";
+        var imageUrl = "";
 
         wp.media.editor.send.attachment = function (props, attachment) {
-
             if (attachment.type === "image") {
-                fileContent = '<img class=\"file\" src="' + attachment.sizes.thumbnail.url + '">';
+                if(attachment.sizes.thumbnail){
+                    imageUrl = attachment.sizes.thumbnail.url;
+                } else {
+                    imageUrl = attachment.sizes.full.url;
+                }
+                fileContent = '<img class=\"file\" src="' + imageUrl + '">';
             } else {
                 fileContent = '<span class=\"file\">' + attachment.title + '</span>';
             }
