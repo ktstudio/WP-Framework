@@ -57,11 +57,7 @@ abstract class KT_Presenter_Base implements KT_Presentable {
                 include(locate_template("loops/loop-" . $loopName . ".php"));
                 $index++;
                 if ($isClearfixes) {
-                    foreach ($clearfixes as $clearfixModulo => $clearfixOutput) {
-                        if ($index % $clearfixModulo === 0) {
-                            echo $clearfixOutput;
-                        }
-                    }
+                    self::theClearfixes($clearfixes, $index);
                 }
             endwhile;
             wp_reset_postdata();
@@ -75,9 +71,11 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      * @param string $loopName
      * @param mixed int|null $count
      * @param mixed int|null $offset
+     * @param array $clearfixes pole clearfixů k printu podle klíče (modulo)
      */
-    public static function theItemsLoops(array $items, $loopName, $count = null, $offset = null) {
+    public static function theItemsLoops(array $items, $loopName, $count = null, $offset = null, array $clearfixes = null) {
         if (KT::arrayIssetAndNotEmpty($items)) {
+            $isClearfixes = KT::arrayIssetAndNotEmpty($clearfixes);
             $index = 0;
             if (KT::tryGetInt($offset) > 0) {
                 $items = array_slice($items, $offset);
@@ -90,8 +88,25 @@ abstract class KT_Presenter_Base implements KT_Presentable {
                 $post = $item;
                 include(locate_template("loops/loop-$loopName.php"));
                 $index++;
+                if ($isClearfixes) {
+                    self::theClearfixes($clearfixes, $index);
+                }
             }
             wp_reset_postdata();
+        }
+    }
+
+    /**
+     * Vypíše clearfixy podle (zadaného) indexu
+     * 
+     * @param array $clearfixes
+     * @param int $index
+     */
+    public static function theClearfixes(array $clearfixes, $index) {
+        foreach ($clearfixes as $clearfixModulo => $clearfixOutput) {
+            if ($index % $clearfixModulo === 0) {
+                echo $clearfixOutput;
+            }
         }
     }
 

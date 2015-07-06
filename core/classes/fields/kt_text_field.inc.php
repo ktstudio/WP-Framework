@@ -10,7 +10,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
     const INPUT_URL = "url";
 
     private $inputType = self::FIELD_TYPE;
-    
+
     /**
      * Založení objektu typu input type="text || number || email || password"
      * V případě date založen type="text" a doplněny classy pro jQuery datapicker
@@ -97,10 +97,10 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
         $html = "";
 
         $fieldType = $this->getInputType() == self::INPUT_DATE ? "text" : $this->getInputType();
-        $value = htmlspecialchars($this->getValue(), ENT_QUOTES, "UTF-8");
+        $value = html_entity_decode(stripslashes($this->getValue()), ENT_COMPAT | ENT_HTML401, "UTF-8");
 
         $html .= "<input type=\"{$fieldType}\" ";
-        $html .= $this->getBasicHtml();      
+        $html .= $this->getBasicHtml();
         $html .= " value=\"{$value}\" ";
         $html .= "/>";
 

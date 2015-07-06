@@ -70,8 +70,9 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base {
      */
     public function getField() {
         $html = "";
+
         $html .= "<textarea " . $this->getBasicHtml() . ">";
-        $value = htmlspecialchars($this->getValue(), ENT_QUOTES, "UTF-8");
+        $html .= html_entity_decode(stripslashes($this->getValue()), ENT_COMPAT | ENT_HTML401, "UTF-8");
         $html .= "</textarea>";
 
         if ($this->hasErrorMsg()) {
