@@ -1097,6 +1097,22 @@ class KT {
     }
 
     /**
+     * Konverze textu (zpět) do HTML (entit) vč. uvozovek
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $text
+     * @return string
+     */
+    public static function stringHtmlDecode($text) {
+        if (self::issetAndNotEmpty($text)) {
+            return html_entity_decode(stripslashes($text), ENT_COMPAT | ENT_HTML401, "UTF-8");
+        }
+        return $text;
+    }
+
+    /**
      * Na základě odřádkování rozdělí zadaný text do pole (tzn. po řádcích)
      * 
      * @author Martin Hlaváč
