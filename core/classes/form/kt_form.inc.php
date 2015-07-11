@@ -572,7 +572,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         $html .= self::getSubmitButton($this->getButtonValue(), $this->getButtonClass());
         $html .= "</form>";
-        
+
         return $html;
     }
 
@@ -745,30 +745,48 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return \KT_Form
      */
     public function loadDataFromUserMeta($userId) {
-        if (!KT::isIdFormat($userId)) {
-            return $this;
-        }
-
-        if (!$this->hasFieldset()) {
-            return $this;
-        }
-
-        $userMetas = KT_WP_User_Base_Model::getUserMetas($userId);
-
-        foreach ($this->getFieldsets() as $fieldset) {
-            /* @var $fieldset \KT_Form_Fieldset */
-
-            if (!$fieldset->hasFields()) {
-                continue;
+        if (KT::isIdFormat($userId) && $this->hasFieldset()) {
+            $userMetas = KT_WP_User_Base_Model::getUserMetas($userId);
+            foreach ($this->getFieldsets() as $fieldset) {
+                /* @var $fieldset \KT_Form_Fieldset */
+                if (!$fieldset->hasFields()) {
+                    continue;
+                }
+                if ($fieldset->getSeralizeSave()) {
+                    $fieldset->setFieldsData($userMetas[$fieldset->getName()]);
+                    continue;
+                }
+                $fieldset->setFieldsData($userMetas);
             }
-
-            if ($fieldset->getSeralizeSave()) {
-                $fieldset->setFieldsData($userMetas[$fieldset->getName()]);
-                continue;
-            }
-
-            $fieldset->setFieldsData($userMetas);
         }
+        return $this;
+    }
+
+    /**
+     * Načte data do všech fieldsetů na základě userId z tabulky kt_wp_terms
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param int $termId
+     * @return \KT_Form
+     */
+    public function loadDataFromWpTermmeta($termId) {
+        if (KT::isIdFormat($termId) && $this->hasFieldset()) {
+            $termMetas = KT_Termmeta::getAllData($termId);
+            foreach ($this->getFieldsets() as $fieldset) {
+                /* @var $fieldset \KT_Form_Fieldset */
+                if (!$fieldset->hasFields()) {
+                    continue;
+                }
+                if ($fieldset->getSeralizeSave()) {
+                    $fieldset->setFieldsData($termMetas[$fieldset->getName()]);
+                    continue;
+                }
+                $fieldset->setFieldsData($termMetas);
+            }
+        }
+        return $this;
     }
 
     /**
@@ -884,11 +902,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return \KT_Form
      */
     public function saveFieldsetToOptionTable(array $exludeFields = array()) {
-        if ($this->hasError()) {
-            return $this;
-        }
-
-        if ($this->hasFieldset()) {
+        if (!$this->hasError() && $this->hasFieldset()) {
             foreach ($this->fieldsets as $fieldset) {
                 /* @var $fieldSet \KT_Form_Fieldset */
                 if ($fieldset->hasFields()) {
@@ -900,13 +914,11 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 }
             }
         }
-
         return $this;
     }
 
     /**
      * Funkce uloží všechny fieldy z formuláře do wp_usermeta klíč field->name
-     * Funkce si sama provede kontrolu, zda
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
@@ -916,11 +928,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return \KT_Form
      */
     public function saveFieldsetToUserMeta($userId, array $excludeFields = array()) {
-        if (!$this->isFormSend() || $this->hasError()) {
-            return $this;
-        }
-
-        if ($this->hasFieldset()) {
+        if ($this->isFormSend() && !$this->hasError() && $this->hasFieldset()) {
             foreach ($this->fieldsets as $fieldset) {
                 /* @var $fieldSet \KT_Form_Fieldset */
                 if ($fieldset->hasFields()) {
@@ -932,7 +940,32 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 }
             }
         }
+        return $this;
+    }
 
+    /**
+     * Funkce uloží všechny fieldy z formuláře do kt_wp_terms klíč field->name
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param int $termId - kterému uživateli budou meta uložena
+     * @param array $excludeFields - které fieldy se nebudou ukládat
+     * @return \KT_Form
+     */
+    public function saveFieldsetToTermmetaTable($termId, array $excludeFields = array()) {
+        if ($this->isFormSend() && !$this->hasError() && $this->hasFieldset()) {
+            foreach ($this->fieldsets as $fieldset) {
+                /* @var $fieldSet \KT_Form_Fieldset */
+                if ($fieldset->hasFields()) {
+                    if ($fieldset->getSeralizeSave()) {
+                        $this->saveFieldsetToTermmetaByGroup($termId, $fieldset, $excludeFields);
+                    } else {
+                        $this->saveFieldsetToTermmetaOneByOne($termId, $fieldset, $excludeFields);
+                    }
+                }
+            }
+        }
         return $this;
     }
 
@@ -1047,14 +1080,14 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
-     * Uloži data poslané postem do tabulky wp_option - každý field jako extra row
+     * Uloží data poslané postem do tabulky wp_option - každý field jako extra row
      * USED : saveFieldsToOptionTable
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param \KT_Form_Fields $fieldSet
-     * @param array $exlude_fieldset
+     * @param array $exludeFields
      * @return \KT_Form
      */
     private function saveFieldsetToOptionOneByOne(KT_Form_Fieldset $fieldSet, array $exludeFields = array()) {
@@ -1069,7 +1102,6 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 }
             }
         }
-
         return $this;
     }
 
@@ -1086,7 +1118,6 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     private function saveFieldsetToOptionByGroup(KT_Form_Fieldset $fieldset, array $exludeFields = array()) {
         /* @var $field \KT_Field */
-
         foreach ($fieldset->getFields() as $field) {
             if (!in_array($field->getName(), $exludeFields) && KT::issetAndNotEmpty($field->getValue())) {
                 $fieldValue = $field->getValue();
@@ -1095,13 +1126,11 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 }
             }
         }
-
         if (KT::arrayIssetAndNotEmpty($fieldsetData)) {
             update_option($fieldset->getName(), $fieldsetData);
         } else {
             delete_option($fieldset->getName());
         }
-
         return $this;
     }
 
@@ -1257,6 +1286,63 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         return $this;
     }
 
+    /**
+     * Uloží data poslané postem do tabulky kt_wp_termmeta - každý field jako extra row
+     * @see saveFieldsToTermmetaTable
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param int $termId
+     * @param \KT_Form_Fields $fieldSet
+     * @param array $exludeFields
+     * @return \KT_Form
+     */
+    private function saveFieldsetToTermmetaOneByOne($termId, KT_Form_Fieldset $fieldSet, array $exludeFields = array()) {
+        /* @var $field \KT_Field */
+        foreach ($fieldSet->getFields() as $field) {
+            if (!in_array($field->getName(), $exludeFields)) {
+                $fieldValue = $field->getValue();
+                if ($fieldValue !== "" && isset($fieldValue)) {
+                    KT_Termmeta::updateData($termId, $field->getName(), $field->getValue());
+                } else {
+                    KT_Termmeta::deleteData($termId, $field->getName());
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Uloží data poslané postem do tabulky kt_wp_termmeta - celý fieldset jako realizované pole fieldů ($fieldName => $fieldValue)
+     * @see saveFieldsToTermmetaTable
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param int $termId
+     * @param \KT_Form_Fieldset $fieldset
+     * @param array $exludeFields
+     * @return \KT_Form
+     */
+    private function saveFieldsetToTermmetaByGroup($termId, KT_Form_Fieldset $fieldset, array $exludeFields = array()) {
+        /* @var $field \KT_Field */
+        foreach ($fieldset->getFields() as $field) {
+            if (!in_array($field->getName(), $exludeFields) && KT::issetAndNotEmpty($field->getValue())) {
+                $fieldValue = $field->getValue();
+                if ($fieldValue != "" || $fieldValue === 0 || $fieldValue === "0") {
+                    $fieldsetData[$field->getName()] = $field->getValue();
+                }
+            }
+        }
+        if (KT::arrayIssetAndNotEmpty($fieldsetData)) {
+            KT_Termmeta::updateData($termId, $field->getName(), $fieldsetData);
+        } else {
+            KT_Termmeta::deleteData($termId, $field->getName());
+        }
+        return $this;
+    }
+
     // --- statické metody ---------------
 
     /**
@@ -1299,5 +1385,3 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
 }
-
-?>
