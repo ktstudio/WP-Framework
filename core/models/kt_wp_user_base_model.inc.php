@@ -6,11 +6,9 @@
  * @author Tomáš Kocifaj
  * @link http://www.ktstudio.cz
  */
-class KT_WP_User_Base_Model extends KT_Model_Base {
+class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
 
     private $wpUser = null;
-    private $metas = array();
-    private $metaPrefix;
 
     /**
      * Sestavení základního modelu pro práci s uživatelem a jeho daty podle ID
@@ -21,11 +19,11 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      * @param integer $userId
      */
     function __construct($userId, $metaPrefix = null) {
+        parent::__construct($metaPrefix);
         $this->wpUserInitById($userId);
-        $this->metaPrefix = $metaPrefix;
     }
 
-    // --- gettery ------------------------
+    // --- getry & setry ------------------------
 
     /*
      * @return \WP_User
@@ -33,37 +31,6 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
     public function getWpUser() {
         return $this->wpUser;
     }
-
-    /**
-     * @return int
-     */
-    public function getUserId() {
-        return $this->getWpUser()->ID;
-    }
-
-    /**
-     * Vrátí sadu usermetas
-     *
-     * @author Martin Hlaváč
-     * @link http://www.ktstudio.cz
-     * 
-     * @return array
-     */
-    public function getMetas() {
-        if (KT::notIssetOrEmpty($this->metas)) {
-            $this->initMetas();
-        }
-        return $this->metas;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaPrefix() {
-        return $this->metaPrefix;
-    }
-
-    // --- settery ------------------------
 
     /**
      * Nastaví modelu objekt WP_Userera
@@ -76,21 +43,6 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
     public function setWpUser(WP_User $wpUser) {
         $this->wpUser = $wpUser;
     }
-
-    /**
-     * Nastaví modelu sadu usermetas
-     *
-     * @author Martin Hlaváč
-     * @link http://www.ktstudio.cz
-     *
-     * @param array $metas
-     */
-    private function setMetas(array $metas) {
-        $this->metas = $metas;
-        return $this;
-    }
-
-    // --- veřejné metody ------------------------
 
     /**
      * Vrátí ID uživatele
@@ -151,7 +103,7 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
     public function getEmail() {
         return $this->getWpUser()->user_email;
     }
-    
+
     /**
      * Vrátí datum registrace uživatele dle zadaného formářu
      * 
@@ -161,7 +113,7 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      * @param type $format
      * @return type
      */
-    public function getRegistredDate($format = "d.m.Y"){
+    public function getRegistredDate($format = "d.m.Y") {
         return KT::dateConvert($this->getWpUser()->user_registered, $format);
     }
 
@@ -174,7 +126,7 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      * @return string
      */
     public function getFirstName() {
-        return $this->getMetaValueByKey(KT_User_Profile_Config::FIRST_NAME);
+        return $this->getMetaValue(KT_User_Profile_Config::FIRST_NAME);
     }
 
     /**
@@ -186,7 +138,7 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      * @return string
      */
     public function getLastName() {
-        return $this->getMetaValueByKey(KT_User_Profile_Config::LAST_NAME);
+        return $this->getMetaValue(KT_User_Profile_Config::LAST_NAME);
     }
 
     /**
@@ -210,7 +162,7 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      * @return type
      */
     public function getPhone() {
-        return $this->getMetaValueByKey(KT_User_Profile_Config::PHONE);
+        return $this->getMetaValue(KT_User_Profile_Config::PHONE);
     }
 
     /**
@@ -222,7 +174,7 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      * @return mixed string|null
      */
     public function getDescription() {
-        return $this->getMetaValueByKey("description");
+        return $this->getMetaValue("description");
     }
 
     /**
@@ -247,6 +199,8 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
     public function getPermalink() {
         return get_author_posts_url($this->getId());
     }
+
+    // --- veřejné metody ------------------------
 
     /**
      * Vráti počet příspěvků autora na základě předaných parametrů
@@ -355,26 +309,6 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
     }
 
     /**
-     * Vrátí jednu hodnotu z wp_usermetas na základě zadaného klíče
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param string $key
-     * @return string
-     */
-    public function getMetaValueByKey($key) {
-        $metas = $this->getMetas();
-        if (array_key_exists($key, $metas)) {
-            $value = $metas[$key];
-            if (isset($value)) {
-                return $value;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Vrátí všechny user metas k danému uživateli - v případě volby prefixu probíhá LIKE dotaz
      *
      * @author Tomáš Kocifaj
@@ -420,27 +354,14 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      * @throws KT_Not_Supported_Exception
      */
     private function wpUserInitById($userId) {
-
-        if (KT::notIssetOrEmpty($userId)) {
-            return null;
-        }
-
-        if (!KT::isIdFormat($userId)) {
-            return null;
-        }
-
-        $userId = KT::tryGetInt($userId);
-
-        if (KT::issetAndNotEmpty($userId)) {
+        if (KT::isIdFormat($userId)) {
             $wpUser = get_user_by("id", $userId);
-
             if ($wpUser) {
                 $this->setWpUser($wpUser);
             } else {
                 throw new KT_Not_Supported_Exception(__("ID uživatele neexistuje (ve WP databázi).", KT_DOMAIN));
             }
         }
-
         return $this;
     }
 
@@ -450,9 +371,8 @@ class KT_WP_User_Base_Model extends KT_Model_Base {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
-    private function initMetas() {
-        $metaNamePrefix = $this->getMetaPrefix();
-        $metas = self::getUserMetas($this->getUserId(), $metaNamePrefix);
+    protected function initMetas() {
+        $metas = self::getUserMetas($this->getId(), $this->getMetaPrefix());
         $this->setMetas($metas);
         return $this;
     }

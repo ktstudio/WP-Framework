@@ -1,11 +1,9 @@
 <?php
 
-class KT_WP_Post_Base_Model extends KT_Model_Base {
+class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
 
     private $post = null;
     private $author = null;
-    private $metas = array();
-    private $metaPrefix;
     private $gallery = null;
     private $files = null;
     private $data = array();
@@ -21,13 +19,13 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      * @return \KT_WP_Post_Base_Model
      */
     function __construct(WP_Post $post = null, $metaPrefix = null) {
+        parent::__construct($metaPrefix);
         if (KT::issetAndNotEmpty($post)) {
             $this->setPost($post);
         }
-        $this->metaPrefix = $metaPrefix;
     }
 
-    // --- magic functions -----
+    // --- magic funkce ---------------------
 
     public function __set($name, $value) {
         $this->data[$name] = $value;
@@ -49,7 +47,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         unset($this->data[$name]);
     }
 
-    // --- gettery -------------
+    // --- gettery ---------------------
 
     /**
      * @return \WP_Post
@@ -67,24 +65,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         }
 
         return $this->author;
-    }
-
-    /**
-     * @return array
-     */
-    public function getMetas() {
-        if (KT::notIssetOrEmpty($this->metas)) {
-            $this->initMetas();
-        }
-
-        return $this->metas;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaPrefix() {
-        return $this->metaPrefix;
     }
 
     /**
@@ -110,7 +90,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         return $this->gallery;
     }
 
-    // --- settery ------------------------
+    // --- settery ---------------------
 
     /**
      * Nastaví objektu WP_Postu pro model
@@ -141,20 +121,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     }
 
     /**
-     * Nastavení (post) metas daného příspěvku
-     *
-     * @author Martin Hlaváč
-     * @link http://www.ktstudio.cz
-     *
-     * @param array $metas
-     * @return \KT_WP_Post_Base_Model
-     */
-    private function setMetas(array $metas) {
-        $this->metas = $metas;
-        return $this;
-    }
-
-    /**
      * Nastaví galerii obrázků daného příspěvku
      *
      * @author Tomáš Kocifaj
@@ -180,7 +146,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         return $this;
     }
 
-    // --- Veřejné funkce -------
+    // --- veřejné funkce ---------------------
 
     /**
      * Vrátí ID WP_Postu v rámci modelu
@@ -377,26 +343,6 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
     }
 
     /**
-     * Vrátí hodnotu z $wpdb->postmeta na základě zadaného meta_key
-     *
-     * @author Martin Hlaváč
-     * @link http://www.ktstudio.cz
-     *
-     * @param string $key
-     * @return string|null
-     */
-    public function getMetaValue($key) {
-        $metas = $this->getMetas();
-        if (array_key_exists($key, $metas)) {
-            $value = $metas[$key];
-            if (isset($value)) {
-                return $value;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Vrátí kolekci všech termů, kam je post zařazen na základě zadané taxonomy
      * Pokud ještě nebyly načteny, uloží je do proměnné $this->data->{$taxonomy} a znovu se na ně nedotazuje
      *
@@ -490,7 +436,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         return false;
     }
 
-    // --- private function ----
+    // --- neveřejné funkce ---------------------
 
     /**
      * Inicializuje WP_User objekt na základě post_author
@@ -519,7 +465,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
      *
      * @return \KT_Post_Type_Presenter_Base
      */
-    private function initMetas() {
+    protected function initMetas() {
         $metas = self::getPostMetas($this->getPostId(), $this->getMetaPrefix());
         $this->setMetas($metas);
         return $this;
@@ -553,7 +499,7 @@ class KT_WP_Post_Base_Model extends KT_Model_Base {
         return $this;
     }
 
-    // --- (veřejné) statické funkce --
+    // --- (veřejné) statické funkce ---------------------
 
     /**
      * Vrátí term podle ID pro zadanou taxonomie

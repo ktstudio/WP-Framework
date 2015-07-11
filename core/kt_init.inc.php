@@ -41,7 +41,13 @@ define("KT_WP_NAV_MENU_ITEM_KEY", "nav_menu_item");
 // --- post meta ------------------------
 define("KT_WP_META_KEY_PAGE_TEMPLATE", "_wp_page_template");
 // --- theme support ------------------------
+define("KT_WP_THEME_SUPPORT_POST_FORMATS_KEY", "post-formats");
 define("KT_WP_THEME_SUPPORT_POST_THUMBNAILS_KEY", "post-thumbnails");
+define("KT_WP_THEME_SUPPORT_CUSTOM_BACKGROUND_KEY", "custom-background");
+define("KT_WP_THEME_SUPPORT_CUSTOM_HEADER_KEY", "custom-header");
+define("KT_WP_THEME_SUPPORT_AUTOMATIC_FEED_LINKS_KEY", "automatic-feed-links");
+define("KT_WP_THEME_SUPPORT_HTML5_KEY", "html5");
+define("KT_WP_THEME_SUPPORT_TITLE_TAG_KEY", "title-tag");
 // --- post type support ------------------------
 define("KT_WP_POST_TYPE_SUPPORT_TITLE_KEY", "title");
 define("KT_WP_POST_TYPE_SUPPORT_EDITOR_KEY", "editor");
