@@ -1,6 +1,6 @@
 <?php
 
-abstract class KT_Field extends KT_HTML_Tag_Base{
+abstract class KT_Field extends KT_HTML_Tag_Base {
 
     const DEFAULT_CLASS = 'kt-field';
 
@@ -23,10 +23,9 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      */
     public function __construct($name, $label) {
         $this->setAttrId($name)
-            ->addAttrClass(self::DEFAULT_CLASS)
-            ->setLabel($label)
-            ->setName($name);
-                    
+                ->addAttrClass(self::DEFAULT_CLASS)
+                ->setLabel($label)
+                ->setName($name);
     }
 
     // --- settery ------------------------
@@ -72,7 +71,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      * @return \KT_Field
      */
     public function setPostPrefix($postPrefix) {
-        if(KT::issetAndNotEmpty($postPrefix)){
+        if (KT::issetAndNotEmpty($postPrefix)) {
             $this->postPrefix = $postPrefix;
         }
         return $this;
@@ -139,7 +138,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
 
         return $this;
     }
-    
+
     /**
      * Nastaví HTML parametr tabindex fieldu
      * 
@@ -151,12 +150,12 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      */
     public function setTabindex($tabindex) {
         $tabindex = KT::tryGetInt($tabindex);
-        if(KT::isIdFormat($tabindex)){
+        if (KT::isIdFormat($tabindex)) {
             $this->addAttribute("tabindex", $tabindex);
         }
-        
+
         return $this;
-    }   
+    }
 
     /**
      * Nastavení kolekci Validotárů
@@ -215,7 +214,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
     public function getError() {
         return $this->error;
     }
-     
+
     /**
      * @return array
      */
@@ -232,7 +231,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
     abstract function getFieldType();
 
     // --- veřejné funkce ------------------
-    
+
     /**
      * Vrátí HTML s <label> a samotný fieldem
      * 
@@ -241,11 +240,11 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      * 
      * @return string
      */
-    public function getControlHtml(){
+    public function getControlHtml() {
         $html = $this->getLabelHtml();
         return $html .= $this->getField();
     }
-    
+
     /**
      * Vrátí HTML element <label> pro daný field
      * 
@@ -254,10 +253,9 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      * 
      * @return string
      */
-    public function getLabelHtml(){
-        return "<label for=\"". $this->getAttrValueByName("id") ."\">". $this->getLabel() ."</label>";
+    public function getLabelHtml() {
+        return "<label for=\"" . $this->getAttrValueByName("id") . "\">" . $this->getLabel() . "</label>";
     }
-  
 
     /**
      * Založí fieldu nový KT_Field_Validator
@@ -340,6 +338,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
      * V případě potřeby vrátí přeconvertovanou hodnotu fieldu pro prezentaci
      * Hlavním účelem funkce je pro dědičnost.
      * 
+     * @author Martin Hlaváč
      * @return mixed
      */
     public function getConvertedValue() {
@@ -365,21 +364,21 @@ abstract class KT_Field extends KT_HTML_Tag_Base{
             }
         }
 
-        if (isset($_POST[$this->getName()])){
+        if (isset($_POST[$this->getName()])) {
             return $_POST[$this->getName()];
         }
 
 
-        if (isset($_GET[$this->getName()])){
+        if (isset($_GET[$this->getName()])) {
             return $_GET[$this->getName()];
         }
-        
-        if($this->getFieldType() == KT_Checkbox_Field::FIELD_TYPE){
-            if(isset($_POST[$this->getPostPrefix()])){
+
+        if ($this->getFieldType() == KT_Checkbox_Field::FIELD_TYPE) {
+            if (isset($_POST[$this->getPostPrefix()])) {
                 return $_POST[$this->getPostPrefix()];
             }
-            
-            if(isset($_GET[$this->getPostPrefix()])){
+
+            if (isset($_GET[$this->getPostPrefix()])) {
                 return $_GET[$this->getPostPrefix()];
             }
         }

@@ -417,6 +417,7 @@ class KT_MetaBox implements KT_Registrable {
         $isDefaultAutoSave = $this->getIsDefaultAutoSave();
 
         add_action("add_meta_boxes_$screen", array($this, "add"));
+
         if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Type_Enum::POST_META) {
             add_action("save_post_$screen", array($this, "savePost"));
         }
@@ -427,6 +428,10 @@ class KT_MetaBox implements KT_Registrable {
 
         if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Type_Enum::OPTIONS && $isDefaultAutoSave) {
             add_filter("kt-custom-metabox-save-$screen", array($this, "saveOptions"));
+        }
+
+        if ($this->getDataType()->getCurrentValue() === KT_MetaBox_Data_Type_Enum::COMMENT_META) {
+            add_action("edit_comment", array($this, "saveComment"));
         }
     }
 
@@ -459,16 +464,42 @@ class KT_MetaBox implements KT_Registrable {
         if (wp_is_post_revision($postId) || wp_is_post_autosave($postId)) {
             return $postId;
         }
-        if (KT::arrayIssetAndNotEmpty($_POST) && $this->CheckCanHandlePostRequest($postId)) {
+        if (KT::arrayIssetAndNotEmpty($_POST)) {
             $isDefaultAutoSave = $this->getIsDefaultAutoSave();
-            $form = new KT_form();
-            $form->addFieldSetByObject($this->getFieldset());
-            $form->validate();
-            if ($isDefaultAutoSave && !$form->hasError()) {
-                $form->saveFieldsetToPostMeta($postId);
+            if ($isDefaultAutoSave) {
+                $form = new KT_form();
+                $form->addFieldSetByObject($this->getFieldset());
+                $form->validate();
+                if (!$form->hasError()) {
+                    $form->saveFieldsetToPostMeta($postId);
+                }
             }
         }
         return $postId;
+    }
+
+    /**
+     * Callback pro akci comment_save_pre pokud je aktivní datový typ příspěvků @see KT_MetaBox_Data_Type_Enum::COMMENT_META
+     * Pozn.: není třeba volat "ručně", jedná se o automatickou systémovou funkci
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param integer $commentId
+     */
+    public function saveComment($commentId) {
+        if (KT::arrayIssetAndNotEmpty($_POST)) {
+            $isDefaultAutoSave = $this->getIsDefaultAutoSave();
+            if ($isDefaultAutoSave) {
+                $form = new KT_form();
+                $form->addFieldSetByObject($this->getFieldset());
+                $form->validate();
+                if (!$form->hasError()) {
+                    $form->saveFieldsetToCommentMetaTable($commentId);
+                }
+            }
+        }
+        return $commentId;
     }
 
     /**
@@ -530,7 +561,7 @@ class KT_MetaBox implements KT_Registrable {
         }
 
         do_action("kt_before_metabox_save_options", $form);
-        $form->saveFieldsetToOptionTable();
+        $form->saveFieldsetToOptionsTable();
         do_action("kt_after_metabox_save_options", $form);
 
         $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = true;
@@ -570,8 +601,11 @@ class KT_MetaBox implements KT_Registrable {
             case KT_MetaBox_Data_Type_Enum::POST_META:
                 $form->loadDataFromPostMeta($post->ID);
                 break;
+            case KT_MetaBox_Data_Type_Enum::COMMENT_META:
+                $form->loadDataFromCommentMeta($post->comment_ID);
+                break;
             case KT_MetaBox_Data_Type_Enum::OPTIONS:
-                $form->loadDataFromWpOption();
+                $form->loadDataFromOptions();
                 break;
             case KT_MetaBox_Data_Type_Enum::CRUD:
                 $crudInstance = $this->getCrudInstance();

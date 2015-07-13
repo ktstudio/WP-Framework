@@ -35,6 +35,7 @@ define("KT_UPLOADS_EXPORT_URL", path_join(KT_WP_UPLOADS_URL, "kt"));
 // --- post types ------------------------
 define("KT_WP_POST_KEY", "post");
 define("KT_WP_PAGE_KEY", "page");
+define("KT_WP_COMMENT_KEY", "comment");
 define("KT_WP_ATTACHMENT_KEY", "attachment");
 define("KT_WP_REVISION_KEY", "revision");
 define("KT_WP_NAV_MENU_ITEM_KEY", "nav_menu_item");

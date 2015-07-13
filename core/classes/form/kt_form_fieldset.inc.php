@@ -84,7 +84,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     /**
      * @return boolean
      */
-    public function getSeralizeSave() {
+    public function getSerializeSave() {
         return $this->serializeSave;
     }
 
@@ -212,18 +212,14 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return boolean
      */
     public function hasFieldsError() {
-        if (!$this->hasFields()) {
-            return false;
+        if ($this->hasFields()) {
+            foreach ($this->getFields() as $field) {
+                /* @var $field \KT_Field */
+                if ($field->hasErrorMsg()) {
+                    return true;
+                }
+            };
         }
-
-        foreach ($this->getFields() as $field) {
-            /* @var $field \KT_Field */
-
-            if ($field->hasErrorMsg()) {
-                return true;
-            }
-        }
-
         return false;
     }
 
@@ -252,11 +248,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function removeFieldByName($name) {
         $fieldsCollection = $this->getFields();
-
         unset($fieldsCollection[$name]);
-
         $this->setFields($fieldsCollection);
-
         return $this;
     }
 
@@ -269,31 +262,37 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param array $fieldsData
      */
     public function setFieldsData($fieldsData) {
-
-        if (KT::notIssetOrEmpty($fieldsData) || !is_array($fieldsData)) {
-            return $this;
-        }
-
-        foreach ($this->getFields() as $field) {
-            /** @var $field \KT_Field */
-            if (!array_key_exists($field->getName(), $fieldsData)) {
-                continue;
-            }
-
-            $fieldValue = $fieldsData[$field->getName()];
-
-            if ($field->getFieldType() == KT_Text_Field::FIELD_TYPE) {
-                if ($field->getInputType() == KT_Text_Field::INPUT_DATE && KT::issetAndNotEmpty($fieldValue)) {
-                    $fieldValue = KT::dateConvert($fieldValue);
+        if (KT::arrayIssetAndNotEmpty($fieldsData)) {
+            foreach ($this->getFields() as $field) {
+                /** @var $field \KT_Field */
+                if (!array_key_exists($field->getName(), $fieldsData)) {
+                    continue;
+                }
+                $value = $fieldsData[$field->getName()];
+                if ($value !== "" && isset($value)) {
+                    $field->setValue($this->convertFieldValue($field, $value));
                 }
             }
+        }
+        return $this;
+    }
 
-            if ($fieldValue !== "" && isset($fieldValue)) {
-                $field->setValue($fieldValue);
+    /**
+     * Vrátí hodnotu fieldu pro (single) výpis (zobrazení)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param KT_Field $field
+     * @return string
+     */
+    public function convertFieldValue(KT_Field $field, $value) {
+        if ($field->getFieldType() == KT_Text_Field::FIELD_TYPE) {
+            if ($field->getInputType() == KT_Text_Field::INPUT_DATE) {
+                return KT::dateConvert($value);
             }
         }
-
-        return $this;
+        return $value;
     }
 
     /**

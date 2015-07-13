@@ -12,6 +12,7 @@ class KT_MetaBox_Data_Type_Enum extends KT_Enum {
     const POST_META = 1;
     const OPTIONS = 3;
     const CRUD = 5;
+    const COMMENT_META = 7;
     const CUSTOM = 10;
 
     function __construct($value = null) {

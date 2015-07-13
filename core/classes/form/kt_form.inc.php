@@ -627,22 +627,16 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return string
      */
     public function getInputsDataToTable(array $excludeFieldsets = array(), $class = 'meta-info') {
-
         $html = "";
-
-        if (!$this->hasFieldset()) {
-            return $html;
-        }
-
-        foreach ($this->getFieldsets() as $fieldset) {
-            /* @var $fieldset \KT_Form_Fieldset */
-            if (in_array($fieldset->getName(), $excludeFieldsets)) {
-                continue;
+        if ($this->hasFieldset()) {
+            foreach ($this->getFieldsets() as $fieldset) {
+                /* @var $fieldset \KT_Form_Fieldset */
+                if (in_array($fieldset->getName(), $excludeFieldsets)) {
+                    continue;
+                }
+                $html .= $fieldset->getInputsDataToTable($class);
             }
-
-            $html .= $fieldset->getInputsDataToTable($class);
         }
-
         return $html;
     }
 
@@ -655,35 +649,25 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param $postId in
      *
      * */
-    public function loadDataFromWpOption() {
-
-        if (!$this->hasFieldset()) {
-            return;
-        }
-
-        foreach ($this->getFieldsets() as $fieldset) {
-            /* @var $fieldset \KT_Form_Fieldset */
-
-
-            if (!$fieldset->hasFields()) {
-                continue;
-            }
-
-            if ($fieldset->getSeralizeSave()) {
-                $fieldsetData = get_option($fieldset->getName());
-                $fieldset->setFieldsData($fieldsetData);
-
-                continue;
-            }
-
-            foreach ($fieldset->getFields() as $field) {
-                $value = get_option($field->getName());
-                if ($value !== "" && isset($value) && $value !== false) {
-                    $field->setValue($value);
+    public function loadDataFromOptions() {
+        if ($this->hasFieldset()) {
+            foreach ($this->getFieldsets() as $fieldset) {
+                /* @var $fieldset \KT_Form_Fieldset */
+                if ($fieldset->hasFields()) {
+                    if ($fieldset->getSerializeSave()) {
+                        $fieldsetData = get_option($fieldset->getName());
+                        $fieldset->setFieldsData($fieldsetData);
+                        continue;
+                    }
+                    foreach ($fieldset->getFields() as $field) {
+                        $value = get_option($field->getName());
+                        if ($value !== "" && isset($value)) {
+                            $field->setValue($fieldset->convertFieldValue($field, $value));
+                        }
+                    }
                 }
             }
         }
-
         return $this;
     }
 
@@ -724,7 +708,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 continue;
             }
 
-            if ($fieldset->getSeralizeSave() && array_key_exists($fieldset->getName(), $postMetas)) {
+            if ($fieldset->getSerializeSave() && array_key_exists($fieldset->getName(), $postMetas)) {
                 $fieldset->setFieldsData(unserialize($postMetas[$fieldset->getName()]));
                 continue;
             }
@@ -749,14 +733,39 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
             $userMetas = KT_WP_User_Base_Model::getUserMetas($userId);
             foreach ($this->getFieldsets() as $fieldset) {
                 /* @var $fieldset \KT_Form_Fieldset */
-                if (!$fieldset->hasFields()) {
-                    continue;
+                if ($fieldset->hasFields()) {
+                    if ($fieldset->getSerializeSave()) {
+                        $fieldset->setFieldsData($userMetas[$fieldset->getName()]);
+                        continue;
+                    }
+                    $fieldset->setFieldsData($userMetas);
                 }
-                if ($fieldset->getSeralizeSave()) {
-                    $fieldset->setFieldsData($userMetas[$fieldset->getName()]);
-                    continue;
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Načte data do všech fieldsetů na základě commentId z tabulky wp_commentmeta
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param int $commentId
+     * @return \KT_Form
+     */
+    public function loadDataFromCommentMeta($commentId) {
+        if (KT::isIdFormat($commentId) && $this->hasFieldset()) {
+            $commentMetas = KT_WP_Comment_Base_Model::getCommentMetas($commentId);
+            foreach ($this->getFieldsets() as $fieldset) {
+                /* @var $fieldset \KT_Form_Fieldset */
+                if ($fieldset->hasFields()) {
+                    if ($fieldset->getSerializeSave()) {
+                        $fieldset->setFieldsData($commentMetas[$fieldset->getName()]);
+                        continue;
+                    }
+                    $fieldset->setFieldsData($commentMetas);
                 }
-                $fieldset->setFieldsData($userMetas);
             }
         }
         return $this;
@@ -771,19 +780,18 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param int $termId
      * @return \KT_Form
      */
-    public function loadDataFromWpTermmeta($termId) {
+    public function loadDataFromTermMeta($termId) {
         if (KT::isIdFormat($termId) && $this->hasFieldset()) {
             $termMetas = KT_Termmeta::getAllData($termId);
             foreach ($this->getFieldsets() as $fieldset) {
                 /* @var $fieldset \KT_Form_Fieldset */
-                if (!$fieldset->hasFields()) {
-                    continue;
+                if ($fieldset->hasFields()) {
+                    if ($fieldset->getSerializeSave()) {
+                        $fieldset->setFieldsData($termMetas[$fieldset->getName()]);
+                        continue;
+                    }
+                    $fieldset->setFieldsData($termMetas);
                 }
-                if ($fieldset->getSeralizeSave()) {
-                    $fieldset->setFieldsData($termMetas[$fieldset->getName()]);
-                    continue;
-                }
-                $fieldset->setFieldsData($termMetas);
             }
         }
         return $this;
@@ -880,8 +888,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 continue;
             }
 
-            if ($fieldset->getSeralizeSave()) {
-                $this->saveFieldsetToPostmetaByGroup($postId, $fieldset, $excludeFields);
+            if ($fieldset->getSerializeSave()) {
+                $this->saveFieldsetToPostMetaByGroup($postId, $fieldset, $excludeFields);
                 continue;
             }
 
@@ -898,18 +906,18 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @param array $exludeFields - které fieldy se nebudou ukládat
+     * @param array $excludeFields - které fieldy se nebudou ukládat
      * @return \KT_Form
      */
-    public function saveFieldsetToOptionTable(array $exludeFields = array()) {
+    public function saveFieldsetToOptionsTable(array $excludeFields = array()) {
         if (!$this->hasError() && $this->hasFieldset()) {
             foreach ($this->fieldsets as $fieldset) {
                 /* @var $fieldSet \KT_Form_Fieldset */
                 if ($fieldset->hasFields()) {
-                    if ($fieldset->getSeralizeSave()) {
-                        $this->saveFieldsetToOptionByGroup($fieldset, $exludeFields);
+                    if ($fieldset->getSerializeSave()) {
+                        $this->saveFieldsetToOptionByGroup($fieldset, $excludeFields);
                     } else {
-                        $this->saveFieldsetToOptionOneByOne($fieldset, $exludeFields);
+                        $this->saveFieldsetToOptionOneByOne($fieldset, $excludeFields);
                     }
                 }
             }
@@ -932,10 +940,36 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
             foreach ($this->fieldsets as $fieldset) {
                 /* @var $fieldSet \KT_Form_Fieldset */
                 if ($fieldset->hasFields()) {
-                    if ($fieldset->getSeralizeSave()) {
-                        $this->saveFieldsetToUsermetaByGroup($userId, $fieldset, $excludeFields);
+                    if ($fieldset->getSerializeSave()) {
+                        $this->saveFieldsetToUserMetaByGroup($userId, $fieldset, $excludeFields);
                     } else {
-                        $this->saveFieldsetToUsermetaOnyByOne($userId, $fieldset, $excludeFields);
+                        $this->saveFieldsetToUserMetaOneByOne($userId, $fieldset, $excludeFields);
+                    }
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Funkce uloží všechny fieldy z formuláře do wp_commentmeta klíč field->name
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param int $commentId - kterému uživateli budou meta uložena
+     * @param array $excludeFields - které fieldy se nebudou ukládat
+     * @return \KT_Form
+     */
+    public function saveFieldsetToCommentMetaTable($commentId, array $excludeFields = array()) {
+        if (!$this->hasError() && $this->hasFieldset()) {
+            foreach ($this->fieldsets as $fieldset) {
+                /* @var $fieldSet \KT_Form_Fieldset */
+                if ($fieldset->hasFields()) {
+                    if ($fieldset->getSerializeSave()) {
+                        $this->saveFieldsetToCommentMetaByGroup($commentId, $fieldset, $excludeFields);
+                    } else {
+                        $this->saveFieldsetToCommentMetaOneByOne($commentId, $fieldset, $excludeFields);
                     }
                 }
             }
@@ -953,15 +987,15 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param array $excludeFields - které fieldy se nebudou ukládat
      * @return \KT_Form
      */
-    public function saveFieldsetToTermmetaTable($termId, array $excludeFields = array()) {
-        if ($this->isFormSend() && !$this->hasError() && $this->hasFieldset()) {
+    public function saveFieldsetToTermMetaTable($termId, array $excludeFields = array()) {
+        if (!$this->hasError() && $this->hasFieldset()) {
             foreach ($this->fieldsets as $fieldset) {
                 /* @var $fieldSet \KT_Form_Fieldset */
                 if ($fieldset->hasFields()) {
-                    if ($fieldset->getSeralizeSave()) {
-                        $this->saveFieldsetToTermmetaByGroup($termId, $fieldset, $excludeFields);
+                    if ($fieldset->getSerializeSave()) {
+                        $this->saveFieldsetToTermMetaByGroup($termId, $fieldset, $excludeFields);
                     } else {
-                        $this->saveFieldsetToTermmetaOneByOne($termId, $fieldset, $excludeFields);
+                        $this->saveFieldsetToTermMetaOneByOne($termId, $fieldset, $excludeFields);
                     }
                 }
             }
@@ -1049,161 +1083,76 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     *
-     * @global type $current_screen
-     * @return type
+     * 
+     * @return \KT_Form
      */
     private function updateTransientDataForAdminValidation() {
-
         $fieldsetWithErrors = array();
-
-        if (!is_admin()) {
-            return;
-        }
-
-        $transientName = self::getCurrentTransientName();
-
-        if ($this->hasError()) {
-            foreach ($this->getFieldsets() as $fieldset) {
-                if ($fieldset->hasFieldsError()) {
-                    $fieldset->setFieldsData($_POST[$fieldset->getName()]);
-                    $fieldsetWithErrors[$fieldset->getName()] = $fieldset;
+        if (is_admin()) {
+            $transientName = self::getCurrentTransientName();
+            if ($this->hasError()) {
+                foreach ($this->getFieldsets() as $fieldset) {
+                    if ($fieldset->hasFieldsError()) {
+                        $fieldset->setFieldsData($_POST[$fieldset->getName()]);
+                        $fieldsetWithErrors[$fieldset->getName()] = $fieldset;
+                    }
                 }
-            }
-
-            if (KT::issetAndNotEmpty($fieldsetWithErrors)) {
-                set_transient($transientName, $fieldsetWithErrors, (30));
-            }
-        } else {
-            delete_transient($transientName);
-        }
-    }
-
-    /**
-     * Uloží data poslané postem do tabulky wp_option - každý field jako extra row
-     * USED : saveFieldsToOptionTable
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param \KT_Form_Fields $fieldSet
-     * @param array $exludeFields
-     * @return \KT_Form
-     */
-    private function saveFieldsetToOptionOneByOne(KT_Form_Fieldset $fieldSet, array $exludeFields = array()) {
-        /* @var $field \KT_Field */
-        foreach ($fieldSet->getFields() as $field) {
-            if (!in_array($field->getName(), $exludeFields)) {
-                $fieldValue = $field->getValue();
-                if ($fieldValue !== "" && isset($fieldValue)) {
-                    update_option($field->getName(), $field->getValue());
-                } else {
-                    delete_option($field->getName());
+                if (KT::issetAndNotEmpty($fieldsetWithErrors)) {
+                    set_transient($transientName, $fieldsetWithErrors, (30));
                 }
+            } else {
+                delete_transient($transientName);
             }
-        }
-        return $this;
-    }
-
-    /**
-     * Uloží data poslané postem do tabulky wp_option - celý fieldset jako realizované pole fieldů ($fieldName => $fieldValue)
-     * USED : saveFieldsToOptionTable
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param \KT_Form_Fieldset $fieldset
-     * @param array $exludeFields
-     * @return \KT_Form
-     */
-    private function saveFieldsetToOptionByGroup(KT_Form_Fieldset $fieldset, array $exludeFields = array()) {
-        /* @var $field \KT_Field */
-        foreach ($fieldset->getFields() as $field) {
-            if (!in_array($field->getName(), $exludeFields) && KT::issetAndNotEmpty($field->getValue())) {
-                $fieldValue = $field->getValue();
-                if ($fieldValue != "" || $fieldValue === 0 || $fieldValue === "0") {
-                    $fieldsetData[$field->getName()] = $field->getValue();
-                }
-            }
-        }
-        if (KT::arrayIssetAndNotEmpty($fieldsetData)) {
-            update_option($fieldset->getName(), $fieldsetData);
-        } else {
-            delete_option($fieldset->getName());
         }
         return $this;
     }
 
     /**
      * Uloží data poslané formulářem do tabulky wp_postmeta - každý field jako extra pole
-     * Pokud je třeba nějaký field vyloučit z uložení, stačí jeho getName() zadat do $exludeFieldse
-     *
-     * USED : saveFormDataToPostMeta
+     * Pokud je třeba nějaký field vyloučit z uložení, stačí jeho getName() zadat do $excludeFieldse
+     * @see saveFormDataToPostMeta
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param KT_Form_Fieldset $fieldset
-     * @param array $exludeFields
+     * @param array $excludeFields
      * @return \KT_Form
      */
     private function saveFieldsetToPostMetaOneByOne($postId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
+        /* @var $field \KT_Field */
         foreach ($fieldset->getFields() as $field) {
-            /* @var $field \KT_Field */
-
-            if (in_array($field->getName(), $excludeFields)) {
-                continue;
-            }
-
-            $old = get_post_meta($postId, $field->getName(), true);
-            $new = $field->getValue();
-
-            if ($new === '' || !isset($new)) {
-                delete_post_meta($postId, $field->getName());
-                continue;
-            }
-
-            if ($new != $old) {
-                $fieldType = get_class($field);
-                if ($fieldType == "KT_Text_Field") {
-                    if ($field->getInputType() == KT_Text_Field::INPUT_DATE) {
-                        $new = KT::dateConvert($new, "Y-m-d");
-                    }
+            if (!in_array($field->getName(), $excludeFields)) {
+                $oldValue = get_post_meta($postId, $field->getName(), true);
+                $newValue = $fieldValue = $this->getSavableFieldValue($field);
+                if ($newValue === "" || !isset($newValue)) {
+                    delete_post_meta($postId, $field->getName());
+                    continue;
                 }
-                update_post_meta($postId, $field->getName(), $new);
-                continue;
-            } elseif ('' == $new && $old) {
-                delete_post_meta($postId, $field->getName(), $old);
+                if ($newValue != $oldValue) {
+                    update_post_meta($postId, $field->getName(), $newValue);
+                } elseif ($newValue === "" && $oldValue) {
+                    delete_post_meta($postId, $field->getName(), $oldValue);
+                }
             }
         }
-
         return $this;
     }
 
     /**
      * Uloží data poslané postem do tabulky wp_postmeta - na základě zadaného fieldsetu, post_id
-     * Pokud je třeba nějaký field vyloučit z uložení, stačí jeho getName() zadat do $exludeFieldse
-     *
-     * USED : saveFormDataToPostMeta
+     * Pokud je třeba nějaký field vyloučit z uložení, stačí jeho getName() zadat do $excludeFieldse
+     * @see saveFormDataToPostMeta
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param KT_Form_Fieldset $fieldset
-     * @param array $exludeFields
+     * @param array $excludeFields
      * @return \KT_Form
      */
-    private function saveFieldsetToPostmetaByGroup($postId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
-        foreach ($fieldset->getFields() as $field) {
-            /* @var $field \KT_Field */
-
-            if (in_array($field->getName(), $excludeFields) && KT::notIssetOrEmpty($field->getValue())) {
-                continue;
-            }
-
-            $fieldsetData[$field->getName()] = $field->getValue();
-        }
-
+    private function saveFieldsetToPostMetaByGroup($postId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
+        $fieldsetData = $this->getSavableFieldsetGroupValue($fieldset, $excludeFields);
         if (KT::issetAndNotEmpty($fieldsetData)) {
             update_post_meta($postId, $fieldset->getName(), $fieldsetData);
         } else {
@@ -1214,75 +1163,147 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
-     * Uloží data poslané formulářem do tabulky wp_usermeta - každý field jako extra pole
-     * Pokud je třeba nějaký field vyloučit z uložení, stačí jeho getName() zadat do $exludeFieldse
+     * Uloží data poslané postem do tabulky wp_option - každý field jako extra row
+     * @see saveFieldsToOptionTable
      *
-     * USED : saveFormDataToPostMeta
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     *
+     * @param \KT_Form_Fields $fieldSet
+     * @param array $excludeFields
+     * @return \KT_Form
+     */
+    private function saveFieldsetToOptionOneByOne(KT_Form_Fieldset $fieldSet, array $excludeFields = array()) {
+        /* @var $field \KT_Field */
+        foreach ($fieldSet->getFields() as $field) {
+            if (!in_array($field->getName(), $excludeFields)) {
+                $fieldValue = $this->getSavableFieldValue($field);
+                if ($fieldValue !== "" && isset($fieldValue)) {
+                    update_option($field->getName(), $fieldValue);
+                } else {
+                    delete_option($field->getName());
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Uloží data poslané postem do tabulky wp_option - celý fieldset jako realizované pole fieldů ($fieldName => $fieldValue)
+     * @see saveFieldsToOptionTable
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     *
+     * @param \KT_Form_Fieldset $fieldset
+     * @param array $excludeFields
+     * @return \KT_Form
+     */
+    private function saveFieldsetToOptionByGroup(KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
+        $fieldsetData = $this->getSavableFieldsetGroupValue($fieldset, $excludeFields);
+        if (KT::arrayIssetAndNotEmpty($fieldsetData)) {
+            update_option($fieldset->getName(), $fieldsetData);
+        } else {
+            delete_option($fieldset->getName());
+        }
+        return $this;
+    }
+
+    /**
+     * Uloží data poslané formulářem do tabulky wp_usermeta - každý field jako extra pole
+     * Pokud je třeba nějaký field vyloučit z uložení, stačí jeho getName() zadat do $excludeFieldse
+     * @see saveFormDataToPostMeta
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param KT_Form_Fieldset $fieldset
-     * @param array $exludeFields
+     * @param array $excludeFields
      * @return \KT_Form
      */
-    private function saveFieldsetToUsermetaOnyByOne($userId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
-        foreach ($fieldset->getFields() as $field) {
-            /* @var $field \KT_Field */
-
-            if (in_array($field->getName(), $excludeFields)) {
-                continue;
-            }
-
-            $fieldValue = $field->getValue();
-
-            if ($fieldValue !== "" && isset($fieldValue)) {
-                $fieldType = get_class($field);
-                if ($fieldType == "KT_Text_Field") {
-                    if ($field->getInputType() == KT_Text_Field::INPUT_DATE) {
-                        $new = KT::dateConvert($new, "Y-m-d");
-                    }
+    private function saveFieldsetToUserMetaOneByOne($userId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
+        /* @var $field \KT_Field */
+        foreach ($fieldSet->getFields() as $field) {
+            if (!in_array($field->getName(), $excludeFields)) {
+                $fieldValue = $this->getSavableFieldValue($field);
+                if ($fieldValue !== "" && isset($fieldValue)) {
+                    update_user_meta($userId, $field->getName(), $fieldValue);
+                } else {
+                    delete_user_meta($userId, $field->getName());
                 }
-
-                $result = update_user_meta($userId, $field->getName(), $field->getValue());
-            } else {
-                delete_user_meta($userId, $field->getName());
             }
         }
-
         return $this;
     }
 
     /**
      * Uloží data poslané postem do tabulky wp_postmeta - na základě zadaného fieldsetu, post_id
-     * Pokud je třeba nějaký field vyloučit z uložení, stačí jeho getName() zadat do $exludeFieldse
-     *
-     * USED : saveFormDataToPostMeta
+     * Pokud je třeba nějaký field vyloučit z uložení, stačí jeho getName() zadat do $excludeFieldse
+     * @see saveFormDataToPostMeta
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param KT_Form_Fieldset $fieldset
-     * @param array $exludeFields
+     * @param array $excludeFields
      * @return \KT_Form
      */
-    private function saveFieldsetToUsermetaByGroup($userId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
-        foreach ($fieldset->getFields() as $field) {
-            /* @var $field \KT_Field */
-
-            if (in_array($field->getName(), $excludeFields) && KT::notIssetOrEmpty($field->getValue())) {
-                continue;
-            }
-
-            $fieldsetData[$field->getName()] = $field->getValue();
-        }
-
+    private function saveFieldsetToUserMetaByGroup($userId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
+        $fieldsetData = $this->getSavableFieldsetGroupValue($fieldset, $excludeFields);
         if (KT::issetAndNotEmpty($fieldsetData)) {
             update_user_meta($userId, $fieldset->getName(), $fieldsetData);
         } else {
             delete_user_meta($userId, $fieldset->getName());
         }
+        return $this;
+    }
 
+    /**
+     * Uloží data poslané postem do tabulky wp_commentmeta - každý field jako extra row
+     * @see saveFieldsToCommentMetaTable
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param int $commentId
+     * @param \KT_Form_Fields $fieldSet
+     * @param array $excludeFields
+     * @return \KT_Form
+     */
+    private function saveFieldsetToCommentMetaOneByOne($commentId, KT_Form_Fieldset $fieldSet, array $excludeFields = array()) {
+        /* @var $field \KT_Field */
+        foreach ($fieldSet->getFields() as $field) {
+            if (!in_array($field->getName(), $excludeFields)) {
+                $fieldValue = $this->getSavableFieldValue($field);
+                if ($fieldValue !== "" && isset($fieldValue)) {
+                    update_comment_meta($commentId, $field->getName(), $fieldValue);
+                } else {
+                    delete_comment_meta($commentId, $field->getName());
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Uloží data poslané postem do tabulky wp_commentmeta - celý fieldset jako realizované pole fieldů ($fieldName => $fieldValue)
+     * @see saveFieldsToCommentMetaTable
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param int $commentId
+     * @param \KT_Form_Fieldset $fieldset
+     * @param array $excludeFields
+     * @return \KT_Form
+     */
+    private function saveFieldsetToCommentMetaByGroup($commentId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
+        $fieldsetData = $this->getSavableFieldsetGroupValue($fieldset, $excludeFields);
+        if (KT::arrayIssetAndNotEmpty($fieldsetData)) {
+            update_comment_meta($commentId, $fieldset->getName(), $fieldsetData);
+        } else {
+            delete_comment_meta($commentId, $fieldset->getName());
+        }
         return $this;
     }
 
@@ -1295,16 +1316,16 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @param int $termId
      * @param \KT_Form_Fields $fieldSet
-     * @param array $exludeFields
+     * @param array $excludeFields
      * @return \KT_Form
      */
-    private function saveFieldsetToTermmetaOneByOne($termId, KT_Form_Fieldset $fieldSet, array $exludeFields = array()) {
+    private function saveFieldsetToTermMetaOneByOne($termId, KT_Form_Fieldset $fieldSet, array $excludeFields = array()) {
         /* @var $field \KT_Field */
         foreach ($fieldSet->getFields() as $field) {
-            if (!in_array($field->getName(), $exludeFields)) {
-                $fieldValue = $field->getValue();
+            if (!in_array($field->getName(), $excludeFields)) {
+                $fieldValue = $this->getSavableFieldValue($field);
                 if ($fieldValue !== "" && isset($fieldValue)) {
-                    KT_Termmeta::updateData($termId, $field->getName(), $field->getValue());
+                    KT_Termmeta::updateData($termId, $field->getName(), $fieldValue);
                 } else {
                     KT_Termmeta::deleteData($termId, $field->getName());
                 }
@@ -1322,25 +1343,59 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @param int $termId
      * @param \KT_Form_Fieldset $fieldset
-     * @param array $exludeFields
+     * @param array $excludeFields
      * @return \KT_Form
      */
-    private function saveFieldsetToTermmetaByGroup($termId, KT_Form_Fieldset $fieldset, array $exludeFields = array()) {
+    private function saveFieldsetToTermMetaByGroup($termId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
+        $fieldsetData = $this->getSavableFieldsetGroupValue($fieldset, $excludeFields);
+        if (KT::arrayIssetAndNotEmpty($fieldsetData)) {
+            KT_Termmeta::updateData($termId, $fieldset->getName(), $fieldsetData);
+        } else {
+            KT_Termmeta::deleteData($termId, $fieldset->getName());
+        }
+        return $this;
+    }
+
+    /**
+     * Vrátí hodnotu fieldu pro (single) uložení
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param KT_Field $field
+     * @return string
+     */
+    private function getSavableFieldValue(KT_Field $field) {
+        $value = $field->getValue();
+        if ($field->getFieldType() == KT_Text_Field::FIELD_TYPE) {
+            if ($field->getInputType() == KT_Text_Field::INPUT_DATE) {
+                $value = KT::dateConvert($value, "Y-m-d");
+            }
+        }
+        return $value;
+    }
+
+    /**
+     * Vrátí všechny hodnoty fieldsetu jako pole pro hromadné uložení
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param KT_Form_Fieldset $fieldset
+     * @param array $excludeFields
+     * @return array
+     */
+    private function getSavableFieldsetGroupValue(KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
         /* @var $field \KT_Field */
         foreach ($fieldset->getFields() as $field) {
-            if (!in_array($field->getName(), $exludeFields) && KT::issetAndNotEmpty($field->getValue())) {
+            if (!in_array($field->getName(), $excludeFields) && KT::issetAndNotEmpty($field->getValue())) {
                 $fieldValue = $field->getValue();
-                if ($fieldValue != "" || $fieldValue === 0 || $fieldValue === "0") {
-                    $fieldsetData[$field->getName()] = $field->getValue();
+                if ($fieldValue !== "" || $fieldValue === 0 || $fieldValue === "0") {
+                    $fieldsetData[$field->getName()] = $field->getFieldValue();
                 }
             }
         }
-        if (KT::arrayIssetAndNotEmpty($fieldsetData)) {
-            KT_Termmeta::updateData($termId, $field->getName(), $fieldsetData);
-        } else {
-            KT_Termmeta::deleteData($termId, $field->getName());
-        }
-        return $this;
+        return $fieldsetData;
     }
 
     // --- statické metody ---------------
@@ -1378,9 +1433,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public static function getCurrentTransientName() {
         global $current_screen;
-
         $transtionName = $current_screen->base . "-" . get_current_user_id();
-
         return $transtionName;
     }
 
