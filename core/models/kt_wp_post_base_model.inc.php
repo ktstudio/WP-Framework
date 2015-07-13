@@ -2,6 +2,8 @@
 
 class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
 
+    const DEFAULT_EXCERPT_LENGTH = 55;
+
     private $post = null;
     private $author = null;
     private $gallery = null;
@@ -124,6 +126,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
      * Nastaví galerii obrázků daného příspěvku
      *
      * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param KT_WP_Post_Gallery $gallery
      * @return \KT_WP_Post_Base_Model
@@ -137,6 +140,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
      * Nastaví seznam souborů daného příspěvku
      * 
      * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @param KT_WP_Post_File_List $files
      * @return \KT_WP_Post_Base_Model
@@ -152,6 +156,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
      * Vrátí ID WP_Postu v rámci modelu
      *
      * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return int
      */
@@ -203,36 +208,40 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
      * 
      * Metoda šetří SQL requesty při prostém výpisu stručného popisku
      * 
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
      * @param boolean $withTheFilter
-     * @param int $customExcerptLength
+     * @param int $customExcerptLength (Words)
+     * @param string $customExcerptMore
      * 
      * @return string
      */
-    public function getExcerpt($withTheFilter = true, $customExcerptLength = null) {
-        if ($this->hasExcrept()) {
-            $excerpt = $this->getPost()->post_excerpt;
-        } else {
-            $excerptLength = apply_filters("excerpt_length", 55);
-            if (KT::isIdFormat($customExcerptLength)) {
-                $excerptLength = $customExcerptLength;
+    public function getExcerpt($withTheFilter = true, $customExcerptLength = null, $customExcerptMore = null) {
+        $excerptMore = $customExcerptMore ? : apply_filters("excerpt_more", " [&hellip;]");
+        $excerptLength = $customExcerptLength ? : apply_filters("excerpt_length", self::DEFAULT_EXCERPT_LENGTH);
+        $post = $this->getPost();
+        if (KT::issetAndNotEmpty($post)) {
+            if ($this->hasExcrept()) {
+                $excerpt = $post->post_excerpt;
+            } else {
+                $excerpt = $post->post_content;
             }
-            $excerptMore = apply_filters("excerpt_more", " [&hellip;]");
-            $excerpt = wp_trim_words($this->getPost()->post_content, $excerptLength, $excerptMore);
+            $excerpt = wp_trim_words($excerpt, $excerptLength, $excerptMore);
+            $excerptFilterered = apply_filters("get_the_excerpt", $excerpt);
+            if ($withTheFilter) {
+                return apply_filters("the_excerpt", $excerptFilterered);
+            }
+            return $excerptFilterered;
         }
-        $excerptFilterered = apply_filters("get_the_excerpt", $excerpt);
-        if ($withTheFilter) {
-            return apply_filters("the_excerpt", $excerptFilterered);
-        }
-        return $excerptFilterered;
+        return null;
     }
 
     /**
      * Vrátí URL pro zobrazení detailu postu
      *
      * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -249,6 +258,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
      * Hlavní pro title=""
      * 
      * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return string
      */
@@ -260,6 +270,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
      * Vrátí ID náhledového obrázku. Pokud není přiřazen, vrátí Null
      *
      * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @return mixed null || int
      */
@@ -290,6 +301,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
      * Vrátí uběhnutý čas od datumu publikace příspěvku
      * 
      * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
