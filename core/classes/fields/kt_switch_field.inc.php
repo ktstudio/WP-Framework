@@ -150,4 +150,20 @@ class KT_Switch_Field extends KT_Field {
         }
     }
 
+    /**
+     * Zkontroluje, zda se jedná o (přímou) hodnotu KT_Switch_Field (0 nebo 1)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz 
+     * 
+     * @param string|int $value
+     * @return bool
+     */
+    public static function isSwitchValue($value) {
+        if ($value == KT_Switch_Field::YES || $value === 1 || $value == KT_Switch_Field::NO || $value === 0) {
+            return true;
+        }
+        return false;
+    }
+
 }
