@@ -518,7 +518,7 @@ class KT {
      */
     public static function getRequestUrl($fullUrl = true) {
         $requestUrl = "http";
-        if ($_SERVER["HTTPS"] == "on") {
+        if (self::arrayTryGetValue($_SERVER, "HTTPS") == "on") {
             $requestUrl .= "s";
         }
         $requestUrl .= "://";

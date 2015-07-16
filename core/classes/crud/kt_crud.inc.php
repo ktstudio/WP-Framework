@@ -61,11 +61,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
             return $this->getColumnByName($key)->getValue();
         }
 
-        $trace = debug_backtrace();
-        trigger_error(
-                'Undefined property via __get(): ' . $name .
-                ' in ' . $trace[0]['file'] .
-                ' on line ' . $trace[0]['line'], E_USER_NOTICE);
+        trigger_error("Undefined CRUD property via __get(): \"$name\" for table \"{$this->getTable()}\"", E_USER_NOTICE);
+
         return null;
     }
 
@@ -602,7 +599,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         global $wpdb;
 
         $updateValue = $this->getColumnsWithFormatsData();
-        
+
         // Povolení filtru, který ze "NULL" strinogové hodnoty udělá v SQL dotazu běžný NULL pro nullable sloupce
         add_filter("query", array($this, "nullUpdateFilterCallback"));
         $sql = $wpdb->update($this->getTable(), $updateValue->columns, array($this->getPrimaryKeyColumn() => $this->getId()), $updateValue->formats);
