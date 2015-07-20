@@ -69,6 +69,14 @@ abstract class KT_Meta_Model_Base implements KT_Modelable {
         return null;
     }
 
+    /**
+     * @deprecated since version 1.3
+     * @see getMetaValue
+     */
+    public function getMetaValueByKey($key) {
+        return $this->getMetaValue($key);
+    }
+    
     // --- neveřejné metody ---------------------
 
     /**
