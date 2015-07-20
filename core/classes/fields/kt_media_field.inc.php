@@ -1,8 +1,16 @@
 <?php
 
+/**
+ * Prvek formuláře pro výběr obrázku nebo souboru, resp. přílohy 
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_Media_Field extends KT_Field {
 
     const FIELD_TYPE = "media";
+
+    private $isMultiple = false;
 
     /**
      * Založení objektu typu image loader - pouze Admin sekce
@@ -10,6 +18,9 @@ class KT_Media_Field extends KT_Field {
      * Pro funkčnost je ve stránce je nutné mít načteno:
      * wp_enqueue_media();
      * wp_enqueue_script("kt-img-loader");
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
      *
      * @param string $name - hash v poli
      * @param string $label - popisek v html
@@ -19,6 +30,57 @@ class KT_Media_Field extends KT_Field {
         parent::__construct($name, $label);
         $this->addAttrClass("kt-file-loader button");
     }
+
+    // --- getry & setry ---------------------
+
+    public function getFieldType() {
+        return self::FIELD_TYPE;
+    }
+
+    /**
+     * Vrátí hodnotu jako pole s ID(s)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return array
+     */
+    public function getValues() {
+        $value = $this->getValue();
+        if (KT::issetAndNotEmpty($value)) {
+            $ids = split(",", $value);
+            return $ids;
+        }
+        return null;
+    }
+
+    /**
+     * Vrátí označení, zda se jedné o multi výběr
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return bool
+     */
+    public function getIsMultiple() {
+        return $this->isMultiple;
+    }
+
+    /**
+     * Nastaví označení, zda se jedné o multi výběr
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param bool $isMultiple
+     * @return \KT_Media_Field
+     */
+    public function setIsMultiple($isMultiple) {
+        $this->isMultiple = KT::tryGetBool($isMultiple) ? : false;
+        return $this;
+    }
+
+    // --- veřejné metody ---------------------
 
     /**
      * Provede výpis fieldu pomocí echo $this->getField()
@@ -33,73 +95,68 @@ class KT_Media_Field extends KT_Field {
     /**
      * Vrátí HTML strukturu pro zobrazní fieldu
      *
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
      * @return string
      */
     public function getField() {
-
-        $html = "";
-
-        $classes = $this->getAttrClassString();
-
-        $html .= "<div class=\"file-load-box\">";
-
+        $html = "<div class=\"file-load-box\">";
         $html .= $this->getFullSpanUrl();
-
-        $html .= "<input type=\"hidden\" ";
-        $html .= $this->getBasicHtml();
-        $html .= " value=\"{$this->getValue()}\" ";
-        $html .= "/>";
-
-        $html .= "<span $classes id=\"{$this->getAttrValueByName("id")}\">" . __('Vybrat soubor', KT_DOMAIN) . "</span>";
-
+        $html .= "<input type=\"hidden\" {$this->getBasicHtml()} value=\"{$this->getValue()}\" />";
+        $multiple = ($this->getIsMultiple()) ? "true" : "false";
+        $html .= "<span id=\"{$this->getAttrValueByName("id")}\" {$this->getAttrClassString()} data-multiple=\"$multiple\">" . __("Vybrat soubor", KT_DOMAIN) . "</span>";
         if ($this->hasErrorMsg()) {
             $html .= parent::getHtmlErrorMsg();
         }
-
         return $html;
     }
 
-    public function getFieldType() {
-        return self::FIELD_TYPE;
-    }
-
-    // --- privátní funkce --------------
+    // --- neveřejné metody ---------------------
 
     /**
      * Vrátí obsah s daty pro field v případě, že je attachment nastaven
      * V případě obrázku vrátí jeho thumbnail v případě souboru pouze název
      * 
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
      * @return string
      */
     private function getFullSpanUrl() {
+        $html = null;
         $value = $this->getValue();
         if (KT::issetAndNotEmpty($value)) {
-            $attachment = get_post($this->getValue());
-            if (KT::issetAndNotEmpty($attachment)) {
-                if (self::isFileImageType($attachment)) {
-                    $imageData = wp_get_attachment_image_src($attachment->ID, KT_WP_IMAGE_SIZE_THUBNAIL);
-                    $fileTag = "<img class=\"file\" src=\"{$imageData[0]}\">";
+            $html .= "<span class=\"{$this->getAttrValueByName("id")} span-url full\">";
+            $ids = $this->getValues();
+            if (KT::arrayIssetAndNotEmpty($ids)) {
+                foreach ($ids as $id) {
+                    $attachment = get_post($id);
+                    if (KT::issetAndNotEmpty($attachment)) {
+                        if (self::isFileImageType($attachment)) {
+                            $imageData = wp_get_attachment_image_src($attachment->ID, KT_WP_IMAGE_SIZE_THUBNAIL);
+                            $fileTag = "<img class=\"file\" src=\"{$imageData[0]}\">";
+                        }
+                        if (KT::notIssetOrEmpty($fileTag)) {
+                            $fileTag = "<span class=\"file\">{$attachment->post_title}</span>";
+                        }
+                        $removeFileTag = "<a class=\"remove-file\"><span class=\"dashicons dashicons-no\"></span></a>";
+                        $html .= "$fileTag $removeFileTag";
+                    } else {
+                        $html .= "<span class=\"file\">" . __("Soubor byl smazán", KT_DOMAIN) . "</span>";
+                    }
                 }
-                if (KT::notIssetOrEmpty($fileTag)) {
-                    $fileTag = "<span class=\"file\">{$attachment->post_title}</span>";
-                }
-                $removeFileTag = "<a class=\"remove-file\"><span class=\"dashicons dashicons-no\"></span></a>";
-                return $html = "<span class=\"{$this->getAttrValueByName("id")} span-url full\">$fileTag $removeFileTag</span>";
             } else {
-                return "<span class=\"file\">" . __("Obrázek byl smazán", KT_DOMAIN) . "</span>";
+                $html = "<span class=\"file\">" . __("Soubor(y) byl(y) smazán(y)", KT_DOMAIN) . "</span>";
             }
+            $html .= "</span>";
         } else {
-            return $html = "<span class=\"{$this->getAttrValueByName("id")} span-url\"></span>";
+            $html = "<span class=\"{$this->getAttrValueByName("id")} span-url\"></span>";
         }
+        return $html;
     }
 
-    // --- statické funkce ------------
+    // --- statické funkce ---------------------
 
     /**
      * Funkce provede kontrolu, zda předaný attachment je typu obrázek
@@ -111,17 +168,13 @@ class KT_Media_Field extends KT_Field {
      * @return boolean
      */
     public static function isFileImageType(WP_Post $attachment) {
-
         $file = get_attached_file($attachment->ID);
-
+        $matches = array();
         $ext = preg_match('/\.([^.]+)$/', $file, $matches) ? strtolower($matches[1]) : false;
-
         $image_exts = array("jpg", "jpeg", "gif", "png", "bmp", "tiff");
-
         if ("image/" == substr($attachment->post_mime_type, 0, 6) || $ext && "import" == $attachment->post_mime_type && in_array($ext, $image_exts)) {
             return true;
         }
-
         return false;
     }
 

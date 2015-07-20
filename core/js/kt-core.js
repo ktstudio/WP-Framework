@@ -109,27 +109,35 @@ jQuery(document).ready(function () {
     jQuery('body').on("click", ".kt-file-loader", function (e) {
         var kt_input_id = jQuery(this).attr('id');
         var button = jQuery(this);
-        var deleteButtonContent = '<a class="remove-file"><span class="dashicons dashicons-no"></span></a>';
         var fileContent = "";
         var imageUrl = "";
+        var selectedIds = [];
+        var isMultiple;
+        if (jQuery(this).data("multiple") == true) {
+            isMultiple = true;
+        } else {
+            isMultiple = false;
+        }
 
         wp.media.editor.send.attachment = function (props, attachment) {
+            var selectedId = attachment.id;
             if (attachment.type === "image") {
-                if(attachment.sizes.thumbnail){
+                if (attachment.sizes.thumbnail) {
                     imageUrl = attachment.sizes.thumbnail.url;
                 } else {
                     imageUrl = attachment.sizes.full.url;
                 }
-                fileContent = '<img class=\"file\" src="' + imageUrl + '">';
+                fileContent += '<img class="file" data-id="' + selectedId + '" src="' + imageUrl + '">';
             } else {
-                fileContent = '<span class=\"file\">' + attachment.title + '</span>';
+                fileContent += '<span class="file" data-id="' + selectedId + '">' + attachment.title + '</span>';
             }
-
-            jQuery("." + kt_input_id).html(fileContent + deleteButtonContent);
-            jQuery("#" + kt_input_id).val(attachment.id);
+            fileContent += '<a class="remove-file" data-id="' + selectedId + '"><span class="dashicons dashicons-no"></span></a>';
+            selectedIds.push(selectedId);
+            jQuery("." + kt_input_id).html(fileContent);
+            jQuery("#" + kt_input_id).val(selectedIds);
         };
 
-        wp.media.editor.open(button);
+        wp.media.editor.open(button, {multiple: isMultiple});
 
         return false;
     });
@@ -141,7 +149,12 @@ jQuery(document).ready(function () {
             jQuery(this).remove();
             removeButton.remove();
         });
-        jQuery(this).parents(".file-load-box").find("input").val("");
+        var dataId = jQuery(this).data("id").toString();
+        var oldValues = jQuery(this).parents(".file-load-box").find("input").val().toString().split(",");
+        var newValues = jQuery.grep(oldValues, function (value) {
+            return value != dataId;
+        });
+        jQuery(this).parents(".file-load-box").find("input").val(newValues);
     });
 
     // Přepínání switch toggle buttonu na základě inputu a a toggle
@@ -208,8 +221,7 @@ jQuery(document).ready(function () {
 
         jQuery(this).slider({
             range: false,
-            step: step,
-            min: min,
+            step: step, min: min,
             max: max,
             value: value,
             slide: function (event, ui) {
