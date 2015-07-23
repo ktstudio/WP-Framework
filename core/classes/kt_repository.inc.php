@@ -41,7 +41,7 @@ class KT_Repository {
             throw new KT_Not_Supported_Exception("table is not a string");
         }
 
-        if (is_string($table)) {
+        if (is_string($className)) {
             $this->className = $className;
         } else {
             throw new KT_Not_Supported_Exception("className is not a string");
