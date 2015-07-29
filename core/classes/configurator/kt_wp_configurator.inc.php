@@ -519,17 +519,15 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * Přidá Theme Support do Wordpressu
-     * $postTypes - dle WP Codexu - v případě použití thumbnails a post-formats se definuje pole post_types
+     * Přidá Theme Support do Wordpressu 
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
      * @param string $feature
-     * @param array $postTypes
      */
-    public function addThemeSupport($feature, array $postTypes) {
-        add_theme_support($feature, $postTypes);
+    public function addThemeSupport($feature) {
+        add_theme_support($feature);
         return $this;
     }
 
