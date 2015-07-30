@@ -35,6 +35,7 @@ final class KT_WP_Configurator {
     private $postArchiveMenu = null;
     private $sessionEnable = false;
     private $facebookManager = null;
+    private $emojiSwtich = false;
 
     // --- gettery ----------------------
 
@@ -160,6 +161,14 @@ final class KT_WP_Configurator {
         }
 
         return $this->facebookManager;
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function getEmojiSwtich() {
+        return $this->emojiSwtich;
     }
 
     // --- settery ----------------------
@@ -352,6 +361,18 @@ final class KT_WP_Configurator {
         return $this;
     }
 
+    /**
+     * Zapne emoji smajlíky
+     * 
+     * @author Jan Pokorný
+     * @param boolean $switch
+     * @return \KT_WP_Configurator
+     */
+    public function setEmojiSwitch($switch = true) {
+        $this->emojiSwtich = $switch;
+        return $this;
+    }
+
     // --- veřejné funkce ---------------
 
     /**
@@ -469,6 +490,11 @@ final class KT_WP_Configurator {
         // facebookManager
         if ($this->getFacebookManager()->getModuleEnabled()) {
             add_action("wp_head", array($this, "facebookTagsInit"), 99);
+        }
+
+        //emoji
+        if ($this->getEmojiSwtich() === false) {
+            add_action("init", array($this, "removeEmoji"), 1);
         }
     }
 
@@ -1186,6 +1212,39 @@ final class KT_WP_Configurator {
      */
     public static function getThemeSettingSlug() {
         return $baseName = self::THEME_SUBPAGE_PREFIX . self::THEME_SETTING_PAGE_SLUG;
+    }
+
+    /**
+     * Smaže akce spojené s emoji
+     * 
+     * @author Jan Pokorný
+     */
+    public function removeEmoji() {
+        remove_action('admin_print_styles', 'print_emoji_styles');
+        remove_action('wp_head', 'print_emoji_detection_script', 7);
+        remove_action('admin_print_scripts', 'print_emoji_detection_script');
+        remove_action('wp_print_styles', 'print_emoji_styles');
+        remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
+        remove_filter('the_content_feed', 'wp_staticize_emoji');
+        remove_filter('comment_text_rss', 'wp_staticize_emoji');
+
+        // filter to remove TinyMCE emojis
+        add_filter('tiny_mce_plugins', array($this, "disableEmojiInTinymc"));
+    }
+
+    /**
+     * Filtr pro odstranění emoji z Tinymc
+     * 
+     * @author Jan Pokorný
+     * @param array $plugins
+     * @return array
+     */
+    public function disableEmojiInTinymc($plugins) {
+        if (is_array($plugins)) {
+            return array_diff($plugins, array('wpemoji'));
+        } else {
+            return array();
+        }
     }
 
 }
