@@ -35,7 +35,7 @@ final class KT_WP_Configurator {
     private $postArchiveMenu = null;
     private $sessionEnable = false;
     private $facebookManager = null;
-    private $emojiSwtich = false;
+    private $emojiSwitch = false;
 
     // --- gettery ----------------------
 
@@ -167,8 +167,8 @@ final class KT_WP_Configurator {
      * 
      * @return boolean
      */
-    public function getEmojiSwtich() {
-        return $this->emojiSwtich;
+    public function getEmojiSwitch() {
+        return $this->emojiSwitch;
     }
 
     // --- settery ----------------------
@@ -369,7 +369,7 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Configurator
      */
     public function setEmojiSwitch($switch = true) {
-        $this->emojiSwtich = $switch;
+        $this->emojiSwitch = $switch;
         return $this;
     }
 
@@ -493,7 +493,7 @@ final class KT_WP_Configurator {
         }
 
         //emoji
-        if ($this->getEmojiSwtich() === false) {
+        if ($this->getEmojiSwitch() === false) {
             add_action("init", array($this, "removeEmoji"), 1);
         }
     }

@@ -911,7 +911,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function saveFieldsetToOptionsTable(array $excludeFields = array()) {
         if (!$this->hasError() && $this->hasFieldset()) {
-            foreach ($this->fieldsets as $fieldset) {
+            foreach ($this->getFieldsets() as $fieldset) {
                 /* @var $fieldSet \KT_Form_Fieldset */
                 if ($fieldset->hasFields()) {
                     if ($fieldset->getSerializeSave()) {
@@ -937,7 +937,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function saveFieldsetToUserMeta($userId, array $excludeFields = array()) {
         if ($this->isFormSend() && !$this->hasError() && $this->hasFieldset()) {
-            foreach ($this->fieldsets as $fieldset) {
+            foreach ($this->getFieldsets() as $fieldset) {
                 /* @var $fieldSet \KT_Form_Fieldset */
                 if ($fieldset->hasFields()) {
                     if ($fieldset->getSerializeSave()) {
@@ -963,7 +963,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function saveFieldsetToCommentMetaTable($commentId, array $excludeFields = array()) {
         if (!$this->hasError() && $this->hasFieldset()) {
-            foreach ($this->fieldsets as $fieldset) {
+            foreach ($this->getFieldsets() as $fieldset) {
                 /* @var $fieldSet \KT_Form_Fieldset */
                 if ($fieldset->hasFields()) {
                     if ($fieldset->getSerializeSave()) {
@@ -989,7 +989,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function saveFieldsetToTermMetaTable($termId, array $excludeFields = array()) {
         if (!$this->hasError() && $this->hasFieldset()) {
-            foreach ($this->fieldsets as $fieldset) {
+            foreach ($this->getFieldsets() as $fieldset) {
                 /* @var $fieldSet \KT_Form_Fieldset */
                 if ($fieldset->hasFields()) {
                     if ($fieldset->getSerializeSave()) {
@@ -1169,13 +1169,13 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @param \KT_Form_Fields $fieldSet
+     * @param \KT_Form_Fields $fieldset
      * @param array $excludeFields
      * @return \KT_Form
      */
-    private function saveFieldsetToOptionOneByOne(KT_Form_Fieldset $fieldSet, array $excludeFields = array()) {
+    private function saveFieldsetToOptionOneByOne(KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
         /* @var $field \KT_Field */
-        foreach ($fieldSet->getFields() as $field) {
+        foreach ($fieldset->getFields() as $field) {
             if (!in_array($field->getName(), $excludeFields)) {
                 $fieldValue = $this->getSavableFieldValue($field);
                 if ($fieldValue !== "" && isset($fieldValue)) {
@@ -1223,7 +1223,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     private function saveFieldsetToUserMetaOneByOne($userId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
         /* @var $field \KT_Field */
-        foreach ($fieldSet->getFields() as $field) {
+        foreach ($fieldset->getFields() as $field) {
             if (!in_array($field->getName(), $excludeFields)) {
                 $fieldValue = $this->getSavableFieldValue($field);
                 if ($fieldValue !== "" && isset($fieldValue)) {
@@ -1266,13 +1266,13 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @link http://www.ktstudio.cz
      *
      * @param int $commentId
-     * @param \KT_Form_Fields $fieldSet
+     * @param \KT_Form_Fields $fieldset
      * @param array $excludeFields
      * @return \KT_Form
      */
-    private function saveFieldsetToCommentMetaOneByOne($commentId, KT_Form_Fieldset $fieldSet, array $excludeFields = array()) {
+    private function saveFieldsetToCommentMetaOneByOne($commentId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
         /* @var $field \KT_Field */
-        foreach ($fieldSet->getFields() as $field) {
+        foreach ($fieldset->getFields() as $field) {
             if (!in_array($field->getName(), $excludeFields)) {
                 $fieldValue = $this->getSavableFieldValue($field);
                 if ($fieldValue !== "" && isset($fieldValue)) {
@@ -1315,13 +1315,13 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @link http://www.ktstudio.cz
      *
      * @param int $termId
-     * @param \KT_Form_Fields $fieldSet
+     * @param \KT_Form_Fields $fieldset
      * @param array $excludeFields
      * @return \KT_Form
      */
-    private function saveFieldsetToTermMetaOneByOne($termId, KT_Form_Fieldset $fieldSet, array $excludeFields = array()) {
+    private function saveFieldsetToTermMetaOneByOne($termId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
         /* @var $field \KT_Field */
-        foreach ($fieldSet->getFields() as $field) {
+        foreach ($fieldset->getFields() as $field) {
             if (!in_array($field->getName(), $excludeFields)) {
                 $fieldValue = $this->getSavableFieldValue($field);
                 if ($fieldValue !== "" && isset($fieldValue)) {
