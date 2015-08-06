@@ -56,7 +56,7 @@ class KT_File_Field extends KT_Field {
         $fieldValue = $this->getValue();
         $accept = $this->getAcceptFileTypeString();
 
-        $html .= "<input type=\"file\"";
+        $html = "<input type=\"file\"";
         $html .= $this->getBasicHtml();
         if (KT::issetAndNotEmpty($fieldValue)) {
             $html .= " value=\"$fieldValue\" ";

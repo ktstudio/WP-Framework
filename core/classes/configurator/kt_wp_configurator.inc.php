@@ -362,7 +362,7 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * Zapne emoji smajlíky
+     * Zapne / vypne emoji smajlíky a vše s nimi spojené
      * 
      * @author Jan Pokorný
      * @param boolean $switch

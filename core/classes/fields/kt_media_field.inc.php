@@ -48,7 +48,7 @@ class KT_Media_Field extends KT_Field {
     public function getValues() {
         $value = $this->getValue();
         if (KT::issetAndNotEmpty($value)) {
-            $ids = split(",", $value);
+            $ids = explode(",", $value);
             return $ids;
         }
         return null;
@@ -137,7 +137,7 @@ class KT_Media_Field extends KT_Field {
                             $imageData = wp_get_attachment_image_src($attachment->ID, KT_WP_IMAGE_SIZE_THUBNAIL);
                             $fileTag = "<img class=\"file\" src=\"{$imageData[0]}\">";
                         }
-                        if (KT::notIssetOrEmpty($fileTag)) {
+                        if (!isset($fileTag)) {
                             $fileTag = "<span class=\"file\">{$attachment->post_title}</span>";
                         }
                         $removeFileTag = "<a class=\"remove-file\"><span class=\"dashicons dashicons-no\"></span></a>";

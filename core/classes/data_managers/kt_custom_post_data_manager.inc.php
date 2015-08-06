@@ -161,7 +161,7 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
         }
 
         $postCollection = get_posts($this->getQueryArgs());
-
+        $options = null;
         if (KT::issetAndNotEmpty($postCollection)) {
             foreach ($postCollection as $postItem) {
                 $options[$postItem->ID] = $this->getPrefixValue($postItem->ID) . " " . $postItem->post_title . " " . $this->getSuffixValue($postItem->ID);
