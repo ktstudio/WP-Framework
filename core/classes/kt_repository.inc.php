@@ -48,7 +48,7 @@ class KT_Repository {
         }
     }
 
-    // --- gettery ------------
+// --- gettery ------------
 
     /**
      * Vrátí aktuální objekt, na kterém se nachází vnitřní iterátor pomoc haveItems() a theItems()
@@ -223,7 +223,7 @@ class KT_Repository {
         return $this->countItems;
     }
 
-    // --- settery ------------
+// --- settery ------------
 
     /**
      * Nastaví, na jakém itemu se aktuální iterovaný kolekce nachází
@@ -428,7 +428,7 @@ class KT_Repository {
         return $this;
     }
 
-    // --- veřejné funkce ------------
+// --- veřejné funkce ------------
 
     /**
      * Nastaví ručně tvořenou query se sadou dat pro prepare statment
@@ -462,60 +462,23 @@ class KT_Repository {
      *
      * @param string $column
      * @param mixed $value
-     * @param string $condition // = < > =< => <> - běžné DB MySQL conditions
+     * @param string $condition // = < > =< => <> IN IS - běžné DB MySQL conditions
      * @return \KT_Repository
      */
-    public function addWhereParam($column, $value, $condition = "=") {
+    public function addWhereParam($column, $value, $condition = null) {
+
+        if (!$condition) {
+            if (is_array($value)) {
+                $condition = "IN";
+            } else {
+                $condition = "=";
+            }
+        }
+
         $newWhereParams = array(
             "column" => $column,
             "value" => $value,
             "condition" => $condition
-        );
-
-        $currentWhereParams = $this->getQueryParams();
-        array_push($currentWhereParams, $newWhereParams);
-
-        $this->setQueryParams($currentWhereParams);
-
-        return $this;
-    }
-
-    /**
-     * Přidá WHERE parametr, kde se dotazuje na to, zda v daném sloupci je nastasven NULL
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param type $column
-     * @return \KT_Repository
-     */
-    public function addWhereIsNotNull($column) {
-        $newWhereParams = array(
-            "column" => $column,
-            "value" => " IS NOT NULL "
-        );
-
-        $currentWhereParams = $this->getQueryParams();
-        array_push($currentWhereParams, $newWhereParams);
-
-        $this->setQueryParams($currentWhereParams);
-
-        return $this;
-    }
-
-    /**
-     * Přidá WHERE parametr, kde se dotazuje na to, zda ve sloupci je nějaká hodnota - tedy není NULL
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param type $column
-     * @return \KT_Repository
-     */
-    public function addWhereIsNull($column) {
-        $newWhereParams = array(
-            "column" => $column,
-            "value" => " IS NULL "
         );
 
         $currentWhereParams = $this->getQueryParams();
@@ -629,7 +592,7 @@ class KT_Repository {
         return $this->getCurrentItem();
     }
 
-    // --- privátní metody ------------
+// --- privátní metody ------------
 
     /**
      * Připráví základní string s query na základě specifikovaných where podmínek
@@ -642,7 +605,7 @@ class KT_Repository {
     private function createConditionsQuery() {
 
         if (KT::notIssetOrEmpty($this->getQueryParams())) {
-            return "";
+            return NULL;
         }
 
         $preparedData = array();
@@ -653,10 +616,15 @@ class KT_Repository {
         $query .=" WHERE ";
 
         foreach ($this->getQueryParams() as $key => $value) {
-
-            if (KT::issetAndNotEmpty($value["condition"])) {
+            if (strtoupper($value["condition"]) == "IS") {
+                $query .= "{$value["column"]} {$value["condition"]} {$value["value"]}";
+            } else {
                 $query .= "{$value["column"]} {$value["condition"]} {$this->getValueTypeForDbQuery($value["value"])}";
-                array_push($preparedData, $value["value"]);
+                if (is_array($value["value"])) {
+                    $preparedData = array_merge($preparedData, $value["value"]);
+                } else {
+                    array_push($preparedData, $value["value"]);
+                }
             }
 
             if ($paramsCount != $key && $paramsCount > 0) {
@@ -708,10 +676,8 @@ class KT_Repository {
         }
 
         if (KT::issetAndNotEmpty($preparData)) {
-            $this->setQuery($wpdb->prepare($query, $preparData));
-            return $this;
+            $query = $wpdb->prepare($query, $preparData);
         }
-
         $this->setQuery($query);
         return $this;
     }
@@ -772,6 +738,12 @@ class KT_Repository {
             return $type = "%f";
         } elseif (is_string($value)) {
             return $type = "%s";
+        } elseif (is_array($value)) {
+            $typeArray = array();
+            foreach ($value as $singleValue) {
+                $typeArray[] = $this->getValueTypeForDbQuery($singleValue);
+            }
+            return $type = "(" . join(",", $typeArray) . ")";
         }
 
         throw new InvalidArgumentException("value for db query is not correct value");
