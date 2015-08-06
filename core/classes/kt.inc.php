@@ -618,14 +618,13 @@ class KT {
                     $original = wp_get_attachment_image_src($id, KT_WP_IMAGE_SIZE_ORIGINAL);
                     $linkUrl = $original[0];
                 }
+                $linkAttributes = "";
                 foreach ($linkArgs as $key => $value) {
                     $linkAttributes .= " $key=\"$value\"";
                 }
-                foreach ($imageArgs as $key => $value) {
-                    $imageAttributes .= " $key=\"$value\"";
-                }
+
                 $output .= self::getTabsIndent($tabsCount, "<a href=\"$linkUrl\"$linkAttributes>", true);
-                $output .= self::getTabsIndent($tabsCount + 1, "<img src=\"$imageUrl\" width=\"$imageWidth\" height=\"$imageHeight\"$imageAttributes />", true);
+                $output .= self::getTabsIndent($tabsCount + 1, self::imageGetHtml($imageUrl, $imageWidth, $imageHeight, $imageArgs));
                 $output .= self::getTabsIndent($tabsCount, "</a>", true, true);
             }
         }
@@ -684,14 +683,18 @@ class KT {
      * 
      * @author Jan Pokorný
      * 
-     * @param string $fileName Název / cesta k souboru
+     * @param string $file URL nebo cesta k souboru ve složce images
      * @param int $width Šířka obrázku
      * @param int $height Výška obrázku
      * @param array $attrs Další html atributy
      * 
      */
-    public static function imageGetHtml($fileName, $width, $height, array $attrs = null) {
-        $fileUrl = KT::imageGetUrlFromTheme($fileName);
+    public static function imageGetHtml($file, $width, $height, array $attrs = null) {
+        if (filter_var($file, FILTER_VALIDATE_URL) === false) {
+            $fileUrl = KT::imageGetUrlFromTheme($file);
+        } else {
+            $fileUrl = $file;
+        }
         $htmlAttrs = "";
         if ($attrs) {
             foreach ($attrs as $param => $value) {
