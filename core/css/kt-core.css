@@ -161,6 +161,11 @@ form#kt-form textarea
     width: 90%;
 }
 
+.chosen-search input
+{
+    float: none !important;
+}
+
 form#kt-form .required,
 table.kt-form-table .required
 {

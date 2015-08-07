@@ -705,10 +705,26 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @param string $name
      * @param string $label
-     * @return \KT_Select_Field
+     * @return \KT_Multi_Select_Field
      */
     public function addMultiSelect($name, $label = "") {
         $field = $this->fields[$name] = new KT_Multi_Select_Field($name, $label);
+        $field->setPostPrefix($this->postPrefix);
+        return $field;
+    }
+    
+    /**
+     * Funkce přidá nový typ fieldu KT_Single_Select_Field
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $name
+     * @param string $label
+     * @return \KT_Single_Select_Field
+     */
+    public function addSingleSelect($name, $label = "") {
+        $field = $this->fields[$name] = new KT_Single_Select_Field($name, $label);
         $field->setPostPrefix($this->postPrefix);
         return $field;
     }

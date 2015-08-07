@@ -30,7 +30,7 @@ class KT_Multi_Select_Field extends KT_Select_Field {
     // --- getry & settery ------------------------
 
     /**
-     * Vrátí unukátní název typu prvku v rámci formulářů ve FW
+     * Vrátí unikátní název typu prvku v rámci formulářů ve FW
      * 
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -76,7 +76,7 @@ class KT_Multi_Select_Field extends KT_Select_Field {
      * @link http://www.ktstudio.cz
      * 
      * @param string $class
-     * @return type
+     * @return string
      * @throws KT_Not_Supported_Exception
      */
     public function removeAttrClass($class) {
@@ -86,7 +86,7 @@ class KT_Multi_Select_Field extends KT_Select_Field {
         return parent::removeAttrClass($class);
     }
 
-    // --- privátní funkce ------------------
+    // --- neveřejné funkce ------------------
 
     /**
      * Zajistí, aby hodnoty byly zpracovány jako pole
