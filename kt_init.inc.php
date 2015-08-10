@@ -334,6 +334,11 @@ function kt_load_template_from_subdir($template) {
     global $taxonomy;
     global $cat;
 
+    // --- front-page ---------------------------
+    if (is_front_page()) {
+        return $template;
+    }
+    
     // --- single ---------------------------
     if (is_single()) {
         $ktTemplate = KT::getSingleTemplate($post);
