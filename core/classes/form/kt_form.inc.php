@@ -831,6 +831,32 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
+     * Kontrola, zda jsou všechny případné WP nonce prvky validní
+     * @see \KT_WP_Nonce_Field
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public function nonceValidate() {
+        if ($this->hasFieldset()) {
+            foreach ($this->getFieldsets() as $fieldset) {
+                if ($fieldset->hasFields()) {
+                    foreach ($fieldset->getFields() as $field) {
+                        if ($field->getFieldType() === KT_WP_Nonce_Field::FIELD_TYPE) {
+                            if ($field->NonceValidate() === false) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
      * Funkce umístí hodnoty do fieldu fomuláře. Možné definovat pomocí fieldsetu nebo obyčejným polem
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
