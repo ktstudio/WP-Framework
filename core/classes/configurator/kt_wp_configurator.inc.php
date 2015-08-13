@@ -21,7 +21,8 @@ final class KT_WP_Configurator {
     private $wpMenuCollection = array();
     private $widgetsCollection = array();
     private $sidebarCollection = array();
-    private $postTypesFeatures = array();
+    private $postTypesFeaturesToAdd = array();
+    private $postTypesFeaturesToRemove = array();
     private $excerptLenght = null;
     private $excerptText = null;
     private $metaboxRemover = null;
@@ -64,8 +65,15 @@ final class KT_WP_Configurator {
     /**
      * @return array
      */
-    private function getPostTypesFeatures() {
-        return $this->postTypesFeatures;
+    private function getPostTypesFeaturesToAdd() {
+        return $this->postTypesFeaturesToAdd;
+    }
+
+    /**
+     * @return array
+     */
+    private function getPostTypesFeaturesToRemove() {
+        return $this->postTypesFeaturesToRemove;
     }
 
     /**
@@ -392,8 +400,15 @@ final class KT_WP_Configurator {
         // registrace sidebar
         add_action("widgets_init", array($this, "registersSidebarsAction"));
 
-        // registrace post type support (features)
-        add_action("init", array($this, "registerPostTypeSupportAction"));
+        if (KT::arrayIssetAndNotEmpty($this->getPostTypesFeaturesToAdd())) {
+            // přidání post type supports (features)
+            add_action("init", array($this, "addPostTypeSupportAction"));
+        }
+
+        if (KT::arrayIssetAndNotEmpty($this->getPostTypesFeaturesToRemove())) {
+            // odebrání post type supports (features)
+            add_action("init", array($this, "removePostTypeSupportAction"));
+        }
 
         // délka excreptu
         if (KT::issetAndNotEmpty($this->getExcerptLength()) && $this->getExcerptLength() > 0) {
@@ -559,7 +574,6 @@ final class KT_WP_Configurator {
 
     /**
      * Přidá Post Type Support do Wordpressu, resp. zadanou vlastnost pro zadaní post typy
-     * $postTypes - pole post_types
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -568,7 +582,21 @@ final class KT_WP_Configurator {
      * @param array $postTypes
      */
     public function addPostTypeSupport($feature, array $postTypes) {
-        $this->postTypesFeatures[$feature] = $postTypes;
+        $this->postTypesFeaturesToAdd[$feature] = $postTypes;
+        return $this;
+    }
+
+    /**
+     * Odebere Post Type Support z Wordpressu, resp. zadanou vlastnost pro zadaní post typy
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $feature
+     * @param array $postTypes
+     */
+    public function removePostTypeSupport($feature, array $postTypes) {
+        $this->postTypesFeaturesToRemove[$feature] = $postTypes;
         return $this;
     }
 
@@ -752,7 +780,7 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * Provede registraci post type features (support)
+     * Provede přidání post type features (support)
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
      * @author Martin Hlaváč
@@ -760,12 +788,33 @@ final class KT_WP_Configurator {
      *
      * @return \KT_WP_Configurator
      */
-    public function registerPostTypeSupportAction() {
-        $features = $this->getPostTypesFeatures();
+    public function addPostTypeSupportAction() {
+        $features = $this->getPostTypesFeaturesToAdd();
         if (KT::issetAndNotEmpty($features)) {
             foreach ($features as $feature => $postTypes) {
                 foreach ($postTypes as $postType) {
                     add_post_type_support("$postType", "$feature");
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Provede odebrání post type features (support)
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Configurator
+     */
+    public function removePostTypeSupportAction() {
+        $features = $this->getPostTypesFeaturesToRemove();
+        if (KT::issetAndNotEmpty($features)) {
+            foreach ($features as $feature => $postTypes) {
+                foreach ($postTypes as $postType) {
+                    remove_post_type_support("$postType", "$feature");
                 }
             }
         }
