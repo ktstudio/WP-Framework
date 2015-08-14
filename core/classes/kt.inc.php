@@ -667,7 +667,7 @@ class KT {
                     continue; // tento obrázek byl již zpracován
                 }
                 array_push($processedImages, $oldSrc);
-                $newSrc = KT_CORE_IMAGES_URL . "/transparent.png";
+                $newSrc = self::imageGetTransparent();
                 if ($oldSrc !== $newSrc) {
                     $html = str_replace("src=\"$oldSrc\"", "src=\"$newSrc\" data-src=\"$oldSrc\"", $html);
                 }
@@ -676,6 +676,18 @@ class KT {
             libxml_use_internal_errors($libxmlInternalErrorsState);
         }
         return $html;
+    }
+
+    /**
+     * Vrátí průhledný ("systémový") obrázek (včetně URL)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public static function imageGetTransparent() {
+        return KT_CORE_IMAGES_URL . "/transparent.png";
     }
 
     /**

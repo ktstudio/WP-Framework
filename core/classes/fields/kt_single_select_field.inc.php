@@ -65,7 +65,7 @@ class KT_Single_Select_Field extends KT_Select_Field {
      * @param boolean $allowDeselect
      * @return \KT_Single_Select_Field
      */
-    public function setAllowDeselect($allowDeselect) {
+    public function setAllowDeselect($allowDeselect = true) {
         $this->isInAllowDeselectChange = true;
         $this->allowDeselect = $allowDeselect;
         if ($allowDeselect) {
