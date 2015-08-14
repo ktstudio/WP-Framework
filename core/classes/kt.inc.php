@@ -1161,26 +1161,28 @@ class KT {
     /**
      * Funkce vrátí single templatu ze subdir - singles
      *
-     * @author Tomáš Kocifaj
+     * @author Tomáš Kocifaj, Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
      * @param WP_Post $post
      * @return string - template path
      */
     public static function getSingleTemplate(WP_Post $post) {
-        $file = TEMPLATEPATH . '/singles/single-' . $post->post_type . '.php';
-        if ($post->post_type != 'post') {
+        $templatePart = null;
+        $template = get_post_meta($post->ID, KT_META_KEY_SINGLE_TEMPLATE, true);
+        if (KT::issetAndNotEmpty($template)) {
+            $templatePart = "-{$template}";
+        }
+        if ($post->post_type != KT_WP_POST_KEY) {
+            $file = TEMPLATEPATH . "/singles/single-{$post->post_type}{$templatePart}.php";
             if (file_exists($file)) {
                 return $file;
             }
         }
-
-        $file = TEMPLATEPATH . '/singles/single.php';
+        $file = TEMPLATEPATH . "/singles/single{$templatePart}.php";
         if (file_exists($file)) {
             return $file;
         }
-
-
         return false;
     }
 
