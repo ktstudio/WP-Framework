@@ -257,4 +257,12 @@ jQuery(document).ready(function () {
         width: "90%"
     });
 
+    // cookie statement
+    jQuery("#ktCookieStatementConfirm").click(function () {
+        var date = new Date();
+        date.setFullYear(date.getFullYear() + 10);
+        document.cookie = "kt-cookie-statement-key=1; path=/; expires=" + date.toGMTString();
+        jQuery("#ktCookieStatement").fadeOut();
+    });
+
 });

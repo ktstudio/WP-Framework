@@ -17,6 +17,7 @@ final class KT_WP_Configurator {
     const THEME_SUBPAGE_PREFIX = "appearance_page_";
     const THEME_SETTING_PAGE_SLUG = "kt-theme-setting";
     const POST_TYPE_ARCHIVE_OBJECT_KEY = "kt-post-type-archive";
+    const COOKIE_STATEMENT_KEY = "kt-cookie-statement-key";
 
     private $wpMenuCollection = array();
     private $widgetsCollection = array();
@@ -34,7 +35,8 @@ final class KT_WP_Configurator {
     private $assetsConfigurator = null;
     private $imagesLazyLoading = null;
     private $postArchiveMenu = null;
-    private $sessionEnable = false;
+    private $allowSession = false;
+    private $allowCookieStatement = false;
     private $facebookManager = null;
     private $emojiSwitch = false;
 
@@ -156,8 +158,15 @@ final class KT_WP_Configurator {
     /**
      * @return boolean
      */
-    private function getSessionEnable() {
-        return $this->sessionEnable;
+    private function getAllowSession() {
+        return $this->allowSession;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function getAllowCookieStatement() {
+        return $this->allowCookieStatement;
     }
 
     /**
@@ -322,11 +331,36 @@ final class KT_WP_Configurator {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
-     * @param type $sessionEnable
+     * @param boolean $allowSession
+     * @return \KT_WP_Configurator
+     */
+    public function setAllowSession($allowSession = true) {
+        $this->allowSession = $allowSession;
+        return $this;
+    }
+
+    /**
+     * @deprecated since version 1.4
+     * @see setAllowSession
+     * @param boolean $sessionEnable
      * @return \KT_WP_Configurator
      */
     public function setSessionEnable($sessionEnable = true) {
-        $this->sessionEnable = $sessionEnable;
+        $this->allowSession = $sessionEnable;
+        return $this;
+    }
+
+    /**
+     * Nastaví, zda se má v rámci šablony zapnout odsouhlasení cookie
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param boolean $allowCookieStatement
+     * @return \KT_WP_Configurator
+     */
+    public function setAllowCookieStatement($allowCookieStatement = true) {
+        $this->allowCookieStatement = $allowCookieStatement;
         return $this;
     }
 
@@ -496,10 +530,15 @@ final class KT_WP_Configurator {
         }
 
         // session
-        if ($this->getSessionEnable() === true) {
+        if ($this->getAllowSession() === true) {
             add_action("init", array($this, "startSesson"), 1);
             add_action("wp_logout", array($this, "endSession"));
             add_action("wp_login", array($this, "endSession"));
+        }
+
+        // cookie statement
+        if ($this->getAllowCookieStatement() === true) {
+            add_action("wp_footer", array($this, "renderCookieStatement"), 99);
         }
 
         // facebookManager
@@ -1247,6 +1286,29 @@ final class KT_WP_Configurator {
      */
     public function endSession() {
         session_destroy();
+    }
+
+    /**
+     * Provede povolení, resp. inicializaci proužku s potvrzením cookie (v patičce)
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public function renderCookieStatement() {
+        if (KT::notIssetOrEmpty($_COOKIE[self::COOKIE_STATEMENT_KEY])) {
+            $text = __("Tyto stránky využívají Cookies. Používáním těchto stránek vyjadřujete souhlas s používáním Cookies.", KT_DOMAIN);
+            $moreInfoTitle = __("Zjistit více", KT_DOMAIN);
+            $moreInfoUrl = apply_filters( "kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
+            $confirmTitle = __("OK, rozumím", KT_DOMAIN);
+            
+            echo "<div id=\"ktCookieStatement\">";
+            echo "<span id=\"ktCookieStatementText\">$text</span>";
+            echo "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
+            echo "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
+            echo "</div>";
+            echo "<noscript><style scoped>#ktCookieStatement { display:none; }</style></noscript>";
+        }
     }
 
     // --- statické funkce --------------
