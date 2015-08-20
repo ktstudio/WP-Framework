@@ -144,13 +144,25 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí string složeny s jména a příjmení uživatele
      *
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
      * @return string
      */
     public function getFullName() {
         return $this->getFirstName() . " " . $this->getLastName();
+    }
+
+    /**
+     * Vrátí titulek autora ošetřen tak, aby mohl být součástí některého z HTML attributů
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getTitleAttribute() {
+        return $titleAttributeContent = esc_attr(strip_tags(sprintf(__("Autor: %s", KT_DOMAIN), $this->getFullName())));
     }
 
     /**

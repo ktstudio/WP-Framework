@@ -10,6 +10,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
     private $files = null;
     private $data = array();
     private $permalink = null;
+    private $wpCommentsCount = null;
 
     /**
      * Základní model pro práci s daty post_typu
@@ -90,6 +91,21 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
         }
 
         return $this->gallery;
+    }
+
+    /**
+     * Vrátí WP comments STD class s počtem komentářů příspěvku
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return object Comment stats
+     */
+    public function getWpCommentsCount() {
+        if (KT::issetAndNotEmpty($this->wpCommentsCount)) {
+            return $this->wpCommentsCount;
+        }
+        return $this->wpCommentsCount = wp_count_comments($this->getPostId());
     }
 
     // --- settery ---------------------
@@ -446,6 +462,48 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Kontrola, zda je k dispozici WP comments STD class s počtem komentářů příspěvku
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return object Comment stats
+     */
+    public function isWpCommentsCount() {
+        return KT::issetAndNotEmpty($this->getWpCommentsCount());
+    }
+
+    /**
+     * Vrátí počet povolených komentářů příspěvku
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public function getApprovedCommentsCount() {
+        if ($this->isWpCommentsCount()) {
+            return $this->getWpCommentsCount()->approved;
+        }
+        return 0;
+    }
+
+    /**
+     * Vrátí celkový počet komentářů příspěvku
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public function getTotalCommentsCount() {
+        if ($this->isWpCommentsCount()) {
+            return $this->getWpCommentsCount()->total_comments;
+        }
+        return 0;
     }
 
     // --- neveřejné funkce ---------------------

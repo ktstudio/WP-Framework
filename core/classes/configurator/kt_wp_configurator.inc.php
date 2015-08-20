@@ -1296,12 +1296,13 @@ final class KT_WP_Configurator {
      * @link http://www.ktstudio.cz
      */
     public function renderCookieStatement() {
-        if (KT::notIssetOrEmpty($_COOKIE[self::COOKIE_STATEMENT_KEY])) {
+        $cookueStatementKey = KT::arrayTryGetValue($_COOKIE, self::COOKIE_STATEMENT_KEY);
+        if (KT::notIssetOrEmpty($cookueStatementKey)) {
             $text = __("Tyto stránky využívají Cookies. Používáním těchto stránek vyjadřujete souhlas s používáním Cookies.", KT_DOMAIN);
             $moreInfoTitle = __("Zjistit více", KT_DOMAIN);
-            $moreInfoUrl = apply_filters( "kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
+            $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
             $confirmTitle = __("OK, rozumím", KT_DOMAIN);
-            
+
             echo "<div id=\"ktCookieStatement\">";
             echo "<span id=\"ktCookieStatementText\">$text</span>";
             echo "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
