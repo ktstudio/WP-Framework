@@ -8,11 +8,12 @@
  */
 class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
 
-    private $commentId;
     private $comment;
     private $post;
     private $author;
     private $permalink;
+    private $avatar;
+    private $avatarUrl;
 
     /**
      * Sestavení základního modelu pro práci s komentáři na základě postu (ID)
@@ -20,12 +21,12 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @param int $commentId
+     * @param int $comment
      * @param string $metaPrefix
      */
-    function __construct($commentId, $metaPrefix = null) {
+    function __construct($comment, $metaPrefix = null) {
         parent::__construct($metaPrefix);
-        $this->setCommentId($commentId);
+        $this->initComment($comment);
     }
 
     // --- gettery ------------------------
@@ -36,22 +37,7 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
      * @return int
      */
     public function getCommentId() {
-        return $this->commentId;
-    }
-
-    /**
-     * Natavení ID přiřazeného postu
-     * 
-     * @param int $commentId
-     * @return \KT_WP_Comments_Base_Model
-     * @throws KT_Not_Supported_Exception
-     */
-    private function setCommentId($commentId) {
-        if (KT::isIdFormat($commentId)) {
-            $this->commentId = $commentId;
-            return $this;
-        }
-        throw new KT_Not_Supported_Exception("Comment ID: $commentId");
+        return $this->getComment()->comment_ID;
     }
 
     /**
@@ -60,15 +46,22 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
      * @return stdClass
      */
     public function getComment() {
-        $comment = $this->comment;
+        return $this->comment;
+    }
+
+    /**
+     * Natavení ID přiřazeného postu
+     * 
+     * @param STD_Class $comment
+     * @return \KT_WP_Comments_Base_Model
+     * @throws KT_Not_Supported_Exception
+     */
+    private function setComment($comment) {
         if (KT::issetAndNotEmpty($comment)) {
-            return $comment;
+            $this->comment = $comment;
+            return $this;
         }
-        $commentId = $this->getCommentId();
-        if (KT::isIdFormat($commentId)) {
-            return $this->comment = get_comment($commentId);
-        }
-        throw new KT_Not_Supported_Exception("Comment: {$this->getCommentId()}");
+        throw new KT_Not_Set_Argument_Exception("comment");
     }
 
     /**
@@ -246,6 +239,34 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
         return $this->permalink = get_comment_link($this->getCommentId());
     }
 
+    /**
+     * Vrátí (gr)avatar pohle emailu autora (jako HTML img)
+     * 
+     * @param int $size
+     * 
+     * @return string 
+     */
+    public function getAvatar($size = 70) {
+        if (KT::issetAndNotEmpty($this->avatar)) {
+            return $this->avatar;
+        }
+        return $this->avatar = get_avatar($this->getAuthorEmail(), $size, "", $this->getAuthorName());
+    }
+
+    /**
+     * Vrátí URL (gr)avatara pohle emailu autora
+     * 
+     * @param int $size
+     * 
+     * @return string 
+     */
+    public function getAvatarUrl($size = 70) {
+        if (KT::issetAndNotEmpty($this->avatarUrl)) {
+            return $this->avatarUrl;
+        }
+        return $this->avatarUrl = get_avatar_url($this->getAuthorEmail(), array("size" => $size));
+    }
+
     // --- veřejné metody ------------------------
 
     /**
@@ -291,6 +312,14 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     }
 
     // --- privátní metody ------------------------
+
+    private function initComment($comment) {
+        if (KT::isIdFormat($comment)) {
+            $this->setComment(get_comment($comment));
+        } else {
+            $this->setComment($comment);
+        }
+    }
 
     /**
      * Provede inicializaci všech uživatelo comment metas a nastaví je do objektu

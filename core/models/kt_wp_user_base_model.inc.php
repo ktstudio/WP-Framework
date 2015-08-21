@@ -150,7 +150,22 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @return string
      */
     public function getFullName() {
-        return $this->getFirstName() . " " . $this->getLastName();
+        if (KT::issetAndNotEmpty($this->getFirstName()) && KT::issetAndNotEmpty($this->getLastName())) {
+            return $this->getFirstName() . " " . $this->getLastName();
+        }
+        return null;
+    }
+
+    /**
+     * Vrátí buď jméno a příjmení nebo zobrazované jméno
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getName() {
+        return $this->getFullName() ? : $this->getDisplayName();
     }
 
     /**
@@ -162,7 +177,7 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @return string
      */
     public function getTitleAttribute() {
-        return $titleAttributeContent = esc_attr(strip_tags(sprintf(__("Autor: %s", KT_DOMAIN), $this->getFullName())));
+        return $titleAttributeContent = esc_attr(strip_tags(sprintf(__("Autor: %s", KT_DOMAIN), $this->getName())));
     }
 
     /**
