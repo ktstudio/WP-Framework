@@ -25,6 +25,7 @@ class KT_MetaBox implements KT_Registrable {
     private $fieldset;
     private $isDefaultAutoSave = true;
     private $pageTemplate;
+    private $postFormat;
     private $customCallback;
     private $className;
     private $idParamName;
@@ -312,6 +313,33 @@ class KT_MetaBox implements KT_Registrable {
      */
     public function setPageTemplate($pageTemplate) {
         $this->pageTemplate = $pageTemplate;
+        return $this;
+    }
+
+    /**
+     * Vrátí požadovaný post formát, pokud je zadán
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getPostFormat() {
+        return $this->postFormat;
+    }
+
+    /**
+     * Nastaví požadovaný post formát
+     * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované stránkám, které mají právě zadanou šablonu (template)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $postFormat
+     * @return \KT_MetaBox
+     */
+    public function setPostFormat($postFormat) {
+        $this->postFormat = $postFormat;
         return $this;
     }
 
@@ -778,12 +806,20 @@ class KT_MetaBox implements KT_Registrable {
         if (!$post instanceof WP_Post) {
             return true;
         }
-
         $pageTemplate = $this->getPageTemplate();
         if (KT::issetAndNotEmpty($pageTemplate)) { // chceme kontrolovat (aktuální) page template
             $currentPageTemplate = get_post_meta($post->ID, KT_WP_META_KEY_PAGE_TEMPLATE, true);
             if ($currentPageTemplate !== $pageTemplate) { // (aktuální) page template nesedí => rušíme přidání metaboxu
                 return false;
+            }
+        }
+        $postFormat = $this->getPostFormat();
+        if (KT::issetAndNotEmpty($postFormat)) { // chceme kontrolovat (aktuální) post formát
+            $currentPostFormat = get_the_terms($post->ID, "post_format");
+            if (KT::arrayIssetAndNotEmpty($currentPostFormat)) {
+                if (reset($currentPostFormat)->slug !== $postFormat) { // (aktuální) post formát nesedí => rušíme přidání metaboxu
+                    return false;
+                }
             }
         }
         return true;

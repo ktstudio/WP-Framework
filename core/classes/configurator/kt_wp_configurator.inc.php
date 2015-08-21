@@ -601,13 +601,19 @@ final class KT_WP_Configurator {
     /**
      * Přidá Theme Support do Wordpressu 
      *
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
      * @param string $feature
+     * @param array $args
+     * @return \KT_WP_Configurator
      */
-    public function addThemeSupport($feature) {
-        add_theme_support($feature);
+    public function addThemeSupport($feature, array $args = null) {
+        if (KT::arrayIssetAndNotEmpty($args)) {
+            add_theme_support($feature, $args);
+        } else {
+            add_theme_support($feature);
+        }
         return $this;
     }
 

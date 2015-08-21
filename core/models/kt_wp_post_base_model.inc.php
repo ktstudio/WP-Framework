@@ -465,6 +465,19 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
     }
 
     /**
+     * Kontrola, zda má příspěvek vybraný požadovaný formát
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $format
+     * @return bool
+     */
+    public function hasPostFormat($format) {
+        return has_post_format($format);
+    }
+
+    /**
      * Kontrola, zda je k dispozici WP comments STD class s počtem komentářů příspěvku
      * 
      * @author Martin Hlaváč

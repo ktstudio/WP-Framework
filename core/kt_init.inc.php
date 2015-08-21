@@ -64,6 +64,16 @@ define("KT_WP_POST_TYPE_SUPPORT_COMMENTS_KEY", "comments");
 define("KT_WP_POST_TYPE_SUPPORT_REVISIONS_KEY", "revisions");
 define("KT_WP_POST_TYPE_SUPPORT_PAGE_ATTRIBUTES_KEY", "page-attributes");
 define("KT_WP_POST_TYPE_SUPPORT_POST_FORMATS_KEY", "post-formats");
+// --- post formats ------------------------
+define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_ASIDE", "aside");
+define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_GALLERY", "gallery");
+define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_LINK", "link");
+define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_IMAGE", "image");
+define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_QUOTE", "quote");
+define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_STATUS", "status");
+define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_VIDEO", "video");
+define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_AUDIO", "audio");
+define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_CHAT", "chat");
 // --- taxonomies ------------------------
 define("KT_WP_TAG_KEY", "post_tag");
 define("KT_WP_CATEGORY_KEY", "category");
