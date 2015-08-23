@@ -330,7 +330,7 @@ class KT_MetaBox implements KT_Registrable {
 
     /**
      * Nastaví požadovaný post formát
-     * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované stránkám, které mají právě zadanou šablonu (template)
+     * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované příspěvkům, stránkám apod., které mají právě zadaný post formát
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -817,9 +817,11 @@ class KT_MetaBox implements KT_Registrable {
         if (KT::issetAndNotEmpty($postFormat)) { // chceme kontrolovat (aktuální) post formát
             $currentPostFormat = get_the_terms($post->ID, "post_format");
             if (KT::arrayIssetAndNotEmpty($currentPostFormat)) {
-                if (reset($currentPostFormat)->slug !== $postFormat) { // (aktuální) post formát nesedí => rušíme přidání metaboxu
+                if (reset($currentPostFormat)->slug !== "post-format-$postFormat") { // (aktuální) post formát nesedí => rušíme přidání metaboxu
                     return false;
                 }
+            } else {
+                return false;
             }
         }
         return true;
