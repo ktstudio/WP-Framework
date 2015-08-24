@@ -408,24 +408,18 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
      */
     public static function getCommentMetas($commentId, $prefix = null) {
         global $wpdb;
-
+        $results = array();
         $query = "SELECT meta_key, meta_value FROM {$wpdb->commentmeta} WHERE comment_id = %d";
-
+        $prepareData[] = $commentId;
         if (KT::issetAndNotEmpty($prefix)) {
-            $query .= " AND meta_key LIKE '$prefix%'";
+            $query .= " AND meta_key LIKE '%s'";
+            $prepareData[] = "{$prefix}%";
         }
-
-        $results = $wpdb->get_results($wpdb->prepare($query, $commentId), ARRAY_A);
-
-        if (KT::issetAndNotEmpty($results)) {
-            foreach ($results as $result) {
-                $output[$result["meta_key"]] = $result["meta_value"];
-            }
-        } else {
-            $output = array();
+        $metas = $wpdb->get_results($wpdb->prepare($query, $prepareData), ARRAY_A);
+        foreach ($metas as $meta) {
+            $results[$meta["meta_key"]] = $meta["meta_value"];
         }
-
-        return $output;
+        return $results;
     }
 
     // --- privátní metody ------------------------
