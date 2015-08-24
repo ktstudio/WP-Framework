@@ -4,13 +4,14 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
 
     const DEFAULT_EXCERPT_LENGTH = 55;
 
-    private $post = null;
-    private $author = null;
-    private $gallery = null;
-    private $files = null;
+    private $post;
+    private $author;
+    private $gallery;
+    private $files;
     private $data = array();
-    private $permalink = null;
-    private $wpCommentsCount = null;
+    private $permalink;
+    private $categoriesIds;
+    private $wpCommentsCount;
 
     /**
      * Základní model pro práci s daty post_typu
@@ -432,6 +433,23 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
             }
         }
         return $termsNames;
+    }
+
+    /**
+     * Vrátí pole IDček kategorií příspěvku
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array $args případné pole argumentů (budou "zacachovány")
+     * 
+     * @return array
+     */
+    public function getCategoriesIds($args = array()) {
+        if (KT::issetAndNotEmpty($this->categoriesIds)) {
+            return $this->categoriesIds;
+        }
+        return $this->categoriesIds = wp_get_post_categories($this->getPostId(), $args);
     }
 
     /**
