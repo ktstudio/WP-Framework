@@ -249,7 +249,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
             if ($withTheFilter) {
                 return apply_filters("the_excerpt", $excerptFilterered);
             }
-            return $excerptFilterered;
+            return strip_shortcodes(strip_tags($excerptFilterered));
         }
         return null;
     }
