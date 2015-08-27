@@ -75,6 +75,15 @@ class KT_WP_Nonce_Field extends KT_Field {
      * @return string
      */
     public function getField() {
+//        $name = $this->getName();
+//        if (KT::issetAndNotEmpty($name)) {
+//            $postPrefix = $this->getPostPrefix();
+//            if (KT::issetAndNotEmpty($postPrefix)) {
+//                $nameAttribute = "{$postPrefix}[{$name}]";
+//            } else {
+//                $nameAttribute = $name;
+//            }
+//        }
         $html = wp_nonce_field($this->getAction(), $this->getName() ? : self::DEFAULT_NONCE_NAME, true, false);
         return $html;
     }
@@ -88,8 +97,8 @@ class KT_WP_Nonce_Field extends KT_Field {
      *
      * @return boolean
      */
-    public function Validate() {
-        return $this->NonceValidate() && parent::Validate();
+    public function validate() {
+        return $this->nonceValidate() && parent::Validate();
     }
 
     /**
@@ -101,7 +110,7 @@ class KT_WP_Nonce_Field extends KT_Field {
      * 
      * @return boolean
      */
-    public function NonceValidate() {
+    public function nonceValidate() {
         $value = $this->getValue();
         if (KT::issetAndNotEmpty($value) && !wp_verify_nonce($value, $this->getAction())) {
             $this->setError(__("Chyba zpracování - volání", KT_DOMAIN));

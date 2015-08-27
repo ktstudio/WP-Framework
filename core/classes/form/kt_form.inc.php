@@ -820,7 +820,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
             }
 
             foreach ($fieldset->getFields() as $field) {
-                $field->Validate();
+                $field->validate();
                 if ($field->hasErrorMsg()) {
                     $this->setError(true);
                 }
@@ -845,7 +845,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 if ($fieldset->hasFields()) {
                     foreach ($fieldset->getFields() as $field) {
                         if ($field->getFieldType() === KT_WP_Nonce_Field::FIELD_TYPE) {
-                            if ($field->NonceValidate() === false) {
+                            if ($field->nonceValidate() === false) {
                                 return false;
                             }
                         }

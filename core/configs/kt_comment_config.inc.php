@@ -6,16 +6,26 @@
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-class KT_WP_Comment_Base_Config {
+class KT_Comment_Config {
 
     const COMMENT_FIELDSET = "kt-comment";
     const AUTHOR = "author";
     const EMAIL = "email";
     const URL = "url";
     const COMMENT = "comment";
+    const FAVOURITE = "kt-comment-favourite";
+    const NONCE = "kt-comment-nonce";
 
     // --- fieldsets ---------------------------
 
+    /**
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param WP_User $currentUser
+     * @return \KT_Form_Fieldset
+     */
     public static function getCommentFieldset(WP_User $currentUser = null) {
         $fieldset = new KT_Form_Fieldset(self::COMMENT_FIELDSET);
         $fieldset->setPostPrefix(self::COMMENT_FIELDSET);
@@ -42,8 +52,49 @@ class KT_WP_Comment_Base_Config {
                 ->setAttrMaxlength(1000)
                 ->addRule(KT_Field_Validator::REQUIRED, __("Komentář je povinná položka.", KT_DOMAIN))
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Komentář může mít maximálně 1000 znaků.", KT_DOMAIN), 1000);
+        $fieldset->addField(self::getCommentFavouriteField(__("Kontrola:", KT_DOMAIN)));
+        $fieldset->addField(self::getCommentNonceField($fieldset->getName(), __("Kontrola:", KT_DOMAIN)));
 
         return $fieldset;
+    }
+
+    /**
+     * Vrátí kontrolní (skrytý) field typu nezadávejte text (pro roboty)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $label
+     * @param string $postPrefix
+     * @param string $name
+     * @return \KT_Text_Field
+     */
+    public static function getCommentFavouriteField($label = "", $postPrefix = self::COMMENT_FIELDSET, $name = self::FAVOURITE) {
+
+        $field = new KT_Text_Field($name, $label);
+        $field->setPostPrefix($postPrefix);
+        $field->setPlaceholder(__("Nevyplňujte, pokud jste člověk", KT_DOMAIN))
+                ->addAttrClass("hidden")
+                ->addAttribute("maxlength", 30);
+        return $field;
+    }
+
+    /**
+     * Vrátí kontrolní (skrytý) field typu WP nonce
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $action
+     * @param string $label
+     * @param string $postPrefix
+     * @param string $name
+     * @return \KT_WP_Nonce_Field
+     */
+    public static function getCommentNonceField($action = self::COMMENT_FIELDSET, $label = "", $postPrefix = self::COMMENT_FIELDSET, $name = self::NONCE) {
+        $field = new KT_WP_Nonce_Field($action, $name, $label);
+        $field->setPostPrefix($postPrefix);
+        return $field;
     }
 
 }

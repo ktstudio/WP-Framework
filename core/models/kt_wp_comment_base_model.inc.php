@@ -355,14 +355,22 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
      * @link http://www.ktstudio.cz
      * 
      * @param int $size
+     * @param bool $clearUrl označení, zda mát být URL čístá - bez parametrů
      * 
      * @return string 
      */
-    public function getAvatarUrl($size = 70) {
+    public function getAvatarUrl($size = 70, $clearUrl = true) {
         if (KT::issetAndNotEmpty($this->avatarUrl)) {
             return $this->avatarUrl;
         }
-        return $this->avatarUrl = get_avatar_url($this->getAuthorEmail(), array("size" => $size));
+        $avatarUrl = get_avatar_url($this->getAuthorEmail(), array("size" => $size));
+        if (KT::issetAndNotEmpty($avatarUrl)) {
+            if ($clearUrl) {
+                $avatarUrl = strtok($avatarUrl, "?");
+            }
+            return $this->avatarUrl = $avatarUrl;
+        }
+        return null;
     }
 
     // --- veřejné metody ------------------------
