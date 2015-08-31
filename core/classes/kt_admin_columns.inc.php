@@ -111,7 +111,7 @@ class KT_Admin_Columns {
                 if (KT::issetAndNotEmpty($post)) {
                     $property = $args[self::PROPERTY_PARAM_KEY];
                     $value = $post->$property;
-                    $filterFunction = $args[self::FILTER_FUNCTION];
+                    $filterFunction = KT::arrayTryGetValue($args, self::FILTER_FUNCTION);
                     if (KT::issetAndNotEmpty($filterFunction)) {
                         $value = apply_filters("$filterFunction", $value);
                     }
@@ -124,7 +124,7 @@ class KT_Admin_Columns {
                 $postMeta = get_post_meta($postId, $args[self::METAKEY_PARAM_KEY], true);
                 if (isset($postMeta)) {
                     $value = $postMeta;
-                    $filterFunction = $args[self::FILTER_FUNCTION];
+                    $filterFunction = KT::arrayTryGetValue($args, self::FILTER_FUNCTION);
                     if (KT::issetAndNotEmpty($filterFunction)) {
                         $value = apply_filters($filterFunction, $value);
                     }
