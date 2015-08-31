@@ -376,6 +376,18 @@ class KT {
     }
 
     /**
+     * Kontrola, zda je právě prováděn WP ajax (na základě konstanty DOING_AJAX)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return bool
+     */
+    public static function isWpAjax() {
+        return defined("DOING_AJAX") && DOING_AJAX;
+    }
+
+    /**
      * Vypise obsah cehokoliv (pole, objektu, ...)
      * Slouzi jako pomucka pri programovani
      *

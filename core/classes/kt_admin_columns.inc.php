@@ -45,7 +45,8 @@ class KT_Admin_Columns {
 
     public function addColumns($defaults) {
         global $typenow;
-        if ($this->postType == $typenow) {
+        $postType = filter_var($_REQUEST["post_type"])? : $typenow;
+        if ($this->postType == $postType) {
             $columns = array();
             $indexes = array();
             foreach ($this->columns as $key => $args) {
@@ -76,7 +77,8 @@ class KT_Admin_Columns {
 
     public function sortableColumns($columns) {
         global $typenow;
-        if ($this->postType == $typenow) {
+        $postType = filter_var($_REQUEST["post_type"])? : $typenow;
+        if ($this->postType == $postType) {
             foreach ($this->sortableColumns as $key => $args) {
                 if ($args[self::SORTABLE_PARAM_KEY]) {
                     $columns[$key] = $key;

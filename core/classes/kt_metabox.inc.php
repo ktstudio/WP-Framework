@@ -489,7 +489,7 @@ class KT_MetaBox implements KT_Registrable {
      * @param integer $postId
      */
     public function savePost($postId) {
-        if (wp_is_post_revision($postId) || wp_is_post_autosave($postId)) {
+        if (wp_is_post_revision($postId) || wp_is_post_autosave($postId) || KT::isWpAjax()) {
             return $postId;
         }
         if (KT::arrayIssetAndNotEmpty($_POST)) {
@@ -516,7 +516,7 @@ class KT_MetaBox implements KT_Registrable {
      * @param integer $commentId
      */
     public function saveComment($commentId) {
-        if (KT::arrayIssetAndNotEmpty($_POST)) {
+        if (KT::arrayIssetAndNotEmpty($_POST) || KT::isWpAjax()) {
             $isDefaultAutoSave = $this->getIsDefaultAutoSave();
             if ($isDefaultAutoSave) {
                 $form = new KT_form();
@@ -799,10 +799,13 @@ class KT_MetaBox implements KT_Registrable {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param integer $postId
+     * @param WP_Post $post
      * @return boolean
      */
     private function CheckCanHandlePostRequest($post) {
+        if (KT::isWpAjax() && !$this->getIsDefaultAutoSave()) {
+            return false; // v případě ajaxu (zatím) nechceme přidávat ani zpracovávat naše Metaboxy
+        }
         if (!$post instanceof WP_Post) {
             return true;
         }
