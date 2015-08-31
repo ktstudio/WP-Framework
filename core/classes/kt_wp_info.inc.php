@@ -19,6 +19,9 @@ class KT_WP_Info {
     }
 
     public function getWpUrl() {
+        if (function_exists("icl_get_home_url")) {
+            return icl_get_home_url();
+        }
         return get_bloginfo("wpurl");
     }
 
