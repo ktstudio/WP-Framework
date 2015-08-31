@@ -24,8 +24,8 @@ class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
      * @param type $title - Titulek v menu (attr title)
      * @param type $menuTitle - Název v menu
      * @param type $capability - Právo editace
-     * @param type $slug - slug v url adrese při volán íbase
-     * @param type $icon - url iconka v menu
+     * @param type $slug - slug v url adrese při volání base
+     * @param type $iconUrl - url iconka v menu
      * @param type $position - pozice v menu - defaultně 55
      */
     public function __construct($title, $menuTitle, $capability, $slug, $iconUrl, $position = 55) {
@@ -212,7 +212,7 @@ class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
         $screenId = add_menu_page(
                 $this->getTitle(), $this->getMenuTitle(), $this->getCapability(), $this->getSlug(), $callBackScreenFunction, $this->getIcon(), $this->getPosition()
         );
-        
+
         $this->screenUpdatingRedirect($screenId);
 
         if (is_array($callBackScreenFunction)) {

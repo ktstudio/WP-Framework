@@ -91,7 +91,7 @@ final class KT_WP_Metabox_Remover_Configurator {
     }
 
     /**
-     * Odstraní meatbox s komenáři u příslušného post type
+     * Odstraní meatbox s komentáři u příslušného post type
      * Default post_type = post
      *
      * @param string $postType
@@ -115,7 +115,7 @@ final class KT_WP_Metabox_Remover_Configurator {
     }
 
     /**
-     * Odstraní meatbox s komenáři u příslušného post type
+     * Odstraní meatbox s autorem u příslušného post type
      * Default post_type = post
      *
      * @param string $postType
@@ -127,7 +127,7 @@ final class KT_WP_Metabox_Remover_Configurator {
     }
 
     /**
-     * Odstraní meatbox s komenáři u příslušného post type
+     * Odstraní meatbox s vlastními inputy u příslušného post type
      * Default post_type = post
      *
      * @param string $postType
