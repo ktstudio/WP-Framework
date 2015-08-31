@@ -28,5 +28,6 @@
     },
     "autoload": {
         "files": ["kt_init.inc.php"]
-    }
+    },
+    "minimum-stability": "dev"
 }

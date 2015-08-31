@@ -578,6 +578,26 @@ class KT {
     }
 
     /**
+     * Kontrola, zda je právě aktivní localhost (na základě SERVER - REMOTE_ADDR)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array $customWhitelist
+     * @return boolean
+     */
+    public static function isLocalhost($customWhitelist = null) {
+        $whitelist = array("127.0.0.1", "::1");
+        if (KT::arrayIssetAndNotEmpty($customWhitelist)) {
+            $whitelist = array_merge($whitelist, $customWhitelist);
+        }
+        if (in_array($_SERVER["REMOTE_ADDR"], $whitelist)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Na základě zadané adresy vrátí GPS souřadnice pomocí Google API pokud je možné
      * 
      * @author Martin Hlaváč
@@ -1169,9 +1189,11 @@ class KT {
     public static function textLinesToHtml($text, $tag, $class = null) {
         $lines = self::textLinesToArray($text);
         if (KT::arrayIssetAndNotEmpty($lines)) {
+            $classPart = null;
             if (KT::issetAndNotEmpty($class)) {
                 $classPart = " class=\"{$class}\"";
             }
+            $output = null;
             foreach ($lines as $line) {
                 $output .= "<{$tag}{$classPart}>{$line}</{$tag}>";
             }

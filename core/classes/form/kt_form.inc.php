@@ -1442,6 +1442,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         if (KT::issetAndNotEmpty($id)) {
             $idPart = " id=\"{$id}\"";
         }
+        $classPart = null;
         if (KT::issetAndNotEmpty($id)) {
             $classPart = " class=\"{$class}\"";
         }
