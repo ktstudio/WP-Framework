@@ -1,0 +1,32 @@
+{
+    "name": "ktstudio/wp-framework",
+    "description": "(KT) WordPress framework for developers of templates",
+    "keywords": ["wordpress", "framework"],
+    "homepage": "http://www.wpframework.cz",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Martin Hlaváč",
+            "email": "hlavac@ktstudio.cz",
+            "homepage": "http://www.ktstudio.cz/",
+            "role": "Developer"
+        },
+        {
+            "name": "Tomáš Kocifaj",
+            "email": "kocifaj@ktstudio.cz",
+            "homepage": "http://www.ktstudio.cz/",
+            "role": "Developer"
+        },
+        {
+            "name": "Jan Pokorný",
+            "email": "pokorny.h@seznam.cz",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "files": ["kt_init.inc.php"]
+    }
+}

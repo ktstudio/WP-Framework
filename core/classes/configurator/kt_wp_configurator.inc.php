@@ -994,7 +994,7 @@ final class KT_WP_Configurator {
      * @return string
      */
     public function registerLoginLogoUrlFilter() {
-        return 'http://www.ktstudio.cz';
+        return 'http://www.wpframework.cz';
     }
 
     /**
