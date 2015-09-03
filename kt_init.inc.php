@@ -2,7 +2,7 @@
 
 define("KT_LOADED", true);
 
-define("KT_VERSION", "1.4");
+define("KT_VERSION", "1.5");
 
 define("KT_BASE_PATH", path_join(TEMPLATEPATH, "kt"));
 define("KT_BASE_URL", get_template_directory_uri() . "/kt");

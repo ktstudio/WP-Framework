@@ -101,6 +101,23 @@ class KT {
     }
 
     /**
+     * Přidání (přiřazené) hodnoty do zadaného pole, pokud tato hodnota ještě není v poli obsažena
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array $haystack
+     * @param mixed $value
+     * @return array
+     */
+    public static function arrayAdd(array $haystack, $value) {
+        if (isset($value) && !in_array($value, $haystack)) {
+            array_push($haystack, $value);
+        }
+        return $haystack;
+    }
+
+    /**
      * Ze zadaného pole odstraní zadanou hodnotu a vrátí pole hodnot
      * 
      * @author Martin Hlaváč
@@ -148,7 +165,7 @@ class KT {
      * @link http://www.ktstudio.cz
      * 
      * @param array $haystack
-     * @param int|string $needle
+     * @param mixed $needle
      * @return array
      */
     public static function arrayRemoveByValue(array $haystack = null, $needle) {

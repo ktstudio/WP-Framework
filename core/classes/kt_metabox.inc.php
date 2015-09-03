@@ -15,6 +15,8 @@ class KT_MetaBox implements KT_Registrable {
     const PRIORITY_HIGH = "high";
     const PRIORITY_DEFAULT = "default";
     const PRIORITY_CORE = "core";
+    const PAGE_TEMPLATE_KEY = "page.php";
+    const PAGES_TEMPLATE_KEY = "pages/page.php";
 
     private $id;
     private $title;
@@ -24,7 +26,7 @@ class KT_MetaBox implements KT_Registrable {
     private $dataType;
     private $fieldset;
     private $isDefaultAutoSave = true;
-    private $pageTemplate;
+    private $pageTemplates = array();
     private $postFormat;
     private $customCallback;
     private $className;
@@ -290,19 +292,95 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
-     * Vrátí (název) šablony stránky, pokud je zadán
+     * Vrátí výčet (názvů) šablon stránek, pokud jsou zadány
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return array
+     */
+    public function getPageTemplates() {
+        return $this->pageTemplates;
+    }
+
+    /**
+     * Vrátí pouze první page template, proto není vhodné používat, raději @see getPageTemplates
+     *
+     * @deprecated since version 1.5
+     * 
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
      * @return string
      */
     public function getPageTemplate() {
-        return $this->pageTemplate;
+        return reset($this->getPageTemplates());
     }
 
     /**
-     * Nastaví název šablony stránky
+     * Přidá (další/nový) název šablony stránky
+     * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované stránkám, které mají právě zadanou šablonu (template)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $pageTemplate
+     * @return \KT_MetaBox
+     */
+    public function addPageTemplate($pageTemplate) {
+        $this->pageTemplates = KT::arrayAdd($this->getPageTemplates(), $pageTemplate);
+        return $this;
+    }
+
+    /**
+     * Přidá (další/nové) názvy šablon stránek
+     * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované stránkám, které mají právě zadanou šablonu (template)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param array $pageTemplates
+     * @return \KT_MetaBox
+     */
+    public function addPageTemplates(array $pageTemplates) {
+        $this->pageTemplates = array_merge($this->getPageTemplates(), $pageTemplates);
+        return $this;
+    }
+
+    /**
+     * Odebere (zadaný) název šablony stránky
+     * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované stránkám, které mají právě zadanou šablonu (template)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $pageTemplate
+     * @return \KT_MetaBox
+     */
+    public function RemovePageTemplate($pageTemplate) {
+        $this->pageTemplates = KT::arrayRemoveByValue($this->getPageTemplates(), $pageTemplate);
+        return $this;
+    }
+
+    /**
+     * Odebere (zadané) názvy šablon stránek
+     * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované stránkám, které mají právě zadanou šablonu (template)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param array $pageTemplates
+     * @return \KT_MetaBox
+     */
+    public function RemovePageTemplates(array $pageTemplates) {
+        foreach ($pageTemplates as $pageTemplate) {
+            $this->RemovePageTemplate($pageTemplate);
+        }
+        return $this;
+    }
+
+    /**
+     * Nastaví název šablony stránky (pouze jeden)
      * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované stránkám, které mají právě zadanou šablonu (template)
      *
      * @author Martin Hlaváč
@@ -312,7 +390,7 @@ class KT_MetaBox implements KT_Registrable {
      * @return \KT_MetaBox
      */
     public function setPageTemplate($pageTemplate) {
-        $this->pageTemplate = $pageTemplate;
+        $this->pageTemplates = array($pageTemplate);
         return $this;
     }
 
@@ -809,11 +887,18 @@ class KT_MetaBox implements KT_Registrable {
         if (!$post instanceof WP_Post) {
             return true;
         }
-        $pageTemplate = $this->getPageTemplate();
-        if (KT::issetAndNotEmpty($pageTemplate)) { // chceme kontrolovat (aktuální) page template
-            $currentPageTemplate = get_post_meta($post->ID, KT_WP_META_KEY_PAGE_TEMPLATE, true);
-            if ($currentPageTemplate !== $pageTemplate) { // (aktuální) page template nesedí => rušíme přidání metaboxu
-                return false;
+        if ($post->post_type == KT_WP_PAGE_KEY) {
+            $pageTemplates = $this->getPageTemplates();
+            if (KT::arrayIssetAndNotEmpty($pageTemplates)) { // chceme kontrolovat (aktuální) page template(y)
+                $currentPageTemplate = get_post_meta($post->ID, KT_WP_META_KEY_PAGE_TEMPLATE, true);
+                if (KT::issetAndNotEmpty($currentPageTemplate)) {
+                    $pageTemplateResult = in_array($currentPageTemplate, $pageTemplates); // (aktuální) page template nesedí => rušíme přidání metaboxu
+                } else {
+                    $pageTemplateResult = ($pageTemplate == self::PAGE_TEMPLATE_KEY || $pageTemplate == self::PAGES_TEMPLATE_KEY); // povolení normálních stránek
+                }
+                if (!$pageTemplateResult) {
+                    return false;
+                }
             }
         }
         $postFormat = $this->getPostFormat();
