@@ -376,6 +376,18 @@ class KT {
     }
 
     /**
+     * Kontrola, zda je právě prováděn WP ajax (na základě konstanty DOING_AJAX)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return bool
+     */
+    public static function isWpAjax() {
+        return defined("DOING_AJAX") && DOING_AJAX;
+    }
+
+    /**
      * Vypise obsah cehokoliv (pole, objektu, ...)
      * Slouzi jako pomucka pri programovani
      *
@@ -566,6 +578,26 @@ class KT {
     }
 
     /**
+     * Kontrola, zda je právě aktivní localhost (na základě SERVER - REMOTE_ADDR)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array $customWhitelist
+     * @return boolean
+     */
+    public static function isLocalhost($customWhitelist = null) {
+        $whitelist = array("127.0.0.1", "::1");
+        if (KT::arrayIssetAndNotEmpty($customWhitelist)) {
+            $whitelist = array_merge($whitelist, $customWhitelist);
+        }
+        if (in_array($_SERVER["REMOTE_ADDR"], $whitelist)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Na základě zadané adresy vrátí GPS souřadnice pomocí Google API pokud je možné
      * 
      * @author Martin Hlaváč
@@ -618,14 +650,13 @@ class KT {
                     $original = wp_get_attachment_image_src($id, KT_WP_IMAGE_SIZE_ORIGINAL);
                     $linkUrl = $original[0];
                 }
+                $linkAttributes = "";
                 foreach ($linkArgs as $key => $value) {
                     $linkAttributes .= " $key=\"$value\"";
                 }
-                foreach ($imageArgs as $key => $value) {
-                    $imageAttributes .= " $key=\"$value\"";
-                }
+
                 $output .= self::getTabsIndent($tabsCount, "<a href=\"$linkUrl\"$linkAttributes>", true);
-                $output .= self::getTabsIndent($tabsCount + 1, "<img src=\"$imageUrl\" width=\"$imageWidth\" height=\"$imageHeight\"$imageAttributes />", true);
+                $output .= self::getTabsIndent($tabsCount + 1, self::imageGetHtml($imageUrl, $imageWidth, $imageHeight, $imageArgs));
                 $output .= self::getTabsIndent($tabsCount, "</a>", true, true);
             }
         }
@@ -668,7 +699,7 @@ class KT {
                     continue; // tento obrázek byl již zpracován
                 }
                 array_push($processedImages, $oldSrc);
-                $newSrc = KT_CORE_IMAGES_URL . "/transparent.png";
+                $newSrc = self::imageGetTransparent();
                 if ($oldSrc !== $newSrc) {
                     $html = str_replace("src=\"$oldSrc\"", "src=\"$newSrc\" data-src=\"$oldSrc\"", $html);
                 }
@@ -680,18 +711,34 @@ class KT {
     }
 
     /**
+     * Vrátí průhledný ("systémový") obrázek (včetně URL)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public static function imageGetTransparent() {
+        return KT_CORE_IMAGES_URL . "/transparent.png";
+    }
+
+    /**
      * Vratí html tag img připravený na lazy load
      * 
      * @author Jan Pokorný
      * 
-     * @param string $fileName Název / cesta k souboru
+     * @param string $file URL nebo cesta k souboru ve složce images
      * @param int $width Šířka obrázku
      * @param int $height Výška obrázku
      * @param array $attrs Další html atributy
      * 
      */
-    public static function imageGetHtml($fileName, $width, $height, array $attrs = null) {
-        $fileUrl = KT::imageGetUrlFromTheme($fileName);
+    public static function imageGetHtml($file, $width, $height, array $attrs = null) {
+        if (filter_var($file, FILTER_VALIDATE_URL) === false) {
+            $fileUrl = KT::imageGetUrlFromTheme($file);
+        } else {
+            $fileUrl = $file;
+        }
         $htmlAttrs = "";
         if ($attrs) {
             foreach ($attrs as $param => $value) {
@@ -1142,9 +1189,11 @@ class KT {
     public static function textLinesToHtml($text, $tag, $class = null) {
         $lines = self::textLinesToArray($text);
         if (KT::arrayIssetAndNotEmpty($lines)) {
+            $classPart = null;
             if (KT::issetAndNotEmpty($class)) {
                 $classPart = " class=\"{$class}\"";
             }
+            $output = null;
             foreach ($lines as $line) {
                 $output .= "<{$tag}{$classPart}>{$line}</{$tag}>";
             }
@@ -1158,26 +1207,28 @@ class KT {
     /**
      * Funkce vrátí single templatu ze subdir - singles
      *
-     * @author Tomáš Kocifaj
+     * @author Tomáš Kocifaj, Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
      * @param WP_Post $post
      * @return string - template path
      */
     public static function getSingleTemplate(WP_Post $post) {
-        $file = TEMPLATEPATH . '/singles/single-' . $post->post_type . '.php';
-        if ($post->post_type != 'post') {
+        $templatePart = null;
+        $template = get_post_meta($post->ID, KT_META_KEY_SINGLE_TEMPLATE, true);
+        if (KT::issetAndNotEmpty($template)) {
+            $templatePart = "-{$template}";
+        }
+        if ($post->post_type != KT_WP_POST_KEY) {
+            $file = TEMPLATEPATH . "/singles/single-{$post->post_type}{$templatePart}.php";
             if (file_exists($file)) {
                 return $file;
             }
         }
-
-        $file = TEMPLATEPATH . '/singles/single.php';
+        $file = TEMPLATEPATH . "/singles/single{$templatePart}.php";
         if (file_exists($file)) {
             return $file;
         }
-
-
         return false;
     }
 

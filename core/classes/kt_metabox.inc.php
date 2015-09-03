@@ -25,6 +25,7 @@ class KT_MetaBox implements KT_Registrable {
     private $fieldset;
     private $isDefaultAutoSave = true;
     private $pageTemplate;
+    private $postFormat;
     private $customCallback;
     private $className;
     private $idParamName;
@@ -316,6 +317,33 @@ class KT_MetaBox implements KT_Registrable {
     }
 
     /**
+     * Vrátí požadovaný post formát, pokud je zadán
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getPostFormat() {
+        return $this->postFormat;
+    }
+
+    /**
+     * Nastaví požadovaný post formát
+     * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované příspěvkům, stránkám apod., které mají právě zadaný post formát
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $postFormat
+     * @return \KT_MetaBox
+     */
+    public function setPostFormat($postFormat) {
+        $this->postFormat = $postFormat;
+        return $this;
+    }
+
+    /**
      * Vrátí název případné vlastní funkce pro callback
      *
      * @author Martin Hlaváč
@@ -461,7 +489,7 @@ class KT_MetaBox implements KT_Registrable {
      * @param integer $postId
      */
     public function savePost($postId) {
-        if (wp_is_post_revision($postId) || wp_is_post_autosave($postId)) {
+        if (wp_is_post_revision($postId) || wp_is_post_autosave($postId) || KT::isWpAjax()) {
             return $postId;
         }
         if (KT::arrayIssetAndNotEmpty($_POST)) {
@@ -488,7 +516,7 @@ class KT_MetaBox implements KT_Registrable {
      * @param integer $commentId
      */
     public function saveComment($commentId) {
-        if (KT::arrayIssetAndNotEmpty($_POST)) {
+        if (KT::arrayIssetAndNotEmpty($_POST) || KT::isWpAjax()) {
             $isDefaultAutoSave = $this->getIsDefaultAutoSave();
             if ($isDefaultAutoSave) {
                 $form = new KT_form();
@@ -771,18 +799,31 @@ class KT_MetaBox implements KT_Registrable {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param integer $postId
+     * @param WP_Post $post
      * @return boolean
      */
     private function CheckCanHandlePostRequest($post) {
+        if (KT::isWpAjax() && !$this->getIsDefaultAutoSave()) {
+            return false; // v případě ajaxu (zatím) nechceme přidávat ani zpracovávat naše Metaboxy
+        }
         if (!$post instanceof WP_Post) {
             return true;
         }
-
         $pageTemplate = $this->getPageTemplate();
         if (KT::issetAndNotEmpty($pageTemplate)) { // chceme kontrolovat (aktuální) page template
             $currentPageTemplate = get_post_meta($post->ID, KT_WP_META_KEY_PAGE_TEMPLATE, true);
             if ($currentPageTemplate !== $pageTemplate) { // (aktuální) page template nesedí => rušíme přidání metaboxu
+                return false;
+            }
+        }
+        $postFormat = $this->getPostFormat();
+        if (KT::issetAndNotEmpty($postFormat)) { // chceme kontrolovat (aktuální) post formát
+            $currentPostFormat = get_the_terms($post->ID, "post_format");
+            if (KT::arrayIssetAndNotEmpty($currentPostFormat)) {
+                if (reset($currentPostFormat)->slug !== "post-format-$postFormat") { // (aktuální) post formát nesedí => rušíme přidání metaboxu
+                    return false;
+                }
+            } else {
                 return false;
             }
         }

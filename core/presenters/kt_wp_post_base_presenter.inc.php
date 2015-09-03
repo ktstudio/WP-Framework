@@ -2,6 +2,8 @@
 
 class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
 
+    private $thumbnailImagePermalink;
+
     /**
      * Základní presenter pro práci s daty post_typu
      * 
@@ -209,16 +211,20 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     }
 
     /**
-     * Vrátí URL pro odkaz na (velký) obrázek (thumb)
+     * Vrátí URL pro odkaz na obrázek (thumb)
+     * Defaultní velikost - Large
      * 
      * @return string (URL)
      */
-    public function getThumbnailImagePermalink() {
-        $src = wp_get_attachment_image_src($this->getModel()->getThumbnailId(), KT_WP_IMAGE_SIZE_LARGE);
-        if (KT::arrayIssetAndNotEmpty($src)) {
-            return $src[0];
+    public function getThumbnailImagePermalink( $size = KT_WP_IMAGE_SIZE_LARGE) {
+        if (KT::issetAndNotEmpty($this->thumbnailImagePermalink)) {
+            return $this->thumbnailImagePermalink;
         }
-        return null;
+        $src = wp_get_attachment_image_src($this->getModel()->getThumbnailId(), $size);
+        if (KT::arrayIssetAndNotEmpty($src)) {
+            return $this->thumbnailImagePermalink = $src[0];
+        }
+        return $this->thumbnailImagePermalink = null;
     }
 
     // --- protected funkce ------------------

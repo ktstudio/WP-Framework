@@ -82,11 +82,16 @@ img.kt-loading-image
 
 /** LOGIN KT LOGO */
 
+body.login
+{
+    background: #193340;
+}
+
 div#login h1 a
 {
-    background: url('../images/kt-logo.png') center top no-repeat;
-    background-size: 200px 55px;
-    width: 200px;
+    background: url('../images/logo.png') center top no-repeat;
+    background-size: 240px 55px;
+    width: 240px;
     height: 55px;
 }
 
@@ -159,6 +164,11 @@ form#kt-form textarea
 {
     float: left;
     width: 90%;
+}
+
+.chosen-search input
+{
+    float: none !important;
 }
 
 form#kt-form .required,

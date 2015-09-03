@@ -379,6 +379,11 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
             if ($column->getName() == $this->getPrimaryKeyColumn()) {
                 $this->setId($value);
             }
+
+            if ($column->getType() == KT_CRUD_Column::TEXT && KT::issetAndNotEmpty($value) && is_array($value)) {
+                $value = serialize($value);
+            }
+
             $column->setValue($value);
         }
 
@@ -426,6 +431,9 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
      * @return string || int
      */
     public function getColumnValue($column) {
+        if (KT::arrayIsSerialized($column)) {
+            return unserialize($column);
+        }
         return $this->$column;
     }
 

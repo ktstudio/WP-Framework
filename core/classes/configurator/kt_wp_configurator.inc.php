@@ -17,11 +17,13 @@ final class KT_WP_Configurator {
     const THEME_SUBPAGE_PREFIX = "appearance_page_";
     const THEME_SETTING_PAGE_SLUG = "kt-theme-setting";
     const POST_TYPE_ARCHIVE_OBJECT_KEY = "kt-post-type-archive";
+    const COOKIE_STATEMENT_KEY = "kt-cookie-statement-key";
 
     private $wpMenuCollection = array();
     private $widgetsCollection = array();
     private $sidebarCollection = array();
-    private $postTypesFeatures = array();
+    private $postTypesFeaturesToAdd = array();
+    private $postTypesFeaturesToRemove = array();
     private $excerptLenght = null;
     private $excerptText = null;
     private $metaboxRemover = null;
@@ -33,8 +35,10 @@ final class KT_WP_Configurator {
     private $assetsConfigurator = null;
     private $imagesLazyLoading = null;
     private $postArchiveMenu = null;
-    private $sessionEnable = false;
+    private $allowSession = false;
+    private $allowCookieStatement = false;
     private $facebookManager = null;
+    private $emojiSwitch = false;
 
     // --- gettery ----------------------
 
@@ -63,8 +67,15 @@ final class KT_WP_Configurator {
     /**
      * @return array
      */
-    private function getPostTypesFeatures() {
-        return $this->postTypesFeatures;
+    private function getPostTypesFeaturesToAdd() {
+        return $this->postTypesFeaturesToAdd;
+    }
+
+    /**
+     * @return array
+     */
+    private function getPostTypesFeaturesToRemove() {
+        return $this->postTypesFeaturesToRemove;
     }
 
     /**
@@ -147,8 +158,15 @@ final class KT_WP_Configurator {
     /**
      * @return boolean
      */
-    private function getSessionEnable() {
-        return $this->sessionEnable;
+    private function getAllowSession() {
+        return $this->allowSession;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function getAllowCookieStatement() {
+        return $this->allowCookieStatement;
     }
 
     /**
@@ -160,6 +178,14 @@ final class KT_WP_Configurator {
         }
 
         return $this->facebookManager;
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function getEmojiSwitch() {
+        return $this->emojiSwitch;
     }
 
     // --- settery ----------------------
@@ -305,11 +331,36 @@ final class KT_WP_Configurator {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
-     * @param type $sessionEnable
+     * @param boolean $allowSession
+     * @return \KT_WP_Configurator
+     */
+    public function setAllowSession($allowSession = true) {
+        $this->allowSession = $allowSession;
+        return $this;
+    }
+
+    /**
+     * @deprecated since version 1.4
+     * @see setAllowSession
+     * @param boolean $sessionEnable
      * @return \KT_WP_Configurator
      */
     public function setSessionEnable($sessionEnable = true) {
-        $this->sessionEnable = $sessionEnable;
+        $this->allowSession = $sessionEnable;
+        return $this;
+    }
+
+    /**
+     * Nastaví, zda se má v rámci šablony zapnout odsouhlasení cookie
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param boolean $allowCookieStatement
+     * @return \KT_WP_Configurator
+     */
+    public function setAllowCookieStatement($allowCookieStatement = true) {
+        $this->allowCookieStatement = $allowCookieStatement;
         return $this;
     }
 
@@ -352,6 +403,18 @@ final class KT_WP_Configurator {
         return $this;
     }
 
+    /**
+     * Zapne / vypne emoji smajlíky a vše s nimi spojené
+     * 
+     * @author Jan Pokorný
+     * @param boolean $switch
+     * @return \KT_WP_Configurator
+     */
+    public function setEmojiSwitch($switch = true) {
+        $this->emojiSwitch = $switch;
+        return $this;
+    }
+
     // --- veřejné funkce ---------------
 
     /**
@@ -371,8 +434,15 @@ final class KT_WP_Configurator {
         // registrace sidebar
         add_action("widgets_init", array($this, "registersSidebarsAction"));
 
-        // registrace post type support (features)
-        add_action("init", array($this, "registerPostTypeSupportAction"));
+        if (KT::arrayIssetAndNotEmpty($this->getPostTypesFeaturesToAdd())) {
+            // přidání post type supports (features)
+            add_action("init", array($this, "addPostTypeSupportAction"));
+        }
+
+        if (KT::arrayIssetAndNotEmpty($this->getPostTypesFeaturesToRemove())) {
+            // odebrání post type supports (features)
+            add_action("init", array($this, "removePostTypeSupportAction"));
+        }
 
         // délka excreptu
         if (KT::issetAndNotEmpty($this->getExcerptLength()) && $this->getExcerptLength() > 0) {
@@ -460,15 +530,25 @@ final class KT_WP_Configurator {
         }
 
         // session
-        if ($this->getSessionEnable() === true) {
+        if ($this->getAllowSession() === true) {
             add_action("init", array($this, "startSesson"), 1);
             add_action("wp_logout", array($this, "endSession"));
             add_action("wp_login", array($this, "endSession"));
         }
 
+        // cookie statement
+        if ($this->getAllowCookieStatement() === true) {
+            add_action("wp_footer", array($this, "renderCookieStatement"), 99);
+        }
+
         // facebookManager
         if ($this->getFacebookManager()->getModuleEnabled()) {
             add_action("wp_head", array($this, "facebookTagsInit"), 99);
+        }
+
+        //emoji
+        if ($this->getEmojiSwitch() === false) {
+            add_action("init", array($this, "removeEmoji"), 1);
         }
     }
 
@@ -519,23 +599,26 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * Přidá Theme Support do Wordpressu
-     * $postTypes - dle WP Codexu - v případě použití thumbnails a post-formats se definuje pole post_types
+     * Přidá Theme Support do Wordpressu 
      *
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
      * @param string $feature
-     * @param array $postTypes
+     * @param array $args
+     * @return \KT_WP_Configurator
      */
-    public function addThemeSupport($feature, array $postTypes) {
-        add_theme_support($feature, $postTypes);
+    public function addThemeSupport($feature, array $args = null) {
+        if (KT::arrayIssetAndNotEmpty($args)) {
+            add_theme_support($feature, $args);
+        } else {
+            add_theme_support($feature);
+        }
         return $this;
     }
 
     /**
      * Přidá Post Type Support do Wordpressu, resp. zadanou vlastnost pro zadaní post typy
-     * $postTypes - pole post_types
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -544,7 +627,21 @@ final class KT_WP_Configurator {
      * @param array $postTypes
      */
     public function addPostTypeSupport($feature, array $postTypes) {
-        $this->postTypesFeatures[$feature] = $postTypes;
+        $this->postTypesFeaturesToAdd[$feature] = $postTypes;
+        return $this;
+    }
+
+    /**
+     * Odebere Post Type Support z Wordpressu, resp. zadanou vlastnost pro zadaní post typy
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $feature
+     * @param array $postTypes
+     */
+    public function removePostTypeSupport($feature, array $postTypes) {
+        $this->postTypesFeaturesToRemove[$feature] = $postTypes;
         return $this;
     }
 
@@ -728,7 +825,7 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * Provede registraci post type features (support)
+     * Provede přidání post type features (support)
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
      * @author Martin Hlaváč
@@ -736,12 +833,33 @@ final class KT_WP_Configurator {
      *
      * @return \KT_WP_Configurator
      */
-    public function registerPostTypeSupportAction() {
-        $features = $this->getPostTypesFeatures();
+    public function addPostTypeSupportAction() {
+        $features = $this->getPostTypesFeaturesToAdd();
         if (KT::issetAndNotEmpty($features)) {
             foreach ($features as $feature => $postTypes) {
                 foreach ($postTypes as $postType) {
                     add_post_type_support("$postType", "$feature");
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Provede odebrání post type features (support)
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Configurator
+     */
+    public function removePostTypeSupportAction() {
+        $features = $this->getPostTypesFeaturesToRemove();
+        if (KT::issetAndNotEmpty($features)) {
+            foreach ($features as $feature => $postTypes) {
+                foreach ($postTypes as $postType) {
+                    remove_post_type_support("$postType", "$feature");
                 }
             }
         }
@@ -876,7 +994,7 @@ final class KT_WP_Configurator {
      * @return string
      */
     public function registerLoginLogoUrlFilter() {
-        return 'http://www.ktstudio.cz';
+        return 'http://www.wpframework.cz';
     }
 
     /**
@@ -1176,6 +1294,30 @@ final class KT_WP_Configurator {
         session_destroy();
     }
 
+    /**
+     * Provede povolení, resp. inicializaci proužku s potvrzením cookie (v patičce)
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public function renderCookieStatement() {
+        $cookueStatementKey = KT::arrayTryGetValue($_COOKIE, self::COOKIE_STATEMENT_KEY);
+        if (KT::notIssetOrEmpty($cookueStatementKey)) {
+            $text = __("Tyto stránky využívají Cookies. Používáním těchto stránek vyjadřujete souhlas s používáním Cookies.", KT_DOMAIN);
+            $moreInfoTitle = __("Zjistit více", KT_DOMAIN);
+            $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
+            $confirmTitle = __("OK, rozumím", KT_DOMAIN);
+
+            echo "<div id=\"ktCookieStatement\">";
+            echo "<span id=\"ktCookieStatementText\">$text</span>";
+            echo "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
+            echo "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
+            echo "</div>";
+            echo "<noscript><style scoped>#ktCookieStatement { display:none; }</style></noscript>";
+        }
+    }
+
     // --- statické funkce --------------
 
     /**
@@ -1188,6 +1330,39 @@ final class KT_WP_Configurator {
      */
     public static function getThemeSettingSlug() {
         return $baseName = self::THEME_SUBPAGE_PREFIX . self::THEME_SETTING_PAGE_SLUG;
+    }
+
+    /**
+     * Smaže akce spojené s emoji
+     * 
+     * @author Jan Pokorný
+     */
+    public function removeEmoji() {
+        remove_action('admin_print_styles', 'print_emoji_styles');
+        remove_action('wp_head', 'print_emoji_detection_script', 7);
+        remove_action('admin_print_scripts', 'print_emoji_detection_script');
+        remove_action('wp_print_styles', 'print_emoji_styles');
+        remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
+        remove_filter('the_content_feed', 'wp_staticize_emoji');
+        remove_filter('comment_text_rss', 'wp_staticize_emoji');
+
+        // filter to remove TinyMCE emojis
+        add_filter('tiny_mce_plugins', array($this, "disableEmojiInTinymc"));
+    }
+
+    /**
+     * Filtr pro odstranění emoji z Tinymc
+     * 
+     * @author Jan Pokorný
+     * @param array $plugins
+     * @return array
+     */
+    public function disableEmojiInTinymc($plugins) {
+        if (is_array($plugins)) {
+            return array_diff($plugins, array('wpemoji'));
+        } else {
+            return array();
+        }
     }
 
 }

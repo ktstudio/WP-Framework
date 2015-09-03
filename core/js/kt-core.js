@@ -243,5 +243,26 @@ jQuery(document).ready(function () {
         placeholder_text_single: "Prázdný výběr",
         width: "90%"
     });
+    // chosen - single select
+    jQuery(".singleSelect").chosen({
+        no_results_text: "Žádné výsledky pro",
+        placeholder_text_single: "Prázdný výběr",
+        width: "90%"
+    });
+    // chosen - single select deselect
+    jQuery(".singleSelectDeselect").chosen({
+        allow_single_deselect: true,
+        no_results_text: "Žádné výsledky pro",
+        placeholder_text_single: "Prázdný výběr",
+        width: "90%"
+    });
+
+    // cookie statement
+    jQuery("#ktCookieStatementConfirm").click(function () {
+        var date = new Date();
+        date.setFullYear(date.getFullYear() + 10);
+        document.cookie = "kt-cookie-statement-key=1; path=/; expires=" + date.toGMTString();
+        jQuery("#ktCookieStatement").fadeOut();
+    });
 
 });

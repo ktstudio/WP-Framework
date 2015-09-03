@@ -4,12 +4,14 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
 
     const DEFAULT_EXCERPT_LENGTH = 55;
 
-    private $post = null;
-    private $author = null;
-    private $gallery = null;
-    private $files = null;
+    private $post;
+    private $author;
+    private $gallery;
+    private $files;
     private $data = array();
-    private $permalink = null;
+    private $permalink;
+    private $categoriesIds;
+    private $wpCommentsCount;
 
     /**
      * Základní model pro práci s daty post_typu
@@ -90,6 +92,21 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
         }
 
         return $this->gallery;
+    }
+
+    /**
+     * Vrátí WP comments STD class s počtem komentářů příspěvku
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return object Comment stats
+     */
+    public function getWpCommentsCount() {
+        if (KT::issetAndNotEmpty($this->wpCommentsCount)) {
+            return $this->wpCommentsCount;
+        }
+        return $this->wpCommentsCount = wp_count_comments($this->getPostId());
     }
 
     // --- settery ---------------------
@@ -232,7 +249,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
             if ($withTheFilter) {
                 return apply_filters("the_excerpt", $excerptFilterered);
             }
-            return $excerptFilterered;
+            return strip_shortcodes(strip_tags($excerptFilterered));
         }
         return null;
     }
@@ -419,6 +436,23 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
     }
 
     /**
+     * Vrátí pole IDček kategorií příspěvku
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array $args případné pole argumentů (budou "zacachovány")
+     * 
+     * @return array
+     */
+    public function getCategoriesIds($args = array()) {
+        if (KT::issetAndNotEmpty($this->categoriesIds)) {
+            return $this->categoriesIds;
+        }
+        return $this->categoriesIds = wp_get_post_categories($this->getPostId(), $args);
+    }
+
+    /**
      * Vrátí, zda daný model má nebo nemá vyplněný post_excerpt v DB tabulce.
      * 
      * @author Tomáš Kocifaj
@@ -446,6 +480,61 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Kontrola, zda má příspěvek vybraný požadovaný formát
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $format
+     * @return bool
+     */
+    public function hasPostFormat($format) {
+        return has_post_format($format);
+    }
+
+    /**
+     * Kontrola, zda je k dispozici WP comments STD class s počtem komentářů příspěvku
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return object Comment stats
+     */
+    public function isWpCommentsCount() {
+        return KT::issetAndNotEmpty($this->getWpCommentsCount());
+    }
+
+    /**
+     * Vrátí počet povolených komentářů příspěvku
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public function getApprovedCommentsCount() {
+        if ($this->isWpCommentsCount()) {
+            return $this->getWpCommentsCount()->approved;
+        }
+        return 0;
+    }
+
+    /**
+     * Vrátí celkový počet komentářů příspěvku
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public function getTotalCommentsCount() {
+        if ($this->isWpCommentsCount()) {
+            return $this->getWpCommentsCount()->total_comments;
+        }
+        return 0;
     }
 
     // --- neveřejné funkce ---------------------
@@ -596,25 +685,25 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @global WP_Database $wpdb
+     * @global WP_DB $wpdb
      * @param int $postId
      * @param string $prefix
      * @return array
      */
     public static function getPostMetas($postId = null, $prefix = null) {
         global $wpdb;
-        $results = array();
         $post = KT::setupPostObject($postId); // nastaví post object
         if (is_object($post)) {
+            $results = array();
             $query = "SELECT meta_key, meta_value FROM {$wpdb->postmeta} WHERE post_id = %d";
             $prepareData[] = $post->ID;
             if (isset($prefix)) {
-                $query .= " AND meta_key LIKE '%s' OR meta_key = '_thumbnail_id'";
+                $query .= " AND (meta_key LIKE '%s' OR meta_key = '" . KT_WP_META_KEY_THUMBNAIL_ID . "' OR meta_key = '" . KT_META_KEY_SINGLE_TEMPLATE . "')";
                 $prepareData[] = "{$prefix}%";
             }
-            $postMetas = $wpdb->get_results($wpdb->prepare($query, $prepareData), ARRAY_A);
-            foreach ($postMetas as $postMeta) {
-                $results[$postMeta["meta_key"]] = $postMeta["meta_value"];
+            $metas = $wpdb->get_results($wpdb->prepare($query, $prepareData), ARRAY_A);
+            foreach ($metas as $meta) {
+                $results[$meta["meta_key"]] = $meta["meta_value"];
             }
             return $results;
         }

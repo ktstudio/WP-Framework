@@ -610,7 +610,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addText($name, $label) {
         $field = $this->fields[$name] = new KT_Text_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -627,7 +627,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addFile($name, $label) {
         $field = $this->fields[$name] = new KT_File_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -641,9 +641,9 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Hidden_Field
      */
-    public function addHidden($name, $label = NULL) {
+    public function addHidden($name, $label = null) {
         $field = $this->fields[$name] = new KT_Hidden_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -660,7 +660,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addCheckbox($name, $label) {
         $field = $this->fields[$name] = new KT_Checkbox_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -677,7 +677,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addRadio($name, $label) {
         $field = $this->fields[$name] = new KT_Radio_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -693,7 +693,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addSelect($name, $label = "") {
         $field = $this->fields[$name] = new KT_Select_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -705,11 +705,27 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @param string $name
      * @param string $label
-     * @return \KT_Select_Field
+     * @return \KT_Multi_Select_Field
      */
     public function addMultiSelect($name, $label = "") {
         $field = $this->fields[$name] = new KT_Multi_Select_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
+        return $field;
+    }
+
+    /**
+     * Funkce přidá nový typ fieldu KT_Single_Select_Field
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $name
+     * @param string $label
+     * @return \KT_Single_Select_Field
+     */
+    public function addSingleSelect($name, $label = "") {
+        $field = $this->fields[$name] = new KT_Single_Select_Field($name, $label);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -726,7 +742,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addMedia($name, $label) {
         $field = $this->fields[$name] = new KT_Media_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -743,7 +759,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addSwitch($name, $label) {
         $field = $this->fields[$name] = new KT_Switch_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
 
         return $field;
     }
@@ -760,7 +776,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addTextarea($name, $label) {
         $field = $this->fields[$name] = new KT_Textarea_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -777,7 +793,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addWpPage($name, $label) {
         $field = $this->fields[$name] = new KT_Page_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -811,7 +827,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addWpUsers($name, $label) {
         $field = $this->fields[$name] = new KT_WP_User_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -827,7 +843,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addSlider($name, $label) {
         $field = $this->fields[$name] = new KT_Slider_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -844,7 +860,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addWpEditor($name, $label) {
         $field = $this->fields[$name] = new KT_WP_Editor_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -860,7 +876,23 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addColor($name, $label) {
         $field = $this->fields[$name] = new KT_Color_Field($name, $label);
-        $field->setPostPrefix($this->postPrefix);
+        $field->setPostPrefix($this->getPostPrefix());
+        return $field;
+    }
+
+    /**
+     * Přidá nový field KT_WP_Nonce_Field_Field
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $name
+     * @param string $label
+     * @return \KT_WP_Nonce_Field_Field
+     */
+    public function addWpNonce($name, $label = null) {
+        $field = $this->fields[$name] = new KT_WP_Nonce_Field($this->getName(), $name, $label);
+        $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
 
@@ -877,7 +909,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     private function setPostPrefixToAllFields() {
         if ($this->hasFields() && KT::issetAndNotEmpty($this->postPrefix)) {
             foreach ($this->fields as $field) {
-                $field->setPostPrefix($this->postPrefix);
+                $field->setPostPrefix($this->getPostPrefix());
             }
         }
 

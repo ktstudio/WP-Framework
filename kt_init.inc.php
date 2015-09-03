@@ -1,8 +1,8 @@
 <?php
 
-define("KT_LOADED", TRUE);
+define("KT_LOADED", true);
 
-define("KT_VERSION", "1.3");
+define("KT_VERSION", "1.4");
 
 define("KT_BASE_PATH", path_join(TEMPLATEPATH, "kt"));
 define("KT_BASE_URL", get_template_directory_uri() . "/kt");
@@ -31,12 +31,22 @@ define("KT_WIDGETS_FOLDER", "widgets");
 define("KT_SHORTCODES_FOLDER", "shortcodes");
 
 /**
+ * Kolekce všech (systémových) modulů (adresářů)
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
  * @return array
  */
 global $ktModules;
 $ktModules = array("core");
 
 /**
+ * Kolekce všech (systémových) speciálních adresářů (tj. akceptovaných, resp. povolených)
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
  * @return array
  */
 global $ktSpecialFolders;
@@ -55,19 +65,11 @@ spl_autoload_register("kt_class_autoloader_init");
 kt_load_all_modules();
 
 /**
- * Kontrola, zda je načten KT framework pro šablony apod.
- *
- * @return empty|exit
- */
-function kt_check_loaded() {
-    if (KT_LOADED === true)
-        return;
-    exit;
-}
-
-/**
  * Načtení všech inicializačních souborů pro všechny podsložky na hlavní podúrovni, resp. moduly
  * Tato jediná funkce by se měla volat ze šablony, všech ostatní dostupný zbytek se načte sám...
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
  */
 function kt_load_all_modules() {
     $submodules = kt_get_subdirs_names(KT_BASE_PATH);
@@ -83,16 +85,17 @@ function kt_load_all_modules() {
 
 /**
  * Získání všech názvů podadresářů pro zadaný adresář
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
  * @return array
  */
 function kt_get_subdirs_names($dirPath, $checkForDirExists = true) {
     if (isset($dirPath) && is_dir($dirPath)) {
         $subdirsNames = array();
-        $names = scandir($dirPath);
+        $names = array_diff(scandir($dirPath), array(".", "..", ".git", ".gitignore", "LICENSE", "README.md", "composer.json", "kt_init.inc.php"));
         foreach ($names as $name) { // procházíme základní adresáře v KT, tedy moduly
-            if ($name == "." || $name == ".." || $name == ".git" || $name == ".gitignore") {
-                continue;
-            }
             if ($checkForDirExists === true) {
                 if (is_dir(path_join($dirPath, $name))) {
                     array_push($subdirsNames, $name);
@@ -108,6 +111,10 @@ function kt_get_subdirs_names($dirPath, $checkForDirExists = true) {
 
 /**
  * Autoload určený pro strukturu KT modulů uvnitř
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
  * @param string $name třída nebo interface k auto načtení
  */
 function kt_class_autoloader_init($name) {
@@ -155,10 +162,19 @@ function kt_class_autoloader_init($name) {
     }
 }
 
+/**
+ * Vnitřní autoload (speciálních) systémových adresářů (tj. modulů)
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
+ * @global array $ktSpecialFolders
+ * @param string $name
+ * @param string $fileName
+ * @param array $moduleNames
+ * @return boolean
+ */
 function kt_special_class_autoloader_init($name, $fileName, $moduleNames) {
-    /**
-     * @return array
-     */
     global $ktSpecialFolders;
     $nameParts = explode("_", $name);
     $lastNamePart = strtolower((string) array_pop($nameParts));
@@ -182,7 +198,12 @@ function kt_special_class_autoloader_init($name, $fileName, $moduleNames) {
 
 /**
  * Převede název na malá písmena a přidá vkládací příponu (pro php)
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
  * @param string $name název třídy nebo interfacu
+ * 
  * @return string zformátovaný název pro include nebo require
  */
 function kt_get_include_file_name($name) {
@@ -193,7 +214,11 @@ function kt_get_include_file_name($name) {
 /**
  * Registrace modulu do "systému" podle klíče - relativní cesta uvnitř KT adresáře
  * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
  * @global array $ktModules
+ * @param string $key
  */
 function kt_register_module($key) {
     /**
@@ -210,6 +235,9 @@ function kt_register_module($key) {
  * názvu adresáře a klíče, resp. prefixu (pro sestavní konstant). 
  * Inicializuje ***_PATH a ***_URL konstanty por vnitřní a další použití. 
  * Ve výchozím nastavní se automaticky načte i adresář Requires. 
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
  * 
  * @param string $modulePrefix (constant prefix)
  * @param string $folder (name)
@@ -252,6 +280,10 @@ function kt_initialize_module($modulePrefix, $folder = "yours", $withIncludeAll 
 
 /**
  * Načtení všech PHP souborů s KT předponou a inc příponou v zadaném adresáři a všech jeho podadresářích
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
  * @param string $folder - uri (cesta) ke složce
  */
 function kt_include_all($folder) {
@@ -282,8 +314,28 @@ function kt_include_all($folder) {
 }
 
 /**
+ * Kontrola, zda je načten KT framework pro šablony apod.
+ *
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ * 
+ * @return empty|exit
+ */
+function kt_check_loaded() {
+    if (KT_LOADED === true) {
+        return;
+    }
+    wp_die(__("WP Framework není načten, či povolen!", KT_DOMAIN));
+}
+
+/**
  * Přidá k zadanému textu KT_PREFIX (na začátek)
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
  * @param string $text
+ * 
  * @return string|null
  */
 function kt_get_prefixed($text) {
@@ -295,7 +347,12 @@ function kt_get_prefixed($text) {
 
 /**
  * Přidá k zadanému textu KT_FORM_PREFIX (na začátek)
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
  * @param string $text
+ * 
  * @return string|null
  */
 function kt_get_form_prefixed($text) {
@@ -307,7 +364,12 @@ function kt_get_form_prefixed($text) {
 
 /**
  * Kontrola, zda zadaný text začíná KT prefixem
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
  * @param string $text
+ * 
  * @return boolean
  */
 function kt_is_prefixed($text) {
@@ -328,11 +390,21 @@ add_filter("template_include", "kt_load_template_from_subdir");
  * dir - singles - všechny single soubory
  * dir - pages - všechny template pro složky a page.php samotné
  * dir - taxonomies - všechny taxonomy včetně taxonomy.php
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ * 
+ * @param string $template
  */
 function kt_load_template_from_subdir($template) {
     global $post;
     global $taxonomy;
     global $cat;
+
+    // --- front-page ---------------------------
+    if (is_front_page()) {
+        return $template;
+    }
 
     // --- single ---------------------------
     if (is_single()) {

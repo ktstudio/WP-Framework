@@ -133,15 +133,15 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
         if (KT::notIssetOrEmpty($this->getFiles())) {
             return $html;
         }
-        
-        if(KT::notIssetOrEmpty($this->getAttrValueByName("id"))){
+
+        if (KT::notIssetOrEmpty($this->getAttrValueByName("id"))) {
             $this->setAttrId("ktGalleryContainer");
         }
-        
-        if(KT::notIssetOrEmpty($this->getAttrClassString())){
+
+        if (KT::notIssetOrEmpty($this->getAttrClassString())) {
             $this->addAttrClass("ktGallery");
         }
-        
+
         $this->addAttrClass("postGalleryId-" . $this->getPost()->ID)
                 ->addAttrClass($this->getPost()->post_type);
 
@@ -250,7 +250,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
      * @return string
      */
     private function getImageTag(WP_Post $image, array $thumbnail, $imgClass = null) {
-        return $html .= "<img src=\"$thumbnail[0]\" alt=\"$image->post_title\" class=\"$imgClass\">";
+        return $html = "<img src=\"$thumbnail[0]\" alt=\"$image->post_title\" class=\"$imgClass\">";
     }
 
 }

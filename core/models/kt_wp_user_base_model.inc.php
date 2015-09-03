@@ -9,6 +9,7 @@
 class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
 
     private $wpUser = null;
+    private $permalink;
 
     /**
      * Sestavení základního modelu pro práci s uživatelem a jeho daty podle ID
@@ -19,8 +20,8 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @param integer $userId
      */
     function __construct($userId, $metaPrefix = null) {
-        parent::__construct($metaPrefix);
         $this->wpUserInitById($userId);
+        parent::__construct($metaPrefix);
     }
 
     // --- getry & setry ------------------------
@@ -144,13 +145,40 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí string složeny s jména a příjmení uživatele
      *
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
      * @return string
      */
     public function getFullName() {
-        return $this->getFirstName() . " " . $this->getLastName();
+        if (KT::issetAndNotEmpty($this->getFirstName()) && KT::issetAndNotEmpty($this->getLastName())) {
+            return $this->getFirstName() . " " . $this->getLastName();
+        }
+        return null;
+    }
+
+    /**
+     * Vrátí buď jméno a příjmení nebo zobrazované jméno
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getName() {
+        return $this->getFullName() ? : $this->getDisplayName();
+    }
+
+    /**
+     * Vrátí titulek autora ošetřen tak, aby mohl být součástí některého z HTML attributů
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getTitleAttribute() {
+        return $titleAttributeContent = esc_attr(strip_tags(sprintf(__("Autor: %s", KT_DOMAIN), $this->getName())));
     }
 
     /**
@@ -192,12 +220,16 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí URL adresu na detail autora (author.php)
      * 
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
     public function getPermalink() {
-        return get_author_posts_url($this->getId());
+        if (KT::issetAndNotEmpty($this->permalink)) {
+            return $this->permalink;
+        }
+        return $this->permalink = get_author_posts_url($this->getId());
     }
 
     // --- veřejné metody ------------------------
@@ -311,7 +343,7 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí všechny user metas k danému uživateli - v případě volby prefixu probíhá LIKE dotaz
      *
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @url www.ktstudio.cz
      *
      * @global WP_DB $wpdb
@@ -321,24 +353,18 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      */
     public static function getUserMetas($userId, $prefix = null) {
         global $wpdb;
-
+        $results = array();
         $query = "SELECT meta_key, meta_value FROM {$wpdb->usermeta} WHERE user_id = %d";
-
+        $prepareData[] = $userId;
         if (KT::issetAndNotEmpty($prefix)) {
-            $query .= " AND meta_key LIKE '$prefix%'";
+            $query .= " AND meta_key LIKE '%s'";
+            $prepareData[] = "{$prefix}%";
         }
-
-        $results = $wpdb->get_results($wpdb->prepare($query, $userId), ARRAY_A);
-
-        if (KT::issetAndNotEmpty($results)) {
-            foreach ($results as $result) {
-                $clearResult[$result["meta_key"]] = $result["meta_value"];
-            }
-        } else {
-            $clearResult = array();
+        $metas = $wpdb->get_results($wpdb->prepare($query, $prepareData), ARRAY_A);
+        foreach ($metas as $meta) {
+            $results[$meta["meta_key"]] = $meta["meta_value"];
         }
-
-        return $clearResult;
+        return $results;
     }
 
     // --- privátní metody ------------------------

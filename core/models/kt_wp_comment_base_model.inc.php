@@ -8,11 +8,14 @@
  */
 class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
 
-    private $commentId;
     private $comment;
     private $post;
     private $author;
     private $permalink;
+    private $avatar;
+    private $avatarUrl;
+    private $commentReplyUrl;
+    private $commentEditUrl;
 
     /**
      * Sestavení základního modelu pro práci s komentáři na základě postu (ID)
@@ -20,12 +23,12 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @param int $commentId
+     * @param int $comment
      * @param string $metaPrefix
      */
-    function __construct($commentId, $metaPrefix = null) {
+    function __construct($comment, $metaPrefix = null) {
         parent::__construct($metaPrefix);
-        $this->setCommentId($commentId);
+        $this->initComment($comment);
     }
 
     // --- gettery ------------------------
@@ -33,47 +36,51 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * ID přiřazeného postu
      * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return int
      */
     public function getCommentId() {
-        return $this->commentId;
-    }
-
-    /**
-     * Natavení ID přiřazeného postu
-     * 
-     * @param int $commentId
-     * @return \KT_WP_Comments_Base_Model
-     * @throws KT_Not_Supported_Exception
-     */
-    private function setCommentId($commentId) {
-        if (KT::isIdFormat($commentId)) {
-            $this->commentId = $commentId;
-            return $this;
-        }
-        throw new KT_Not_Supported_Exception("Comment ID: $commentId");
+        return $this->getComment()->comment_ID;
     }
 
     /**
      * Vrátí objekt s komentářem
      * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return stdClass
      */
     public function getComment() {
-        $comment = $this->comment;
+        return $this->comment;
+    }
+
+    /**
+     * Natavení ID přiřazeného postu
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param STD_Class $comment
+     * @return \KT_WP_Comments_Base_Model
+     * @throws KT_Not_Supported_Exception
+     */
+    private function setComment($comment) {
         if (KT::issetAndNotEmpty($comment)) {
-            return $comment;
+            $this->comment = $comment;
+            return $this;
         }
-        $commentId = $this->getCommentId();
-        if (KT::isIdFormat($commentId)) {
-            return $this->comment = get_comment($commentId);
-        }
-        throw new KT_Not_Supported_Exception("Comment: {$this->getCommentId()}");
+        throw new KT_Not_Set_Argument_Exception("comment");
     }
 
     /**
      * Vrátí ID přiřazeného postu
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return int
      */
     public function getPostId() {
@@ -82,6 +89,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
 
     /**
      * Vrátí přiřazený post
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
      * 
      * @return \WP_Post
      */
@@ -100,6 +110,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí ID uživatele/autora komentáře
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return string
      */
     public function getUsetId() {
@@ -108,6 +121,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
 
     /**
      * Vrátí přiřazeného uživatele/autora
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
      * 
      * @return \WP_User
      */
@@ -126,6 +142,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí jméno autora komentáře
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return string
      */
     public function getAuthorName() {
@@ -135,6 +154,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí e-mail autora komentáře
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return string
      */
     public function getAuthorEmail() {
@@ -144,6 +166,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí url autora komentáře
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return string
      */
     public function getAuthorUrl() {
@@ -153,6 +178,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí ip autora komentáře
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return string
      */
     public function getAuthorIp() {
@@ -161,6 +189,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
 
     /**
      * Vrátí datum komentáře
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
      * 
      * @param type $format
      * @return type
@@ -172,6 +203,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí datum komentáře (GMT)
      * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @param type $format
      * @return type
      */
@@ -182,6 +216,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí obsah komentáře
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return string
      */
     public function getContent() {
@@ -191,6 +228,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí karmu komentáře
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return string
      */
     public function getKarma() {
@@ -200,6 +240,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí povolení komentáře
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return bool
      */
     public function getApproved() {
@@ -209,6 +252,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí agenta (prohlížeče) komentáře
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return string
      */
     public function getAgent() {
@@ -218,6 +264,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí typ komentáře
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return string
      */
     public function getType() {
@@ -227,6 +276,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     /**
      * Vrátí ID rodiče komentáře
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return string
      */
     public function getParentId() {
@@ -235,6 +287,9 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
 
     /**
      * Vrátí URL adresu na detail komentáře
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
      * 
      * @return string
      */
@@ -246,11 +301,86 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
         return $this->permalink = get_comment_link($this->getCommentId());
     }
 
+    /**
+     * Vrátí URL adresu pro odpověď na komentář
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public function getCommentReplyUrl() {
+        if (KT::issetAndNotEmpty($this->commentReplyUrl)) {
+            return $this->commentReplyUrl;
+        }
+        return $this->commentReplyUrl = esc_url(add_query_arg("replytocom", $this->getCommentId())) . "#respond";
+    }
+
+    /**
+     * Vrátí URL adresu pro editaci komentáře
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public function getCommentEditUrl() {
+        if (KT::issetAndNotEmpty($this->commentEditUrl)) {
+            return $this->commentEditUrl;
+        }
+        return $this->commentEditUrl = get_edit_comment_link($this->getCommentId());
+    }
+
+    /**
+     * Vrátí (gr)avatar pohle emailu autora (jako HTML img)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param int $size
+     * 
+     * @return string 
+     */
+    public function getAvatar($size = 70) {
+        if (KT::issetAndNotEmpty($this->avatar)) {
+            return $this->avatar;
+        }
+        return $this->avatar = get_avatar($this->getAuthorEmail(), $size, "", $this->getAuthorName());
+    }
+
+    /**
+     * Vrátí URL (gr)avatara pohle emailu autora
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param int $size
+     * @param bool $clearUrl označení, zda mát být URL čístá - bez parametrů
+     * 
+     * @return string 
+     */
+    public function getAvatarUrl($size = 70, $clearUrl = true) {
+        if (KT::issetAndNotEmpty($this->avatarUrl)) {
+            return $this->avatarUrl;
+        }
+        $avatarUrl = get_avatar_url($this->getAuthorEmail(), array("size" => $size));
+        if (KT::issetAndNotEmpty($avatarUrl)) {
+            if ($clearUrl) {
+                $avatarUrl = strtok($avatarUrl, "?");
+            }
+            return $this->avatarUrl = $avatarUrl;
+        }
+        return null;
+    }
+
     // --- veřejné metody ------------------------
 
     /**
-     * Kontrola, zda je k dispoizici rodičovský komentář
+     * Kontrola, zda je k dispozici rodičovský komentář
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return bool
      */
     public function hasParent() {
@@ -258,10 +388,26 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
     }
 
     /**
+     * Kontrola, zda přihlášený uživatel autorem komentáře
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return bool
+     */
+    public function isAuthorLogged() {
+        $currentUser = wp_get_current_user();
+        if (KT::issetAndNotEmpty($currentUser)) {
+            return ($currentUser->user_email === $this->getAuthorEmail());
+        }
+        return false;
+    }
+
+    /**
      * Vrátí všechny comment metas k danému komentáři - v případě volby prefixu probíhá LIKE dotaz
      *
-     * @author Tomáš Kocifaj
-     * @url www.ktstudio.cz
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
      *
      * @global WP_DB $wpdb
      * @param int $commentId
@@ -270,27 +416,35 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
      */
     public static function getCommentMetas($commentId, $prefix = null) {
         global $wpdb;
-
+        $results = array();
         $query = "SELECT meta_key, meta_value FROM {$wpdb->commentmeta} WHERE comment_id = %d";
-
+        $prepareData[] = $commentId;
         if (KT::issetAndNotEmpty($prefix)) {
-            $query .= " AND meta_key LIKE '$prefix%'";
+            $query .= " AND meta_key LIKE '%s'";
+            $prepareData[] = "{$prefix}%";
         }
-
-        $results = $wpdb->get_results($wpdb->prepare($query, $commentId), ARRAY_A);
-
-        if (KT::issetAndNotEmpty($results)) {
-            foreach ($results as $result) {
-                $output[$result["meta_key"]] = $result["meta_value"];
-            }
-        } else {
-            $output = array();
+        $metas = $wpdb->get_results($wpdb->prepare($query, $prepareData), ARRAY_A);
+        foreach ($metas as $meta) {
+            $results[$meta["meta_key"]] = $meta["meta_value"];
         }
-
-        return $output;
+        return $results;
     }
 
     // --- privátní metody ------------------------
+
+    /**
+     * Provede inicializaci systémového (WP) stdClass objektu s komentářem
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    private function initComment($comment) {
+        if (KT::isIdFormat($comment)) {
+            $this->setComment(get_comment($comment));
+        } else {
+            $this->setComment($comment);
+        }
+    }
 
     /**
      * Provede inicializaci všech uživatelo comment metas a nastaví je do objektu

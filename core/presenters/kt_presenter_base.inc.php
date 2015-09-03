@@ -9,6 +9,8 @@
 abstract class KT_Presenter_Base implements KT_Presentable {
 
     private $model = null;
+    private static $currentQueryLoopIndex;
+    private static $currentItemsLoopIndex;
 
     public function __construct(KT_Modelable $model = null) {
         kt_check_loaded(); // kontrola KT Frameworku
@@ -22,6 +24,9 @@ abstract class KT_Presenter_Base implements KT_Presentable {
     /**
      * Vrátí zadaný v obecné podobě
      * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
      * @return KT_Modelable
      */
     public function getModel() {
@@ -31,6 +36,9 @@ abstract class KT_Presenter_Base implements KT_Presentable {
     /**
      * Nastavení jiného modelu v obecné podobě
      * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
      * @param KT_Modelable $model
      * @return \KT_Presenter_Base
      */
@@ -39,10 +47,37 @@ abstract class KT_Presenter_Base implements KT_Presentable {
         return $this;
     }
 
+    /**
+     * Vrátí aktuální index v rámci výpisu šablon pomocí @see theQueryLoops
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public static function getCurrentQueryLoopIndex() {
+        return self::$currentQueryLoopIndex;
+    }
+
+    /**
+     * Vrátí aktuální index v rámci výpisu šablon pomocí @see theItemsLoops
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public static function getCurrentItemsLoopIndex() {
+        return self::$currentItemsLoopIndex;
+    }
+
     // --- veřejné funkce ---------------------
 
     /**
      * Výpis postů podle zadané query v zadané loopě
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
      * 
      * @param WP_Query $query
      * @param string $loopName
@@ -51,21 +86,25 @@ abstract class KT_Presenter_Base implements KT_Presentable {
     public static function theQueryLoops(WP_Query $query, $loopName, array $clearfixes = null) {
         if (KT::issetAndNotEmpty($query) && $query->have_posts()) {
             $isClearfixes = KT::arrayIssetAndNotEmpty($clearfixes);
-            $index = 0;
+            self::$currentQueryLoopIndex = 0;
             while ($query->have_posts()) : $query->the_post();
                 global $post;
                 include(locate_template("loops/loop-" . $loopName . ".php"));
-                $index++;
+                self::$currentQueryLoopIndex++;
                 if ($isClearfixes) {
-                    self::theClearfixes($clearfixes, $index);
+                    self::theClearfixes($clearfixes, self::$currentQueryLoopIndex);
                 }
             endwhile;
+            self::$currentQueryLoopIndex = null;
             wp_reset_postdata();
         }
     }
 
     /**
      * Výpis postů podle zadané query v zadané loopě
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
      * 
      * @param array $items
      * @param string $loopName
@@ -76,7 +115,7 @@ abstract class KT_Presenter_Base implements KT_Presentable {
     public static function theItemsLoops(array $items, $loopName, $count = null, $offset = null, array $clearfixes = null) {
         if (KT::arrayIssetAndNotEmpty($items)) {
             $isClearfixes = KT::arrayIssetAndNotEmpty($clearfixes);
-            $index = 0;
+            self::$currentItemsLoopIndex = 0;
             if (KT::tryGetInt($offset) > 0) {
                 $items = array_slice($items, $offset);
             }
@@ -87,17 +126,21 @@ abstract class KT_Presenter_Base implements KT_Presentable {
                 global $post;
                 $post = $item;
                 include(locate_template("loops/loop-$loopName.php"));
-                $index++;
+                self::$currentItemsLoopIndex++;
                 if ($isClearfixes) {
-                    self::theClearfixes($clearfixes, $index);
+                    self::theClearfixes($clearfixes, self::$currentQueryLoopIndex);
                 }
             }
+            self::$currentItemsLoopIndex = null;
             wp_reset_postdata();
         }
     }
 
     /**
      * Vypíše clearfixy podle (zadaného) indexu
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
      * 
      * @param array $clearfixes
      * @param int $index
