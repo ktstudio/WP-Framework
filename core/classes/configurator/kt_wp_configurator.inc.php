@@ -306,7 +306,7 @@ final class KT_WP_Configurator {
      * @param boolean $displayLogo
      * @return \KT_WP_Configurator
      */
-    public function setDisplayLogo($displayLogo = false) {
+    public function setDisplayLogo($displayLogo = true) {
         $this->displayLogo = $displayLogo;
         return $this;
     }

@@ -6,7 +6,7 @@
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-abstract class KT_Meta_Model_Base implements KT_Modelable {
+abstract class KT_Meta_Model_Base extends KT_Model_Base {
 
     private $metas = array();
     private $metaPrefix;
@@ -76,7 +76,7 @@ abstract class KT_Meta_Model_Base implements KT_Modelable {
     public function getMetaValueByKey($key) {
         return $this->getMetaValue($key);
     }
-    
+
     // --- neveřejné metody ---------------------
 
     /**

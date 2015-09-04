@@ -134,6 +134,11 @@ table.wp-list-table tbody tr.status-publish
     background: #DAFF75;
 }
 
+table.wp-list-table .column-post_thumbnail
+{
+    width: 40px;
+}
+
 table.kt-rez-table thead tr th#title
 {
     padding-left: 10px;
@@ -150,6 +155,7 @@ table.item-list tr.ui-sortable-helper
     border: 1px dashed #c7c7c7;
     background: rgba(199, 199, 199, 0.7);
 }
+
 
 /**** FORM BASIC STYLES ****/
 
