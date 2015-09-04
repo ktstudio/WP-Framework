@@ -167,7 +167,7 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní všechny systémové widgety
      *
-     * @param bool $withoutText - vše kromě textového widgetu
+     * @param boolean $withoutText - vše kromě textového widgetu
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeAllSystemWidgets($withoutText = false, $withoutMenu = false) {

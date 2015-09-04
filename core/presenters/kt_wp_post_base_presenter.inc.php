@@ -110,7 +110,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param bool $withAvatar
+     * @param boolean $withAvatar
      * @return mixed null|string (HTML)
      */
     public function getAuthorBio($withAvatar = false) {
@@ -133,7 +133,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param bool $inSameCategory
+     * @param boolean $inSameCategory
      * @return mixed null|string (HTML)
      */
     public function getPreviousPostLink($inSameCategory = false) {
@@ -146,7 +146,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param bool $inSameCategory
+     * @param boolean $inSameCategory
      * @return mixed null|string (HTML)
      */
     public function getNextPostLink($inSameCategory = false) {

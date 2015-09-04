@@ -84,7 +84,7 @@ class KT_Termmeta {
      * @param int $termId
      * @param string $metaKey
      * @param string $metaValue
-     * @param bool $unique
+     * @param boolean $unique
      * @return int|bool
      */
     public static function addData($termId, $metaKey, $metaValue, $unique = false) {
@@ -102,7 +102,7 @@ class KT_Termmeta {
      * @param int $termId
      * @param string $metaKey
      * @param string $metaValue
-     * @param bool $previousValue
+     * @param boolean $previousValue
      * @return int|bool
      */
     public static function updateData($termId, $metaKey, $metaValue, $previousValue = "") {
@@ -120,8 +120,8 @@ class KT_Termmeta {
      * @param int $termId
      * @param string $metaKey
      * @param string $metaValue
-     * @param bool $deleteAll
-     * @return bool
+     * @param boolean $deleteAll
+     * @return boolean
      */
     public static function deleteData($termId, $metaKey, $metaValue = "", $deleteAll = false) {
         return delete_metadata(self::TYPE, $termId, $metaKey, $metaValue, $deleteAll);

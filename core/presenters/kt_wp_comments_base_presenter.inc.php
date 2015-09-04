@@ -62,7 +62,7 @@ class KT_WP_Comments_Base_Presenter extends KT_Presenter_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @return bool
+     * @return boolean
      */
     public function haveComments() {
         return KT::arrayIssetAndNotEmpty($this->getComments());

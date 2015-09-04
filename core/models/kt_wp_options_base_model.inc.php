@@ -75,7 +75,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @return bool
+     * @return boolean
      */
     private function getInitialized() {
         return $this->initialized;
@@ -88,7 +88,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @param bool $initialized
+     * @param boolean $initialized
      */
     private function setInitialized($initialized) {
         $this->initialized = $initialized;

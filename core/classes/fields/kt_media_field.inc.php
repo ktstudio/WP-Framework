@@ -60,7 +60,7 @@ class KT_Media_Field extends KT_Field {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @return bool
+     * @return boolean
      */
     public function getIsMultiple() {
         return $this->isMultiple;
@@ -72,7 +72,7 @@ class KT_Media_Field extends KT_Field {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param bool $isMultiple
+     * @param boolean $isMultiple
      * @return \KT_Media_Field
      */
     public function setIsMultiple($isMultiple) {

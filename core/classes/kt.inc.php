@@ -373,7 +373,7 @@ class KT {
      * @link http://www.ktstudio.cz
      * 
      * @param mixed $value
-     * @return bool
+     * @return boolean
      */
     public static function issetAndNotEmpty($value) {
         return isset($value) && !empty($value);
@@ -386,7 +386,7 @@ class KT {
      * @link http://www.ktstudio.cz
      * 
      * @param mixed $value
-     * @return bool
+     * @return boolean
      */
     public static function notIssetOrEmpty($value) {
         return !isset($value) || empty($value);
@@ -398,7 +398,7 @@ class KT {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @return bool
+     * @return boolean
      */
     public static function isWpAjax() {
         return defined("DOING_AJAX") && DOING_AJAX;
@@ -542,7 +542,7 @@ class KT {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param bool $fullUrl - true i s pametry, false bez
+     * @param boolean $fullUrl - true i s pametry, false bez
      * @return string
      */
     public static function getRequestUrl($fullUrl = true) {

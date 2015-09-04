@@ -489,7 +489,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
      * @link http://www.ktstudio.cz
      * 
      * @param string $format
-     * @return bool
+     * @return boolean
      */
     public function hasPostFormat($format) {
         return has_post_format($format);
