@@ -15,8 +15,7 @@ class KT_MetaBox implements KT_Registrable {
     const PRIORITY_HIGH = "high";
     const PRIORITY_DEFAULT = "default";
     const PRIORITY_CORE = "core";
-    const PAGE_TEMPLATE_KEY = "page.php";
-    const PAGES_TEMPLATE_KEY = "pages/page.php";
+    const DEFAULT_PAGE_TEMPLATE_KEY = "default";
 
     private $id;
     private $title;
@@ -357,7 +356,7 @@ class KT_MetaBox implements KT_Registrable {
      * @param string $pageTemplate
      * @return \KT_MetaBox
      */
-    public function RemovePageTemplate($pageTemplate) {
+    public function removePageTemplate($pageTemplate) {
         $this->pageTemplates = KT::arrayRemoveByValue($this->getPageTemplates(), $pageTemplate);
         return $this;
     }
@@ -372,9 +371,9 @@ class KT_MetaBox implements KT_Registrable {
      * @param array $pageTemplates
      * @return \KT_MetaBox
      */
-    public function RemovePageTemplates(array $pageTemplates) {
+    public function removePageTemplates(array $pageTemplates) {
         foreach ($pageTemplates as $pageTemplate) {
-            $this->RemovePageTemplate($pageTemplate);
+            $this->removePageTemplate($pageTemplate);
         }
         return $this;
     }
@@ -890,13 +889,8 @@ class KT_MetaBox implements KT_Registrable {
         if ($post->post_type == KT_WP_PAGE_KEY) {
             $pageTemplates = $this->getPageTemplates();
             if (KT::arrayIssetAndNotEmpty($pageTemplates)) { // chceme kontrolovat (aktuální) page template(y)
-                $currentPageTemplate = get_post_meta($post->ID, KT_WP_META_KEY_PAGE_TEMPLATE, true);
-                if (KT::issetAndNotEmpty($currentPageTemplate)) {
-                    $pageTemplateResult = in_array($currentPageTemplate, $pageTemplates); // (aktuální) page template nesedí => rušíme přidání metaboxu
-                } else {
-                    $pageTemplateResult = ($pageTemplate == self::PAGE_TEMPLATE_KEY || $pageTemplate == self::PAGES_TEMPLATE_KEY); // povolení normálních stránek
-                }
-                if (!$pageTemplateResult) {
+                $currentPageTemplate = get_post_meta($post->ID, KT_WP_META_KEY_PAGE_TEMPLATE, true) ? : self::DEFAULT_PAGE_TEMPLATE_KEY;
+                if (!in_array($currentPageTemplate, $pageTemplates)) { // (aktuální) page template nesedí => rušíme přidání metaboxu
                     return false;
                 }
             }
