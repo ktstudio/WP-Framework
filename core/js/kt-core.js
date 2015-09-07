@@ -43,6 +43,9 @@ jQuery(document).ready(function () {
     // Aktivace tooltip pro inputy KT_Field
     jQuery('.kt-field').tooltip();
     jQuery('.kt-tooltip').tooltip();
+    jQuery('body').tooltip({
+        selector: 'div.chosen-container'
+    });
 
     // Přepínání switch fieldu
     jQuery('body').on("click", ".switch-toggle", function () {
