@@ -25,6 +25,7 @@ class KT_MetaBox implements KT_Registrable {
     private $dataType;
     private $fieldset;
     private $isDefaultAutoSave = true;
+    private $isOnlyForFrontPage = null;
     private $pageTemplates = array();
     private $postFormat;
     private $customCallback;
@@ -268,7 +269,7 @@ class KT_MetaBox implements KT_Registrable {
      *
      * @return boolean
      */
-    function getIsDefaultAutoSave() {
+    public function getIsDefaultAutoSave() {
         return $this->isDefaultAutoSave;
     }
 
@@ -280,14 +281,37 @@ class KT_MetaBox implements KT_Registrable {
      *
      * @param boolean $isDefaultAutoSave
      * @return \KT_MetaBox
-     * @throws KT_Not_Set_Argument_Exception
      */
-    function setIsDefaultAutoSave($isDefaultAutoSave) {
-        if (is_bool($isDefaultAutoSave)) {
-            $this->isDefaultAutoSave = $isDefaultAutoSave;
-            return $this;
-        }
-        throw new KT_Not_Set_Argument_Exception("isDefaultAutoSave");
+    public function setIsDefaultAutoSave($isDefaultAutoSave) {
+        $this->isDefaultAutoSave = KT::tryGetBool($isDefaultAutoSave);
+        return $this;
+    }
+
+    /**
+     * Vrátí označení, zda se má MetaBox aplikovat pouze úvodní stránku
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return boolean
+     */
+    public function getIsOnlyForFrontPage() {
+        return $this->isOnlyForFrontPage;
+    }
+
+    /**
+     * Nastaví označení, zda se má MetaBox aplikovat pouze úvodní stránku
+     * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované úvodním stránkám
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param boolean $isOnlyForFrontPage
+     * @return \KT_MetaBox
+     */
+    public function setIsOnlyForFrontPage($isOnlyForFrontPage) {
+        $this->isOnlyForFrontPage = KT::tryGetBool($isOnlyForFrontPage);
+        return $this;
     }
 
     /**
@@ -886,18 +910,33 @@ class KT_MetaBox implements KT_Registrable {
         if (!$post instanceof WP_Post) {
             return true;
         }
-        if ($post->post_type == KT_WP_PAGE_KEY) {
-            $pageTemplates = $this->getPageTemplates();
-            if (KT::arrayIssetAndNotEmpty($pageTemplates)) { // chceme kontrolovat (aktuální) page template(y)
-                $currentPageTemplate = get_post_meta($post->ID, KT_WP_META_KEY_PAGE_TEMPLATE, true) ? : self::DEFAULT_PAGE_TEMPLATE_KEY;
+        $postId = $post->ID;
+        $isPage = $post->post_type == KT_WP_PAGE_KEY;
+        $isOnlyForFrontPage = $this->getIsOnlyForFrontPage();
+        if (isset($isOnlyForFrontPage)) {
+            if ($isPage) {
+                $frontPageId = get_option(KT_WP_OPTION_KEY_FRONT_PAGE);
+                if (($isOnlyForFrontPage && $postId != $frontPageId) || (!$isOnlyForFrontPage && $postId == $frontPageId)) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        $pageTemplates = $this->getPageTemplates();
+        if (KT::arrayIssetAndNotEmpty($pageTemplates)) { // chceme kontrolovat (aktuální) page template(y)
+            if ($isPage) {
+                $currentPageTemplate = get_post_meta($postId, KT_WP_META_KEY_PAGE_TEMPLATE, true) ? : self::DEFAULT_PAGE_TEMPLATE_KEY;
                 if (!in_array($currentPageTemplate, $pageTemplates)) { // (aktuální) page template nesedí => rušíme přidání metaboxu
                     return false;
                 }
+            } else {
+                return false;
             }
         }
         $postFormat = $this->getPostFormat();
         if (KT::issetAndNotEmpty($postFormat)) { // chceme kontrolovat (aktuální) post formát
-            $currentPostFormat = get_the_terms($post->ID, "post_format");
+            $currentPostFormat = get_the_terms($postId, "post_format");
             if (KT::arrayIssetAndNotEmpty($currentPostFormat)) {
                 if (reset($currentPostFormat)->slug !== "post-format-$postFormat") { // (aktuální) post formát nesedí => rušíme přidání metaboxu
                     return false;
