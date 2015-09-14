@@ -1209,10 +1209,18 @@ final class KT_WP_Configurator {
         if (KT::arrayIssetAndNotEmpty($postTypes)) {
             foreach ($postTypes as $postType) {
                 $postType->classes = array();
-                $postType->type = $postType->name;
+                $postType->type = "custom"; //$postType->name;
                 $postType->object_id = $postType->name;
                 $postType->title = $postType->labels->name;
+                $postType->description = $postType->labels->name;
                 $postType->object = self::POST_TYPE_ARCHIVE_OBJECT_KEY;
+                $postType->menu_item_parent = null;
+                $postType->parent = null;
+                $postType->db_id = null;
+                $postType->url = get_post_type_archive_link($postType->name);
+                $postType->target = null;
+                $postType->attr_title = $postType->labels->name;
+                $postType->xfn = null;
             }
 
             $walker = new Walker_Nav_Menu_Checklist(array());
