@@ -1,26 +1,37 @@
 <?php
 
+/**
+ * Základní presenter pro práci s příspěvky (posty)
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
 
     private $thumbnailImagePermalink;
 
     /**
-     * Základní presenter pro práci s daty post_typu
+     * Základní presenter pro práci s daty postu
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @param WP_Post $post
-     * @param int $postId
+     * @param KT_Modelable|WP_Post $item
+     * 
      * @return \kt_post_type_presenter_base
      */
-    function __construct(WP_Post $post = null) {
+    function __construct($item = null) {
         parent::__construct();
-        if (KT::issetAndNotEmpty($post)) {
-            $postModel = new KT_WP_Post_Base_Model($post);
-            $this->setModel($postModel);
-            if (is_singular($post->post_type)) {
-                static::singularDetailPostProcess();
+        if (KT::issetAndNotEmpty($item)) {
+            if ($item instanceof KT_Modelable) {
+                $this->setModel($item);
+            } elseif ($item instanceof WP_Post) {
+                $this->setModel(new KT_WP_Post_Base_Model($item));
+                if (is_singular($item->post_type)) {
+                    static::singularDetailPostProcess();
+                }
+            } else {
+                throw new KT_Not_Supported_Exception("KT WP Post Base Presenter - Type of $item");
             }
         }
     }
@@ -216,7 +227,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * 
      * @return string (URL)
      */
-    public function getThumbnailImagePermalink( $size = KT_WP_IMAGE_SIZE_LARGE) {
+    public function getThumbnailImagePermalink($size = KT_WP_IMAGE_SIZE_LARGE) {
         if (KT::issetAndNotEmpty($this->thumbnailImagePermalink)) {
             return $this->thumbnailImagePermalink;
         }
@@ -233,6 +244,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * Funkce je volána v konstruktoru presenteru a zavolá se pouze tehdy, pokud se jedná
      * o detail daného modelu. Funkce je připravená pro automatické zavádění funkcí právě
      * pro danou entitu.
+     * 
+     * @deprecated since version 1.5
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz

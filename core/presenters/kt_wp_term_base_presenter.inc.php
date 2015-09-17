@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Základní presenter pro práci s (taxonomy) termy
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_WP_Term_Base_Presenter extends KT_Presenter_Base {
 
     /**

@@ -10,6 +10,24 @@ class KT_Termmeta {
 
     const TYPE = "ktterm";
 
+    private static $isActive = false;
+
+    // --- getry & setry ------------------------
+
+    /**
+     * Kontrola, zda jsou (KT) term meta aktivní, @see activate()
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz 
+     * 
+     * @return boolean
+     */
+    public static function getIsActive() {
+        return self::$isActive;
+    }
+
+    // --- veřejné metody ------------------------
+
     /**
      * Aktivuje vlastní (KT) term meta (v rámci WPDB a metadata API) 
      * 
@@ -21,10 +39,13 @@ class KT_Termmeta {
      * @global \WP_DB $wpdb
      */
     public static function activate() {
-        global $wpdb;
-        $id = self::TYPE . "meta";
-        $table = kt_get_prefixed($wpdb->prefix . "termmeta");
-        $wpdb->$id = $table;
+        if (!self::getIsActive()) {
+            global $wpdb;
+            $id = self::TYPE . "meta";
+            $table = kt_get_prefixed($wpdb->prefix . "termmeta");
+            $wpdb->$id = $table;
+            self::$isActive = true;
+        }
     }
 
     /**
@@ -38,20 +59,23 @@ class KT_Termmeta {
      * @return array
      */
     public static function getAllData($termId, $prefix = null) {
-        global $wpdb;
-        $results = array();
-        $prepareData[] = $termId;
-        $id = self::TYPE . "meta";
-        $query = "SELECT meta_key, meta_value FROM {$wpdb->$id} WHERE ktterm_id = %d";
-        if (isset($prefix)) {
-            $query .= " AND meta_key LIKE '%s'";
-            $prepareData[] = "{$prefix}%";
+        if (self::getIsActive()) {
+            global $wpdb;
+            $results = array();
+            $prepareData[] = $termId;
+            $id = self::TYPE . "meta";
+            $query = "SELECT meta_key, meta_value FROM {$wpdb->$id} WHERE ktterm_id = %d";
+            if (isset($prefix)) {
+                $query .= " AND meta_key LIKE '%s'";
+                $prepareData[] = "{$prefix}%";
+            }
+            $metas = $wpdb->get_results($wpdb->prepare($query, $prepareData), ARRAY_A);
+            foreach ($metas as $meta) {
+                $results[$meta["meta_key"]] = $meta["meta_value"];
+            }
+            return $results;
         }
-        $metas = $wpdb->get_results($wpdb->prepare($query, $prepareData), ARRAY_A);
-        foreach ($metas as $meta) {
-            $results[$meta["meta_key"]] = $meta["meta_value"];
-        }
-        return $results;
+        return null;
     }
 
     /**
@@ -70,7 +94,10 @@ class KT_Termmeta {
      * @return mixed string|array
      */
     public static function getData($termId, $metaKey = "", $single = true) {
-        return get_metadata(self::TYPE, $termId, $metaKey, $single);
+        if (self::getIsActive()) {
+            return get_metadata(self::TYPE, $termId, $metaKey, $single);
+        }
+        return null;
     }
 
     /**
@@ -88,7 +115,10 @@ class KT_Termmeta {
      * @return int|bool
      */
     public static function addData($termId, $metaKey, $metaValue, $unique = false) {
-        return add_metadata(self::TYPE, $termId, $metaKey, $metaValue, $unique);
+        if (self::getIsActive()) {
+            return add_metadata(self::TYPE, $termId, $metaKey, $metaValue, $unique);
+        }
+        return null;
     }
 
     /**
@@ -106,7 +136,10 @@ class KT_Termmeta {
      * @return int|bool
      */
     public static function updateData($termId, $metaKey, $metaValue, $previousValue = "") {
-        return update_metadata(self::TYPE, $termId, $metaKey, $metaValue, $previousValue);
+        if (self::getIsActive()) {
+            return update_metadata(self::TYPE, $termId, $metaKey, $metaValue, $previousValue);
+        }
+        return null;
     }
 
     /**
@@ -124,7 +157,10 @@ class KT_Termmeta {
      * @return boolean
      */
     public static function deleteData($termId, $metaKey, $metaValue = "", $deleteAll = false) {
-        return delete_metadata(self::TYPE, $termId, $metaKey, $metaValue, $deleteAll);
+        if (self::getIsActive()) {
+            return delete_metadata(self::TYPE, $termId, $metaKey, $metaValue, $deleteAll);
+        }
+        return null;
     }
 
 }
