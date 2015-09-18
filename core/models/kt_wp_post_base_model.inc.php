@@ -1,6 +1,6 @@
 <?php
 
-class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
+class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
 
     const DEFAULT_EXCERPT_LENGTH = 55;
 
@@ -69,6 +69,13 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
         }
 
         return $this->author;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAuthorId() {
+        return $this->getAuthor()->getId();
     }
 
     /**

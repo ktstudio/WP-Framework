@@ -21,18 +21,22 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return \kt_post_type_presenter_base
      */
     function __construct($item = null) {
-        parent::__construct();
         if (KT::issetAndNotEmpty($item)) {
-            if ($item instanceof KT_Modelable) {
-                $this->setModel($item);
+            if ($item instanceof KT_Postable) {
+                parent::__construct($item);
             } elseif ($item instanceof WP_Post) {
-                $this->setModel(new KT_WP_Post_Base_Model($item));
+                /**
+                 * Kvůli zpětné kompatibilitě, časem bude zrušeno -> používejte modely...
+                 */
+                parent::__construct(new KT_WP_Post_Base_Model($item));
                 if (is_singular($item->post_type)) {
                     static::singularDetailPostProcess();
                 }
             } else {
                 throw new KT_Not_Supported_Exception("KT WP Post Base Presenter - Type of $item");
             }
+        } else {
+            parent::__construct();
         }
     }
 
