@@ -48,7 +48,7 @@ class KT_Repository {
         }
     }
 
-// --- gettery ------------
+    // --- gettery ------------------------
 
     /**
      * Vrátí aktuální objekt, na kterém se nachází vnitřní iterátor pomoc haveItems() a theItems()
@@ -223,7 +223,7 @@ class KT_Repository {
         return $this->countItems;
     }
 
-// --- settery ------------
+    // --- settery ------------------------
 
     /**
      * Nastaví, na jakém itemu se aktuální iterovaný kolekce nachází
@@ -315,7 +315,7 @@ class KT_Repository {
      * @throws KT_Not_Supported_Exception
      * @throws KT_Null_Reference_Exception
      */
-    public function setOrder($orderBy, $direction = NULL) {
+    public function setOrder($orderBy, $direction = null) {
         $this->orders = array();
         $this->addOrder($orderBy, $direction);
         return $this;
@@ -428,7 +428,7 @@ class KT_Repository {
         return $this;
     }
 
-// --- veřejné funkce ------------
+    // --- veřejné metody ------------------------
 
     /**
      * Nastaví ručně tvořenou query se sadou dat pro prepare statment
@@ -558,6 +558,30 @@ class KT_Repository {
     }
 
     /**
+     * Na základě @see selectData() vrací první odpovídající záznam nebo nic
+     * 
+     * Pozn.: nastavuje automaticky LIMIT = 1 + případné řazení v jednom kroku
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $orderBy
+     * @param string $direction ASC | DESC
+     * @return mixed object|null
+     */
+    public function selectFirst($orderBy, $direction = null) {
+        if (KT::issetAndNotEmpty($orderBy)) {
+            $this->setOrder($orderBy, $direction);
+        }
+        $this->setLimit(1);
+        $this->selectData();
+        if ($this->haveItems()) {
+            return reset($this->getItems());
+        }
+        return null;
+    }
+
+    /**
      * Vrací TRUE když v procházení kolekce má ještě další item k iteraci
      *
      * @author Tomáš Kocifaj
@@ -567,11 +591,9 @@ class KT_Repository {
      */
     public function haveItems() {
         $itemCount = count($this->getItems());
-
         if ($itemCount > $this->getIterator()) {
             return true;
         }
-
         return false;
     }
 
@@ -587,12 +609,11 @@ class KT_Repository {
         $itemCollection = $this->getItems();
         $currentItem = $itemCollection[$this->getIterator()];
         $this->setCurrentItem($currentItem);
-        $this->iterator ++;
-
+        $this->iterator++;
         return $this->getCurrentItem();
     }
 
-// --- privátní metody ------------
+    // --- neveřejné metody ------------------------
 
     /**
      * Připráví základní string s query na základě specifikovaných where podmínek

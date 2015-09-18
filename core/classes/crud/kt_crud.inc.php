@@ -656,6 +656,10 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
                     $formats[] = "%d";
                     $columns[$column->getName()] = KT::tryGetInt($value);
                     break;
+                case KT_CRUD_Column::BIGINT:
+                    $formats[] = "%f";
+                    $columns[$column->getName()] = floor(KT::tryGetFloat($value)); // simulace "long"
+                    break;
                 case KT_CRUD_Column::FLOAT:
                     $formats[] = "%f";
                     $columns[$column->getName()] = KT::tryGetFloat($value);
