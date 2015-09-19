@@ -14,11 +14,10 @@ class KT_User_Profile_Config {
     const EMAIL = "user_email";
     const PHONE = "user_phone";
     const PASSWORD = "user_pass";
-    const PASSWORD_CONFIRM = "kt-user-profile-password-confirm";
 
     // --- fieldsets ---------------------------
 
-    public static function getUserProfileFieldset(WP_User $currentUser = null, $withPhone = true, $isPhoneRequired = true) {
+    public static function getSimpleProfileFieldset(WP_User $currentUser = null, $withPhone = true, $isPhoneRequired = true) {
         $fieldset = new KT_Form_Fieldset(self::USER_PROFILE_FIELDSET);
         $fieldset->setPostPrefix(self::USER_PROFILE_FIELDSET);
 
@@ -26,17 +25,17 @@ class KT_User_Profile_Config {
             $currentUser = wp_get_current_user();
         }
 
-        $fieldset->addText(self::FIRST_NAME, __("Jméno:", KT_DOMAIN))
+        $fieldset->addText(self::FIRST_NAME, __("Jméno*:", KT_DOMAIN))
                 ->setValue($currentUser->user_firstname)
                 ->setAttrMaxlength(30)
                 ->addRule(KT_Field_Validator::REQUIRED, __("Jméno je povinná položka.", KT_DOMAIN))
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Jméno může mít maximálně 30 znaků.", KT_DOMAIN), 30);
-        $fieldset->addText(self::LAST_NAME, __("Příjmení:", KT_DOMAIN))
+        $fieldset->addText(self::LAST_NAME, __("Příjmení*:", KT_DOMAIN))
                 ->setValue($currentUser->user_lastname)
                 ->setAttrMaxlength(30)
                 ->addRule(KT_Field_Validator::REQUIRED, __("Příjmení je povinná položka.", KT_DOMAIN))
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Příjmení může mít maximálně 30 znaků.", KT_DOMAIN), 30);
-        $fieldset->addText(self::EMAIL, __("E-mail:", KT_DOMAIN))
+        $fieldset->addText(self::EMAIL, __("E-mail*:", KT_DOMAIN))
                 ->setValue($currentUser->user_email)
                 ->setAttrMaxlength(50)
                 ->addRule(KT_Field_Validator::REQUIRED, __("E-mail je povinná položka.", KT_DOMAIN))
@@ -44,7 +43,8 @@ class KT_User_Profile_Config {
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("E-mail může mít maximálně 30 znaků.", KT_DOMAIN), 50);
         $userPhoneKey = KT_User_Profile_Config::PHONE;
         if ($withPhone) {
-            $phoneField = $fieldset->addText(self::PHONE, __("Telefon:", KT_DOMAIN))
+            $phoneLabel = ($isPhoneRequired) ? __("Telefon*:", KT_DOMAIN) : __("Telefon:", KT_DOMAIN);
+            $phoneField = $fieldset->addText(self::PHONE, $phoneLabel)
                     ->setValue($currentUser->$userPhoneKey)
                     ->setAttrMaxlength(16)
                     ->setPlaceholder(__("+420 606 707 808", KT_DOMAIN))
@@ -54,12 +54,49 @@ class KT_User_Profile_Config {
                 $phoneField->addRule(KT_Field_Validator::REQUIRED, __("Telefon je povinná položka.", KT_DOMAIN));
             }
         }
-        $fieldset->addText(self::PASSWORD, __("Heslo:", KT_DOMAIN))
+
+        return $fieldset;
+    }
+
+    public static function getUserProfileFieldset(WP_User $currentUser = null, $withPhone = true, $isPhoneRequired = true) {
+        $fieldset = self::getSimpleProfileFieldset($currentUser, $withPhone, $isPhoneRequired);
+
+        $fieldset->addText(self::PASSWORD, __("Heslo*:", KT_DOMAIN))
                 ->setInputType(KT_Text_Field::INPUT_PASSWORD)
                 ->setAttrMaxlength(20)
                 ->addRule(KT_Field_Validator::MIN_LENGTH, __("Heslo musí mít mininálně 7 znaků.", KT_DOMAIN), 7)
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Heslo může mít maximálně 20 znaků.", KT_DOMAIN), 20);
-        $fieldset->addText(self::PASSWORD_CONFIRM, __("Potvrzení hesla:", KT_DOMAIN))
+        $fieldset->addText(self::PASSWORD_CONFIRM, __("Potvrzení hesla*:", KT_DOMAIN))
+                ->setInputType(KT_Text_Field::INPUT_PASSWORD)
+                ->setAttrMaxlength(20)
+                ->addRule(KT_Field_Validator::MIN_LENGTH, __("Potvrzení hesla musí mít mininálně 7 znaků.", KT_DOMAIN), 7)
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Potvrzení hesla může mít maximálně 20 znaků.", KT_DOMAIN), 20)
+                ->setTooltip(__("Zadejte ještě jednou vaše nové heslo.", KT_DOMAIN));
+
+        return $fieldset;
+    }
+
+    const PASSWORD_FIELDSET = "kt-user-profile-password-fieldset";
+    const PASSWORD_OLD = "kt-user-profile-password-old";
+    const PASSWORD_NEW = "kt-user-profile-password-new";
+    const PASSWORD_CONFIRM = "kt-user-profile-password-confirm";
+
+    public static function getPasswordFieldset() {
+        $fieldset = new KT_Form_Fieldset(self::PASSWORD_FIELDSET, __("Změna hesla", KT_DOMAIN));
+        $fieldset->setPostPrefix(self::PASSWORD_FIELDSET);
+
+        $fieldset->addText(self::PASSWORD_OLD, __("Staré heslo*:", KT_DOMAIN))
+                ->setInputType(KT_Text_Field::INPUT_PASSWORD)
+                ->setAttrMaxlength(20)
+                ->addRule(KT_Field_Validator::MIN_LENGTH, __("Staré heslo musí mít mininálně 5 znaků.", KT_DOMAIN), 5)
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Staré heslo může mít maximálně 20 znaků.", KT_DOMAIN), 20);
+
+        $fieldset->addText(self::PASSWORD_NEW, __("Heslo*:", KT_DOMAIN))
+                ->setInputType(KT_Text_Field::INPUT_PASSWORD)
+                ->setAttrMaxlength(20)
+                ->addRule(KT_Field_Validator::MIN_LENGTH, __("Nové heslo musí mít mininálně 7 znaků.", KT_DOMAIN), 7)
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Nové heslo může mít maximálně 20 znaků.", KT_DOMAIN), 20);
+        $fieldset->addText(self::PASSWORD_CONFIRM, __("Potvrzení hesla*:", KT_DOMAIN))
                 ->setInputType(KT_Text_Field::INPUT_PASSWORD)
                 ->setAttrMaxlength(20)
                 ->addRule(KT_Field_Validator::MIN_LENGTH, __("Potvrzení hesla musí mít mininálně 7 znaků.", KT_DOMAIN), 7)
