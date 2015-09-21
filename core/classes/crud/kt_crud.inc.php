@@ -550,7 +550,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         $result = $wpdb->get_row($wpdb->prepare($query, $this->getId()), ARRAY_A);
 
         if ($result === null) {
-            $this->addError("Došlo k chybě při výběru dat z DB", $wpdb->db->last_error);
+            $this->addError("Došlo k chybě při výběru dat z DB", $wpdb->last_error);
             $this->setId(null);
             return;
         }
