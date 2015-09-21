@@ -372,7 +372,7 @@ class KT_Mailer {
      * @return \KT_Mailer
      */
     private function setupHeader() {
-        $header .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $header = "Content-Type: text/html; charset=UTF-8\r\n";
         $header .= "MIME-Version: 1.0\r\n";
         $header .= "Content-Transfer-Encoding: 8bit\r\n";
         $header .= "From: " . self::getHeaderEmail($this->getSenderEmail(), $this->getSenderName()) . "\r\n";

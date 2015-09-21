@@ -8,7 +8,11 @@
  */
 class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
 
+    const DEFAULT_OTHER_POSTS_COUNT = 4;
+
     private $thumbnailImagePermalink;
+    private $otherPostsQuery;
+    private $otherPostsCount;
 
     /**
      * Základní presenter pro práci s daty postu
@@ -17,10 +21,11 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @link http://www.ktstudio.cz
      *
      * @param KT_Modelable|WP_Post $item
+     * @param int $otherPostsCount
      * 
      * @return \kt_post_type_presenter_base
      */
-    function __construct($item = null) {
+    function __construct($item = null, $otherPostsCount = self::DEFAULT_OTHER_POSTS_COUNT) {
         if (KT::issetAndNotEmpty($item)) {
             if ($item instanceof KT_Postable) {
                 parent::__construct($item);
@@ -38,18 +43,76 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         } else {
             parent::__construct();
         }
+        $this->otherPostsCount = KT::tryGetInt($otherPostsCount);
     }
 
     // --- gettery ---------------------------
 
     /**
+     * Vrátí KT WP Post Model
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Post_Base_Model
      */
     public function getModel() {
         return parent::getModel();
     }
 
-    // --- veřejné funkce ---------------------------
+    /**
+     * Vrátí WP Query s ostatními příspěvky
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return \WP_Query
+     */
+    public function getOtherPostsQuery() {
+        if (KT::issetAndNotEmpty($this->otherPostsQuery)) {
+            return $this->otherPostsQuery;
+        }
+        return $this->initOtherPostsQuery();
+    }
+
+    /**
+     * Počet ostatních příspěvků (především v rámci sestavení WP Query)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public function getOtherPostsCount() {
+        return $this->otherPostsCount;
+    }
+
+    // --- veřejné metody ---------------------------
+
+    /**
+     * Kontrola, zda jsou k dispozici ostatní příspěvky
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public function haveOtherPosts() {
+        $otherPostsQuery = $this->getOtherPostsQuery();
+        return KT::issetAndNotEmpty($otherPostsQuery) && $otherPostsQuery->have_posts();
+    }
+
+    /**
+     * Vypíše ostatní příspěvky
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $loopName
+     */
+    public function theOtherPosts($loopName = KT_WP_POST_KEY) {
+        self::theQueryLoops($this->getOtherPostsQuery(), $loopName);
+    }
 
     /**
      * Vypíše kolekci všech termů, kam je post zařazen na základě taxonomy
@@ -242,7 +305,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         return $this->thumbnailImagePermalink = null;
     }
 
-    // --- protected funkce ------------------
+    // --- neveřejné metody ------------------
 
     /**
      * Funkce je volána v konstruktoru presenteru a zavolá se pouze tehdy, pokud se jedná
@@ -258,7 +321,28 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         
     }
 
-    // --- static public function ---------------------------
+    /**
+     * Vrátí a nastaví WP Query s ostatními články
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return \WP_Query
+     */
+    private function initOtherPostsQuery() {
+        $args = array(
+            "post_type" => KT_WP_POST_KEY,
+            "post_status" => "publish",
+            "post_parent" => 0,
+            "posts_per_page" => $this->getOtherPostsCount(),
+            "posts__not_in" => array($this->getModel()->getPostId()),
+            "orderby" => "date",
+            "order" => "DESC",
+        );
+        return $this->otherPostsQuery = new WP_Query($args);
+    }
+
+    // --- statické metody ---------------------------
 
     /**
      * Vrátí HTML tag img s náhledovým obrázkem zadaného postu dle specifikace parametrů
