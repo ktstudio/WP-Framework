@@ -29,6 +29,7 @@ final class KT_WP_Configurator {
     private $metaboxRemover = null;
     private $pageRemover = null;
     private $widgetRemover = null;
+    private $headRemover = null;
     private $themeSettingPage = false;
     private $deleteImagesWithPost = false;
     private $displayLogo = true;
@@ -111,6 +112,13 @@ final class KT_WP_Configurator {
      */
     private function getWidgetRemover() {
         return $this->widgetRemover;
+    }
+
+    /**
+     * @return \KT_WP_Head_Remover_Configurator
+     */
+    private function getHeadRemover() {
+        return $this->headRemover;
     }
 
     /**
@@ -231,6 +239,20 @@ final class KT_WP_Configurator {
      */
     private function setWidgetRemover(KT_WP_Widget_Remover_Configurator $widgetRemover) {
         $this->widgetRemover = $widgetRemover;
+        return $this;
+    }
+
+    /**
+     * Nastaví KT_WP_Head_Remover_Configurator do objektu
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param KT_WP_Head_Remover_Configurator $headRemover
+     * @return \KT_WP_Configurator
+     */
+    private function setHeadRemover(KT_WP_Head_Remover_Configurator $headRemover) {
+        $this->headRemover = $headRemover;
         return $this;
     }
 
@@ -472,6 +494,11 @@ final class KT_WP_Configurator {
             add_action("widgets_init", array($this, "registerWidgetRemoverAction"));
         }
 
+        // head remover
+        if (KT::issetAndNotEmpty($this->getHeadRemover())) {
+            $this->getHeadRemover()->doRemoveHeads();
+        }
+
         // mazání attachmentu se smazáním postu
         if ($this->getDeleteImagesWithPost()) {
             add_action("delete_before_post", array($this, "registerDeleteAttachmentWithPostAction"));
@@ -658,7 +685,6 @@ final class KT_WP_Configurator {
     public function addSidebar($slug) {
         $newSidebar = new KT_WP_Sidebar_Configurator();
         $newSidebar->setId($slug);
-
         $this->sidebarCollection[$slug] = $newSidebar;
         return $this->sidebarCollection[$slug];
     }
@@ -672,12 +698,10 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function metaboxRemover() {
-
         if (KT::notIssetOrEmpty($this->getMetaboxRemover())) {
             $metaboxRemover = new KT_WP_Metabox_Remover_Configurator();
             $this->setMetaboxRemover($metaboxRemover);
         }
-
         return $this->getMetaboxRemover();
     }
 
@@ -690,13 +714,11 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Page_Remover_Configurator
      */
     public function pageRemover() {
-
         $pageRemover = $this->getPageRemover();
         if (KT::notIssetOrEmpty($pageRemover)) {
             $pageRemover = new KT_WP_Page_Remover_Configurator();
             $this->setPageRemover($pageRemover);
         }
-
         return $pageRemover;
     }
 
@@ -709,14 +731,29 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function widgetRemover() {
-
         $widgetRemover = $this->getWidgetRemover();
         if (KT::notIssetOrEmpty($widgetRemover)) {
             $widgetRemover = new KT_WP_Widget_Remover_Configurator();
             $this->setWidgetRemover($widgetRemover);
         }
-
         return $widgetRemover;
+    }
+
+    /**
+     * Aktivuje head remover v rámci configu, který následně umožní odstranění headu z WP Adminu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Head_Remover_Configurator
+     */
+    public function headRemover() {
+        $headRemover = $this->getHeadRemover();
+        if (KT::notIssetOrEmpty($headRemover)) {
+            $headRemover = new KT_WP_Head_Remover_Configurator();
+            $this->setHeadRemover($headRemover);
+        }
+        return $headRemover;
     }
 
     /**

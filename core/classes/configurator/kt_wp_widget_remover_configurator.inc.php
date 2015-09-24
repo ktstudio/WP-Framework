@@ -13,6 +13,11 @@ final class KT_WP_Widget_Remover_Configurator {
     // --- gettery ----------------------
 
     /**
+     * Vrátí zadené widgety k odstranění
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return array
      */
     public function getWidgetRemoverData() {
@@ -24,6 +29,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Zruší widget na základě názvu
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @param string $widgetName
      * @return \KT_WP_Widget_Remover_Configurator
      */
@@ -37,6 +45,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní widget stránek
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removePagesWidget() {
@@ -47,6 +58,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní widget kalendáře
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeCalendarWidget() {
@@ -57,6 +71,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní widget archivů
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeArchivesWidget() {
@@ -67,6 +84,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní widget odkazů
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeLinksWidget() {
@@ -77,6 +97,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní meta widget
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeMetaWidget() {
@@ -87,6 +110,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní vyhledávací widget
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeSearchWidget() {
@@ -97,6 +123,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní textový widget
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeTextWidget() {
@@ -107,6 +136,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní widget kategorií
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeCategoriesWidget() {
@@ -117,6 +149,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní widget posledních příspěvků
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeRecentPostsWidget() {
@@ -127,6 +162,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní widget posledních komentářů
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeRecentCommentsWidget() {
@@ -137,6 +175,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní widget RSS
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeRssWidget() {
@@ -147,6 +188,9 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní widget tagů
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeTagCloudWidget() {
@@ -155,8 +199,11 @@ final class KT_WP_Widget_Remover_Configurator {
     }
 
     /**
-     * Odstraní widget naivgace - menu
+     * Odstraní widget navigace - menu
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeNavMenuWidget() {
@@ -167,7 +214,11 @@ final class KT_WP_Widget_Remover_Configurator {
     /**
      * Odstraní všechny systémové widgety
      *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
      * @param boolean $withoutText - vše kromě textového widgetu
+     * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function removeAllSystemWidgets($withoutText = false, $withoutMenu = false) {
