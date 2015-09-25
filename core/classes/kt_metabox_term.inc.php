@@ -121,7 +121,7 @@ class KT_Metabox_Term {
         }
         foreach ($taxonomy as $tax) {
             if (!taxonomy_exists($tax)) {
-                throw new Exception("Taxonomy " . $tax . " does not exist");
+                //   throw new Exception("Taxonomy " . $tax . " does not exist");
             }
         }
         $this->taxonomies = $taxonomy;

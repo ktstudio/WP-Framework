@@ -12,6 +12,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     private $permalink;
     private $categoriesIds;
     private $wpCommentsCount;
+    private $postTypeObject;
 
     /**
      * Základní model pro práci s daty post_typu
@@ -376,6 +377,21 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
      */
     public function getPostType() {
         return $this->getPost()->post_type;
+    }
+
+    /**
+     * Vrací post type object
+     * 
+     * @see https://codex.wordpress.org/Function_Reference/get_post_type_object
+     * @author Jan Pokorný
+     * @return stdClass
+     */
+    public function getPostTypeObject() {
+        if (!isset($this->postTypeObject)) {
+            $postType = $this->getPostType();
+            $this->postTypeObject = get_post_type_object($postType);
+        }
+        return $this->postTypeObject;
     }
 
     /**
