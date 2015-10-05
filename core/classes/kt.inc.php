@@ -945,6 +945,23 @@ class KT {
         return $value;
     }
 
+    /**
+     * Vyčistí zadané telefonní číslo o mezery a znak + nahradí za 00
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param mixed string|int $phoneNumber
+     * @return string
+     */
+    public static function clearPhoneNumber($phoneNumber) {
+        if (KT::issetAndNotEmpty($phoneNumber)) {
+            $phoneNumber = str_replace("+", "00", str_replace(" ", "", trim($phoneNumber)));
+            return $phoneNumber;
+        }
+        return null;
+    }
+
     // --- LOGICKÉ HODNOTY ---------------------------
 
     /**
@@ -1155,7 +1172,7 @@ class KT {
      */
     public static function stringRemoveSpaces($text) {
         if (KT::issetAndNotEmpty($text)) {
-            return str_replace(' ', '', trim($text));
+            return str_replace(" ", "", trim($text));
         }
         return null;
     }
