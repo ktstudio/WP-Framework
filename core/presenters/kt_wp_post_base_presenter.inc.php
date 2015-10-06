@@ -334,8 +334,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             "post_type" => KT_WP_POST_KEY,
             "post_status" => "publish",
             "post_parent" => 0,
+            "post__not_in" => array($this->getModel()->getPostId()),
             "posts_per_page" => $this->getOtherPostsCount(),
-            "posts__not_in" => array($this->getModel()->getPostId()),
             "orderby" => "date",
             "order" => "DESC",
         );
