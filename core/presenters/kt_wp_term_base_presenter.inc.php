@@ -18,11 +18,14 @@ class KT_WP_Term_Base_Presenter extends KT_Presenter_Base {
      * @param mixed $term - stdClass | string | int
      * @param string $taxonomy
      */
-    public function __construct($term, $taxonomy = null) {
-        $this->termModelInit($term, $taxonomy);
+    public function __construct($term = null, $taxonomy = null) {
+        if (KT::notIssetOrEmpty($term)) {
+            $term = get_queried_object();
+        }
+        parent::__construct(new KT_WP_Term_Base_Model($term, $taxonomy));
     }
 
-    // --- getry & setry -----------
+    // --- getry & setry ---------------------
 
     /**
      * @return \KT_WP_Term_Base_Model
@@ -31,33 +34,11 @@ class KT_WP_Term_Base_Presenter extends KT_Presenter_Base {
         return parent::getModel();
     }
 
-    // --- veřejné funkce -----------
+    // --- veřejné metody ---------------------
 
     public function getPaginationLinks(WP_Query $wp_query = null, $userArgs = array()) {
         return KT::getPaginationLinks($wp_query, $userArgs);
     }
-
-    // --- privátní funkce ----------
-
-    /**
-     * Inicializace KT_WP_Term_Base_Modelu pro presenter
-     * Pokud je zadanán term jako stdClass není potřeba taxonomy
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param mixed $term - stdClass | string | int
-     * @param string $taxonomy
-     * @return \KT_WP_Term_Base_Presenter
-     */
-    private function termModelInit($term, $taxonomy = null) {
-        $termModel = new KT_WP_Term_Base_Model($term, $taxonomy);
-        $this->setModel($termModel);
-
-        return $this;
-    }
-
-    // --- statické funkce ----------
 
     /**
      * Vytažení všech termů pro zadané taxonomy vlastním způsobem ve formátu [ID, slug, name]
@@ -86,4 +67,5 @@ class KT_WP_Term_Base_Presenter extends KT_Presenter_Base {
         throw new KT_Not_Set_Argument_Exception("taxonomy");
     }
 
+    // --- neveřejné metody ---------------------
 }

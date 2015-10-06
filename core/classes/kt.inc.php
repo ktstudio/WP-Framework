@@ -1018,8 +1018,8 @@ class KT {
             "format" => "page/%#%",
             "current" => max(1, $paged),
             "total" => $wp_query->max_num_pages,
-            "prev_text" => __("Předchozí", KT_DOMAIN),
-            "next_text" => __("Další", KT_DOMAIN)
+            "prev_text" => __("&laquo; Předchozí", KT_DOMAIN),
+            "next_text" => __("Další &raquo;", KT_DOMAIN)
         );
 
         $argsPagination = wp_parse_args($userArgs, $defaultArgs);
