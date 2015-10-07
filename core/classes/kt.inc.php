@@ -643,6 +643,23 @@ class KT {
         return null;
     }
 
+    /**
+     * Převede zadnou hodnotu na des. číslo pro formát GPS, pokud je to možné
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param mixed float|int|string $coordinate
+     * @return number
+     */
+    public static function clearGpsNumberCoordinate($coordinate) {
+        if (KT::issetAndNotEmpty($coordinate)) {
+            $coordinateNumber = KT::tryGetFloat(preg_replace("/[^0-9,.\/-\/+]/", "", trim($coordinate)));
+            return number_format($coordinateNumber, 6, ".", "");
+        }
+        return null;
+    }
+
     // --- OBRÁZKY - IMAGE ---------------------------
 
     /**

@@ -385,9 +385,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @param boolean $isLazyLoading
      * @return mixed string|null
      */
-    public static function getImageHtmlTag($imageSrc, array $imageAttr = array()) {
-        $attr = "";
-
+    public static function getImageHtmlTag($imageSrc, array $imageAttr = array(), $isLazyLoading = true) {
+        $attr = null;
         if (KT::issetAndNotEmpty($imageSrc)) {
             $parseAttr = wp_parse_args($imageAttr);
             if (KT::issetAndNotEmpty($parseAttr)) {
@@ -395,7 +394,10 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
                     $attr .= " $attrName=\"$attrValue\"";
                 }
             }
-            return apply_filters("post_thumbnail_html", "<img src=\"$imageSrc\"$attr />");
+            if ($isLazyLoading) {
+                return apply_filters("post_thumbnail_html", "<img src=\"$imageSrc\"$attr />");
+            }
+            return "<img src=\"$imageSrc\"$attr />";
         }
         return null;
     }
