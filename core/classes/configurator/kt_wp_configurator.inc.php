@@ -1354,11 +1354,12 @@ final class KT_WP_Configurator {
             $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
             $confirmTitle = __("OK, rozumím", KT_DOMAIN);
 
+            $content = "<span id=\"ktCookieStatementText\">$text</span>";
+            $content .= "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
+            $content .= "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
+
             echo "<div id=\"ktCookieStatement\">";
-            echo "<span id=\"ktCookieStatementText\">$text</span>";
-            echo "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
-            echo "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
-            echo "</div>";
+            echo apply_filters("kt_cookie_statement_content_filter", $content);
             echo "<noscript><style scoped>#ktCookieStatement { display:none; }</style></noscript>";
         }
     }
