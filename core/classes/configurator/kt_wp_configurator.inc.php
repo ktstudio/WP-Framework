@@ -1360,6 +1360,7 @@ final class KT_WP_Configurator {
 
             echo "<div id=\"ktCookieStatement\">";
             echo apply_filters("kt_cookie_statement_content_filter", $content);
+            echo "</div>";
             echo "<noscript><style scoped>#ktCookieStatement { display:none; }</style></noscript>";
         }
     }

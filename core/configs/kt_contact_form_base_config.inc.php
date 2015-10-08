@@ -25,7 +25,7 @@ class KT_Contact_Form_Base_Config {
      * @return \KT_Form_Fieldset
      */
     public static function getFieldset() {
-        $fieldset = new KT_Form_Fieldset(self::FORM_PREFIX, __("Jméno", KT_DOMAIN));
+        $fieldset = new KT_Form_Fieldset(self::FORM_PREFIX, __("Kontakt", KT_DOMAIN));
         $fieldset->setPostPrefix(self::FORM_PREFIX);
 
         $fieldset->addText(self::NAME, __("Jméno*:", KT_DOMAIN))
@@ -39,7 +39,7 @@ class KT_Contact_Form_Base_Config {
                 ->addAttribute("maxlength", 50)
                 ->addRule(KT_Field_Validator::REQUIRED, __("E-mail je povinná položka", KT_DOMAIN))
                 ->addRule(KT_Field_Validator::EMAIL, __("E-mail je ve špatném tvaru", KT_DOMAIN))
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("E-mail může mít maximálně 350 znaků", KT_DOMAIN), 50);
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("E-mail může mít maximálně 50 znaků", KT_DOMAIN), 50);
 
         $fieldset->addText(self::PHONE, __("Telefon*:", KT_DOMAIN))
                 ->setPlaceholder(__("Telefon*", KT_DOMAIN))
