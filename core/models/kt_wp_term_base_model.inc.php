@@ -1,6 +1,6 @@
 <?php
 
-class KT_WP_Term_Base_Model extends KT_Model_Base {
+class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
 
     const TERM_SLUG = "slug";
     const TERM_ID = "id";

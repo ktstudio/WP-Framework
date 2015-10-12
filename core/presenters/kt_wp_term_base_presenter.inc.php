@@ -15,14 +15,22 @@ class KT_WP_Term_Base_Presenter extends KT_Presenter_Base {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @param mixed $term - stdClass | string | int
+     * @param mixed \KT_Termable | stdClass $item
      * @param string $taxonomy
      */
-    public function __construct($term = null, $taxonomy = null) {
-        if (KT::notIssetOrEmpty($term)) {
-            $term = get_queried_object();
+    public function __construct($item = null, $taxonomy = null) {
+        if ($item instanceof KT_Termable) {
+            parent::__construct($item);
+        } else {
+            /**
+             * Kvůli zpětné kompatibilitě, časem bude zrušeno -> používejte modely...
+             */
+            if (KT::issetAndNotEmpty($item)) {
+                parent::__construct(new KT_WP_Term_Base_Model($item));
+            } else {
+                parent::__construct(new KT_WP_Term_Base_Model(get_queried_object()));
+            }
         }
-        parent::__construct(new KT_WP_Term_Base_Model($term, $taxonomy));
     }
 
     // --- getry & setry ---------------------
