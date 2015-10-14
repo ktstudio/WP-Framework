@@ -1339,21 +1339,21 @@ class KT {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
+     * @global WP_Query $wp_query
      * @param WP_Post $post
      * @return string - template path
      */
     public static function getArchiveTemplate() {
         global $wp_query;
-        $file = TEMPLATEPATH . '/archives/archive-' . $wp_query->query_vars['post_type'] . '.php';
+        $postType = $wp_query->query_vars["post_type"];
+        $file = TEMPLATEPATH . "/archives/archive-{$postType}.php";
         if (file_exists($file)) {
             return $file;
         }
-
         $file = TEMPLATEPATH . '/archives/archive.php';
         if (file_exists($file)) {
             return $file;
         }
-
         return false;
     }
 
@@ -1363,26 +1363,23 @@ class KT {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
-     * @param string $cat = slug zobrazované category
+     * @param string $categorySlug = slug zobrazované category
      * @return string - template path
      */
-    public static function getCategoryTemplate($cat) {
-        $file = TEMPLATEPATH . '/categories/category-' . $cat . '.php';
+    public static function getCategoryTemplate($categorySlug) {
+        $file = TEMPLATEPATH . "/categories/category-{$categorySlug}.php";
         if (file_exists($file)) {
             return $file;
         }
-        $category = get_category($cat);
-
-        $file = TEMPLATEPATH . '/categories/category-' . $category->slug . '.php';
+        $category = get_category($categorySlug);
+        $file = TEMPLATEPATH . "/categories/category-{$category->slug}.php";
         if (file_exists($file)) {
             return $file;
         }
-
-        $file = TEMPLATEPATH . '/categories/category.php';
+        $file = TEMPLATEPATH . "/categories/category.php";
         if (file_exists($file)) {
             return $file;
         }
-
         return false;
     }
 
@@ -1394,32 +1391,26 @@ class KT {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
-     * @param string $taxonomy - slug zobrazené taxonomy
+     * @param string $taxonomyName - slug zobrazené taxonomy
      * @return string - template path
      */
-    public static function getTaxonomyTemplate($taxonomy) {
-
+    public static function getTaxonomyTemplate($taxonomyName) {
         $term = get_queried_object();
-
-        $file = TEMPLATEPATH . "/taxonomies/taxonomy-" . $taxonomy . "-" . $term->slug . ".php";
+        $file = TEMPLATEPATH . "/taxonomies/taxonomy-{$taxonomyName}-{$term->slug}.php";
         if (file_exists($file)) {
             return $file;
         }
-
-        $file = TEMPLATEPATH . "/taxonomies/taxonomy-" . $taxonomy . "-" . $term->term_id . ".php";
+        $file = TEMPLATEPATH . "/taxonomies/taxonomy-{$taxonomyName}-{$term->term_id}.php";
         if (file_exists($file)) {
             return $file;
         }
-
-        $file = TEMPLATEPATH . '/taxonomies/taxonomy-' . $taxonomy . '.php';
+        $file = TEMPLATEPATH . "/taxonomies/taxonomy-{$taxonomyName}.php";
         if (file_exists($file)) {
             return $file;
         }
-
-        if (file_exists(TEMPLATEPATH . '/taxonomies/taxonomy.php')) {
-            return TEMPLATEPATH . '/taxonomies/taxonomy.php';
+        if (file_exists(TEMPLATEPATH . "/taxonomies/taxonomy.php")) {
+            return TEMPLATEPATH . "/taxonomies/taxonomy.php";
         }
-
         return false;
     }
 

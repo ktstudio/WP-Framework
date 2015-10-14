@@ -166,7 +166,10 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
             }
             $name = $term->name;
             if ($this->getWithDescriptionSuffix()) {
-                $name .= " ({$term->description})";
+                $description = $term->description;
+                if (KT::issetAndNotEmpty($description)) {
+                    $name .= " ($description)";
+                }
             }
             if ($this->getWithParentSuffix()) {
                 $parentId = $term->parent;
