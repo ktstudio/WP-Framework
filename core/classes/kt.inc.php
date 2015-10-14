@@ -312,6 +312,26 @@ class KT {
         return array_values($input);
     }
 
+    /**
+     * Rozdělí zadané pole na požadovaný počet částí s přibližně stejným počtem záznamů
+     * 
+     * @author Sebastiaan de Jonge
+     * @link http://blog.sebastiaandejonge.com/articles/2010/december/28/php-dividing-an-array-into-equal-pieces/
+     * 
+     * @param array $items
+     * @param int $segmentsCount
+     * @return array
+     */
+    public static function arrayDivide(array $items, $segmentsCount) {
+        $itemsCount = count($items);
+        if ($itemsCount === 0) {
+            return null;
+        }
+        $segmentLimit = ceil($itemsCount / $segmentsCount);
+        $results = array_chunk($items, $segmentLimit);
+        return $results;
+    }
+
     // --- DATUMY - DATES ---------------------------
 
     /**
