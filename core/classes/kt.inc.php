@@ -320,16 +320,17 @@ class KT {
      * 
      * @param array $items
      * @param int $segmentsCount
+     * @param boolean $preserveKeys
      * @return array
      */
-    public static function arrayDivide(array $items, $segmentsCount) {
+    public static function arrayDivide(array $items, $segmentsCount, $preserveKeys = true) {
         $itemsCount = count($items);
-        if ($itemsCount === 0) {
+        if (($itemsCount === 0) || ($segmentsCount < 1)) {
             return null;
         }
         $segmentLimit = ceil($itemsCount / $segmentsCount);
-        $results = array_chunk($items, $segmentLimit);
-        return $results;
+        $segments = array_chunk($items, $segmentLimit, $preserveKeys);
+        return $segments;
     }
 
     // --- DATUMY - DATES ---------------------------
