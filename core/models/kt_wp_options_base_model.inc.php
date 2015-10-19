@@ -17,6 +17,26 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
     }
 
     /**
+     * Provádí odchychycení funkcí s začátkem názvu "get", který následně prověří
+     * existenci metody. Pokud ano, vrátí dle klíče konstanty hodnotu uloženou v DB
+     * v opačném případě neprovede nic.
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param type $functionName
+     * @param array $attributes
+     * @return type
+     */
+    public function __call($functionName, array $attributes) {
+        $constValue = $this->getConstantValue($functionName);
+
+        if (KT::notIssetOrEmpty($constValue)) {
+            return $this->getOption($constValue);
+        }
+    }
+
+    /**
      * Vrátí prefix pro vyčtení (jen konkrétních) options z DB
      *
      * @author Martin Hlaváč
@@ -129,7 +149,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
         return null;
     }
 
-        /**
+    /**
      * Vrátí překlad hodnoty (pokud je to možné) pro zadaný název (klíč) pokud existuje ve výčtu získaných options hodnot (podle dříve zadaného případného prefixu)
      * Pozn.: překlad je spajt s pluginem WPML
      *
@@ -149,7 +169,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
         }
         return $this->getOption($name);
     }
-    
+
     /**
      * Funkcí vrátí všechny option podle případného prefixu ve tvaru název (klíč) => hodnota
      *
