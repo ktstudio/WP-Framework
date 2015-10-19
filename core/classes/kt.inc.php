@@ -1232,6 +1232,21 @@ class KT {
     }
 
     /**
+     * Na základě zadaného pole hodnot vrátí odpovídající SQL placeholdery jako string 
+     * Pozn. vhodné pro @see WPDB a prepare IN
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array $values
+     * @param string $placeholder
+     * @return string
+     */
+    public static function stringSqlPlaceholders(array $values, $placeholder = "s") {
+        return implode(",", array_fill(0, count($values), "%{$placeholder}"));
+    }
+
+    /**
      * Na základě odřádkování rozdělí zadaný text do pole (tzn. po řádcích)
      * 
      * @author Martin Hlaváč
