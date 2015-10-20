@@ -56,7 +56,8 @@ abstract class KT_Model_Base implements KT_Modelable {
      * @return string
      */
     protected function getConstantValue($functionName) {
-        $firstChars = substr_compare($functionName, self::MAGIC_GETTER_KEY, 0, 3);
+        
+        $firstChars = substr($functionName, 0, 3);
 
         if ($firstChars != self::MAGIC_GETTER_KEY) {
             return null;

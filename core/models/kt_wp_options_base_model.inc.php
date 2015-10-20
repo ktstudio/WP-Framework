@@ -31,7 +31,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
     public function __call($functionName, array $attributes) {
         $constValue = $this->getConstantValue($functionName);
 
-        if (KT::notIssetOrEmpty($constValue)) {
+        if (KT::issetAndNotEmpty($constValue)) {
             return $this->getOption($constValue);
         }
     }
