@@ -1242,7 +1242,7 @@ class KT {
      * @param string $placeholder
      * @return string
      */
-    public static function stringSqlPlaceholders(array $values, $placeholder = "s") {
+    public static function stringWpDbPlaceholders(array $values, $placeholder = "s") {
         return implode(",", array_fill(0, count($values), "%{$placeholder}"));
     }
 
