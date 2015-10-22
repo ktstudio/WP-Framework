@@ -17,16 +17,16 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
     }
 
     /**
-     * Provádí odchychycení funkcí s začátkem názvu "get", který následně prověří
-     * existenci metody. Pokud ano, vrátí dle klíče konstanty hodnotu uloženou v DB
-     * v opačném případě neprovede nic.
+     * Provádí odchychycení funkcí se začátkem názvu "get", který následně prověří
+     * existenci metody. Následně vrátí dle klíče konstanty hodnotu uloženou v DB
+     * v opačném případě neprovede nic nebo nechá dokončit existující funkci.
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
      * @param type $functionName
      * @param array $attributes
-     * @return type
+     * @return mixed
      */
     public function __call($functionName, array $attributes) {
         $constValue = $this->getConstantValue($functionName);

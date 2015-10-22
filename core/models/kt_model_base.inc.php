@@ -66,8 +66,14 @@ abstract class KT_Model_Base implements KT_Modelable {
         if (method_exists($this, $functionName)) {
             return null;
         }
+        
+        $configName = $this->getConfigFromModelName();
+        
+        if(!class_exists($configName)){
+            return null;
+        }
 
-        $classRef = new ReflectionClass($this->getConfigFromModelName());
+        $classRef = new ReflectionClass($configName);
         $constantName = $this->getConstantFromFunctionName($functionName);
 
         if (KT::notIssetOrEmpty($constantName)) {
