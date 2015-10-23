@@ -50,33 +50,39 @@ img.kt-loading-image
     position: relative;
 }
 
+.kt-loading-gif.loading, kt-loading-gif.loading:hover
+{
+    background: #F0F0EE !important;
+    color: #999 !important;
+    border-color: #999 !important;
+    box-shadow: none !important;
+}
+
+.kt-loading-gif.loading:hover
+{
+    cursor:progress;
+}
+
 .kt-loading-gif:before
 {
     content: "";
     display: block;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     display: inline-block;
     background: url('../images/loading.gif') top left no-repeat;
     display: none;
     position: absolute;
 }
 
-.kt-loading-gif.left:before
-{
-    left: -20px;
-    top: 0;
-}
-
-.kt-loading-gif.right:before
-{
-    right: -20px;
-    top: 0;
-}
-
 .kt-loading-gif.loading:before
 {
     display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
 }
 
 
