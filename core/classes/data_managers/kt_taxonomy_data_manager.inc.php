@@ -8,6 +8,7 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
     private $taxonomy;
     private $args = array();
     private $optionValueType = self::FIELD_ID;
+    private $withDescriptionSuffix = false;
     private $withParentSuffix = false;
 
     function __construct($taxonomy = null, $args = null) {
@@ -54,6 +55,22 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
      */
     public function getOptionValueType() {
         return $this->optionValueType;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getWithDescriptionSuffix() {
+        return $this->withDescriptionSuffix;
+    }
+
+    /**
+     * @param boolean $withDescriptionSuffix
+     * @return \KT_Taxonomy_Data_Manager
+     */
+    public function setWithDescriptionSuffix($withDescriptionSuffix) {
+        $this->withDescriptionSuffix = $withDescriptionSuffix;
+        return $this;
     }
 
     /**
@@ -148,6 +165,12 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
                     break;
             }
             $name = $term->name;
+            if ($this->getWithDescriptionSuffix()) {
+                $description = $term->description;
+                if (KT::issetAndNotEmpty($description)) {
+                    $name .= " ($description)";
+                }
+            }
             if ($this->getWithParentSuffix()) {
                 $parentId = $term->parent;
                 if ($parentId > 0) {

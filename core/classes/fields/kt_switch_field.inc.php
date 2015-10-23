@@ -157,7 +157,7 @@ class KT_Switch_Field extends KT_Field {
      * @link http://www.ktstudio.cz 
      * 
      * @param string|int $value
-     * @return bool
+     * @return boolean
      */
     public static function isSwitchValue($value) {
         if ($value == KT_Switch_Field::YES || $value === 1 || $value == KT_Switch_Field::NO || $value === 0) {

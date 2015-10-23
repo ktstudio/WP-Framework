@@ -7,8 +7,7 @@
  * @author Tomáš Kocifaj
  * @link http://www.ktstudio.cz
  */
-Interface KT_Presentable {
-    // --- gettery ------------
+interface KT_Presentable {
 
     /**
      * Metodá, která by měla vracet základní model presenteru
@@ -16,8 +15,6 @@ Interface KT_Presentable {
      * @return mixed
      */
     public function getModel();
-
-    // --- settery ------------
 
     /**
      * Metoda, která má nastavit základní model presenteru

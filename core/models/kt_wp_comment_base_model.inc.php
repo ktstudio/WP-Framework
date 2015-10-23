@@ -243,7 +243,7 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @return bool
+     * @return boolean
      */
     public function getApproved() {
         return KT::tryGetBool($this->getComment()->comment_approved);
@@ -355,7 +355,7 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
      * @link http://www.ktstudio.cz
      * 
      * @param int $size
-     * @param bool $clearUrl označení, zda mát být URL čístá - bez parametrů
+     * @param boolean $clearUrl označení, zda mát být URL čístá - bez parametrů
      * 
      * @return string 
      */
@@ -381,7 +381,7 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @return bool
+     * @return boolean
      */
     public function hasParent() {
         return KT::isIdFormat($this->getParentId());
@@ -393,7 +393,7 @@ class KT_WP_Comment_Base_Model extends KT_Meta_Model_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @return bool
+     * @return boolean
      */
     public function isAuthorLogged() {
         $currentUser = wp_get_current_user();

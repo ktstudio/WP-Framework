@@ -29,6 +29,7 @@ final class KT_WP_Configurator {
     private $metaboxRemover = null;
     private $pageRemover = null;
     private $widgetRemover = null;
+    private $headRemover = null;
     private $themeSettingPage = false;
     private $deleteImagesWithPost = false;
     private $displayLogo = true;
@@ -111,6 +112,13 @@ final class KT_WP_Configurator {
      */
     private function getWidgetRemover() {
         return $this->widgetRemover;
+    }
+
+    /**
+     * @return \KT_WP_Head_Remover_Configurator
+     */
+    private function getHeadRemover() {
+        return $this->headRemover;
     }
 
     /**
@@ -235,6 +243,20 @@ final class KT_WP_Configurator {
     }
 
     /**
+     * Nastaví KT_WP_Head_Remover_Configurator do objektu
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param KT_WP_Head_Remover_Configurator $headRemover
+     * @return \KT_WP_Configurator
+     */
+    private function setHeadRemover(KT_WP_Head_Remover_Configurator $headRemover) {
+        $this->headRemover = $headRemover;
+        return $this;
+    }
+
+    /**
      * Nastavení délku excreptu pří výpisu entit.
      *
      * @author Tomáš Kocifaj
@@ -306,7 +328,7 @@ final class KT_WP_Configurator {
      * @param boolean $displayLogo
      * @return \KT_WP_Configurator
      */
-    public function setDisplayLogo($displayLogo = false) {
+    public function setDisplayLogo($displayLogo = true) {
         $this->displayLogo = $displayLogo;
         return $this;
     }
@@ -470,6 +492,11 @@ final class KT_WP_Configurator {
         // widget remover
         if (KT::issetAndNotEmpty($this->getWidgetRemover())) {
             add_action("widgets_init", array($this, "registerWidgetRemoverAction"));
+        }
+
+        // head remover
+        if (KT::issetAndNotEmpty($this->getHeadRemover())) {
+            $this->getHeadRemover()->doRemoveHeads();
         }
 
         // mazání attachmentu se smazáním postu
@@ -658,7 +685,6 @@ final class KT_WP_Configurator {
     public function addSidebar($slug) {
         $newSidebar = new KT_WP_Sidebar_Configurator();
         $newSidebar->setId($slug);
-
         $this->sidebarCollection[$slug] = $newSidebar;
         return $this->sidebarCollection[$slug];
     }
@@ -672,12 +698,10 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function metaboxRemover() {
-
         if (KT::notIssetOrEmpty($this->getMetaboxRemover())) {
             $metaboxRemover = new KT_WP_Metabox_Remover_Configurator();
             $this->setMetaboxRemover($metaboxRemover);
         }
-
         return $this->getMetaboxRemover();
     }
 
@@ -690,13 +714,11 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Page_Remover_Configurator
      */
     public function pageRemover() {
-
         $pageRemover = $this->getPageRemover();
         if (KT::notIssetOrEmpty($pageRemover)) {
             $pageRemover = new KT_WP_Page_Remover_Configurator();
             $this->setPageRemover($pageRemover);
         }
-
         return $pageRemover;
     }
 
@@ -709,14 +731,29 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function widgetRemover() {
-
         $widgetRemover = $this->getWidgetRemover();
         if (KT::notIssetOrEmpty($widgetRemover)) {
             $widgetRemover = new KT_WP_Widget_Remover_Configurator();
             $this->setWidgetRemover($widgetRemover);
         }
-
         return $widgetRemover;
+    }
+
+    /**
+     * Aktivuje head remover v rámci configu, který následně umožní odstranění headu z WP Adminu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Head_Remover_Configurator
+     */
+    public function headRemover() {
+        $headRemover = $this->getHeadRemover();
+        if (KT::notIssetOrEmpty($headRemover)) {
+            $headRemover = new KT_WP_Head_Remover_Configurator();
+            $this->setHeadRemover($headRemover);
+        }
+        return $headRemover;
     }
 
     /**
@@ -1209,10 +1246,18 @@ final class KT_WP_Configurator {
         if (KT::arrayIssetAndNotEmpty($postTypes)) {
             foreach ($postTypes as $postType) {
                 $postType->classes = array();
-                $postType->type = $postType->name;
+                $postType->type = "custom"; //$postType->name;
                 $postType->object_id = $postType->name;
                 $postType->title = $postType->labels->name;
+                $postType->description = $postType->labels->name;
                 $postType->object = self::POST_TYPE_ARCHIVE_OBJECT_KEY;
+                $postType->menu_item_parent = null;
+                $postType->parent = null;
+                $postType->db_id = null;
+                $postType->url = get_post_type_archive_link($postType->name);
+                $postType->target = null;
+                $postType->attr_title = $postType->labels->name;
+                $postType->xfn = null;
             }
 
             $walker = new Walker_Nav_Menu_Checklist(array());
@@ -1309,10 +1354,12 @@ final class KT_WP_Configurator {
             $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
             $confirmTitle = __("OK, rozumím", KT_DOMAIN);
 
+            $content = "<span id=\"ktCookieStatementText\">$text</span>";
+            $content .= "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
+            $content .= "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
+
             echo "<div id=\"ktCookieStatement\">";
-            echo "<span id=\"ktCookieStatementText\">$text</span>";
-            echo "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
-            echo "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
+            echo apply_filters("kt_cookie_statement_content_filter", $content);
             echo "</div>";
             echo "<noscript><style scoped>#ktCookieStatement { display:none; }</style></noscript>";
         }

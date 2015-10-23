@@ -17,6 +17,14 @@ class KT_Radio_Field extends KT_Options_Field_Base {
         return $this;
     }
 
+    // --- getry & setry ---------------------
+
+    public function getFieldType() {
+        return self::FIELD_TYPE;
+    }
+
+    // --- veřejné metody ---------------------
+
     /**
      * Provede výpis fieldu pomocí echo $this->getField()
      *
@@ -48,7 +56,7 @@ class KT_Radio_Field extends KT_Options_Field_Base {
 
             $html .= "<span class=\"input-wrap radio\">";
             $html .= "<input type=\"radio\" ";
-            $html .= $this->getBasicHtml( $key );
+            $html .= $this->getBasicHtml($key);
             $html .= " value=\"$key\" ";
 
             if ($key == $this->getValue() && $this->getValue() !== null) {
@@ -66,7 +74,7 @@ class KT_Radio_Field extends KT_Options_Field_Base {
 
         return $html;
     }
-    
+
     /**
      * Vrátí základní HTML prvky pro Radio field
      * Class, Name, ID, Title(tooltip), validator jSON
@@ -76,18 +84,14 @@ class KT_Radio_Field extends KT_Options_Field_Base {
      *
      * @return string
      */
-    public function getBasicHtml( $inputName = null) {
+    public function getBasicHtml($inputName = null) {
         $html = "";
         $this->validatorJsonContentInit();
-        $this->setAttrId($this->getName() . "-". $inputName);
+        $this->setAttrId($this->getName() . "-" . $inputName);
         $html .= $this->getNameAttribute();
         $html .= $this->getAttributeString();
 
         return $html;
-    }
-
-    public function getFieldType() {
-        return self::FIELD_TYPE;
     }
 
 }

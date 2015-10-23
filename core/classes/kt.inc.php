@@ -101,6 +101,23 @@ class KT {
     }
 
     /**
+     * Přidání (přiřazené) hodnoty do zadaného pole, pokud tato hodnota ještě není v poli obsažena
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array $haystack
+     * @param mixed $value
+     * @return array
+     */
+    public static function arrayAdd(array $haystack, $value) {
+        if (isset($value) && !in_array($value, $haystack)) {
+            array_push($haystack, $value);
+        }
+        return $haystack;
+    }
+
+    /**
      * Ze zadaného pole odstraní zadanou hodnotu a vrátí pole hodnot
      * 
      * @author Martin Hlaváč
@@ -148,7 +165,7 @@ class KT {
      * @link http://www.ktstudio.cz
      * 
      * @param array $haystack
-     * @param int|string $needle
+     * @param mixed $needle
      * @return array
      */
     public static function arrayRemoveByValue(array $haystack = null, $needle) {
@@ -295,6 +312,27 @@ class KT {
         return array_values($input);
     }
 
+    /**
+     * Rozdělí zadané pole na požadovaný počet částí s přibližně stejným počtem záznamů
+     * 
+     * @author Sebastiaan de Jonge
+     * @link http://blog.sebastiaandejonge.com/articles/2010/december/28/php-dividing-an-array-into-equal-pieces/
+     * 
+     * @param array $items
+     * @param int $segmentsCount
+     * @param boolean $preserveKeys
+     * @return array
+     */
+    public static function arrayDivide(array $items, $segmentsCount, $preserveKeys = true) {
+        $itemsCount = count($items);
+        if (($itemsCount === 0) || ($segmentsCount < 1)) {
+            return null;
+        }
+        $segmentLimit = ceil($itemsCount / $segmentsCount);
+        $segments = array_chunk($items, $segmentLimit, $preserveKeys);
+        return $segments;
+    }
+
     // --- DATUMY - DATES ---------------------------
 
     /**
@@ -356,7 +394,7 @@ class KT {
      * @link http://www.ktstudio.cz
      * 
      * @param mixed $value
-     * @return bool
+     * @return boolean
      */
     public static function issetAndNotEmpty($value) {
         return isset($value) && !empty($value);
@@ -369,7 +407,7 @@ class KT {
      * @link http://www.ktstudio.cz
      * 
      * @param mixed $value
-     * @return bool
+     * @return boolean
      */
     public static function notIssetOrEmpty($value) {
         return !isset($value) || empty($value);
@@ -381,7 +419,7 @@ class KT {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @return bool
+     * @return boolean
      */
     public static function isWpAjax() {
         return defined("DOING_AJAX") && DOING_AJAX;
@@ -525,7 +563,7 @@ class KT {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param bool $fullUrl - true i s pametry, false bez
+     * @param boolean $fullUrl - true i s pametry, false bez
      * @return string
      */
     public static function getRequestUrl($fullUrl = true) {
@@ -622,6 +660,23 @@ class KT {
                     }
                 }
             }
+        }
+        return null;
+    }
+
+    /**
+     * Převede zadnou hodnotu na des. číslo pro formát GPS, pokud je to možné
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param mixed float|int|string $coordinate
+     * @return number
+     */
+    public static function clearGpsNumberCoordinate($coordinate) {
+        if (KT::issetAndNotEmpty($coordinate)) {
+            $coordinateNumber = KT::tryGetFloat(preg_replace("/[^0-9,.\/-\/+]/", "", trim($coordinate)));
+            return number_format($coordinateNumber, 6, ".", "");
         }
         return null;
     }
@@ -928,6 +983,23 @@ class KT {
         return $value;
     }
 
+    /**
+     * Vyčistí zadané telefonní číslo o mezery a znak + nahradí za 00
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param mixed string|int $phoneNumber
+     * @return string
+     */
+    public static function clearPhoneNumber($phoneNumber) {
+        if (KT::issetAndNotEmpty($phoneNumber)) {
+            $phoneNumber = str_replace("+", "00", str_replace(" ", "", trim($phoneNumber)));
+            return $phoneNumber;
+        }
+        return null;
+    }
+
     // --- LOGICKÉ HODNOTY ---------------------------
 
     /**
@@ -940,7 +1012,7 @@ class KT {
      * @return integer|null
      */
     public static function tryGetBool($value) {
-        if (KT::issetAndNotEmpty($value)) {
+        if (isset($value)) {
             if (is_bool($value)) {
                 return $value;
             }
@@ -984,8 +1056,8 @@ class KT {
             "format" => "page/%#%",
             "current" => max(1, $paged),
             "total" => $wp_query->max_num_pages,
-            "prev_text" => __("Předchozí", KT_DOMAIN),
-            "next_text" => __("Další", KT_DOMAIN)
+            "prev_text" => __("&laquo; Předchozí", KT_DOMAIN),
+            "next_text" => __("Další &raquo;", KT_DOMAIN)
         );
 
         $argsPagination = wp_parse_args($userArgs, $defaultArgs);
@@ -1138,7 +1210,7 @@ class KT {
      */
     public static function stringRemoveSpaces($text) {
         if (KT::issetAndNotEmpty($text)) {
-            return str_replace(' ', '', trim($text));
+            return str_replace(" ", "", trim($text));
         }
         return null;
     }
@@ -1157,6 +1229,21 @@ class KT {
             return html_entity_decode(stripslashes($text), ENT_COMPAT | ENT_HTML401, "UTF-8");
         }
         return $text;
+    }
+
+    /**
+     * Na základě zadaného pole hodnot vrátí odpovídající SQL placeholdery jako string 
+     * Pozn. vhodné pro @see WPDB a prepare IN
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array $values
+     * @param string $placeholder
+     * @return string
+     */
+    public static function stringWpDbPlaceholders(array $values, $placeholder = "s") {
+        return implode(",", array_fill(0, count($values), "%{$placeholder}"));
     }
 
     /**
@@ -1288,21 +1375,21 @@ class KT {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
+     * @global WP_Query $wp_query
      * @param WP_Post $post
      * @return string - template path
      */
     public static function getArchiveTemplate() {
         global $wp_query;
-        $file = TEMPLATEPATH . '/archives/archive-' . $wp_query->query_vars['post_type'] . '.php';
+        $postType = $wp_query->query_vars["post_type"];
+        $file = TEMPLATEPATH . "/archives/archive-{$postType}.php";
         if (file_exists($file)) {
             return $file;
         }
-
         $file = TEMPLATEPATH . '/archives/archive.php';
         if (file_exists($file)) {
             return $file;
         }
-
         return false;
     }
 
@@ -1312,26 +1399,23 @@ class KT {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
-     * @param string $cat = slug zobrazované category
+     * @param string $categorySlug = slug zobrazované category
      * @return string - template path
      */
-    public static function getCategoryTemplate($cat) {
-        $file = TEMPLATEPATH . '/categories/category-' . $cat . '.php';
+    public static function getCategoryTemplate($categorySlug) {
+        $file = TEMPLATEPATH . "/categories/category-{$categorySlug}.php";
         if (file_exists($file)) {
             return $file;
         }
-        $category = get_category($cat);
-
-        $file = TEMPLATEPATH . '/categories/category-' . $category->slug . '.php';
+        $category = get_category($categorySlug);
+        $file = TEMPLATEPATH . "/categories/category-{$category->slug}.php";
         if (file_exists($file)) {
             return $file;
         }
-
-        $file = TEMPLATEPATH . '/categories/category.php';
+        $file = TEMPLATEPATH . "/categories/category.php";
         if (file_exists($file)) {
             return $file;
         }
-
         return false;
     }
 
@@ -1343,32 +1427,26 @@ class KT {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
-     * @param string $taxonomy - slug zobrazené taxonomy
+     * @param string $taxonomyName - slug zobrazené taxonomy
      * @return string - template path
      */
-    public static function getTaxonomyTemplate($taxonomy) {
-
+    public static function getTaxonomyTemplate($taxonomyName) {
         $term = get_queried_object();
-
-        $file = TEMPLATEPATH . "/taxonomies/taxonomy-" . $taxonomy . "-" . $term->slug . ".php";
+        $file = TEMPLATEPATH . "/taxonomies/taxonomy-{$taxonomyName}-{$term->slug}.php";
         if (file_exists($file)) {
             return $file;
         }
-
-        $file = TEMPLATEPATH . "/taxonomies/taxonomy-" . $taxonomy . "-" . $term->term_id . ".php";
+        $file = TEMPLATEPATH . "/taxonomies/taxonomy-{$taxonomyName}-{$term->term_id}.php";
         if (file_exists($file)) {
             return $file;
         }
-
-        $file = TEMPLATEPATH . '/taxonomies/taxonomy-' . $taxonomy . '.php';
+        $file = TEMPLATEPATH . "/taxonomies/taxonomy-{$taxonomyName}.php";
         if (file_exists($file)) {
             return $file;
         }
-
-        if (file_exists(TEMPLATEPATH . '/taxonomies/taxonomy.php')) {
-            return TEMPLATEPATH . '/taxonomies/taxonomy.php';
+        if (file_exists(TEMPLATEPATH . "/taxonomies/taxonomy.php")) {
+            return TEMPLATEPATH . "/taxonomies/taxonomy.php";
         }
-
         return false;
     }
 

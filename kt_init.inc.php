@@ -2,7 +2,7 @@
 
 define("KT_LOADED", true);
 
-define("KT_VERSION", "1.4");
+define("KT_VERSION", "1.5");
 
 define("KT_BASE_PATH", path_join(TEMPLATEPATH, "kt"));
 define("KT_BASE_URL", get_template_directory_uri() . "/kt");
@@ -391,45 +391,46 @@ add_filter("template_include", "kt_load_template_from_subdir");
  * dir - pages - všechny template pro složky a page.php samotné
  * dir - taxonomies - všechny taxonomy včetně taxonomy.php
  * 
- * @author Tomáš Kocifaj
+ * @author Tomáš Kocifaj, Martin Hlaváč
  * @link http://www.ktstudio.cz
  * 
+ * @global string $post
+ * @global string $taxonomy
+ * @global string $cat
  * @param string $template
  */
 function kt_load_template_from_subdir($template) {
     global $post;
     global $taxonomy;
     global $cat;
-
     // --- front-page ---------------------------
     if (is_front_page()) {
         return $template;
     }
-
     // --- single ---------------------------
     if (is_single()) {
         $ktTemplate = KT::getSingleTemplate($post);
         if ($ktTemplate) {
             return $ktTemplate;
         }
+        return $template;
     }
-
     // --- attachment ---------------------------
     if (is_attachment()) {
         $ktTemplate = KT::getAttachmentTemplate();
         if ($ktTemplate) {
             return $ktTemplate;
         }
+        return $template;
     }
-
     // --- page ---------------------------
     if (is_page()) {
         $ktTemplate = KT::getPageTemplate($post);
         if ($ktTemplate) {
             return $ktTemplate;
         }
+        return $template;
     }
-
     // --- category ---------------------------
     if (is_category()) {
         $ktTemplate = KT::getCategoryTemplate($cat);
@@ -438,25 +439,22 @@ function kt_load_template_from_subdir($template) {
         }
         return $template;
     }
-
     // --- search ---------------------------
     if (is_search()) {
         return $template;
     }
-
     // --- taxonomy ---------------------------
-    if (KT::issetAndNotEmpty($taxonomy)) {
+    if (is_tax()) {
         $ktTemplate = KT::getTaxonomyTemplate($taxonomy);
         if ($ktTemplate) {
             return $ktTemplate;
         }
+        return $template;
     }
-
     // --- author -----------------------------
     if (is_author()) {
         return $template;
     }
-
     // --- archive ---------------------------
     /*
      * Musí být načítán vždy poslední kvůli WP Query
@@ -466,7 +464,8 @@ function kt_load_template_from_subdir($template) {
         if ($ktTemplate) {
             return $ktTemplate;
         }
+        //return $template;
     }
-
+    // --- default ---------------------------
     return $template;
 }

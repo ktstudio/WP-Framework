@@ -44,6 +44,8 @@ define("KT_WP_NAV_MENU_ITEM_KEY", "nav_menu_item");
 // --- post meta ------------------------
 define("KT_WP_META_KEY_PAGE_TEMPLATE", "_wp_page_template");
 define("KT_WP_META_KEY_THUMBNAIL_ID", "_thumbnail_id");
+// --- options ------------------------
+define("KT_WP_OPTION_KEY_FRONT_PAGE", "page_on_front");
 // --- theme support ------------------------
 define("KT_WP_THEME_SUPPORT_POST_FORMATS_KEY", "post-formats");
 define("KT_WP_THEME_SUPPORT_POST_THUMBNAILS_KEY", "post-thumbnails");

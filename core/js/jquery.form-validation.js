@@ -11,12 +11,12 @@ jQuery(document).ready(function () {
         if (validationResult === false && showNotice == "true") {
             jQuery(this).before(formNotice);
         }
-        
+
         return validationResult;
     });
 });
 
-( function ( $ ) {
+(function ($) {
 
     /**
      * jQuery plugin pro validaci KT_Form na straně browseru
@@ -32,22 +32,22 @@ jQuery(document).ready(function () {
         var dataValidators = "validators";
         var isValid = true;
         var methods = {
-            validate: function ( element ) {
-                var validators = element.data( dataValidators );
+            validate: function (element) {
+                var validators = element.data(dataValidators);
 
-                for ( var index in validators ) {
+                for (var index in validators) {
 
                     var currentValidator = validators[index];
                     var validatorFunction = currentValidator.condition;
 
-                    if ( currentValidator.condition !== "required" && element.val() === "" ) {
+                    if (currentValidator.condition !== "required" && element.val() === "") {
                         continue;
                     }
 
-                    var result = methods[validatorFunction]( element.val(), currentValidator.params );
+                    var result = methods[validatorFunction](element.val(), currentValidator.params);
 
-                    if ( result === false ) {
-                        element.after( methods.errorMsgContent( currentValidator.msg ) );
+                    if (result === false) {
+                        element.after(methods.errorMsgContent(currentValidator.msg));
                         isValid = false;
                         return;
                     }
@@ -55,112 +55,112 @@ jQuery(document).ready(function () {
             },
             // validační funkce na základě předané hodnoty
 
-            required: function ( value, param ) {
-                if ( value !== "" ) {
+            required: function (value, param) {
+                if (value !== "") {
                     return true;
                 }
 
                 return false;
             },
-            integer: function ( value, param ) {
+            integer: function (value, param) {
                 return value % 1 === 0;
             },
-            float: function ( value, param ) {
-                 var RE = /^-{0,1}\d*\.{0,1}\d+$/;
+            float: function (value, param) {
+                var RE = /^-{0,1}\d*\.{0,1}\d+$/;
                 return (RE.test(value));
             },
-            email: function ( value, param ) {
+            email: function (value, param) {
                 var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                return regex.test( value );
+                return regex.test(value);
             },
-            url: function ( value ) {
+            url: function (value) {
                 var regexp = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-                return regexp.test( value );
+                return regexp.test(value);
             },
-            range: function ( value, param ) {
-                
-                console.log(!methods.float( value ));
+            range: function (value, param) {
 
-                if ( !methods.float( value ) ) {
+                console.log(!methods.float(value));
+
+                if (!methods.float(value)) {
                     return false;
                 }
 
                 var minValue = parseInt(param[0]);
                 var maxValue = parseInt(param[1]);
 
-                if ( value >= minValue && value <= maxValue ) {
+                if (value >= minValue && value <= maxValue) {
                     return true;
                 }
 
                 return false;
             },
-            length: function ( value, param ) {
-                if ( value.length === param ) {
+            length: function (value, param) {
+                if (value.length === param) {
                     return true;
                 }
 
                 return false;
             },
-            maxLength: function ( value, param ) {
-                if ( value.length <= param ) {
+            maxLength: function (value, param) {
+                if (value.length <= param) {
                     return true;
                 }
 
                 return false;
             },
-            minLength: function ( value, param ) {
-                if ( value.length >= param ) {
+            minLength: function (value, param) {
+                if (value.length >= param) {
                     return true;
                 }
 
                 return false;
             },
-            maxNumber: function ( value, param ) {
-                if ( !methods.float( value ) ) {
+            maxNumber: function (value, param) {
+                if (!methods.float(value)) {
                     return false;
                 }
-                
+
                 value = parseInt(value);
 
-                if ( value <= param ) {
+                if (value <= param) {
                     return true;
                 }
 
                 return false;
             },
-            minNumber: function ( value, param ) {
-                if ( ! methods.float( value ) ) {
+            minNumber: function (value, param) {
+                if (!methods.float(value)) {
                     return false;
                 }
-                
-                value = parseInt(value);
-                
 
-                if ( value >= param ) {
+                value = parseInt(value);
+
+
+                if (value >= param) {
                     return true;
                 }
 
                 return false;
             },
-            regular: function(value, param){
+            regular: function (value, param) {
                 var patt = new RegExp(param);
                 return patt.test(value);
             },
             // funkce vrátím HTML s chybovou hláškou na základě předané MSG
-            errorMsgContent: function ( msg ) {
+            errorMsgContent: function (msg) {
                 var html = "<div class=\"validator\">" +
-                    "<span class=\"erorr-s\">" + msg + "</span>" +
-                    "</div>";
+                        "<span class=\"erorr-s\">" + msg + "</span>" +
+                        "</div>";
 
                 return html;
             }
         };
 
-        $( this ).find( "[data-" + dataValidators + "]" ).each( function () {
-            methods.validate( $( this ) );
-        } );
+        $(this).find("[data-" + dataValidators + "]").each(function () {
+            methods.validate($(this));
+        });
 
         return isValid;
 
     };
-} )( jQuery );
+})(jQuery);

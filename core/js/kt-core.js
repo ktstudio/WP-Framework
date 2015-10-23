@@ -1,7 +1,7 @@
 jQuery(document).ready(function () {
 
     // Validování metaboxu v editaci postu (custom post_type)
-    jQuery("form#post, form#kt-custom-page-screen").submit(function () {
+    jQuery("form#post, form#kt-custom-page-screenm, #edittag").submit(function () {
         jQuery("#jquery-kt-validator").remove();
 
         var validationResult = jQuery(this).formValidation();
@@ -19,6 +19,12 @@ jQuery(document).ready(function () {
     // Po editaci inputu dojde k zrušení error msg
     jQuery('table.kt-form-table input').blur(function () {
         jQuery(this).next('div').find('span.erorr-s').delay(500).fadeOut(400);
+    });
+
+    // Taxonomy addmeta
+    jQuery('#addtag #submit').click(function () {
+        jQuery("form .validator").remove();
+        jQuery(this).parents('form').formValidation();
     });
 
     // Inicializace switchFieldu
@@ -43,6 +49,9 @@ jQuery(document).ready(function () {
     // Aktivace tooltip pro inputy KT_Field
     jQuery('.kt-field').tooltip();
     jQuery('.kt-tooltip').tooltip();
+    jQuery('body').tooltip({
+        selector: 'div.chosen-container'
+    });
 
     // Přepínání switch fieldu
     jQuery('body').on("click", ".switch-toggle", function () {

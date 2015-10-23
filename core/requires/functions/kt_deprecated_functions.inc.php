@@ -204,7 +204,7 @@ function kt_date_get_now($format = "Y-m-d H:i:s", $timeStampText = null) {
 
 /**
  * Kontrola na isset a ! empty v "jednom" kroku
- * @return bool
+ * @return boolean
  */
 function kt_isset_and_not_empty($value) {
     return isset($value) && !empty($value);
@@ -212,7 +212,7 @@ function kt_isset_and_not_empty($value) {
 
 /**
  * Kontrola na ! isset nebo empty v "jednom" kroku
- * @return bool
+ * @return boolean
  */
 function kt_not_isset_or_empty($value) {
     return !isset($value) || empty($value);
@@ -312,7 +312,7 @@ function kt_the_tabs_indent($tabsCount, $content = null, $newLineBefore = false,
 
 /**
  * Vrátí aktuální URL na základě nastavení APACHE HTTP_HOST a REQUEST_URI
- * @param bool $fullUrl - true i s pametry, false bez
+ * @param boolean $fullUrl - true i s pametry, false bez
  * @return string
  */
 function kt_get_request_url($fullUrl = true) {

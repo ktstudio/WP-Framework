@@ -1,6 +1,12 @@
 <?php
 
-class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
+/**
+ * Základní model pro práci s příspěvky (post, page atd.)
+ *
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
+class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
 
     const DEFAULT_EXCERPT_LENGTH = 55;
 
@@ -12,6 +18,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
     private $permalink;
     private $categoriesIds;
     private $wpCommentsCount;
+    private $postTypeObject;
 
     /**
      * Základní model pro práci s daty post_typu
@@ -26,6 +33,8 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
         parent::__construct($metaPrefix);
         if (KT::issetAndNotEmpty($post)) {
             $this->setPost($post);
+        } else {
+            trigger_error("Empty post variable in (KT WP) Post (Base) Model!", E_USER_NOTICE); // tato možnost bude úplně zrušena
         }
     }
 
@@ -69,6 +78,13 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
         }
 
         return $this->author;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAuthorId() {
+        return $this->getAuthor()->getId();
     }
 
     /**
@@ -208,10 +224,20 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
+     * @param boolean $withTheFilter
+     * 
      * @return string
      */
-    public function getContent() {
-        return $content = apply_filters("the_content", $this->getPost()->post_content);
+    public function getContent($withTheFilter = true) {
+        $post = $this->getPost();
+        if (KT::issetAndNotEmpty($post)) {
+            $content = $post->post_content;
+            if ($withTheFilter) {
+                return apply_filters("the_content", $content);
+            }
+            return apply_filters("get_the_content", $content);
+        }
+        return null;
     }
 
     /**
@@ -235,8 +261,6 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
      * @return string
      */
     public function getExcerpt($withTheFilter = true, $customExcerptLength = null, $customExcerptMore = null) {
-        $excerptMore = $customExcerptMore ? : apply_filters("excerpt_more", " [&hellip;]");
-        $excerptLength = $customExcerptLength ? : apply_filters("excerpt_length", self::DEFAULT_EXCERPT_LENGTH);
         $post = $this->getPost();
         if (KT::issetAndNotEmpty($post)) {
             if ($this->hasExcrept()) {
@@ -244,6 +268,8 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
             } else {
                 $excerpt = $post->post_content;
             }
+            $excerptMore = $customExcerptMore ? : apply_filters("excerpt_more", " [&hellip;]");
+            $excerptLength = $customExcerptLength ? : apply_filters("excerpt_length", self::DEFAULT_EXCERPT_LENGTH);
             $excerpt = wp_trim_words($excerpt, $excerptLength, $excerptMore);
             $excerptFilterered = apply_filters("get_the_excerpt", $excerpt);
             if ($withTheFilter) {
@@ -372,6 +398,21 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
     }
 
     /**
+     * Vrací post type object
+     * 
+     * @see https://codex.wordpress.org/Function_Reference/get_post_type_object
+     * @author Jan Pokorný
+     * @return stdClass
+     */
+    public function getPostTypeObject() {
+        if (!isset($this->postTypeObject)) {
+            $postType = $this->getPostType();
+            $this->postTypeObject = get_post_type_object($postType);
+        }
+        return $this->postTypeObject;
+    }
+
+    /**
      * Vrátí kolekci všech termů, kam je post zařazen na základě zadané taxonomy
      * Pokud ještě nebyly načteny, uloží je do proměnné $this->data->{$taxonomy} a znovu se na ně nedotazuje
      *
@@ -489,7 +530,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base {
      * @link http://www.ktstudio.cz
      * 
      * @param string $format
-     * @return bool
+     * @return boolean
      */
     public function hasPostFormat($format) {
         return has_post_format($format);

@@ -255,7 +255,7 @@ final class KT_WP_Metabox_Remover_Configurator {
     /**
      * Odstraní všechny metabox z nástěnky Wordpressu, které jsou nativně na nástěnku zařazeny
      *
-     * @param bool $withoutRightNow - vše kromě aktuálního přehledu
+     * @param boolean $withoutRightNow - vše kromě aktuálního přehledu
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function clearWordpressDashboard($withoutRightNow = false) {

@@ -550,7 +550,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         $result = $wpdb->get_row($wpdb->prepare($query, $this->getId()), ARRAY_A);
 
         if ($result === null) {
-            $this->addError("Došlo k chybě při výběru dat z DB", $wpdb->db->last_error);
+            $this->addError("Došlo k chybě při výběru dat z DB", $wpdb->last_error);
             $this->setId(null);
             return;
         }
@@ -655,6 +655,10 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
                 case KT_CRUD_Column::INT:
                     $formats[] = "%d";
                     $columns[$column->getName()] = KT::tryGetInt($value);
+                    break;
+                case KT_CRUD_Column::BIGINT:
+                    $formats[] = "%f";
+                    $columns[$column->getName()] = floor(KT::tryGetFloat($value)); // simulace "long"
                     break;
                 case KT_CRUD_Column::FLOAT:
                     $formats[] = "%f";

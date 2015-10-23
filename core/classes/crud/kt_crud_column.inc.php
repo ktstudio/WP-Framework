@@ -4,6 +4,7 @@ class KT_CRUD_Column {
 
     const TEXT = "text";
     const INT = "int";
+    const BIGINT = "bigint";
     const FLOAT = "float";
     const DATE = "date";
     const DATETIME = "datetime";
@@ -95,6 +96,7 @@ class KT_CRUD_Column {
     protected function setType($type) {
         switch ($type) {
             case self::INT:
+            case self::BIGINT:
             case self::FLOAT:
             case self::DATE:
             case self::DATETIME:
