@@ -354,11 +354,25 @@ class KT_Mailer {
                 $content = $contentReplacer->update($content); // tak nahradit tagy
             }
         }
-        $email = wp_mail($this->getRecipients(), $this->getSubject(), $content, $this->getHeader(), $this->getAttachments());
+        $email = wp_mail($this->getRecipients(), self::getMimeHeaderEncode($this->getSubject()), $content, $this->getHeader(), $this->getAttachments());
         if ($email) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Zakódování e-mailové hlavičky podle RFC 2047
+     * 
+     * @copyright Jakub Vrána, http://php.vrana.cz/
+     * 
+     * @param string text k zakódování
+     * @param string kódování, výchozí je utf-8
+     * @return string řetězec pro použití v e-mailové hlavičce
+     */
+    public static function getMimeHeaderEncode($text, $encoding = "utf-8") {
+        $encodedText = imap_8bit($text);
+        return "=?$encoding?Q?{$encodedText}?=";
     }
 
     // --- privátní funkce ----------------
@@ -372,12 +386,12 @@ class KT_Mailer {
      * @return \KT_Mailer
      */
     private function setupHeader() {
-        $header = "Content-Type: text/html; charset=UTF-8\r\n";
-        $header .= "MIME-Version: 1.0\r\n";
-        $header .= "Content-Transfer-Encoding: 8bit\r\n";
-        $header .= "From: " . self::getHeaderEmail($this->getSenderEmail(), $this->getSenderName()) . "\r\n";
-        $header .= "Reply-To: {$this->getSenderEmail()}\r\n";
-        $header .= "Return-Path: {$this->getSenderEmail()}\r\n";
+        $header = "MIME-Version: 1.0" . PHP_EOL;
+        $header .= "Content-Type: text/html; charset=utf-8" . PHP_EOL;
+        $header .= "Content-Transfer-Encoding: 8bit" . PHP_EOL;
+        $header .= "From: " . self::getHeaderEmail($this->getSenderEmail(), $this->getSenderName()) . "" . PHP_EOL;
+        $header .= "Reply-To: {$this->getSenderEmail()}" . PHP_EOL;
+        $header .= "Return-Path: {$this->getSenderEmail()}" . PHP_EOL;
         $this->setHeader($header);
         return $this;
     }
@@ -429,7 +443,7 @@ class KT_Mailer {
         $result = null;
         if (KT::issetAndNotEmpty($email)) {
             if (KT::issetAndNotEmpty($name)) {
-                $result .= "$name ";
+                $result .= self::getMimeHeaderEncode($name) . " ";
             }
             $result .= "<$email>";
         }
