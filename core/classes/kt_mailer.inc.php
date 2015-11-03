@@ -82,6 +82,7 @@ class KT_Mailer {
     }
 
     /**
+     * @deprecated since version 1.6
      * @return array
      */
     private function getAttachments() {
@@ -225,6 +226,7 @@ class KT_Mailer {
     /**
      * Nastaví kolekci všech příloh, které budou odeslány společně s emailem
      * 
+     * @deprecated since version 1.6
      * @author Tomáš Kocifaj
      * @link http://www.ktstduio.cz
      * 
@@ -294,6 +296,7 @@ class KT_Mailer {
     /**
      * Přidá do kolekci příloh jeden soubor
      * 
+     * @deprecated since version 1.6
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
@@ -312,6 +315,7 @@ class KT_Mailer {
     /**
      * Přidá do kolekcí příloh další kolekci (merge).
      * 
+     * @deprecated since version 1.6
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
@@ -354,7 +358,7 @@ class KT_Mailer {
                 $content = $contentReplacer->update($content); // tak nahradit tagy
             }
         }
-        $email = wp_mail($this->getRecipients(), self::getMimeHeaderEncode($this->getSubject()), $content, $this->getHeader(), $this->getAttachments());
+        $email = mail($this->getRecipients(), self::getMimeHeaderEncode($this->getSubject()), $content, $this->getHeader());
         if ($email) {
             return true;
         }
