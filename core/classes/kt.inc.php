@@ -1247,6 +1247,22 @@ class KT {
     }
 
     /**
+     * Escapování HTML atribuntů v zadaném textu (+ trim) nebo null
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $text
+     * @return string
+     */
+    public static function stringEscape($text) {
+        if (self::issetAndNotEmpty($text)) {
+            return esc_attr(trim($text));
+        }
+        return null;
+    }
+
+    /**
      * Na základě odřádkování rozdělí zadaný text do pole (tzn. po řádcích)
      * 
      * @author Martin Hlaváč
