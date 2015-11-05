@@ -111,7 +111,7 @@ class KT_MetaBox implements KT_Registrable {
             $this->title = $title;
             return $this;
         }
-//throw new KT_Not_Set_Argument_Exception( "title" );
+        //throw new KT_Not_Set_Argument_Exception( "title" );
     }
 
     /**
