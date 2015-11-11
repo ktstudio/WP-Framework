@@ -1,19 +1,25 @@
 <?php
 
+/**
+ * Třída pro kontrolu parametrů v administraci
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_Admin_URL_Param_Checker {
-    
+
     private $paramCollection = array();
     private $result = true;
-    
+
     // --- gettery a settery ------------------
-    
+
     /**
      * @return array
      */
     private function getParamCollection() {
         return $this->paramCollection;
     }
-    
+
     /**
      * Nastaví kolekcy kontrolvaných parametrů
      * 
@@ -27,7 +33,7 @@ class KT_Admin_URL_Param_Checker {
         $this->paramCollection = $paramCollection;
         return $this;
     }
-    
+
     /**
      * @return boolean
      */
@@ -36,7 +42,7 @@ class KT_Admin_URL_Param_Checker {
     }
 
     /**
-     * Nastaví výsledek knotroly
+     * Nastaví výsledek kontroly
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
@@ -49,9 +55,8 @@ class KT_Admin_URL_Param_Checker {
         return $this;
     }
 
-        
     // --- veřejné funkce ------------------
-    
+
     /**
      * Do kolekce kontrolovaných parametrů URL přidá $key => $value
      * 
@@ -62,11 +67,11 @@ class KT_Admin_URL_Param_Checker {
      * @param string $paramValue
      * @return \KT_Admin_URL_Param_Checker
      */
-    public function addParamValue($paramName, $paramValue = null){
+    public function addParamValue($paramName, $paramValue = null) {
         $this->paramCollection[$paramName] = $paramValue;
         return $this;
     }
-    
+
     /**
      * Odstraní z kolekce kontrolovaných parametrů URL parametr na základě jeho názvu
      * 
@@ -76,14 +81,14 @@ class KT_Admin_URL_Param_Checker {
      * @param string $paramName
      * @return \KT_Admin_URL_Param_Checker
      */
-    public function removeParamValue($paramName){
-        if(isset($this->paramCollection[$paramName])){
+    public function removeParamValue($paramName) {
+        if (isset($this->paramCollection[$paramName])) {
             unset($this->paramCollection);
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Zkontroluje, zda všechny zadané parametry odpovídají požadavkům
      * 
@@ -92,30 +97,30 @@ class KT_Admin_URL_Param_Checker {
      * 
      * @return boolean
      */
-    public function getCheckedResult(){
-        
-        if( ! is_admin() ){
+    public function getCheckedResult() {
+
+        if (!is_admin()) {
             return false;
         }
-        
-        if(KT::notIssetOrEmpty($this->getParamCollection())){
+
+        if (KT::notIssetOrEmpty($this->getParamCollection())) {
             return $this->getResult();
         }
-        
+
         $paramCollection = $this->getParamCollection();
-        
-        foreach($paramCollection as $paramName => $paramValue){
+
+        foreach ($paramCollection as $paramName => $paramValue) {
             $paramCheckedResult = $this->isParamSet($paramName, $paramValue);
-            if($paramCheckedResult == false){
+            if ($paramCheckedResult == false) {
                 return $this->setResult(false)->getResult();
             }
         }
-        
+
         return $this->getResult();
     }
-    
+
     // --- privátní funkce ------------------
-    
+
     /**
      * Zkontroluje, zda zadaný parametr je nastavený správně dle požadavků
      * 
@@ -126,25 +131,20 @@ class KT_Admin_URL_Param_Checker {
      * @param string $paramValue
      * @return boolean
      */
-    private function isParamSet($paramName, $paramValue){
-        if( ! isset($_GET[$paramName])){
+    private function isParamSet($paramName, $paramValue) {
+        if (!isset($_GET[$paramName])) {
             return false;
         }
-        
-        if(KT::notIssetOrEmpty($paramValue)){
+
+        if (KT::notIssetOrEmpty($paramValue)) {
             return true;
         }
-        
-        if($_GET[$paramName] == $paramValue){
+
+        if ($_GET[$paramName] == $paramValue) {
             return true;
         }
-        
+
         return false;
     }
 
-
-
-
-    
 }
-

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída pro odstraňování (existujících) metaboxů z WP v rámci KT WP konfigurátoru
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ */
 final class KT_WP_Metabox_Remover_Configurator {
 
     private $data = array();

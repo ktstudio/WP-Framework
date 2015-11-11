@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída pro zakládání a registraci stylů pro přidávání
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_WP_Style_Definition extends KT_WP_Asset_Definition_Base {
 
     private $media = null;

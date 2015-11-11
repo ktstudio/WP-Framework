@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Abstraktní třída pro zakládání a definování stránek v rámci WP administrace
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 abstract class KT_Custom_Metaboxes_Base {
 
     const METABOX_SCREEN = "metaboxes";
@@ -18,7 +24,7 @@ abstract class KT_Custom_Metaboxes_Base {
     private $crudList = null;
 
     /**
-     * Abstraktní třída pro zakládání a definování stránke v rámci WP administrace
+     * Abstraktní třída pro zakládání a definování stránek v rámci WP administrace
      * A přidávání metaboxů
      * 
      * @author Tomáš Kocifaj
@@ -502,15 +508,15 @@ abstract class KT_Custom_Metaboxes_Base {
         if (array_key_exists("kt-admin-screen-action", $_POST) && array_key_exists("page", $_GET)) {
             $pageSlug = $_GET["page"];
             if ($pageSlug == $this->getSlug()) {
-                
+
                 $saveResult = array(
                     self::SAVE_RESULT_KEY => true,
-                    self::REDIRECT_ALLOWED =>true
+                    self::REDIRECT_ALLOWED => true
                 );
-                
+
                 $saveResult = apply_filters("kt-custom-metabox-save-$screenName", $saveResult);
-                
-                if($saveResult[self::REDIRECT_ALLOWED] == false){
+
+                if ($saveResult[self::REDIRECT_ALLOWED] == false) {
                     return;
                 }
 

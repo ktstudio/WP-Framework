@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Abstraktní třída pro definici a zakládní Assetů v rámci Wordpressu
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 abstract class KT_WP_Asset_Definition_Base {
 
     private $id = null;
@@ -115,7 +121,7 @@ abstract class KT_WP_Asset_Definition_Base {
     }
 
     /**
-     * Nastaví sadu scriptů, které musí být načteny před přidaném scriptu
+     * Nastaví sadu scriptů, které musí být načteny před přidaním scriptu
      * 
      * array("jquery", "kt-core")...
      * 

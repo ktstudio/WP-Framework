@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída pro nastavení Facebook dat v rámci KT WP konfigurátoru
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_WP_Facebook_Data_Configurator {
 
     const OG_LOCALE = "og:locale";
@@ -16,10 +22,6 @@ class KT_WP_Facebook_Data_Configurator {
     private $url = null;
     private $description = null;
     private $moduleEnabled = false;
-
-    public function __construct() {
-        
-    }
 
     // --- gettery a settery ------------------
 

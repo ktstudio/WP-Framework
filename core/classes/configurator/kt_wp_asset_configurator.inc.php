@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída pro definici příloh, resp. skiptů, stylů apod. v rámci KT WP konfigurátoru
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 final class KT_WP_Asset_Configurator {
 
     private $scriptCollection = array();

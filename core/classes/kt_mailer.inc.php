@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Založí nový objekt pro odeslání emailu
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_Mailer {
 
     private $senderEmail = null;
