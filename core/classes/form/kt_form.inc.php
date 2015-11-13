@@ -1334,7 +1334,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
-     * Uloží data poslané postem do tabulky kt_wp_termmeta - každý field jako extra row
+     * Uloží data poslané postem do tabulky kt_termmeta - každý field jako extra row
      * @see saveFieldsToTermmetaTable
      *
      * @author Martin Hlaváč
@@ -1361,7 +1361,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
-     * Uloží data poslané postem do tabulky kt_wp_termmeta - celý fieldset jako realizované pole fieldů ($fieldName => $fieldValue)
+     * Uloží data poslané postem do tabulky kt_termmeta - celý fieldset jako realizované pole fieldů ($fieldName => $fieldValue)
      * @see saveFieldsToTermmetaTable
      *
      * @author Martin Hlaváč

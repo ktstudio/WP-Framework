@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `kt_logs` (
 );
 
 
-CREATE TABLE IF NOT EXISTS `kt_wp_termmeta` (
+CREATE TABLE IF NOT EXISTS `kt_termmeta` (
   `meta_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `ktterm_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `meta_key` varchar(255) DEFAULT NULL,
