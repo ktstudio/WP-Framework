@@ -161,7 +161,7 @@ class KT_CRUD_Data_Manager extends KT_Data_Manager_Base {
         }
 
         if (KT::notIssetOrEmpty($items)) {
-            return this;
+            return $this;
         }
 
         foreach ($items as $item) {

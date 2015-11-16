@@ -274,8 +274,9 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             $image = $this->getThumbnailImage($imageSize, $imageAttr);
             $linkImage = $this->getThumbnailImagePermalink();
             $isTagContainer = (KT::issetAndNotEmpty($tagId) && KT::issetAndNotEmpty($tagClass));
+            $html = null;
             if ($isTagContainer) {
-                $html = KT::getTabsIndent(0, "<div id=\"$tagId\" class=\"$tagClass\">", true);
+                $html .= KT::getTabsIndent(0, "<div id=\"$tagId\" class=\"$tagClass\">", true);
             }
             $html .= KT::getTabsIndent(1, "<a href=\"$linkImage\" title=\"$titleAttribute\" class=\"fbx-link\" rel=\"lightbox\">", true);
             $html .= KT::getTabsIndent(2, $image, true);

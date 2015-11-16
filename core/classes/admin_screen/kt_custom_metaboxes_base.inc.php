@@ -516,11 +516,11 @@ abstract class KT_Custom_Metaboxes_Base {
 
                 $saveResult = apply_filters("kt-custom-metabox-save-$screenName", $saveResult);
 
-                if ($saveResult[self::REDIRECT_ALLOWED] == false) {
+                if (KT::arrayTryGetValue($saveResult, self::REDIRECT_ALLOWED) == false) {
                     return;
                 }
 
-                if ($saveResult[self::SAVE_RESULT_KEY] !== true) {
+                if (KT::arrayTryGetValue($saveResult, self::SAVE_RESULT_KEY) !== true) {
                     add_action("admin_notices", array($this, "adminNoticesError"));
                     return;
                 }
