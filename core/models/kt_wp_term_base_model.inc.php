@@ -45,6 +45,26 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
         }
         throw new KT_Not_Supported_Exception("Initializace of term is not correct");
     }
+    
+    /**
+     * Provádí odchychycení funkcí se začátkem názvu "get", který následně prověří
+     * existenci metody. Následně vrátí dle klíče konstanty hodnotu uloženou v DB
+     * v opačném případě neprovede nic nebo nechá dokončit existující funkci.
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param type $functionName
+     * @param array $attributes
+     * @return mixed
+     */
+    public function __call($functionName, array $attributes) {
+        $constValue = $this->getConstantValue($functionName);
+
+        if (KT::issetAndNotEmpty($constValue)) {
+            return $this->getMetaValue($constValue);
+        }
+    }
 
     // --- gettery -----------------
 
