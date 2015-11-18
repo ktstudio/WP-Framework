@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída pro odstraňování (existujících) metaboxů z WP v rámci KT WP konfigurátoru
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ */
 final class KT_WP_Metabox_Remover_Configurator {
 
     private $data = array();
@@ -19,13 +25,13 @@ final class KT_WP_Metabox_Remover_Configurator {
      * Zruší metabox na základě názvu, stránky a contextu
      *
      * @param string $metaboxId
-     * @param string $page
+     * @param string $postType
      * @param string $context
      * @return \KT_WP_Metabox_Remover_Configurator
      */
-    public function removeMetabox($metaboxId, $page, $context) {
-        if (KT::issetAndNotEmpty($metaboxId) && KT::issetAndNotEmpty($page) && KT::issetAndNotEmpty($context)) {
-            array_push($this->data, array($metaboxId, $page, $context));
+    public function removeMetabox($metaboxId, $postType, $context) {
+        if (KT::issetAndNotEmpty($metaboxId) && KT::issetAndNotEmpty($postType) && KT::issetAndNotEmpty($context)) {
+            array_push($this->data, array($metaboxId, $postType, $context));
         }
         return $this;
     }

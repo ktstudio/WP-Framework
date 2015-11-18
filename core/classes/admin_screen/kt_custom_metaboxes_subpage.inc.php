@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Založení WP_Screen pro zadávání metaboxů na vlastním layoutu a přídání nové podstránky do navigace Wordpress v admin sekci
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
 
     private $parentPage;
@@ -172,7 +178,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
         $callBackScreenFunction = $this->getCallbackFunctionByActionScreen();
         $screenId = add_submenu_page($this->getParentPage(), $this->getTitle(), $this->getMenuTitle(), $this->getCapability(), $this->getSlug(), $callBackScreenFunction);
         $this->setPage($screenId);
-        
+
         $this->screenUpdatingRedirect($screenId);
 
         if (is_array($callBackScreenFunction)) {
@@ -182,9 +188,9 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
 
         return $this;
     }
-    
+
     // --- statické funkce ------------
-    
+
     /**
      * Vrátí přesný název založené screeny pro přidávání metaboxů do vlastní podstránky
      * 
@@ -195,8 +201,8 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * @param string $subPageSlug // slug podstránky
      * @return string
      */
-    public static function getScreenNameForNativeWpPage($parentSlug, $subPageSlug) {        
-        
+    public static function getScreenNameForNativeWpPage($parentSlug, $subPageSlug) {
+
         $WPHooksRename = array(
             "index.php" => "dashboard",
             "edit.php" => "post",
@@ -217,7 +223,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
 
         return false;
     }
-    
+
     /**
      * Vrátí název screenu pro ručně vytvořenou stránku v administraci na základě titulku hlavní stránky
      * 
@@ -228,7 +234,7 @@ class KT_Custom_Metaboxes_Subpage extends KT_Custom_Metaboxes_Base {
      * @param string $subPageSlug
      * @return string
      */
-    public static function getScreenNameForCustomPage($pageTitle, $subPageSlug){
+    public static function getScreenNameForCustomPage($pageTitle, $subPageSlug) {
         $sanitizeTitle = sanitize_title($pageTitle);
         return $screenName = $sanitizeTitle . "_page_" . $subPageSlug;
     }

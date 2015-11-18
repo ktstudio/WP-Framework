@@ -1,5 +1,11 @@
 <?php
 
+/**
+ *  Základní třída pro práci a definici parametrů pro Custom Metaboxes Screens
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_Custom_Page_Action_Screen {
 
     private $actionName = null;

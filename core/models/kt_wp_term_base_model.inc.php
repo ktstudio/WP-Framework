@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Základní model pro práci s (taxonomy) termy
+ *
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
 
     const TERM_SLUG = "slug";

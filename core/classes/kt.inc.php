@@ -1232,6 +1232,37 @@ class KT {
     }
 
     /**
+     * Na základě zadaného pole hodnot vrátí odpovídající SQL placeholdery jako string 
+     * Pozn. vhodné pro @see WPDB a prepare IN
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array $values
+     * @param string $placeholder
+     * @return string
+     */
+    public static function stringWpDbPlaceholders(array $values, $placeholder = "s") {
+        return implode(",", array_fill(0, count($values), "%{$placeholder}"));
+    }
+
+    /**
+     * Escapování HTML atribuntů v zadaném textu (+ trim) nebo null
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $text
+     * @return string
+     */
+    public static function stringEscape($text) {
+        if (self::issetAndNotEmpty($text)) {
+            return esc_attr(trim($text));
+        }
+        return null;
+    }
+
+    /**
      * Na základě odřádkování rozdělí zadaný text do pole (tzn. po řádcích)
      * 
      * @author Martin Hlaváč
@@ -1270,6 +1301,31 @@ class KT {
                 $output .= "<{$tag}{$classPart}>{$line}</{$tag}>";
             }
             return $output;
+        }
+        return null;
+    }
+
+    // --- cURL ---------------------------
+
+    /**
+     * Zpracování URL (callu) obecně pomocí cURL
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *  
+     * @param string $url
+     * @return string
+     */
+    public static function curlGetContents($url) {
+        if (self::issetAndNotEmpty($url)) {
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+            $data = curl_exec($curl);
+            curl_close($curl);
+            return $data;
         }
         return null;
     }

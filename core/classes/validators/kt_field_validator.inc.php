@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Základní validátor pro validaci dat chodící prostřednictvím KT_Formu
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_Field_Validator {
 
     const REQUIRED = 'required'; // hodnota musí být vyplněna

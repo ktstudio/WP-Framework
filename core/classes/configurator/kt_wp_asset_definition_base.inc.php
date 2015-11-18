@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Abstraktní třída pro definici a zakládní Assetů v rámci Wordpressu
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 abstract class KT_WP_Asset_Definition_Base {
 
     private $id = null;
@@ -7,7 +13,7 @@ abstract class KT_WP_Asset_Definition_Base {
     private $deps = array();
     private $version = null;
     private $enqueue = false;
-    private $backEndScript = false;
+    private $forBackEnd = false;
 
     /**
      * Abstraktní třída pro definici a zakládní Assetů v rámci Wordpressu
@@ -15,8 +21,8 @@ abstract class KT_WP_Asset_Definition_Base {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
-     * @param type $id
-     * @param type $source
+     * @param int $id
+     * @param string $source
      * @return \KT_WP_Asset_Definition_Base
      * @throws KT_Not_Supported_Exception
      */
@@ -63,17 +69,25 @@ abstract class KT_WP_Asset_Definition_Base {
     }
 
     /**
-     * @return Boolean
+     * @return boolean
      */
     public function getEnqueue() {
         return $this->enqueue;
     }
-    
+
     /**
-     * @return Boolean
+     * @deprecated since version 1.6
+     * @see getForBackEnd
      */
-    public function getBackEndScript(){
-        return $this->backEndScript;
+    public function getBackEndScript() {
+        return $this->forBackEnd;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getForBackEnd() {
+        return $this->forBackEnd;
     }
 
     // --- settery ------------
@@ -107,7 +121,7 @@ abstract class KT_WP_Asset_Definition_Base {
     }
 
     /**
-     * Nastaví sadu scriptů, které musí být načteny před přidaném scriptu
+     * Nastaví sadu scriptů, které musí být načteny před přidaním scriptu
      * 
      * array("jquery", "kt-core")...
      * 
@@ -143,22 +157,34 @@ abstract class KT_WP_Asset_Definition_Base {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
-     * @param type $enqueue
+     * @param boolean $enqueue
      * @return \KT_WP_Asset_Definition_Base
      */
     public function setEnqueue($enqueue = true) {
         $this->enqueue = $enqueue;
         return $this;
     }
-    
+
     /**
-     * Nastaví, zda se má script / styl volat v hlavičce administrace namísto Front-endu
+     * @deprecated since version 1.6
+     * @see setForBackEnd
+     */
+    public function setBackEndScript($isBackEndScript = true) {
+        $this->forBackEnd = $isBackEndScript;
+        return $this;
+    }
+
+    /**
+     * Nastaví, zda se má script / styl volat v hlavičce administrace namísto front-endu
      * 
-     * @param Boolean $isBackEndScript
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param boolean $forBackEnd
      * @return \KT_WP_Asset_Definition_Base
      */
-    public function setBackEndScript($isBackEndScript = true){
-        $this->backEndScript = $isBackEndScript;
+    public function setForBackEnd($forBackEnd = true) {
+        $this->forBackEnd = $forBackEnd;
         return $this;
     }
 

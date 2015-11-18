@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída predefinici sidebarů v rámci KT WP konfigurátoru
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 final class KT_WP_Sidebar_Configurator {
 
     private $data = array();

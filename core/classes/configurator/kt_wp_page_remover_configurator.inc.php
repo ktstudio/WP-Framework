@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída pro odstraňování (existujících) stránek z menu v WP v rámci KT WP konfigurátoru
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ */
 final class KT_WP_Page_Remover_Configurator {
 
     const PAGE_KEY = "main-page";
