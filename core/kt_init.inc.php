@@ -21,8 +21,11 @@ define("KT_CORE_JS_URL", path_join(KT_CORE_URL, "js"));
 define("KT_CORE_REQUIRES_URL", path_join(KT_CORE_URL, "requires"));
 
 // --- logování ------------------------
+/* @deprecated deprecated since version 1.6 */
 define("KT_CORE_LOG_MIN_LEVEL", KT_Log_Level_Enum::INFO);
+/* @deprecated deprecated since version 1.6 */
 define("KT_CORE_LOG_ONLY_SIGNED_USERS", true);
+/* @deprecated deprecated since version 1.6 */
 define("KT_CORE_LOG_TOOLS_ADMIN_PAGE", true);
 
 // --- export ------------------------
