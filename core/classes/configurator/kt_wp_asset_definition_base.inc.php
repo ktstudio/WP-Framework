@@ -94,10 +94,14 @@ abstract class KT_WP_Asset_Definition_Base {
         if (KT::issetAndNotEmpty($this->autoVersion)) {
             return $this->autoVersion;
         }
-        $cachedAutoVersionKey = self::VERSION_CACHE_PREFIX . $this->getId();
-        $cachedAutoVersion = KT::arrayTryGetValue($_COOKIE, $cachedAutoVersionKey);
-        if (KT::issetAndNotEmpty($cachedAutoVersion)) {
-            return $this->autoVersion = $cachedAutoVersion;
+        $autoVersionExpiration = $this->getAutoVersionExpiration();
+        $isAutoVersionExpiration = ($autoVersionExpiration > 0);
+        if ($isAutoVersionExpiration) {
+            $cachedAutoVersionKey = self::VERSION_CACHE_PREFIX . $this->getId();
+            $cachedAutoVersion = KT::arrayTryGetValue($_COOKIE, $cachedAutoVersionKey);
+            if (KT::issetAndNotEmpty($cachedAutoVersion)) {
+                return $this->autoVersion = $cachedAutoVersion;
+            }
         }
         $source = $this->getSource();
         if (KT::issetAndNotEmpty($source)) {
@@ -108,7 +112,9 @@ abstract class KT_WP_Asset_Definition_Base {
                     if (KT::issetAndNotEmpty($lastModified)) {
                         $lastModifiedDateTime = new \DateTime($lastModified);
                         $autoVersion = $lastModifiedDateTime->getTimestamp();
-                        setcookie($cachedAutoVersionKey, "$autoVersion", time() + $this->getAutoVersionExpiration(), "/");
+                        if ($isAutoVersionExpiration) {
+                            setcookie($cachedAutoVersionKey, "$autoVersion", time() + $autoVersionExpiration, "/");
+                        }
                         return $this->autoVersion = $autoVersion;
                     }
                 }
@@ -250,18 +256,19 @@ abstract class KT_WP_Asset_Definition_Base {
 
     /**
      * Povolí aplikaci automatická verze - vhodné pro cachování
+     * Pozor: pokud není aktivní cachování, tak hrozí zpomalení potencionálně v řádu desítek až stovek milisekund s každým souborem, především pro externí soubory mimo vlastní server
      * Pozn.: aplikuje se pouze, pokud není zadána verze explicitně
-     * Pozn.: pro cachování využívá cookies
+     * Pozn.: pro cachování využívá cookies nebo zadejte NULL (= bez cache)
      * 
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param int $expiration
+     * @param mixed int|null $expiration
      * @return \kt_wp_script_handle
      */
     public function enableAutoVersion($expiration = self::DEFAULT_VERSION_EXPIRATION) {
         $this->isAutoVersion = true;
-        $this->autoVersionExpiration = KT::tryGetInt($expiration) ? : self::DEFAULT_VERSION_EXPIRATION;
+        $this->autoVersionExpiration = KT::tryGetInt($expiration);
         return $this;
     }
 
