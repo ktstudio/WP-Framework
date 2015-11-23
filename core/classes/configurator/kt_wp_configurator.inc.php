@@ -1358,10 +1358,12 @@ final class KT_WP_Configurator {
             $content .= "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
             $content .= "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
 
+            echo "<!-- ktcookiestatement W3TC_DYNAMIC_SECURITY -->";
             echo "<div id=\"ktCookieStatement\">";
             echo apply_filters("kt_cookie_statement_content_filter", $content);
             echo "</div>";
             echo "<noscript><style scoped>#ktCookieStatement { display:none; }</style></noscript>";
+            echo "<!-- /ktcookiestatement W3TC_DYNAMIC_SECURITY -->";
         }
     }
 
