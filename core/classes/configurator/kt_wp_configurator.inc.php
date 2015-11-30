@@ -506,8 +506,8 @@ final class KT_WP_Configurator {
 
         // změna login url - loga a URL redirect
         if ($this->getDisplayLogo()) {
-            add_filter('login_headerurl', array($this, "registerLoginLogoUrlFilter"), 10, 4);
-            add_action('login_head', array($this, "registerLoginLogoImageAction"));
+            add_filter("login_headerurl", array($this, "registerLoginLogoUrlFilter"), 10, 4);
+            add_action("login_head", array($this, "registerLoginLogoImageAction"));
         }
 
         // registrace a načítání scriptů zavedené v configurátoru
@@ -1031,7 +1031,7 @@ final class KT_WP_Configurator {
      * @return string
      */
     public function registerLoginLogoUrlFilter() {
-        return 'http://www.wpframework.cz';
+        return "http://www.wpframework.cz";
     }
 
     /**
@@ -1042,7 +1042,7 @@ final class KT_WP_Configurator {
      * @link http://www.ktstudio.cz
      */
     public function registerLoginLogoImageAction() {
-        wp_enqueue_style('kt-core-style');
+        wp_enqueue_style(KT_WPFW_LOGIN_STYLE);
     }
 
     /**

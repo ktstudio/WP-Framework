@@ -44,6 +44,7 @@ define("KT_WP_COMMENT_KEY", "comment");
 define("KT_WP_ATTACHMENT_KEY", "attachment");
 define("KT_WP_REVISION_KEY", "revision");
 define("KT_WP_NAV_MENU_ITEM_KEY", "nav_menu_item");
+define("KT_WP_NAV_MENU_ITEM_PARENT_META_KEY", "_menu_item_menu_item_parent");
 // --- post meta ------------------------
 define("KT_WP_META_KEY_PAGE_TEMPLATE", "_wp_page_template");
 define("KT_WP_META_KEY_THUMBNAIL_ID", "_thumbnail_id");
