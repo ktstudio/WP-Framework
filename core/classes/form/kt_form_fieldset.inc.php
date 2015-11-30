@@ -540,7 +540,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @return string
      */
-    public function getInputsDataToTable($class = null) {
+    public function getInputsDataToTable($excludeFields = null, $class = null) {
 
         if (!$this->hasFields()) {
             return null;
@@ -555,7 +555,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
             /* @var $field \KT_Field */
             $value = $field->getValue();
 
-            if ($value === "") {
+            if ($value === "" || in_array($field->getName(), $excludeFields)) {
                 continue;
             }
 
