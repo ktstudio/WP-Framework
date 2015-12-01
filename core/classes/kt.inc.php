@@ -244,6 +244,50 @@ class KT {
     }
 
     /**
+     * Vrátí pole na základě hodnoty zadaného parametru, pokud je to možné
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $paramName
+     * @param char $delimiter
+     * @return array
+     */
+    public static function arrayFromUrlParam($paramName, $delimiter = ",") {
+        $paramValue = filter_input(INPUT_GET, $paramName, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (KT::issetAndNotEmpty($paramValue)) {
+            if (is_serialized($paramValue)) {
+                return unserialize($paramValue);
+            }
+            return explode($delimiter, $paramValue);
+        }
+        return array();
+    }
+
+    /**
+     * Vrátí pole IDs na základě hodnoty zadaného parametru, pokud je to možné
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $paramName
+     * @param char $delimiter
+     * @return array
+     */
+    public static function arrayIdsFromUrlParam($idsParamName, $delimiter = ",") {
+        $ids = array();
+        $values = self::arrayFromUrlParam($idsParamName, $delimiter);
+        if (KT::arrayIssetAndNotEmpty($values)) {
+            foreach ($values as $value) {
+                if (KT::isIdFormat($value)) {
+                    array_push($ids, $value);
+                }
+            }
+        }
+        return $ids;
+    }
+
+    /**
      * Vrátí první klíč v poli
      * 
      * @author Martin Hlaváč
