@@ -97,9 +97,23 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * 
      * @return boolean
      */
-    public function haveOtherPosts() {
+    public function hasOtherPosts() {
         $otherPostsQuery = $this->getOtherPostsQuery();
         return KT::issetAndNotEmpty($otherPostsQuery) && $otherPostsQuery->have_posts();
+    }
+
+    /**
+     * Použijte hasOtherPosts
+     * 
+     * @deprecated since version 1.6
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public function haveOtherPosts() {
+        return $this->hasOtherPosts();
     }
 
     /**
@@ -335,11 +349,13 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             "post_type" => KT_WP_POST_KEY,
             "post_status" => "publish",
             "post_parent" => 0,
-            "post__not_in" => array($this->getModel()->getPostId()),
             "posts_per_page" => $this->getOtherPostsCount(),
             "orderby" => "date",
             "order" => "DESC",
         );
+        if (KT::issetAndNotEmpty($this->getModel())) {
+            $args["post__not_in"] = array($this->getModel()->getPostId());
+        }
         return $this->otherPostsQuery = new WP_Query($args);
     }
 

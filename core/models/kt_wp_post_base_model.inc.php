@@ -11,6 +11,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     const DEFAULT_EXCERPT_LENGTH = 55;
 
     private $post;
+    private $postFormat;
     private $author;
     private $gallery;
     private $files;
@@ -39,7 +40,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     }
 
     // --- magic funkce ---------------------
-    
+
     /**
      * Provádí odchychycení funkcí se začátkem názvu "get", který následně prověří
      * existenci metody. Následně vrátí dle klíče konstanty hodnotu uloženou v DB
@@ -90,13 +91,31 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     }
 
     /**
+     * Vrátí případný přiřazený post formát dle postu
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public function getPostFormat() {
+        if (KT::issetAndNotEmpty($this->postFormat)) {
+            return $this->postFormat;
+        }
+        $post = $this->getPost();
+        if (KT::issetAndNotEmpty($post)) {
+            return $this->postFormat = get_post_format($post);
+        }
+        return $this->postFormat = null;
+    }
+
+    /**
      * @return \KT_WP_User_Base_Model
      */
     public function getAuthor() {
         if (KT::notIssetOrEmpty($this->author)) {
             $this->initAuthor();
         }
-
         return $this->author;
     }
 
