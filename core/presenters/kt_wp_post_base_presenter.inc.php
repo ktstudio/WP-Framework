@@ -8,11 +8,11 @@
  */
 class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
 
-    const DEFAULT_OTHER_POSTS_COUNT = 4;
+    const DEFAULT_OTHER_POSTS_LIMIT = 4;
 
     private $thumbnailImagePermalink;
     private $otherPostsQuery;
-    private $otherPostsCount;
+    private $otherPostsLimit;
 
     /**
      * Základní presenter pro práci s daty postu
@@ -21,11 +21,11 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @link http://www.ktstudio.cz
      *
      * @param KT_Modelable|WP_Post $item
-     * @param int $otherPostsCount
+     * @param int $otherPostsLimit
      * 
      * @return \kt_post_type_presenter_base
      */
-    function __construct($item = null, $otherPostsCount = self::DEFAULT_OTHER_POSTS_COUNT) {
+    function __construct($item = null, $otherPostsLimit = self::DEFAULT_OTHER_POSTS_LIMIT) {
         if (KT::issetAndNotEmpty($item)) {
             if ($item instanceof KT_Postable) {
                 parent::__construct($item);
@@ -43,7 +43,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         } else {
             parent::__construct();
         }
-        $this->otherPostsCount = KT::tryGetInt($otherPostsCount);
+        $this->otherPostsLimit = KT::tryGetInt($otherPostsLimit);
     }
 
     // --- gettery ---------------------------
@@ -83,8 +83,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * 
      * @return int
      */
-    public function getOtherPostsCount() {
-        return $this->otherPostsCount;
+    public function getOtherPostsLimit() {
+        return $this->otherPostsLimit ? : self::DEFAULT_OTHER_POSTS_LIMIT;
     }
 
     // --- veřejné metody ---------------------------
@@ -125,7 +125,9 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @param string $loopName
      */
     public function theOtherPosts($loopName = KT_WP_POST_KEY) {
-        self::theQueryLoops($this->getOtherPostsQuery(), $loopName);
+        if ($this->hasOtherPosts()) {
+            self::theQueryLoops($this->getOtherPostsQuery(), $loopName);
+        }
     }
 
     /**
@@ -349,7 +351,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             "post_type" => KT_WP_POST_KEY,
             "post_status" => "publish",
             "post_parent" => 0,
-            "posts_per_page" => $this->getOtherPostsCount(),
+            "posts_per_page" => $this->getOtherPostsLimit(),
             "orderby" => "date",
             "order" => "DESC",
         );

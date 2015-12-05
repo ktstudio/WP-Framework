@@ -110,7 +110,7 @@ class KT {
      * @param mixed $value
      * @return array
      */
-    public static function arrayAdd(array $haystack, $value) {
+    public static function arrayAdd(array &$haystack, $value) {
         if (isset($value) && !in_array($value, $haystack)) {
             array_push($haystack, $value);
         }
@@ -673,10 +673,26 @@ class KT {
         if (KT::arrayIssetAndNotEmpty($customWhitelist)) {
             $whitelist = array_merge($whitelist, $customWhitelist);
         }
-        if (in_array($_SERVER["REMOTE_ADDR"], $whitelist)) {
+        $ip = self::getIpAddress();
+        if (in_array($ip, $whitelist)) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Vrátí (aktuální) IP adresu z pole $_SERVER
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public static function getIpAddress() {
+        $ip = self::arrayTryGetValue($_SERVER, "HTTP_CLIENT_IP")
+                ? : self::arrayTryGetValue($_SERVER, "HTTP_X_FORWARDED_FOR")
+                ? : self::arrayTryGetValue($_SERVER, "REMOTE_ADDR");
+        return $ip;
     }
 
     /**
