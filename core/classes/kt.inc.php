@@ -1091,7 +1091,7 @@ class KT {
     // --- STRÁNKOVÁNÍ ---------------------------
 
     /**
-     * Vytvoří stránkování odkazy
+     * Vytvoří stránkování (odkazy)
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
@@ -1168,6 +1168,37 @@ class KT {
                 self::theTabsIndent(0, "</div>", true, true);
             }
         }
+    }
+
+    /**
+     * Vrátí odkazy předchozího a následujícího článku, pokud jsou k dispozici
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $class
+     * @param string $separator
+     * @param string $taxonomy
+     * @param boolean $inSameTerm
+     * @param string $excludedTerms
+     * @return string
+     */
+    public static function getPreviousNextPostLinks($class = null, $separator = " | ", $taxonomy = KT_WP_CATEGORY_KEY, $inSameTerm = false, $excludedTerms = "") {
+        $links = array();
+        $previousPost = get_previous_post($inSameTerm, $excludedTerms, $taxonomy);
+        if (KT::issetAndNotEmpty($previousPost)) {
+            $previousUrl = get_permalink($previousPost);
+            array_push($links, sprintf("<a href=\"$previousUrl\" title=\"{$previousPost->post_title}\" class=\"prev $class\">{$previousPost->post_title}</a>"));
+        }
+        $nextPost = get_next_post($inSameTerm, $excludedTerms, $taxonomy);
+        if (KT::issetAndNotEmpty($nextPost)) {
+            $nextUrl = get_permalink($nextPost);
+            array_push($links, sprintf("<a href=\"$nextUrl\" title=\"{$nextPost->post_title}\" class=\"next $class\">{$nextPost->post_title}</a>"));
+        }
+        if (KT::arrayIssetAndNotEmpty($links)) {
+            return implode($separator, $links);
+        }
+        return null;
     }
 
     // -- STRING - Textové řetězce ------------------
