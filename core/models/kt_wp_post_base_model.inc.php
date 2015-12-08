@@ -358,11 +358,9 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
      */
     public function getThumbnailId() {
         $thumbnailId = $this->getMetaValue("_thumbnail_id");
-
         if (KT::issetAndNotEmpty($thumbnailId)) {
             return $thumbnailId;
         }
-
         return null;
     }
 
@@ -434,6 +432,18 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
      */
     public function getPostType() {
         return $this->getPost()->post_type;
+    }
+
+    /**
+     * Vrátí (za/daný) post slug, resp. name
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getSlug() {
+        return $this->getPost()->post_name;
     }
 
     /**
@@ -615,6 +625,46 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
             return $this->getWpCommentsCount()->total_comments;
         }
         return 0;
+    }
+
+    /**
+     * Nahraje a nastaví postu thumbnail ze zadané URL adresy
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $thumbnailUrl
+     * @return boolean
+     */
+    public function setThumbnailFromUrl($thumbnailUrl) {
+        $postId = $this->getPostId();
+        if (KT::issetAndNotEmpty($thumbnailUrl) && KT::isIdFormat($postId)) {
+            $thumbnailData = file_get_contents($thumbnailUrl);
+            if (KT::issetAndNotEmpty($thumbnailData)) {
+                $fileName = sanitize_file_name($this->getSlug()) . "-{$postId}." . strtolower(pathinfo($thumbnailUrl, PATHINFO_EXTENSION));
+                $uploadDir = wp_upload_dir();
+                $uploadDirPath = $uploadDir["path"];
+                if (wp_mkdir_p($uploadDirPath)) {
+                    $file = path_join($uploadDirPath, $fileName);
+                } else {
+                    $file = path_join($uploadDir["basedir"], $fileName);
+                }
+                file_put_contents($file, $thumbnailData);
+                $fileType = wp_check_filetype($fileName, null);
+                $args = array(
+                    "post_mime_type" => $fileType["type"],
+                    "post_title" => $fileName,
+                    "post_content" => $this->getTitleAttribute(),
+                    "post_status" => "inherit"
+                );
+                $attachmentId = wp_insert_attachment($args, $file, $postId);
+                require_once(ABSPATH . "wp-admin/includes/image.php");
+                $attachmentMetadata = wp_generate_attachment_metadata($attachmentId, $file);
+                wp_update_attachment_metadata($attachmentId, $attachmentMetadata);
+                return set_post_thumbnail($postId, $attachmentId);
+            }
+        }
+        return null;
     }
 
     // --- neveřejné funkce ---------------------

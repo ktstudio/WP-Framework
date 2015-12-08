@@ -88,6 +88,10 @@ define("KT_WP_IMAGE_SIZE_THUBNAIL", "thumbnail");
 define("KT_WP_IMAGE_SIZE_MEDIUM", "medium");
 define("KT_WP_IMAGE_SIZE_LARGE", "large");
 define("KT_WP_IMAGE_SIZE_ORIGINAL", "original");
+// --- schedule event ------------------------
+define("KT_WP_RECURRENCE_HOURLY", "hourly");
+define("KT_WP_RECURRENCE_TWICEDAILY", "twicedaily");
+define("KT_WP_RECURRENCE_DAILY", "daily");
 // --- scripts ------------------------
 define("KT_WP_JQUERY_SCRIPT", "jquery");
 define("KT_WP_JQUERY_UI_DATEPICKER_SCRIPT", "jquery-ui-datepicker");

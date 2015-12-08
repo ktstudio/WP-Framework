@@ -177,7 +177,7 @@ class KT_Logger {
             if (KT::issetAndNotEmpty($message)) {
                 $args = array(
                     KT_Log_Model::LEVEL_ID_COLUMN => $level,
-                    KT_Log_Model::MESSAGE_COLUMN => htmlspecialchars(strip_tags(strip_shortcodes(trim($message)))),
+                    KT_Log_Model::MESSAGE_COLUMN => filter_var($message, FILTER_SANITIZE_FULL_SPECIAL_CHARS),
                     KT_Log_Model::DATE_COLUMN => KT::dateNow(),
                 );
                 if ($isUserSigned) {
