@@ -270,7 +270,7 @@ class KT {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param string $paramName
+     * @param string $idsParamName
      * @param char $delimiter
      * @return array
      */
