@@ -381,8 +381,15 @@ class KT_Mailer {
      * @return string řetězec pro použití v e-mailové hlavičce
      */
     public static function getMimeHeaderEncode($text, $encoding = "utf-8") {
-        $encodedText = imap_8bit($text);
-        return "=?$encoding?Q?{$encodedText}?=";
+        if (KT::issetAndNotEmpty($text)) {
+            if (function_exists("imap_8bit")) {
+                $encodedText = imap_8bit($text);
+                return "=?$encoding?Q?{$encodedText}?=";
+            } else {
+                return $text;
+            }
+        }
+        return null;
     }
 
     // --- privátní funkce ----------------
