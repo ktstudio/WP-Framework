@@ -1177,23 +1177,26 @@ class KT {
      * @link http://www.ktstudio.cz
      * 
      * @param string $class
+     * @param string $maxLength
      * @param string $separator
      * @param string $taxonomy
      * @param boolean $inSameTerm
      * @param string $excludedTerms
      * @return string
      */
-    public static function getPreviousNextPostLinks($class = null, $separator = " | ", $taxonomy = KT_WP_CATEGORY_KEY, $inSameTerm = false, $excludedTerms = "") {
+    public static function getPreviousNextPostLinks($class = null, $maxLength = 30, $separator = " | ", $taxonomy = KT_WP_CATEGORY_KEY, $inSameTerm = false, $excludedTerms = "") {
         $links = array();
         $previousPost = get_previous_post($inSameTerm, $excludedTerms, $taxonomy);
         if (KT::issetAndNotEmpty($previousPost)) {
             $previousUrl = get_permalink($previousPost);
-            array_push($links, sprintf("<a href=\"$previousUrl\" title=\"{$previousPost->post_title}\" class=\"prev $class\">{$previousPost->post_title}</a>"));
+            $previousTitle = KT::stringCrop($previousPost->post_title, $maxLength);
+            array_push($links, sprintf("<a href=\"$previousUrl\" title=\"{$previousPost->post_title}\" class=\"prev $class\">$previousTitle</a>"));
         }
         $nextPost = get_next_post($inSameTerm, $excludedTerms, $taxonomy);
         if (KT::issetAndNotEmpty($nextPost)) {
             $nextUrl = get_permalink($nextPost);
-            array_push($links, sprintf("<a href=\"$nextUrl\" title=\"{$nextPost->post_title}\" class=\"next $class\">{$nextPost->post_title}</a>"));
+            $nextTitle = KT::stringCrop($nextPost->post_title, $maxLength);
+            array_push($links, sprintf("<a href=\"$nextUrl\" title=\"{$nextPost->post_title}\" class=\"next $class\">$nextTitle</a>"));
         }
         if (KT::arrayIssetAndNotEmpty($links)) {
             return implode($separator, $links);
