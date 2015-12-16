@@ -1,6 +1,28 @@
 <?php
 
-add_action('wp_ajax_kt_delete_row_from_table_list', 'kt_delete_row_from_table_lis_callback');
+add_action("after_switch_theme", "kt_core_theme_activated");
+
+/**
+ * Po aktivaci šablony zkusí zavést obecný SQL skript šablony (ze souboru)
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ * 
+ * @global \WPDB $wpdb
+ */
+function kt_core_theme_activated() {
+    /* @var $wpdb \WPDB */
+    global $wpdb;
+    $sqlFileName = path_join(KT_CORE_PATH, "kt_core.sql");
+    if (file_exists($sqlFileName)) {
+        $sqlScriptContent = file_get_contents($sqlFileName);
+        if (KT::issetAndNotEmpty($sqlScriptContent)) {
+            $wpdb->query($sqlScriptContent);
+        }
+    }
+}
+
+add_action("wp_ajax_kt_delete_row_from_table_list", "kt_delete_row_from_table_lis_callback");
 
 /**
  * Funkce obslouží ajax dotaz, který pošle název objektu a row id.
