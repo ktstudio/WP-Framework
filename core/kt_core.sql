@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `kt_logs` (
   `file` varchar(300) DEFAULT NULL,
   `line` int(15) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
 
 CREATE TABLE IF NOT EXISTS `kt_termmeta` (
@@ -21,5 +21,5 @@ CREATE TABLE IF NOT EXISTS `kt_termmeta` (
   PRIMARY KEY (`meta_id`),
   KEY `ktterm_id` (`ktterm_id`),
   KEY `meta_key` (`meta_key`(191))
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_general_ci;
 
