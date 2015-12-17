@@ -74,6 +74,18 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
     }
 
     /**
+     * Vrátí email, na který se bude zpracovaný formulář odesílat, výchozí je administrační e-mail
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public function getFormEmail() {
+        return get_bloginfo("admin_email");
+    }
+
+    /**
      * Kontrola, zda byl kontaktní formulář již zpracován
      * 
      * @author Martin Hlaváč
@@ -193,7 +205,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
                 $content .= "<br /><br />---<br />";
                 $content .= sprintf(__("Tento e-mail byl vygenerován pomocí kontaktního formuláře na webu: %s", KT_DOMAIN), $ktWpInfo->getUrl());
 
-                $contactFormEmail = apply_filters("kt_contact_form_email_filter", $ktWpInfo->getAdminEmail());
+                $contactFormEmail = apply_filters("kt_contact_form_email_filter", $this->getFormEmail());
 
                 $mailer = new KT_Mailer($contactFormEmail, $ktWpInfo->getName(), sprintf(__("%s - kontakt", KT_DOMAIN), $ktWpInfo->getName()));
                 $mailer->setSenderEmail($email);
