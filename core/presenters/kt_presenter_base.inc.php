@@ -128,7 +128,7 @@ abstract class KT_Presenter_Base implements KT_Presentable {
                 include(locate_template("loops/loop-$loopName.php"));
                 self::$currentItemsLoopIndex++;
                 if ($isClearfixes) {
-                    self::theClearfixes($clearfixes, self::$currentQueryLoopIndex);
+                    self::theClearfixes($clearfixes, self::$currentItemsLoopIndex);
                 }
             }
             self::$currentItemsLoopIndex = null;
@@ -146,9 +146,11 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      * @param int $index
      */
     public static function theClearfixes(array $clearfixes, $index) {
-        foreach ($clearfixes as $clearfixModulo => $clearfixOutput) {
-            if ($index % $clearfixModulo === 0) {
-                echo $clearfixOutput;
+        if (isset($index)) {
+            foreach ($clearfixes as $clearfixModulo => $clearfixOutput) {
+                if ($index % $clearfixModulo === 0) {
+                    echo $clearfixOutput;
+                }
             }
         }
     }

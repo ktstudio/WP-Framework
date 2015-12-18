@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída pro definici CRUD admin sloupců (v přehledech)
+ * 
+ * @author Tomáš Kocifaj
+ * @link www.ktstduio.cz
+ */
 class KT_CRUD_Admin_Column {
 
     const TEXT_TYPE = "text"; // Běžný sloupec s textem

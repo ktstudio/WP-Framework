@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída pro zakládání a registraci JS scriptů pro přidávání
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_WP_Script_Definition extends KT_WP_Asset_Definition_Base {
 
     private $inFooter = false;
@@ -59,10 +65,10 @@ class KT_WP_Script_Definition extends KT_WP_Asset_Definition_Base {
     /**
      * Nastaví lokalizované scripty
      * 
-     * @param type $localizationData
+     * @param array $localizationData
      * @return \KT_ITH_WP_Script_Definition
      */
-    private function setLocalizationData(array $localizationData) {
+    public function setLocalizationData(array $localizationData) {
         $this->localizationData = $localizationData;
         return $this;
     }
@@ -83,4 +89,5 @@ class KT_WP_Script_Definition extends KT_WP_Asset_Definition_Base {
         $this->localizationData[$name] = $localizationData;
         return $this;
     }
-}   
+
+}

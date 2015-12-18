@@ -1,12 +1,19 @@
 <?php
 
+/**
+ * Založí nové rewrite rules do WP domena.cz/pagename
+ * Pozn.: po každém přidání nutné aktualizovat permalinks Nastaveni -> Trvalá Odkazy ->Uložit změny
+ *
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_Template_Registrator {
 
     private $urls = array();
 
     /**
      * Založí nové rewrite rules do WP domena.cz/pagename
-     * Po každém přidání nutné aktualizovat permalinks Nastaveni -> Trvalá Odkazy ->Uložit změny
+     * Pozn.: po každém přidání nutné aktualizovat permalinks Nastaveni -> Trvalá Odkazy ->Uložit změny
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz

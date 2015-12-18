@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída pro definici CRUD sloupce (z tabulky v DB)
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_CRUD_Column {
 
     const TEXT = "text";

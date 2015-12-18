@@ -1,27 +1,29 @@
 <?php
 
+/**
+ * Třída pro definici příloh, resp. skiptů, stylů apod. v rámci KT WP konfigurátoru
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 final class KT_WP_Asset_Configurator {
 
     private $scriptCollection = array();
     private $styleCollection = array();
 
-    // --- gettery ------------
+    // --- getry & setry ---------------------------
 
     /**
+     * Vrátí celou kolekci scriptů pro registraci
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
      * @return array
      */
     public function getScriptCollection() {
         return $this->scriptCollection;
     }
-
-    /**
-     * @return array
-     */
-    public function getStyleCollection() {
-        return $this->styleCollection;
-    }
-
-    // --- settery ------------
 
     /**
      * Nastaví celou kolekci scriptů pro registraci
@@ -38,6 +40,18 @@ final class KT_WP_Asset_Configurator {
     }
 
     /**
+     * Vrátí celou kolekci scriptů pro registraci
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @return array
+     */
+    public function getStyleCollection() {
+        return $this->styleCollection;
+    }
+
+    /**
      * Nastaví celou kolekci scriptů pro registraci
      * 
      * @author Tomáš Kocifaj
@@ -51,7 +65,7 @@ final class KT_WP_Asset_Configurator {
         return $this;
     }
 
-    // --- veřejné funkce ------------
+    // --- veřejné metody ---------------------------
 
     /**
      * Přidá jeden script k registraci do kolekce dle nastavení
@@ -65,7 +79,6 @@ final class KT_WP_Asset_Configurator {
      * @return \KT_WP_Script_Definition
      */
     public function addScript($id, $source = null) {
-
         $script = $this->scriptCollection[$id] = new KT_WP_Script_Definition($id, $source);
         return $script;
     }
@@ -82,7 +95,6 @@ final class KT_WP_Asset_Configurator {
      * @return \KT_WP_Style_Definition
      */
     public function addStyle($id, $source = null) {
-
         $style = $this->styleCollection[$id] = new KT_WP_Style_Definition($id, $source);
         return $style;
     }
@@ -98,21 +110,16 @@ final class KT_WP_Asset_Configurator {
      * @return \KT_WP_Asset_Configurator
      */
     public function addToScriptCollection(array $scriptCollection) {
-
         if (KT::notIssetOrEmpty($scriptCollection)) {
             return $this;
         }
-
         $currentScriptCollection = $this->getScriptCollection();
-
         if (KT::notIssetOrEmpty($currentScriptCollection)) {
             $this->setScriptCollection($scriptCollection);
             return $this;
         }
-
         $newScriptCollection = array_merge($currentScriptCollection, $scriptCollection);
         $this->setScriptCollection($newScriptCollection);
-
         return $this;
     }
 
@@ -128,23 +135,18 @@ final class KT_WP_Asset_Configurator {
      * @return \KT_WP_Asset_Configurator
      */
     public function addToStyleCollection(array $styleCollection) {
-
         if (KT::notIssetOrEmpty($styleCollection)) {
             return $this;
         }
-
         $currentStyleCollection = $this->getStyleCollection();
-
         if (KT::notIssetOrEmpty($currentStyleCollection)) {
             $this->setStyleCollection($styleCollection);
             return $this;
         }
-
         $newStyleCollection = array_merge($currentStyleCollection, $styleCollection);
         $this->setScriptCollection($newStyleCollection);
-
         return $this;
     }
 
-    // --- privátní funkce ------------
+    // --- neveřejné metody ---------------------------
 }

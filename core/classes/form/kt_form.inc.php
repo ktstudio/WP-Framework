@@ -457,9 +457,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @return string
      */
-    public function returnSuccessMsg($class = "kt-no-error") {
-        $html = "<p class=\"$class\">{$this->getSuccessMessage()}</p>";
-
+    public function returnSuccessMsg($class = "kt-no-error alert alert-success") {
+        $html = "<p class=\"$class\" role=\"alert\">{$this->getSuccessMessage()}</p>";
         return $html;
     }
 
@@ -471,9 +470,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @return string
      */
-    public function returnErrorMsg($class = "kt-error") {
-        $html = "<p class=\"$class\">{$this->getErrorMessage()}</p>";
-
+    public function returnErrorMsg($class = "kt-error alert alert-danger") {
+        $html = "<p class=\"$class\" role=\"alert\">{$this->getErrorMessage()}</p>";
         return $html;
     }
 
@@ -585,7 +583,20 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return string (HTML)
      */
     public function getFormHeader() {
-        $html = "<form " . $this->getAttributeString() . ">";
+        $html = "\n<form " . $this->getAttributeString() . ">";
+        return $html;
+    }
+
+    /**
+     * Vrátí patičku formuláře 
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string (HTML)
+     */
+    public function getFormFooter() {
+        $html = "</form>\n";
         return $html;
     }
 
@@ -1334,7 +1345,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
-     * Uloží data poslané postem do tabulky kt_wp_termmeta - každý field jako extra row
+     * Uloží data poslané postem do tabulky kt_termmeta - každý field jako extra row
      * @see saveFieldsToTermmetaTable
      *
      * @author Martin Hlaváč
@@ -1361,7 +1372,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
-     * Uloží data poslané postem do tabulky kt_wp_termmeta - celý fieldset jako realizované pole fieldů ($fieldName => $fieldValue)
+     * Uloží data poslané postem do tabulky kt_termmeta - celý fieldset jako realizované pole fieldů ($fieldName => $fieldValue)
      * @see saveFieldsToTermmetaTable
      *
      * @author Martin Hlaváč
@@ -1422,6 +1433,22 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
             }
         }
         return $fieldsetData;
+    }
+
+    /**
+     * Vypíše třídu submit tlačítka jako HTML atribut, pokud je zadána
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public function getButtonClassAttr() {
+        $class = $this->getButtonClass();
+        if (KT::issetAndNotEmpty($class)) {
+            return " class=\"$class\"";
+        }
+        return null;
     }
 
     // --- statické metody ---------------

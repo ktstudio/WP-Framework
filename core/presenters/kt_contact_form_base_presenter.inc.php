@@ -27,12 +27,13 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
     public function __construct($withProcessing = true) {
         if ($withProcessing) {
             $this->process();
-            $processedParam = (array_key_exists(self::PROCESSED_PARAM, $_GET)) ? substr(htmlspecialchars($_GET[self::PROCESSED_PARAM]), 0, 1) : null;
-            if ($processedParam != null) {
-                if ($processedParam === "1") {
+            $processedParam = filter_input(INPUT_GET, self::PROCESSED_PARAM, FILTER_SANITIZE_ENCODED);
+            if (isset($processedParam)) {
+                $processed = substr($processedParam, 0, 1);
+                if ($processed === "1") {
                     $this->wasProcessed = true;
                     add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderSuccessNotice"));
-                } elseif ($processedParam === "0") {
+                } elseif ($processed === "0") {
                     $this->wasProcessed = false;
                     add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderErrorNotice"));
                 }
@@ -51,9 +52,8 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      * @return \KT_Form
      */
     public function getForm() {
-        $form = $this->form;
-        if (KT::issetAndNotEmpty($form)) {
-            return $form;
+        if (KT::issetAndNotEmpty($this->form)) {
+            return $this->form;
         }
         return $this->initForm();
     }
@@ -67,11 +67,22 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      * @return \KT_Form_Fieldset
      */
     public function getFieldset() {
-        $fieldset = $this->fieldset;
-        if (KT::issetAndNotEmpty($fieldset)) {
-            return $fieldset;
+        if (KT::issetAndNotEmpty($this->fieldset)) {
+            return $this->fieldset;
         }
         return $this->initFieldset();
+    }
+
+    /**
+     * Vrátí email, na který se bude zpracovaný formulář odesílat, výchozí je administrační e-mail
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public function getFormEmail() {
+        return get_bloginfo("admin_email");
     }
 
     /**
@@ -103,36 +114,14 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
             }
             $form->validate();
             if (!$form->hasError()) {
-                $spam = $_POST[KT_Contact_Form_Base_Config::FORM_PREFIX][KT_Contact_Form_Base_Config::FAVOURITE];
-                if (KT::issetAndNotEmpty($spam)) {
-                    wp_die(__("Vyplnili jste nepovolený kontrolní prvek...", KT_DOMAIN));
-                    exit;
-                }
-
-                $ktWpInfo = new KT_WP_Info();
-
-                $name = htmlspecialchars(trim($_POST[KT_Contact_Form_Base_Config::FORM_PREFIX][KT_Contact_Form_Base_Config::NAME]));
-                $email = htmlspecialchars(trim($_POST[KT_Contact_Form_Base_Config::FORM_PREFIX][KT_Contact_Form_Base_Config::EMAIL]));
-                $phone = htmlspecialchars(trim($_POST[KT_Contact_Form_Base_Config::FORM_PREFIX][KT_Contact_Form_Base_Config::PHONE]));
-                $message = htmlspecialchars(trim($_POST[KT_Contact_Form_Base_Config::FORM_PREFIX][KT_Contact_Form_Base_Config::MESSAGE]));
-                if (KT::issetAndNotEmpty($name) && KT::issetAndNotEmpty($email) && KT::issetAndNotEmpty($phone) && KT::issetAndNotEmpty($message) && is_email($email)) {
-
-                    $content .= sprintf(__("Jméno: %s", KT_DOMAIN), $name) . "<br />";
-                    $content .= sprintf(__("E-mail: %s", KT_DOMAIN), $email) . "<br />";
-                    $content .= sprintf(__("Telefon: %s", KT_DOMAIN), $phone) . "<br /><br />";
-                    $content .= sprintf(__("Zpráva:", KT_DOMAIN), $message) . "<br /><br />";
-                    $content .= $message;
-                    $content .= "<br /><br />---<br />";
-                    $content .= sprintf(__("Tento e-mail byl vygenerován pomocí kontaktního formuláře na webu: %s", KT_DOMAIN), $ktWpInfo->getUrl());
-
-                    $contactFormEmail = apply_filters("kt_contact_form_email_filter", $ktWpInfo->getAdminEmail());
-
-                    $mailer = new KT_Mailer($contactFormEmail, $ktWpInfo->getName(), sprintf(__("%s - kontakt", KT_DOMAIN), $ktWpInfo->getName()));
-                    $mailer->setSenderEmail($email);
-                    $mailer->setSenderName($name);
-                    $mailer->setContent($content);
-                    $sendResult = $mailer->send();
-                    if ($sendResult) {
+                $values = filter_input(INPUT_POST, KT_Contact_Form_Base_Config::FORM_PREFIX, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                if (KT::arrayIssetAndNotEmpty($values)) {
+                    $spam = KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::FAVOURITE);
+                    if (KT::issetAndNotEmpty($spam)) {
+                        wp_die(__("Vyplnili jste nepovolený kontrolní prvek...", KT_DOMAIN));
+                        exit;
+                    }
+                    if ($this->processMail($values)) {
                         wp_redirect(add_query_arg(self::PROCESSED_PARAM, "1", KT::getRequestUrl()));
                         exit;
                     }
@@ -184,6 +173,49 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
     }
 
     // --- neveřejné metody ------------------------
+
+    /**
+     * Zpracování údajů z POSTu (bez spam validace) a případné zodeslání mailu
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array $values
+     * @return boolean
+     */
+    protected function processMail(array $values) {
+        if (count($values) > 0) {
+            $firstName = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::FIRST_NAME), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $lastName = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::LAST_NAME), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $name = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::NAME), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $email = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::EMAIL), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $phone = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::PHONE), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $message = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::MESSAGE), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            $fullName = $name ? : "$firstName $lastName";
+
+            if (KT::issetAndNotEmpty($fullName) && KT::issetAndNotEmpty($email) && KT::issetAndNotEmpty($phone) && KT::issetAndNotEmpty($message) && is_email($email)) {
+                $ktWpInfo = new KT_WP_Info();
+
+                $content = sprintf(__("Jméno: %s", KT_DOMAIN), $fullName) . "<br />";
+                $content .= sprintf(__("E-mail: %s", KT_DOMAIN), $email) . "<br />";
+                $content .= sprintf(__("Telefon: %s", KT_DOMAIN), $phone) . "<br /><br />";
+                $content .= sprintf(__("Zpráva:", KT_DOMAIN), $message) . "<br /><br />";
+                $content .= $message;
+                $content .= "<br /><br />---<br />";
+                $content .= sprintf(__("Tento e-mail byl vygenerován pomocí kontaktního formuláře na webu: %s", KT_DOMAIN), $ktWpInfo->getUrl());
+
+                $contactFormEmail = apply_filters("kt_contact_form_email_filter", $this->getFormEmail());
+
+                $mailer = new KT_Mailer($contactFormEmail, $ktWpInfo->getName(), sprintf(__("%s - kontakt", KT_DOMAIN), $ktWpInfo->getName()));
+                $mailer->setSenderEmail($email);
+                $mailer->setSenderName($fullName);
+                $mailer->setContent($content);
+                return $sendResult = $mailer->send();
+            }
+        }
+        return false;
+    }
 
     /**
      * Základní inicializace formuláře

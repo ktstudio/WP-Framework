@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Založení WP_Screen pro zadávání metaboxů na vlastním layoutu a přídání nové stránky do navigace Wordpress v admin sekci
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_Custom_Metaboxes_Page extends KT_Custom_Metaboxes_Base {
 
     const TOP_LVL_PAGE_PREFIX = "toplevel_page_";

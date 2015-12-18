@@ -9,7 +9,9 @@
 class KT_WP_Comments_Base_Presenter extends KT_Presenter_Base {
 
     private $postId;
+    private $post;
     private $comments;
+    private $commentsEnabled;
 
     /**
      * Založení základního presenteru pro výpis komentářů postu
@@ -39,6 +41,21 @@ class KT_WP_Comments_Base_Presenter extends KT_Presenter_Base {
     }
 
     /**
+     * Vrátí případný post podle zadaného ID
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return mixed WP_Post|null
+     */
+    public function getPost() {
+        if (KT::issetAndNotEmpty($this->post)) {
+            return $this->post;
+        }
+        return $this->post = get_post($this->getPostId());
+    }
+
+    /**
      * Kolekce komentářů pro zadaný post (ID)
      * 
      * @author Martin Hlaváč
@@ -47,11 +64,25 @@ class KT_WP_Comments_Base_Presenter extends KT_Presenter_Base {
      * @return array
      */
     public function getComments() {
-        $query = $this->comments;
-        if (KT::issetAndNotEmpty($query)) {
-            return $query;
+        if (KT::issetAndNotEmpty($this->comments)) {
+            return $this->comments;
         }
         return $this->initComments();
+    }
+
+    /**
+     * Označení zda jsou komentáře povoleny (obecně i pro příspěvek)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public function getCommentsEnabled() {
+        if (KT::issetAndNotEmpty($this->commentsEnabled)) {
+            return $this->commentsEnabled;
+        }
+        return $this->commentsEnabled = comments_open($this->getPostId()) && post_type_supports(KT_PRODUCT_KEY, "comments") && !post_password_required($this->getPost());
     }
 
     // --- veřejné metody ------------------------

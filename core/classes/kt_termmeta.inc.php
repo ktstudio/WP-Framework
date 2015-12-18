@@ -42,8 +42,7 @@ class KT_Termmeta {
         if (!self::getIsActive()) {
             global $wpdb;
             $id = self::TYPE . "meta";
-            $table = kt_get_prefixed($wpdb->prefix . "termmeta");
-            $wpdb->$id = $table;
+            $wpdb->$id = "kt_termmeta";
             self::$isActive = true;
         }
     }

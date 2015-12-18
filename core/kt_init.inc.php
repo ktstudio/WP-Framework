@@ -21,8 +21,11 @@ define("KT_CORE_JS_URL", path_join(KT_CORE_URL, "js"));
 define("KT_CORE_REQUIRES_URL", path_join(KT_CORE_URL, "requires"));
 
 // --- logování ------------------------
+/* @deprecated deprecated since version 1.6 */
 define("KT_CORE_LOG_MIN_LEVEL", KT_Log_Level_Enum::INFO);
+/* @deprecated deprecated since version 1.6 */
 define("KT_CORE_LOG_ONLY_SIGNED_USERS", true);
+/* @deprecated deprecated since version 1.6 */
 define("KT_CORE_LOG_TOOLS_ADMIN_PAGE", true);
 
 // --- export ------------------------
@@ -41,6 +44,7 @@ define("KT_WP_COMMENT_KEY", "comment");
 define("KT_WP_ATTACHMENT_KEY", "attachment");
 define("KT_WP_REVISION_KEY", "revision");
 define("KT_WP_NAV_MENU_ITEM_KEY", "nav_menu_item");
+define("KT_WP_NAV_MENU_ITEM_PARENT_META_KEY", "_menu_item_menu_item_parent");
 // --- post meta ------------------------
 define("KT_WP_META_KEY_PAGE_TEMPLATE", "_wp_page_template");
 define("KT_WP_META_KEY_THUMBNAIL_ID", "_thumbnail_id");
@@ -84,6 +88,10 @@ define("KT_WP_IMAGE_SIZE_THUBNAIL", "thumbnail");
 define("KT_WP_IMAGE_SIZE_MEDIUM", "medium");
 define("KT_WP_IMAGE_SIZE_LARGE", "large");
 define("KT_WP_IMAGE_SIZE_ORIGINAL", "original");
+// --- schedule event ------------------------
+define("KT_WP_RECURRENCE_HOURLY", "hourly");
+define("KT_WP_RECURRENCE_TWICEDAILY", "twicedaily");
+define("KT_WP_RECURRENCE_DAILY", "daily");
 // --- scripts ------------------------
 define("KT_WP_JQUERY_SCRIPT", "jquery");
 define("KT_WP_JQUERY_UI_DATEPICKER_SCRIPT", "jquery-ui-datepicker");

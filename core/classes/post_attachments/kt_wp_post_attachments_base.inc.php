@@ -1,6 +1,6 @@
 <?php
 
-abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
+abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
 
     const DEFAULT_ORDERBY = "ID";
     const DEFAULT_ORDER = "ASC";
@@ -90,7 +90,6 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
         if ($this->files === null) {
             $this->initialize();
         }
-
         return $this->files;
     }
 
@@ -107,7 +106,6 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
      */
     public function setPost(WP_Post $post) {
         $this->post = $post;
-
         return $this;
     }
 
@@ -122,6 +120,7 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
      */
     public function setOrderby($orderby) {
         $this->orderby = $orderby;
+        return $this;
     }
 
     /**
@@ -135,6 +134,7 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
      */
     public function setOrder($order) {
         $this->order = $order;
+        return $this;
     }
 
     /**
@@ -147,6 +147,7 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
      */
     public function setNumberFiles($numberImages) {
         $this->numberFiles = $numberImages;
+        return $this;
     }
 
     /**
@@ -160,7 +161,6 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
      */
     public function setLinkClass($linkClass) {
         $this->linkClass = $linkClass;
-
         return $this;
     }
 
@@ -175,7 +175,6 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
      */
     public function setContainerTitle($galleryTitle) {
         $this->containerTitle = $galleryTitle;
-
         return $this;
     }
 
@@ -193,7 +192,6 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
      */
     public function setContainerTitleHtmlTag($galleryTitleContainer) {
         $this->containerTitleHtmlTag = $galleryTitleContainer;
-
         return $this;
     }
 
@@ -208,7 +206,6 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
      */
     protected function setFiles(array $files) {
         $this->files = $files;
-
         return $this;
     }
 
@@ -226,7 +223,6 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base{
         if (KT::issetAndNotEmpty($this->getFiles())) {
             return true;
         }
-
         return false;
     }
 
