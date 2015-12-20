@@ -472,7 +472,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
      */
     public function saveRow() {
         if ($this->isInDatabase()) {
-            $this->updateRow();
+            return $this->updateRow();
         } else {
             return $this->insertRow();
         }
@@ -601,7 +601,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
     private function updateRow() {
 
         if (!$this->isInDatabase()) {
-            return;
+            return false;
         }
 
         global $wpdb;
@@ -614,7 +614,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         remove_filter("query", array($this, "nullUpdateFilterCallback")); // Zrušení předešlého filtru
 
         if ($sql) {
-            return $sql;
+            return true;
         }
         if (KT::issetAndNotEmpty($wpdb->last_error)) {
             $this->addError("Došlo k chybě při změně dat v DB", $wpdb->last_error);

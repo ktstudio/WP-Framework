@@ -155,7 +155,8 @@ class KT_Select_Field extends KT_Options_Field_Base {
         if ($optionKey == $value && $value !== null && $value !== '') {
             $selected = " selected=\"selected\"";
         }
-        return $html = "<option value=\"$optionKey\"$selected>$optionValue</option>";
+        $filteredValue = filter_var($optionValue, $this->getFilterSanitize());
+        return $html = "<option value=\"$optionKey\"$selected>$filteredValue</option>";
     }
 
 }

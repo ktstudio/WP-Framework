@@ -24,6 +24,7 @@ class KT_CRUD_Admin_Column {
     private $deletable = false;
     private $selfCallback = false;
     private $cssClass = null;
+    private $filterSanitize = FILTER_SANITIZE_SPECIAL_CHARS;
 
     /**
      * @param string $name
@@ -150,11 +151,11 @@ class KT_CRUD_Admin_Column {
      * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
-     * @param type $unit
+     * @param type $prefix
      * @return \KT_CRUD_Admin_Column
      */
-    public function setPrefix($unit) {
-        $this->prefix = $unit;
+    public function setPrefix($prefix) {
+        $this->prefix = $prefix;
         return $this;
     }
 
@@ -171,11 +172,11 @@ class KT_CRUD_Admin_Column {
      * @author Tomáš Kocifaj
      * @link www.ktstduio.cz
      * 
-     * @param type $unit
+     * @param type $suffix
      * @return \KT_CRUD_Admin_Column
      */
-    public function setSuffix($unit) {
-        $this->suffix = $unit;
+    public function setSuffix($suffix) {
+        $this->suffix = $suffix;
         return $this;
     }
 
@@ -266,6 +267,33 @@ class KT_CRUD_Admin_Column {
         return $this;
     }
 
+    /**
+     * Vrátí nastavený sanatizační kód pro (výpis) hodnotu(y)
+     * Pozn.: výchozí je FILTER_SANITIZE_SPECIAL_CHARS
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public function getFilterSanitize() {
+        return $this->filterSanitize;
+    }
+
+    /**
+     * Nastavení (vlastní) sanatizační kód pro hodnotu(y) (výpis)
+     * 
+     * @author Matin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param int $code
+     * @return \KT_Field
+     */
+    public function setFilterSanitize($code) {
+        $this->filterSanitize = KT::tryGetInt($code);
+        return $this;
+    }
+
     // --- veřejné funkce ------------------
 
     /**
@@ -286,7 +314,7 @@ class KT_CRUD_Admin_Column {
         $className = get_class($item);
         $itemId = $item->getId();
         if ($this->getType() != self::CUSTOM_TYPE) {
-            $itemValue = $item->$columnName;
+            $itemValue = filter_var($item->$columnName, $this->getFilterSanitize());
         }
 
         switch ($this->getType()) {

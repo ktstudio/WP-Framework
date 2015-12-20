@@ -63,7 +63,8 @@ class KT_Radio_Field extends KT_Options_Field_Base {
                 $html .= "checked=\"checked\"";
             }
 
-            $html .= "> <span class=\"radio radio-name-{$this->getAttrValueByName("id")} radio-key-$key \"><label for=\"{$this->getName()}-{$key}\">$value</label></span> ";
+            $filteredValue = filter_var($value, $this->getFilterSanitize());
+            $html .= "> <span class=\"radio radio-name-{$this->getAttrValueByName("id")} radio-key-$key \"><label for=\"{$this->getName()}-{$key}\">$filteredValue</label></span> ";
 
             $html .= "</span>";
         }
