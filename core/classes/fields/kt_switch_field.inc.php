@@ -17,7 +17,7 @@ class KT_Switch_Field extends KT_Field {
         parent::__construct($name, $label);
 
         $this->addAttrClass(self::FIELD_TYPE);
-        $this->setValue(self::NO);
+        $this->setDefaultValue(self::NO);
         $this->setFilterSanitize(FILTER_SANITIZE_NUMBER_INT);
 
         return $this;

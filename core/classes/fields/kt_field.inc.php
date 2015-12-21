@@ -8,7 +8,9 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
     private $name = null;
     private $postPrefix = null;
     private $unit = null;
-    private $value = null;
+    private $value;
+    private $cleanValue;
+    private $defaultValue = null;
     private $filterSanitize = FILTER_SANITIZE_SPECIAL_CHARS;
     private $error = false;
     private $validators = array();
@@ -106,6 +108,14 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
     }
 
     /**
+     * @deprecated since version 1.7 
+     * @see setDefaultValue
+     */
+    public function setValue($value) {
+        return $this->setDefaultValue($value);
+    }
+
+    /**
      * Nastavení / změnu hodnoty fildu attr - value.
      * 
      * @author Tomáš Kocifaj
@@ -114,8 +124,8 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
      * @param string $value
      * @return \KT_Field
      */
-    public function setValue($value) {
-        $this->value = $value;
+    public function setDefaultValue($value) {
+        $this->defaultValue = $value;
         return $this;
     }
 
@@ -358,14 +368,31 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
     /**
      * Vrátí field value na základě zaslaného postu, getu, prefixu nebo nastaveného value
      *
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @return null
+     * @return string
      */
     public function getValue() {
+        if (isset($this->value)) {
+            return $this->value;
+        }
+        return $this->value = filter_var($this->getCleanValue(), $this->getFilterSanitize());
+    }
+
+    /**
+     * Vrátí přímo čistou hodnotu bez zpracování - sanitizace
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getCleanValue() {
+        if (isset($this->cleanValue)) {
+            return $this->cleanValue;
+        }
         $name = $this->getName();
-        $filterSanitize = $this->getFilterSanitize();
 
         $postPrefix = $this->getPostPrefix();
         if (KT::issetAndNotEmpty($postPrefix)) {
@@ -373,43 +400,44 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
             if (KT::arrayIssetAndNotEmpty($postValues)) {
                 $postPrefixValue = KT::arrayTryGetValue($postValues, $name);
                 if (isset($postPrefixValue)) {
-                    return $postPrefixFilteredValue = filter_var($postPrefixValue, $filterSanitize);
+                    return $this->cleanValue = $postPrefixValue;
                 }
             }
             $getValues = filter_input(INPUT_GET, $postPrefix, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
             if (KT::arrayIssetAndNotEmpty($getValues)) {
                 $getPrefixValue = KT::arrayTryGetValue($getValues, $name);
                 if (isset($getPrefixValue)) {
-                    return $getPrefixFilteredValue = filter_var($getPrefixValue, $filterSanitize);
+                    return $this->cleanValue = $getPrefixValue;
                 }
             }
         }
 
-        $postValue = filter_input(INPUT_POST, $name, $filterSanitize);
+        $postValue = KT::arrayTryGetValue($_POST, $name);
         if (isset($postValue)) {
-            return $postValue;
+            return $this->cleanValue = $postValue;
         }
-        $getValue = filter_input(INPUT_GET, $name, $filterSanitize);
+        $getValue = KT::arrayTryGetValue($_GET, $name);
         if (isset($getValue)) {
-            return $getValue;
+            return $this->cleanValue = $getValue;
         }
 
-        if (KT::issetAndNotEmpty($this->value)) {
-            return $this->value; // výchozí hodnota
+        $defaultValue = $this->getDefaultValue();
+        if (KT::issetAndNotEmpty($defaultValue)) {
+            return $this->cleanValue = $defaultValue;
         }
-        return null;
+        return $this->cleanValue = "";
     }
 
     /**
-     * Vrátí přímo čistou (výchozí) hodnotu bez zpracování
+     * Vrátí přímo výchozí hodnotu fieldu, pokud je zadána
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @return null
+     * @return string
      */
-    protected function getBaseValue() {
-        return $this->value;
+    protected function getDefaultValue() {
+        return $this->defaultValue;
     }
 
     /**

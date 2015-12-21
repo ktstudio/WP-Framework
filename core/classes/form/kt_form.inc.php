@@ -673,7 +673,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                     foreach ($fieldset->getFields() as $field) {
                         $value = get_option($field->getName(), null);
                         if ($value !== "" && isset($value)) {
-                            $field->setValue($fieldset->convertFieldValue($field, $value));
+                            $field->setDefaultValue($fieldset->convertFieldValue($field, $value));
                         }
                     }
                 }

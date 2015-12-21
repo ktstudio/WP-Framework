@@ -400,7 +400,7 @@ class KT_CRUD_Admin_Column {
      */
     private function getSwitchButtonTypeContent($itemValue, $itemId, $className) {
         $switchField = new KT_Switch_Field("kt-crud-switch-list-field-" . $itemId, "");
-        $switchField->setValue($itemValue)
+        $switchField->setDefaultValue($itemValue)
                 ->addAttribute("data-item-type", $className)
                 ->addAttribute("data-item-id", $itemId)
                 ->addAttribute("data-column-name", $this->getName())

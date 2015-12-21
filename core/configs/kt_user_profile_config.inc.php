@@ -26,17 +26,17 @@ class KT_User_Profile_Config {
         }
 
         $fieldset->addText(self::FIRST_NAME, __("Jméno*:", "KT_CORE_DOMAIN"))
-                ->setValue($currentUser->user_firstname)
+                ->setDefaultValue($currentUser->user_firstname)
                 ->setAttrMaxlength(30)
                 ->addRule(KT_Field_Validator::REQUIRED, __("Jméno je povinná položka.", "KT_CORE_DOMAIN"))
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Jméno může mít maximálně 30 znaků.", "KT_CORE_DOMAIN"), 30);
         $fieldset->addText(self::LAST_NAME, __("Příjmení*:", "KT_CORE_DOMAIN"))
-                ->setValue($currentUser->user_lastname)
+                ->setDefaultValue($currentUser->user_lastname)
                 ->setAttrMaxlength(30)
                 ->addRule(KT_Field_Validator::REQUIRED, __("Příjmení je povinná položka.", "KT_CORE_DOMAIN"))
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Příjmení může mít maximálně 30 znaků.", "KT_CORE_DOMAIN"), 30);
         $fieldset->addText(self::EMAIL, __("E-mail*:", "KT_CORE_DOMAIN"))
-                ->setValue($currentUser->user_email)
+                ->setDefaultValue($currentUser->user_email)
                 ->setAttrMaxlength(50)
                 ->addRule(KT_Field_Validator::REQUIRED, __("E-mail je povinná položka.", "KT_CORE_DOMAIN"))
                 ->addRule(KT_Field_Validator::EMAIL, __("E-mail musí být ve správném tvaru.", "KT_CORE_DOMAIN"))
@@ -45,7 +45,7 @@ class KT_User_Profile_Config {
         if ($withPhone) {
             $phoneLabel = ($isPhoneRequired) ? __("Telefon*:", "KT_CORE_DOMAIN") : __("Telefon:", "KT_CORE_DOMAIN");
             $phoneField = $fieldset->addText(self::PHONE, $phoneLabel)
-                    ->setValue($currentUser->$userPhoneKey)
+                    ->setDefaultValue($currentUser->$userPhoneKey)
                     ->setAttrMaxlength(16)
                     ->setPlaceholder(__("+420 606 707 808", "KT_CORE_DOMAIN"))
                     ->setToolTip(__("Telefon by měl být v mezinárodní formě, např. \"+420 606 707 808\"...", "KT_CORE_DOMAIN"))

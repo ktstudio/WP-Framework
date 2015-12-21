@@ -38,12 +38,12 @@ class KT_Catalog_Base_Config {
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Kód může mít maximálně 30 znaků", "KT_CORE_DOMAIN"), 30);
 
         $fieldset->addSwitch(KT_Catalog_Model_Base::VISIBILITY_COLUMN, __("Viditelnost*: ", "KT_CORE_DOMAIN"))
-                ->setValue(KT_Switch_Field::YES)
+                ->setDefaultValue(KT_Switch_Field::YES)
                 ->addRule(KT_Field_Validator::REQUIRED, __("Viditelnost je povinná položka", "KT_CORE_DOMAIN"));
 
         if (KT::issetAndNotEmpty($item) && $item->isInDatabase()) {
             $fieldset->addHidden(KT_Catalog_Model_Base::ID_COLUMN)
-                    ->setValue($item->getId());
+                    ->setDefaultValue($item->getId());
 
             $fieldset->setFieldsData($item->getData());
         }

@@ -116,7 +116,7 @@ class KT_Term_Metabox implements KT_Registrable {
         foreach ($fieldset->getFields() as $field) {
             if ($termId) {
                 $value = KT_Termmeta::getData($termId, $field->getName(), true);
-                $field->setValue($value);
+                $field->setDefaultValue($value);
             }
         }
         echo $fieldset->getInputsToTable();
@@ -136,7 +136,7 @@ class KT_Term_Metabox implements KT_Registrable {
         foreach ($fieldset->getFields() as $field) {
             if ($termId) {
                 $value = KT_Termmeta::getData($termId, $field->getName(), true);
-                $field->setValue($value);
+                $field->setDefaultValue($value);
             }
             echo $fieldset->getInputToTr($field);
         }

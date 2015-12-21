@@ -12,6 +12,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      */
     public function __construct($name, $label) {
         parent::__construct($name, $label);
+        $this->setFilterSanitize(FILTER_SANITIZE_STRING);
     }
 
     // --- getry & settery ------------------------
@@ -20,35 +21,20 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
         return self::FIELD_TYPE;
     }
 
+    /**
+     * Vrátí field value na základě zaslaného postu, getu, prefixu nebo nastaveného value
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return array
+     */
     public function getValue() {
-        $postPrefix = $this->getPostPrefix();
-        if (KT::issetAndNotEmpty($postPrefix)) {
-            $postValues = filter_input(INPUT_POST, $postPrefix, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-            if (isset($postValues)) {
-                return $postValues;
-            }
-            $getValues = filter_input(INPUT_GET, $postPrefix, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-            if (isset($getValues)) {
-                return $getValues;
-            }
+        $value = parent::getCleanValue();
+        if (KT::arrayIsSerialized($value)) {
+            return unserialize($value);
         }
-
-        $name = $this->getName();
-        $filterSanitize = $this->getFilterSanitize();
-        $postValue = filter_input(INPUT_POST, $name, $filterSanitize);
-        if (isset($postValue)) {
-            return $this->tryCheckValue($postValue);
-        }
-        $getValue = filter_input(INPUT_GET, $name, $filterSanitize);
-        if (isset($getValue)) {
-            return $this->tryCheckValue($getValue);
-        }
-
-        $baseValue = $this->getBaseValue();
-        if (KT::issetAndNotEmpty($baseValue)) {
-            return $this->tryCheckValue($baseValue); // výchozí hodnota
-        }
-        return null;
+        return $value;
     }
 
     // --- veřejné funkce ------------------------
@@ -127,6 +113,18 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
     // --- privátní funkce ------------------
 
     /**
+     * Zajistí, aby hodnoty byly zpracovány jako pole
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    protected function getAfterNameValue() {
+        return "[]";
+    }
+
+    /**
      * Vrátí HTML s attributem name fieldu
      * 
      * @author Tomáš Kocifaj
@@ -141,22 +139,6 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
         } else {
             return $html = "name=\"{$this->getName()}[$inputName]\" ";
         }
-    }
-
-    /**
-     * Kontrola hodnoty na (serializované) pole 
-     * 
-     * @author Martin Hlaváč
-     * @link http://www.ktstudio.cz
-     * 
-     * @param string $value
-     * @return array
-     */
-    private function tryCheckValue($value) {
-        if (KT::arrayIsSerialized($value)) {
-            return unserialize($value);
-        }
-        return $value;
     }
 
 }

@@ -35,12 +35,12 @@ class KT_Comment_Config {
         }
 
         $fieldset->addText(self::FIRST_NAME, __("Autor*:", "KT_CORE_DOMAIN"))
-                ->setValue($currentUser->display_name)
+                ->setDefaultValue($currentUser->display_name)
                 ->setAttrMaxlength(30)
                 ->addRule(KT_Field_Validator::REQUIRED, __("Autor je povinná položka.", "KT_CORE_DOMAIN"))
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Autor může mít maximálně 30 znaků.", "KT_CORE_DOMAIN"), 30);
         $fieldset->addText(self::EMAIL, __("E-mail*:", "KT_CORE_DOMAIN"))
-                ->setValue($currentUser->user_email)
+                ->setDefaultValue($currentUser->user_email)
                 ->setAttrMaxlength(50)
                 ->addRule(KT_Field_Validator::REQUIRED, __("E-mail je povinná položka.", "KT_CORE_DOMAIN"))
                 ->addRule(KT_Field_Validator::EMAIL, __("E-mail musí být ve správném tvaru.", "KT_CORE_DOMAIN"))

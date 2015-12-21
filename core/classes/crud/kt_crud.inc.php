@@ -206,7 +206,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
 
         foreach ($this->getColumns() as $column) {
             if (array_key_exists($column->getName(), $data)) {
-                $column->setValue($data[$column->getName()]);
+                $column->setDefaultValue($data[$column->getName()]);
                 continue;
             }
         }

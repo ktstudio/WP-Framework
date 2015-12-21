@@ -25,6 +25,7 @@ class KT_Multi_Select_Field extends KT_Select_Field {
     public function __construct($name, $label) {
         parent::__construct($name, $label);
         $this->addAttrClass(self::CLASS_IDENTIFICATOR);
+        $this->setFilterSanitize(FILTER_SANITIZE_STRING);
     }
 
     // --- getry & settery ------------------------
@@ -41,8 +42,16 @@ class KT_Multi_Select_Field extends KT_Select_Field {
         return self::FIELD_TYPE;
     }
 
+    /**
+     * Vrátí field value na základě zaslaného postu, getu, prefixu nebo nastaveného value
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return array
+     */
     public function getValue() {
-        $value = parent::getValue();
+        $value = parent::getCleanValue();
         if (KT::arrayIsSerialized($value)) {
             return unserialize($value);
         }
