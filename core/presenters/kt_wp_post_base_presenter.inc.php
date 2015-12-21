@@ -210,7 +210,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     public function getAuthorBio($withAvatar = false) {
         $description = $this->getModel()->getAuthor()->getDescription();
         if (KT::issetAndNotEmpty($description)) {
-            $title = sprintf(__("O autorovi: %s", KT_DOMAIN), $this->getModel()->getAuthor()->getDisplayName());
+            $title = sprintf(__("O autorovi: %s", "KT_CORE_DOMAIN"), $this->getModel()->getAuthor()->getDisplayName());
             $html = "<h2>$title</h2>";
             if ($withAvatar) {
                 $avatar = $this->getModel()->getAuthor()->getAvatar();

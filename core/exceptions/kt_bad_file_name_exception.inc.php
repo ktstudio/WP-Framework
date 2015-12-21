@@ -12,7 +12,7 @@ class KT_Bad_File_Name_Exception extends Exception {
 
     public function __construct($fileName, $code = 0, Exception $previous = null) {
         $this->fileName = $fileName;
-        $message = __("Název souboru neodpovídá stanoveným konvencím, viz. KT předpona a INC přípona...", KT_DOMAIN);
+        $message = __("Název souboru neodpovídá stanoveným konvencím, viz. KT předpona a INC přípona...", "KT_CORE_DOMAIN");
         parent::__construct($message, $code, $previous);
     }
 
@@ -21,7 +21,7 @@ class KT_Bad_File_Name_Exception extends Exception {
     }
 
     public function __toString() {
-        return __("Název souboru: ", KT_DOMAIN) . $this->getFileName() . "\n" . parent::__toString();
+        return sprintf(__("Název souboru: %s \n %s", "KT_CORE_DOMAIN"), $this->getFileName(), parent::__toString());
     }
 
 }

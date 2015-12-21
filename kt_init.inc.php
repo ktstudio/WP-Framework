@@ -9,16 +9,17 @@ define("KT_BASE_URL", get_template_directory_uri() . "/kt");
 define("KT_FILE_PREFIX", "kt_");
 define("KT_PREFIX", "kt_");
 define("KT_FORM_PREFIX", "kt-");
+/** @deprecated since version 1.7 */
 define("KT_DOMAIN", "KT");
 define("KT_PHP_FILE_SUFFIX", ".inc.php");
 define("KT_PHP_ADMIN_FILE_SUFFIX", ".admin.inc.php");
 define("KT_INIT_MODULE_FILE", "kt_init.inc.php");
 define("KT_BASE_STATIC_CLASS", "KT");
-define("KT_EMPTY_SYMBOL", __("---", KT_DOMAIN));
-define("KT_EMPTY_TEXT", __("<Prázdné>", KT_DOMAIN));
-define("KT_ALL_TEXT", __("<Vše>", KT_DOMAIN));
-define("KT_SELECT_TEXT", __("<Vybrat>", KT_DOMAIN));
-define("KT_SELECT_SYMBOL", __("...", KT_DOMAIN));
+define("KT_EMPTY_SYMBOL", __("---", "KT_CORE_DOMAIN"));
+define("KT_EMPTY_TEXT", __("<Prázdné>", "KT_CORE_DOMAIN"));
+define("KT_ALL_TEXT", __("<Vše>", "KT_CORE_DOMAIN"));
+define("KT_SELECT_TEXT", __("<Vybrat>", "KT_CORE_DOMAIN"));
+define("KT_SELECT_SYMBOL", __("...", "KT_CORE_DOMAIN"));
 define("KT_BASE_CLASS_SUFFIX", "base");
 define("KT_INTERFACES_FOLDER", "interfaces");
 define("KT_CLASSES_FOLDER", "classes");
@@ -259,6 +260,7 @@ function kt_initialize_module($modulePrefix, $folder = "yours", $withIncludeAll 
     define("KT_{$modulePrefix}_INTERFACES_PATH", path_join($pathValue, "interfaces"));
     define("KT_{$modulePrefix}_JS_PATH", path_join($pathValue, "js"));
     define("KT_{$modulePrefix}_REQUIRES_PATH", path_join($pathValue, "requires"));
+    define("KT_{$modulePrefix}_LANGUAGES_PATH", path_join($pathValue, "languages"));
     define("KT_{$modulePrefix}_TEMPLATES_PATH", path_join($pathValue, "templates"));
     // URL
     $urlKey = "KT_{$modulePrefix}_URL";
@@ -271,6 +273,7 @@ function kt_initialize_module($modulePrefix, $folder = "yours", $withIncludeAll 
     define("KT_{$modulePrefix}_INTERFACES_URL", path_join($urlValue, "interfaces"));
     define("KT_{$modulePrefix}_JS_URL", path_join($urlValue, "js"));
     define("KT_{$modulePrefix}_REQUIRES_URL", path_join($urlValue, "requires"));
+    define("KT_{$modulePrefix}_LANGUAGES_URL", path_join($urlValue, "languages"));
     define("KT_{$modulePrefix}_TEMPLATES_URL", path_join($urlValue, "templates"));
     // include all
     if ($withIncludeAll) {
@@ -309,7 +312,7 @@ function kt_include_all($folder) {
             }
         }
     } else {
-        throw new InvalidArgumentException(__("Hodnota \"$folder\" nesmí být prázdná a musí být adresář.", KT_DOMAIN));
+        throw new InvalidArgumentException(__("Hodnota \"$folder\" nesmí být prázdná a musí být adresář.", "KT_CORE_DOMAIN"));
     }
 }
 
@@ -325,7 +328,7 @@ function kt_check_loaded() {
     if (KT_LOADED === true) {
         return;
     }
-    wp_die(__("WP Framework není načten, či povolen!", KT_DOMAIN));
+    wp_die(__("WP Framework není načten, či povolen!", "KT_CORE_DOMAIN"));
 }
 
 /**

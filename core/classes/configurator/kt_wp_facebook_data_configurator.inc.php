@@ -212,7 +212,7 @@ class KT_WP_Facebook_Data_Configurator {
         }
 
         if (is_search()) {
-            $this->setTitle(sprintf(__("Vyhledávání pro výraz: %s", KT_DOMAIN), trim(esc_attr(get_search_query()))));
+            $this->setTitle(sprintf(__("Vyhledávání pro výraz: %s", "KT_CORE_DOMAIN"), trim(esc_attr(get_search_query()))));
             return $this;
         }
 
@@ -232,7 +232,7 @@ class KT_WP_Facebook_Data_Configurator {
         }
 
         if (is_404()) {
-            $this->setTitle(sprintf(__("Chyba 404 - %s", KT_DOMAIN), $this->getTitle()));
+            $this->setTitle(sprintf(__("Chyba 404 - %s", "KT_CORE_DOMAIN"), $this->getTitle()));
             return $this;
         }
 

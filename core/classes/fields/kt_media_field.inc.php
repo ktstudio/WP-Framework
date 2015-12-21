@@ -105,7 +105,7 @@ class KT_Media_Field extends KT_Field {
         $html .= $this->getFullSpanUrl();
         $html .= "<input type=\"hidden\" {$this->getBasicHtml()} value=\"{$this->getValue()}\" />";
         $multiple = ($this->getIsMultiple()) ? "true" : "false";
-        $html .= "<span id=\"{$this->getAttrValueByName("id")}\" {$this->getAttrClassString()} data-multiple=\"$multiple\">" . __("Vybrat soubor", KT_DOMAIN) . "</span>";
+        $html .= "<span id=\"{$this->getAttrValueByName("id")}\" {$this->getAttrClassString()} data-multiple=\"$multiple\">" . __("Vybrat soubor", "KT_CORE_DOMAIN") . "</span>";
         if ($this->hasErrorMsg()) {
             $html .= parent::getHtmlErrorMsg();
         }
@@ -143,11 +143,11 @@ class KT_Media_Field extends KT_Field {
                         $removeFileTag = "<a class=\"remove-file\"><span class=\"dashicons dashicons-no\"></span></a>";
                         $html .= "$fileTag $removeFileTag";
                     } else {
-                        $html .= "<span class=\"file\">" . __("Soubor byl smazán", KT_DOMAIN) . "</span>";
+                        $html .= "<span class=\"file\">" . __("Soubor byl smazán", "KT_CORE_DOMAIN") . "</span>";
                     }
                 }
             } else {
-                $html = "<span class=\"file\">" . __("Soubor(y) byl(y) smazán(y)", KT_DOMAIN) . "</span>";
+                $html = "<span class=\"file\">" . __("Soubor(y) byl(y) smazán(y)", "KT_CORE_DOMAIN") . "</span>";
             }
             $html .= "</span>";
         } else {

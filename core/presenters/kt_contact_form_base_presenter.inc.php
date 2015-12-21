@@ -109,7 +109,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
         if (KT::arrayIssetAndNotEmpty($_POST)) {
             $form = $this->getForm();
             if (!$form->nonceValidate()) {
-                wp_die(__("Chyba zpracování zdrojové adresy...", KT_DOMAIN));
+                wp_die(__("Chyba zpracování zdrojové adresy...", "KT_CORE_DOMAIN"));
                 exit;
             }
             $form->validate();
@@ -118,7 +118,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
                 if (KT::arrayIssetAndNotEmpty($values)) {
                     $spam = KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::FAVOURITE);
                     if (KT::issetAndNotEmpty($spam)) {
-                        wp_die(__("Vyplnili jste nepovolený kontrolní prvek...", KT_DOMAIN));
+                        wp_die(__("Vyplnili jste nepovolený kontrolní prvek...", "KT_CORE_DOMAIN"));
                         exit;
                     }
                     if ($this->processMail($values)) {
@@ -153,7 +153,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      */
     public function renderSuccessNotice() {
         echo "<p class=\"success\">";
-        echo __("Váš dotaz byl úspěšně odeslán a bude co nejdříve vyřízen, děkujeme.", KT_DOMAIN);
+        echo __("Váš dotaz byl úspěšně odeslán a bude co nejdříve vyřízen, děkujeme.", "KT_CORE_DOMAIN");
         echo "</p>";
     }
 
@@ -165,9 +165,9 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      */
     public function renderErrorNotice() {
         echo "<p class=\"error\">";
-        _e("Při zpracování a odesílání kontaktního formuláře došlo k chybě. Je třeba zadat správně všechny údaje...", KT_DOMAIN);
+        _e("Při zpracování a odesílání kontaktního formuláře došlo k chybě. Je třeba zadat správně všechny údaje...", "KT_CORE_DOMAIN");
         $formId = self::FORM_ID;
-        $repairLinkTitle = __("Opravit", KT_DOMAIN);
+        $repairLinkTitle = __("Opravit", "KT_CORE_DOMAIN");
         echo " <a id=\"contactFormLink\" href=\"#$formId\" data-target=\"#$formId\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
         echo "</p>";
     }
@@ -197,17 +197,17 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
             if (KT::issetAndNotEmpty($fullName) && KT::issetAndNotEmpty($email) && KT::issetAndNotEmpty($phone) && KT::issetAndNotEmpty($message) && is_email($email)) {
                 $ktWpInfo = new KT_WP_Info();
 
-                $content = sprintf(__("Jméno: %s", KT_DOMAIN), $fullName) . "<br />";
-                $content .= sprintf(__("E-mail: %s", KT_DOMAIN), $email) . "<br />";
-                $content .= sprintf(__("Telefon: %s", KT_DOMAIN), $phone) . "<br /><br />";
-                $content .= sprintf(__("Zpráva:", KT_DOMAIN), $message) . "<br /><br />";
+                $content = sprintf(__("Jméno: %s", "KT_CORE_DOMAIN"), $fullName) . "<br />";
+                $content .= sprintf(__("E-mail: %s", "KT_CORE_DOMAIN"), $email) . "<br />";
+                $content .= sprintf(__("Telefon: %s", "KT_CORE_DOMAIN"), $phone) . "<br /><br />";
+                $content .= sprintf(__("Zpráva:", "KT_CORE_DOMAIN"), $message) . "<br /><br />";
                 $content .= $message;
                 $content .= "<br /><br />---<br />";
-                $content .= sprintf(__("Tento e-mail byl vygenerován pomocí kontaktního formuláře na webu: %s", KT_DOMAIN), $ktWpInfo->getUrl());
+                $content .= sprintf(__("Tento e-mail byl vygenerován pomocí kontaktního formuláře na webu: %s", "KT_CORE_DOMAIN"), $ktWpInfo->getUrl());
 
                 $contactFormEmail = apply_filters("kt_contact_form_email_filter", $this->getFormEmail());
 
-                $mailer = new KT_Mailer($contactFormEmail, $ktWpInfo->getName(), sprintf(__("%s - kontakt", KT_DOMAIN), $ktWpInfo->getName()));
+                $mailer = new KT_Mailer($contactFormEmail, $ktWpInfo->getName(), sprintf(__("%s - kontakt", "KT_CORE_DOMAIN"), $ktWpInfo->getName()));
                 $mailer->setSenderEmail($email);
                 $mailer->setSenderName($fullName);
                 $mailer->setContent($content);
@@ -229,7 +229,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
         $form = new KT_Form();
         $form->setAttrId(self::FORM_ID);
         //$form->setButtonClass("");
-        $form->setButtonValue(__("Odeslat dotaz", KT_DOMAIN));
+        $form->setButtonValue(__("Odeslat dotaz", "KT_CORE_DOMAIN"));
         $form->addFieldSetByObject($this->getFieldset());
         return $this->form = $form;
     }

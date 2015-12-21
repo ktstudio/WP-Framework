@@ -12,7 +12,7 @@ class KT_Not_Supported_Exception extends Exception {
 
     public function __construct($note, $code = 0, Exception $previous = null) {
         $this->note = $note;
-        $message = __("Operace není podporována!", KT_DOMAIN);
+        $message = __("Operace není podporována!", "KT_CORE_DOMAIN");
         parent::__construct($message, $code, $previous);
     }
 
@@ -21,7 +21,7 @@ class KT_Not_Supported_Exception extends Exception {
     }
 
     public function __toString() {
-        return __("Nepodporovaná operace: ", KT_DOMAIN) . $this->getNote() . "\n" . parent::__toString();
+        return sprintf(__("Nepodporovaná operace %s \n %s", "KT_CORE_DOMAIN"), $this->getNote(), parent::__toString());
     }
 
 }

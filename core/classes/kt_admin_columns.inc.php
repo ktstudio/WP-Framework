@@ -148,7 +148,7 @@ class KT_Admin_Columns {
                 }
                 break;
             default:
-                throw new KT_Not_Supported_Exception(__("Typ sloupce: $columnType", KT_DOMAIN));
+                throw new KT_Not_Supported_Exception(sprintf(__("Typ sloupce: %s", "KT_CORE_DOMAIN"), $columnType));
         }
     }
 

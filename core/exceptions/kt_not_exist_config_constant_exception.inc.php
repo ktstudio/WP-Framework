@@ -12,7 +12,7 @@ class KT_Not_Exist_Config_Constant_Exception extends Exception {
 
     public function __construct($constantName, $code = 0, Exception $previous = null) {
         $this->targetName = $constantName;
-        $message = __("Neexistující constant na configu: \"$constantName\"", KT_DOMAIN);
+        $message = sprintf(__("Neexistující konstanta na configu: \"%s\"", "KT_CORE_DOMAIN"), $constantName);
         parent::__construct($message, $code, $previous);
     }
 
@@ -21,7 +21,7 @@ class KT_Not_Exist_Config_Constant_Exception extends Exception {
     }
 
     public function __toString() {
-        return __("Neexistující constant na configu: ", KT_DOMAIN) . $this->getTargetName() . "\n" . parent::__toString();
+        return sprintf(__("Neexistující konstanta na configu: %s \n %s", "KT_CORE_DOMAIN"), $this->getTargetName(), parent::__toString());
     }
 
 }

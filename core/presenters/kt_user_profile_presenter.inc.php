@@ -47,7 +47,7 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
      */
     public function theForm() {
         echo $this->getForm()
-                ->setButtonValue(__("Uložit nastavení", KT_DOMAIN))
+                ->setButtonValue(__("Uložit nastavení", "KT_CORE_DOMAIN"))
                 ->setButtonClass("kt-form-submit button red")
                 ->getFormToHtml();
     }
@@ -96,8 +96,8 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
      */
     public function theInfo($class = "textCenter") {
         echo KT::getTabsIndent(0, '<p class="' . $class . '">', true);
-        echo KT::getTabsIndent(1, __("*) Změní se pouze ty hodnoty, které jsou vyplněné a změněné.", KT_DOMAIN) . "<br />", true);
-        echo KT::getTabsIndent(1, __("**) Hesla musejí být v případě změny shodná.", KT_DOMAIN), true);
+        echo KT::getTabsIndent(1, __("*) Změní se pouze ty hodnoty, které jsou vyplněné a změněné.", "KT_CORE_DOMAIN") . "<br />", true);
+        echo KT::getTabsIndent(1, __("**) Hesla musejí být v případě změny shodná.", "KT_CORE_DOMAIN"), true);
         echo KT::getTabsIndent(0, "</p>", true, true);
     }
 
@@ -123,7 +123,7 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
                     $args[KT_User_Profile_Config::PASSWORD] = $password;
                     $result = wp_update_user($args);
                     if (is_wp_error($result)) {
-                        $form->setErrorMessage(__("Chyba při změně hesla...", KT_DOMAIN));
+                        $form->setErrorMessage(__("Chyba při změně hesla...", "KT_CORE_DOMAIN"));
                         $form->setError(true);
                         wp_redirect($this->getPermalink());
                         return false;
@@ -190,7 +190,7 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
                     $result = wp_update_user($args);
 
                     if (is_wp_error($result)) {
-                        $form->setErrorMessage(__("Chyba při ukládání uživatelského profilu...", KT_DOMAIN));
+                        $form->setErrorMessage(__("Chyba při ukládání uživatelského profilu...", "KT_CORE_DOMAIN"));
                         $form->setError(true);
                         return false;
                     } else {

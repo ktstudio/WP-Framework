@@ -34,8 +34,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 ->setAction($action)
                 ->setMethod(self::METHOD_POST)
                 ->setAttrId($id)
-                ->setSuccessMessage(__("Data byla uložena", KT_DOMAIN))
-                ->setErrorMessage(__("Ve formuláři se vyskytla chyba", KT_DOMAIN));
+                ->setSuccessMessage(__("Data byla uložena", "KT_CORE_DOMAIN"))
+                ->setErrorMessage(__("Ve formuláři se vyskytla chyba", "KT_CORE_DOMAIN"));
 
         $this->addAttribute("data-validate", "jquery");
 
@@ -1057,7 +1057,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         if (KT::issetAndNotEmpty($transientValue)) {
             echo "<div class=\"error\">";
-            echo "<p>" . __("Některé data nebyla uložena. Zkontrolujte prosím vstupní data a proces opakujte", KT_DOMAIN) . ".</p>";
+            echo "<p>" . __("Některé data nebyla uložena. Zkontrolujte prosím vstupní data a proces opakujte", "KT_CORE_DOMAIN") . ".</p>";
             echo "</div>";
         }
     }

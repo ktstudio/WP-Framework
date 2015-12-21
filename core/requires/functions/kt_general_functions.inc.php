@@ -1,5 +1,17 @@
 <?php
 
+//add_action("plugins_loaded", "kt_core_textdomain_init");
+//
+///**
+// * Zavedení textové domény KT_CORE_DOMAIN pro FW
+// * 
+// * @author Martin Hlaváč
+// * @link http://www.ktstudio.cz
+// */
+//function kt_core_textdomain_init() {
+//    load_theme_textdomain("KT_CORE_DOMAIN", KT_CORE_LANGUAGES_PATH);
+//}
+
 add_action("wp_ajax_kt_delete_row_from_table_list", "kt_delete_row_from_table_lis_callback");
 
 /**
@@ -77,7 +89,7 @@ function kt_wp_before_admin_bar_render_callback() {
     global $wp_admin_bar;
     $wp_admin_bar->add_menu(array(
         "id" => KT_WP_Configurator::THEME_SETTING_PAGE_SLUG,
-        "title" => __("Nastavení šablony", KT_DOMAIN),
+        "title" => __("Nastavení šablony", "KT_CORE_DOMAIN"),
         "href" => admin_url("themes.php") . "?page=" . KT_WP_Configurator::THEME_SETTING_PAGE_SLUG,
     ));
 }

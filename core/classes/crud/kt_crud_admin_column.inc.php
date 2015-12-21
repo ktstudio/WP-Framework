@@ -376,10 +376,10 @@ class KT_CRUD_Admin_Column {
 
         $html .= "<a href=\"$updateUrl\" class=\"id-link\" title=\"editovat záznam\">{$this->getPrefix()}$itemValue{$this->getSuffix()}</a>";
         $html .= "<span class=\"row-actions\">";
-        $html .= "<a href=\"$updateUrl\">" . __("Detail", KT_DOMAIN) . "</a>";
+        $html .= "<a href=\"$updateUrl\">" . __("Detail", "KT_CORE_DOMAIN") . "</a>";
 
         if ($this->getDeletable()) {
-            $html .= " | <span class=\"delete-row\" title=\"" . __('Trvale smazat tento záznam', KT_DOMAIN) . "\" data-id=\"$itemId\" data-type=\"$className\">" . __("Smazat", KT_DOMAIN) . "</span>";
+            $html .= " | <span class=\"delete-row\" title=\"" . __('Trvale smazat tento záznam', "KT_CORE_DOMAIN") . "\" data-id=\"$itemId\" data-type=\"$className\">" . __("Smazat", "KT_CORE_DOMAIN") . "</span>";
         }
 
         $html .= "</span>";

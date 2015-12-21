@@ -9,6 +9,7 @@ define("KT_CORE_EXCEPTIONS_PATH", path_join(KT_CORE_PATH, "exceptions"));
 define("KT_CORE_IMAGES_PATH", path_join(KT_CORE_PATH, "images"));
 define("KT_CORE_INTERFACES_PATH", path_join(KT_CORE_PATH, "interfaces"));
 define("KT_CORE_JS_PATH", path_join(KT_CORE_PATH, "js"));
+define("KT_CORE_LANGUAGES_PATH", path_join(KT_BASE_PATH, "languages"));
 define("KT_CORE_REQUIRES_PATH", path_join(KT_CORE_PATH, "requires"));
 
 define("KT_CORE_URL", path_join(KT_BASE_URL, "core"));
@@ -18,6 +19,7 @@ define("KT_CORE_EXCEPTIONS_URL", path_join(KT_CORE_URL, "exceptions"));
 define("KT_CORE_IMAGES_URL", path_join(KT_CORE_URL, "images"));
 define("KT_CORE_INTERFACES_URL", path_join(KT_CORE_URL, "interfaces"));
 define("KT_CORE_JS_URL", path_join(KT_CORE_URL, "js"));
+define("KT_CORE_LANGUAGES_URL", path_join(KT_CORE_URL, "languages"));
 define("KT_CORE_REQUIRES_URL", path_join(KT_CORE_URL, "requires"));
 
 // --- logování ------------------------

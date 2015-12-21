@@ -27,56 +27,56 @@ class KT_Contact_Form_Base_Config {
      * @return \KT_Form_Fieldset
      */
     public static function getFieldset($splittedName = false, $exactedPhone = true) {
-        $fieldset = new KT_Form_Fieldset(self::FORM_PREFIX, __("Kontakt", KT_DOMAIN));
+        $fieldset = new KT_Form_Fieldset(self::FORM_PREFIX, __("Kontakt", "KT_CORE_DOMAIN"));
         $fieldset->setPostPrefix(self::FORM_PREFIX);
 
         if ($splittedName) {
-            $fieldset->addText(self::FIRST_NAME, __("Jméno*:", KT_DOMAIN))
-                    ->setPlaceholder(__("Jméno*", KT_DOMAIN))
+            $fieldset->addText(self::FIRST_NAME, __("Jméno*:", "KT_CORE_DOMAIN"))
+                    ->setPlaceholder(__("Jméno*", "KT_CORE_DOMAIN"))
                     ->addAttribute("maxlength", 30)
-                    ->addRule(KT_Field_Validator::REQUIRED, __("Jméno je povinná položka", KT_DOMAIN))
-                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("Jméno může mít maximálně 30 znaků", KT_DOMAIN), 30);
-            $fieldset->addText(self::LAST_NAME, __("Příjmení*:", KT_DOMAIN))
-                    ->setPlaceholder(__("Příjmení*", KT_DOMAIN))
+                    ->addRule(KT_Field_Validator::REQUIRED, __("Jméno je povinná položka", "KT_CORE_DOMAIN"))
+                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("Jméno může mít maximálně 30 znaků", "KT_CORE_DOMAIN"), 30);
+            $fieldset->addText(self::LAST_NAME, __("Příjmení*:", "KT_CORE_DOMAIN"))
+                    ->setPlaceholder(__("Příjmení*", "KT_CORE_DOMAIN"))
                     ->addAttribute("maxlength", 30)
-                    ->addRule(KT_Field_Validator::REQUIRED, __("Příjmení je povinná položka", KT_DOMAIN))
-                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("Příjmení může mít maximálně 30 znaků", KT_DOMAIN), 30);
+                    ->addRule(KT_Field_Validator::REQUIRED, __("Příjmení je povinná položka", "KT_CORE_DOMAIN"))
+                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("Příjmení může mít maximálně 30 znaků", "KT_CORE_DOMAIN"), 30);
         } else {
-            $fieldset->addText(self::NAME, __("Jméno*:", KT_DOMAIN))
-                    ->setPlaceholder(__("Jméno*", KT_DOMAIN))
+            $fieldset->addText(self::NAME, __("Jméno*:", "KT_CORE_DOMAIN"))
+                    ->setPlaceholder(__("Jméno*", "KT_CORE_DOMAIN"))
                     ->addAttribute("maxlength", 30)
-                    ->addRule(KT_Field_Validator::REQUIRED, __("Jméno je povinná položka", KT_DOMAIN))
-                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("Jméno může mít maximálně 30 znaků", KT_DOMAIN), 30);
+                    ->addRule(KT_Field_Validator::REQUIRED, __("Jméno je povinná položka", "KT_CORE_DOMAIN"))
+                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("Jméno může mít maximálně 30 znaků", "KT_CORE_DOMAIN"), 30);
         }
 
-        $fieldset->addText(self::EMAIL, __("E-mail*:", KT_DOMAIN))
-                ->setPlaceholder(__("E-mail*", KT_DOMAIN))
+        $fieldset->addText(self::EMAIL, __("E-mail*:", "KT_CORE_DOMAIN"))
+                ->setPlaceholder(__("E-mail*", "KT_CORE_DOMAIN"))
                 ->addAttribute("maxlength", 50)
-                ->addRule(KT_Field_Validator::REQUIRED, __("E-mail je povinná položka", KT_DOMAIN))
-                ->addRule(KT_Field_Validator::EMAIL, __("E-mail je ve špatném tvaru", KT_DOMAIN))
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("E-mail může mít maximálně 50 znaků", KT_DOMAIN), 50);
+                ->addRule(KT_Field_Validator::REQUIRED, __("E-mail je povinná položka", "KT_CORE_DOMAIN"))
+                ->addRule(KT_Field_Validator::EMAIL, __("E-mail je ve špatném tvaru", "KT_CORE_DOMAIN"))
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("E-mail může mít maximálně 50 znaků", "KT_CORE_DOMAIN"), 50);
 
-        $phoneField = $fieldset->addText(self::PHONE, __("Telefon*:", KT_DOMAIN))
-                ->setPlaceholder(__("Telefon*", KT_DOMAIN))
+        $phoneField = $fieldset->addText(self::PHONE, __("Telefon*:", "KT_CORE_DOMAIN"))
+                ->setPlaceholder(__("Telefon*", "KT_CORE_DOMAIN"))
                 ->addAttribute("maxlength", 30)
-                ->addRule(KT_Field_Validator::REQUIRED, __("Telefon je povinná položka", KT_DOMAIN))
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Telefon může mít maximálně 30 znaků", KT_DOMAIN), 30);
+                ->addRule(KT_Field_Validator::REQUIRED, __("Telefon je povinná položka", "KT_CORE_DOMAIN"))
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Telefon může mít maximálně 30 znaků", "KT_CORE_DOMAIN"), 30);
         if ($exactedPhone) {
-            $phoneField->addRule(KT_Field_Validator::REGULAR, __("Telefon je ve špatném tvaru", KT_DOMAIN), "^((\+|0)(420|421) ?)?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$");
+            $phoneField->addRule(KT_Field_Validator::REGULAR, __("Telefon je ve špatném tvaru", "KT_CORE_DOMAIN"), "^((\+|0)(420|421) ?)?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$");
         }
 
-        $fieldset->addTextarea(self::MESSAGE, __("Zpráva*:", KT_DOMAIN))
-                ->setPlaceholder(__("Zpráva*", KT_DOMAIN))
+        $fieldset->addTextarea(self::MESSAGE, __("Zpráva*:", "KT_CORE_DOMAIN"))
+                ->setPlaceholder(__("Zpráva*", "KT_CORE_DOMAIN"))
                 ->addAttribute("maxlength", 1000)
-                ->addRule(KT_Field_Validator::REQUIRED, __("Zpráva je povinná položka", KT_DOMAIN))
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Zpráva může mít maximálně 1000 znaků", KT_DOMAIN), 1000);
+                ->addRule(KT_Field_Validator::REQUIRED, __("Zpráva je povinná položka", "KT_CORE_DOMAIN"))
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Zpráva může mít maximálně 1000 znaků", "KT_CORE_DOMAIN"), 1000);
 
-        $fieldset->addText(self::FAVOURITE, __("Kontrola:", KT_DOMAIN))
-                ->setPlaceholder(__("Nevyplňujte, pokud jste člověk", KT_DOMAIN))
+        $fieldset->addText(self::FAVOURITE, __("Kontrola:", "KT_CORE_DOMAIN"))
+                ->setPlaceholder(__("Nevyplňujte, pokud jste člověk", "KT_CORE_DOMAIN"))
                 ->addAttrClass("hidden")
                 ->addAttribute("maxlength", 30);
 
-        $fieldset->addWpNonce(self::NONCE, __("Kontrola:", KT_DOMAIN));
+        $fieldset->addWpNonce(self::NONCE, __("Kontrola:", "KT_CORE_DOMAIN"));
 
         return $fieldset;
     }

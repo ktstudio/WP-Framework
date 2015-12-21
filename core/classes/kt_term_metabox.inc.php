@@ -18,7 +18,7 @@ class KT_Term_Metabox implements KT_Registrable {
      */
     public function __construct(KT_Form_Fieldset $fieldset, $taxonomy = KT_WP_CATEGORY_KEY) {
         if (KT_Termmeta::getIsActive() == false) {
-            throw new KT_Not_Supported_Exception("KT Termmeta nejsou aktivní...", KT_DOMAIN);
+            throw new KT_Not_Supported_Exception("KT Termmeta nejsou aktivní...", "KT_CORE_DOMAIN");
         }
         $this->setTaxonomy($taxonomy);
         $this->fieldset = $fieldset;
@@ -59,7 +59,7 @@ class KT_Term_Metabox implements KT_Registrable {
         }
         foreach ($taxonomies as $taxonomy) {
             if (!taxonomy_exists($taxonomy)) {
-                //throw new KT_Not_Supported_Exception("Tato taxonomie \"$taxonomy\" neexistuje", KT_DOMAIN);
+                //throw new KT_Not_Supported_Exception(sprintf(__("Tato taxonomie \"%s\" neexistuje", "KT_CORE_DOMAIN"), $taxonomy));
             }
         }
         $this->taxonomies = $taxonomies;

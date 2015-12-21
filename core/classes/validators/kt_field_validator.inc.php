@@ -254,7 +254,7 @@ class KT_Field_Validator {
         }
 
         if (!is_array($this->param)) {
-            throw new InvalidArgumentException(__("Hodnota pro kontrolu rozsahu musí být typu pole.", KT_DOMAIN));
+            throw new InvalidArgumentException(__("Hodnota pro kontrolu rozsahu musí být typu pole.", "KT_CORE_DOMAIN"));
         }
 
         if (($value >= $this->param[0]) && ($value <= $this->param[1])) {
@@ -288,7 +288,7 @@ class KT_Field_Validator {
             return false;
         }
 
-        throw new InvalidArgumentException(__("Hodnota pro kontrolu délky musí být přiřazena.", KT_DOMAIN));
+        throw new InvalidArgumentException(__("Hodnota pro kontrolu délky musí být přiřazena.", "KT_CORE_DOMAIN"));
     }
 
     /**
@@ -316,7 +316,7 @@ class KT_Field_Validator {
             return false;
         }
 
-        throw new KT_Not_Set_Argument_Exception(__("Parametr pro kontrolu maximální délky musí být přiřazen a číselného typu.", KT_DOMAIN));
+        throw new KT_Not_Set_Argument_Exception(__("Parametr pro kontrolu maximální délky musí být přiřazen a číselného typu.", "KT_CORE_DOMAIN"));
     }
 
     /**
@@ -344,7 +344,7 @@ class KT_Field_Validator {
             return false;
         }
 
-        throw new KT_Not_Set_Argument_Exception(__("Parametr pro kontrolu minimální délky musí být přiřazen a číselného typu.", KT_DOMAIN));
+        throw new KT_Not_Set_Argument_Exception(__("Parametr pro kontrolu minimální délky musí být přiřazen a číselného typu.", "KT_CORE_DOMAIN"));
     }
 
     /**
@@ -365,7 +365,7 @@ class KT_Field_Validator {
         $param = $this->getParam();
 
         if (!self::integer($param)) {
-            throw new KT_Not_Set_Argument_Exception(__("Parametr pro kontrolu maximálního čísla musí být číselného typu.", KT_DOMAIN));
+            throw new KT_Not_Set_Argument_Exception(__("Parametr pro kontrolu maximálního čísla musí být číselného typu.", "KT_CORE_DOMAIN"));
         }
 
         if (!self::float($value)) {
@@ -397,7 +397,7 @@ class KT_Field_Validator {
         $param = $this->getParam();
 
         if (!self::integer($param)) {
-            throw new KT_Not_Set_Argument_Exception(__("Parametr pro kontrolu minimálního čísla musí být číselného typu.", KT_DOMAIN));
+            throw new KT_Not_Set_Argument_Exception(__("Parametr pro kontrolu minimálního čísla musí být číselného typu.", "KT_CORE_DOMAIN"));
         }
 
         if (!self::float($value)) {

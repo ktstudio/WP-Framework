@@ -522,7 +522,7 @@ final class KT_WP_Configurator {
 
         // stránka nastavení šablony
         if (KT::issetAndNotEmpty($this->getThemeSettingPage())) {
-            $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", KT_DOMAIN), __("Nastavení šablony", KT_DOMAIN), "update_core", self::THEME_SETTING_PAGE_SLUG);
+            $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", "KT_CORE_DOMAIN"), __("Nastavení šablony", "KT_CORE_DOMAIN"), "update_core", self::THEME_SETTING_PAGE_SLUG);
             $themeSettings->setRenderSaveButton()->register();
         }
 
@@ -802,7 +802,7 @@ final class KT_WP_Configurator {
      * @return array
      */
     public function registerUserProfilePhone($profileFields) {
-        $profileFields[KT_User_Profile_Config::PHONE] = __("Telefon", KT_DOMAIN);
+        $profileFields[KT_User_Profile_Config::PHONE] = __("Telefon", "KT_CORE_DOMAIN");
         return $profileFields;
     }
 
@@ -987,7 +987,7 @@ final class KT_WP_Configurator {
             return;
         }
 
-        $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", KT_DOMAIN), __("Nastavení šablony", KT_DOMAIN), $capability, self::THEME_SETTING_PAGE_SLUG);
+        $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", "KT_CORE_DOMAIN"), __("Nastavení šablony", "KT_CORE_DOMAIN"), $capability, self::THEME_SETTING_PAGE_SLUG);
         $themeSettings->setRenderSaveButton()->register();
 
         return $this;
@@ -1229,7 +1229,7 @@ final class KT_WP_Configurator {
      * @param string $html
      */
     public function addPostArchivesMenuMetaBox() {
-        add_meta_box("kt-post-archive-nav-menu", __("Archivy", KT_DOMAIN), array($this, "postArchivesMenuMetaBoxCallBack"), "nav-menus", "side", "default");
+        add_meta_box("kt-post-archive-nav-menu", __("Archivy", "KT_CORE_DOMAIN"), array($this, "postArchivesMenuMetaBoxCallBack"), "nav-menus", "side", "default");
     }
 
     /**
@@ -1270,7 +1270,7 @@ final class KT_WP_Configurator {
             KT::theTabsIndent(1, "</div>", true);
             KT::theTabsIndent(0, "</div>", true, true);
 
-            $addMenuTitle = htmlspecialchars(__("Přidat do menu", KT_DOMAIN));
+            $addMenuTitle = htmlspecialchars(__("Přidat do menu", "KT_CORE_DOMAIN"));
 
             KT::theTabsIndent(0, "<p class=\"button-controls\">", true);
             KT::theTabsIndent(1, "<span class=\"add-to-menu\">", true);
@@ -1349,10 +1349,10 @@ final class KT_WP_Configurator {
     public function renderCookieStatement() {
         $cookueStatementKey = KT::arrayTryGetValue($_COOKIE, self::COOKIE_STATEMENT_KEY);
         if (KT::notIssetOrEmpty($cookueStatementKey)) {
-            $text = __("Tyto stránky využívají Cookies. Používáním těchto stránek vyjadřujete souhlas s používáním Cookies.", KT_DOMAIN);
-            $moreInfoTitle = __("Zjistit více", KT_DOMAIN);
+            $text = __("Tyto stránky využívají Cookies. Používáním těchto stránek vyjadřujete souhlas s používáním Cookies.", "KT_CORE_DOMAIN");
+            $moreInfoTitle = __("Zjistit více", "KT_CORE_DOMAIN");
             $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
-            $confirmTitle = __("OK, rozumím", KT_DOMAIN);
+            $confirmTitle = __("OK, rozumím", "KT_CORE_DOMAIN");
 
             $content = "<span id=\"ktCookieStatementText\">$text</span>";
             $content .= "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";

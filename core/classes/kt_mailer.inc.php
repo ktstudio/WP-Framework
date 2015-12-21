@@ -144,7 +144,7 @@ class KT_Mailer {
             $this->recipients = self::getHeaderEmail($recipientEmail, $recipientName);
             return $this;
         }
-        throw new InvalidArgumentException(__("Příjemce \"$recipientEmail\" není platnný e-mail!", KT_DOMAIN));
+        throw new InvalidArgumentException(sprintf(__("Příjemce \"%s\" není platnný e-mail!", "KT_CORE_DOMAIN"), $recipientEmail));
     }
 
     /**
@@ -163,7 +163,7 @@ class KT_Mailer {
             $this->senderEmail = $senderEmail;
             return $this;
         }
-        throw new InvalidArgumentException(__("Odesílatel \"$senderEmail\" není platnný e-mail!", KT_DOMAIN));
+        throw new InvalidArgumentException(sprintf(__("Odesílatel \"%s\" není platnný e-mail!", "KT_CORE_DOMAIN"), $senderEmail));
     }
 
     /**
@@ -263,7 +263,7 @@ class KT_Mailer {
             $this->setRecipients($recipients);
             return $this;
         }
-        throw new InvalidArgumentException(__("Příjmence \"$recipientEmail\" není platnný e-mail!", KT_DOMAIN));
+        throw new InvalidArgumentException(sprintf(__("Příjmence \"%s\" není platnný e-mail!", "KT_CORE_DOMAIN"), $recipientEmail));
     }
 
     /**
