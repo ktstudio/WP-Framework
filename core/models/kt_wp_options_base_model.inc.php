@@ -142,7 +142,7 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
         if (KT::arrayIssetAndNotEmpty($options)) {
             foreach ($options as $optionName => $optionValue) {
                 if ($optionName == $name) {
-                    return $optionValue;
+                    return apply_filters('option_' . $name, $optionValue, $name);
                 }
             }
         }
