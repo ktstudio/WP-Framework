@@ -309,7 +309,7 @@ class KT_MetaBox implements KT_Registrable {
      * @param boolean $isOnlyForFrontPage
      * @return \KT_MetaBox
      */
-    public function setIsOnlyForFrontPage($isOnlyForFrontPage) {
+    public function setIsOnlyForFrontPage($isOnlyForFrontPage = true) {
         $this->isOnlyForFrontPage = KT::tryGetBool($isOnlyForFrontPage);
         return $this;
     }
