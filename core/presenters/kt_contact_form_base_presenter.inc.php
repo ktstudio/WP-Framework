@@ -185,12 +185,12 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      */
     protected function processMail(array $values) {
         if (count($values) > 0) {
-            $firstName = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::FIRST_NAME), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $lastName = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::LAST_NAME), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $name = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::NAME), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $email = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::EMAIL), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $phone = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::PHONE), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $message = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::MESSAGE), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $firstName = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::FIRST_NAME));
+            $lastName = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::LAST_NAME));
+            $name = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::NAME));
+            $email = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::EMAIL));
+            $phone = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::PHONE));
+            $message = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::MESSAGE));
 
             $fullName = $name ? : "$firstName $lastName";
 
