@@ -558,6 +558,21 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     }
 
     /**
+     * Vrátí, zda daný model má nebo nemá vyplněný post_content v DB tabulce.
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public function hasContent() {
+        if (KT::issetAndNotEmpty($this->getPost()->post_content)) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Zjistí, zda má model zadaný meta hodnotu na klíči - _thumbnail_id
      * 
      * @author Tomáš Kocifaj

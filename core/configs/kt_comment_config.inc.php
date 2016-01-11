@@ -70,7 +70,6 @@ class KT_Comment_Config {
      * @return \KT_Text_Field
      */
     public static function getCommentFavouriteField($label = "", $postPrefix = self::COMMENT_FIELDSET, $name = self::FAVOURITE) {
-
         $field = new KT_Text_Field($name, $label);
         $field->setPostPrefix($postPrefix);
         $field->setPlaceholder(__("Nevyplňujte, pokud jste člověk", "KT_CORE_DOMAIN"))
