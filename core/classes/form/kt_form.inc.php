@@ -1428,7 +1428,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
             if (!in_array($field->getName(), $excludeFields) && KT::issetAndNotEmpty($field->getValue())) {
                 $fieldValue = $field->getValue();
                 if ($fieldValue !== "" || $fieldValue === 0 || $fieldValue === "0") {
-                    $fieldsetData[$field->getName()] = $field->getFieldValue();
+                    $fieldsetData[$field->getName()] = $field->getValue();
                 }
             }
         }

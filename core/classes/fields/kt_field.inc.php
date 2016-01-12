@@ -380,6 +380,11 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
         return $this->value = filter_var($this->getCleanValue(), $this->getFilterSanitize());
     }
 
+    /** @deprecated since version 1.6 */
+    public function getFieldValue() {
+        return $this->getValue();
+    }
+
     /**
      * Vrátí přímo čistou hodnotu bez zpracování - sanitizace
      *
