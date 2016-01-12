@@ -376,6 +376,19 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     public function getPublishDate($dateFormat = "d.m.Y") {
         return mysql2date($dateFormat, $this->getPost()->post_date);
     }
+    
+    /**
+     * Vrátí datum změny příspěvku v základním formátu "d.m.Y"
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $dateFormat
+     * @return string
+     */
+    public function getModifiedDate($dateFormat = "d.m.Y") {
+        return mysql2date($dateFormat, $this->getPost()->post_modified);
+    }
 
     /**
      * Vrátí uběhnutý čas od datumu publikace příspěvku
