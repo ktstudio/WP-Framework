@@ -1190,13 +1190,13 @@ class KT {
         if (KT::issetAndNotEmpty($previousPost)) {
             $previousUrl = get_permalink($previousPost);
             $previousTitle = KT::stringCrop($previousPost->post_title, $maxLength);
-            array_push($links, sprintf("<a href=\"$previousUrl\" title=\"{$previousPost->post_title}\" class=\"prev $class\">$previousTitle</a>"));
+            array_push($links, "<a href=\"$previousUrl\" title=\"{$previousPost->post_title}\" class=\"prev $class\">$previousTitle</a>");
         }
         $nextPost = get_next_post($inSameTerm, $excludedTerms, $taxonomy);
         if (KT::issetAndNotEmpty($nextPost)) {
             $nextUrl = get_permalink($nextPost);
             $nextTitle = KT::stringCrop($nextPost->post_title, $maxLength);
-            array_push($links, sprintf("<a href=\"$nextUrl\" title=\"{$nextPost->post_title}\" class=\"next $class\">$nextTitle</a>"));
+            array_push($links, "<a href=\"$nextUrl\" title=\"{$nextPost->post_title}\" class=\"next $class\">$nextTitle</a>");
         }
         if (KT::arrayIssetAndNotEmpty($links)) {
             return implode($separator, $links);
