@@ -150,6 +150,25 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
     }
 
     /**
+     * Vrátí buď požadované originální nebo "přeložené" ID pro zadaný post type 
+     * (pozn.: dle aktuálního jazyka + zavislé na pluginu WPML)
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $name
+     * @param string $postType
+     * @return string|null
+     */
+    public function getOptionTranslateId($name, $postType) {
+        $value = $this->getOption($name);
+        if (defined("ICL_LANGUAGE_CODE")) {
+            $value = icl_object_id($value, $postType, true, ICL_LANGUAGE_CODE);
+        }
+        return $value;
+    }
+
+    /**
      * Vrátí překlad hodnoty (pokud je to možné) pro zadaný název (klíč) pokud existuje ve výčtu získaných options hodnot (podle dříve zadaného případného prefixu)
      * Pozn.: překlad je spajt s pluginem WPML
      *
