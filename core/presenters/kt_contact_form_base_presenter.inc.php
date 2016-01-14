@@ -152,9 +152,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      * @link http://www.ktstudio.cz
      */
     public function renderSuccessNotice() {
-        echo "<p class=\"success\">";
-        echo __("Váš dotaz byl úspěšně odeslán a bude co nejdříve vyřízen, děkujeme.", "KT_CORE_DOMAIN");
-        echo "</p>";
+        echo "<p class=\"success\">{$this->getSuccessMessage()}</p>";
     }
 
     /**
@@ -165,14 +163,50 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      */
     public function renderErrorNotice() {
         echo "<p class=\"error\">";
-        _e("Při zpracování a odesílání kontaktního formuláře došlo k chybě. Je třeba zadat správně všechny údaje...", "KT_CORE_DOMAIN");
+        echo $this->getErrorMessage();
         $formId = self::FORM_ID;
-        $repairLinkTitle = __("Opravit", "KT_CORE_DOMAIN");
+        $repairLinkTitle = $this->getRepairTitle();
         echo " <a id=\"contactFormLink\" href=\"#$formId\" data-target=\"#$formId\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
         echo "</p>";
     }
 
     // --- neveřejné metody ------------------------
+
+    /**
+     * Hláška pro úspěšné zpracování formuláře
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    protected function getSuccessMessage() {
+        return __("Váš dotaz byl úspěšně odeslán a bude co nejdříve vyřízen, děkujeme.", "KT_CORE_DOMAIN");
+    }
+
+    /**
+     * Hláška pro neúspěšné zpracování formuláře
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    protected function getErrorMessage() {
+        return __("Při zpracování a odesílání kontaktního formuláře došlo k chybě. Je třeba zadat správně všechny údaje...", "KT_CORE_DOMAIN");
+    }
+
+    /**
+     * Popisek pro opravu úspěšného zpracování formuláře
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    protected function getRepairTitle() {
+        return __("Opravit", "KT_CORE_DOMAIN");
+    }
 
     /**
      * Zpracování údajů z POSTu (bez spam validace) a případné zodeslání mailu
