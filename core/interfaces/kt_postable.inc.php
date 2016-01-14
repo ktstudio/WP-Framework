@@ -62,7 +62,7 @@ interface KT_Postable extends KT_Modelable {
     /**
      * @return boolean
      */
-    public function hasExcrept();
+    public function hasExcerpt();
 
     /**
      * @return boolean

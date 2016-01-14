@@ -302,7 +302,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     public function getExcerpt($withTheFilter = true, $customExcerptLength = null, $customExcerptMore = null) {
         $post = $this->getPost();
         if (KT::issetAndNotEmpty($post)) {
-            if ($this->hasExcrept()) {
+            if ($this->hasExcerpt()) {
                 $excerpt = $post->post_excerpt;
             } else {
                 $excerpt = $post->post_content;
@@ -563,11 +563,19 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
      * 
      * @return boolean
      */
-    public function hasExcrept() {
+    public function hasExcerpt() {
         if (KT::issetAndNotEmpty($this->getPost()->post_excerpt)) {
             return true;
         }
         return false;
+    }
+    
+    /**
+     * @deprecated since version 1.7
+     * @see hasExcerpt()
+     */
+    public function hasExcrept() {
+        return $this->hasExcerpt();
     }
 
     /**

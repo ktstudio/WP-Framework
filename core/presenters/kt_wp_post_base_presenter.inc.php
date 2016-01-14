@@ -192,7 +192,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return mixed null|string (HTML)
      */
     public function getExcerpt() {
-        if ($this->getModel()->hasExcrept()) {
+        if ($this->getModel()->hasExcerpt()) {
             return $html = "<p class=\"perex\">{$this->getModel()->getExcerpt(false)}</p>";
         }
         return null;
