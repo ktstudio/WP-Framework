@@ -86,10 +86,14 @@ add_action("wp_before_admin_bar_render", "kt_wp_before_admin_bar_render_callback
  * @global WP_Admin_Bar $wp_admin_bar
  */
 function kt_wp_before_admin_bar_render_callback() {
-    global $wp_admin_bar;
+    global $wp_admin_bar;   
+    
     $wp_admin_bar->add_menu(array(
         "id" => KT_WP_Configurator::THEME_SETTING_PAGE_SLUG,
+        "parent" => "site-name",
         "title" => __("Nastavení šablony", "KT_CORE_DOMAIN"),
         "href" => admin_url("themes.php") . "?page=" . KT_WP_Configurator::THEME_SETTING_PAGE_SLUG,
     ));
 }
+
+

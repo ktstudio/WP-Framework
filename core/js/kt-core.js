@@ -1,7 +1,7 @@
 jQuery(document).ready(function () {
 
     // Validování metaboxu v editaci postu (custom post_type)
-    jQuery("form#post, form#kt-custom-page-screenm, #edittag").submit(function () {
+    jQuery("form#post, form#kt-custom-page-screen, #edittag").submit(function () {
         jQuery("#jquery-kt-validator").remove();
 
         var validationResult = jQuery(this).formValidation();
@@ -11,7 +11,7 @@ jQuery(document).ready(function () {
 
         if (validationResult === false) {
             jQuery("div.wrap h2.screenTitle").after(formNotice);
-        }
+        }               
 
         return validationResult;
     });
