@@ -107,6 +107,14 @@ img.kt-loading-image
     margin-top: -10px;
 }
 
+/**** POST TYPE LIST ****/
+
+.wp-list-table .column-post_thumbnail
+{
+    width: 40px;
+    max-width: 40px;
+}
+
 /**** FORM BASIC STYLES ****/
 
 form#kt-form input[type="number"],
