@@ -659,6 +659,7 @@ class KT_MetaBox implements KT_Registrable {
 
             if ($crudInstance->hasError()) {
                 $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = false;
+                $saveResult["crud"] = $crudInstance;
                 return $saveResult;
             }
 
