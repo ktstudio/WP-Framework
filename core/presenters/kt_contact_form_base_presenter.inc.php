@@ -74,6 +74,18 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
     }
 
     /**
+     * Vrátí ID formuláře, možné přepsat, výchozí se je konstanta FORM_ID
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public function getFormId() {
+        return self::FORM_ID;
+    }
+
+    /**
      * Vrátí email, na který se bude zpracovaný formulář odesílat, výchozí je administrační e-mail
      * 
      * @author Martin Hlaváč
@@ -164,9 +176,8 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
     public function renderErrorNotice() {
         echo "<p class=\"error\">";
         echo $this->getErrorMessage();
-        $formId = self::FORM_ID;
         $repairLinkTitle = $this->getRepairTitle();
-        echo " <a id=\"contactFormLink\" href=\"#$formId\" data-target=\"#$formId\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
+        echo " <a id=\"contactFormLink\" href=\"#{$this->getFormId()}\" data-target=\"#$formId\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
         echo "</p>";
     }
 
@@ -194,6 +205,32 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      */
     protected function getErrorMessage() {
         return __("Při zpracování a odesílání kontaktního formuláře došlo k chybě. Je třeba zadat správně všechny údaje...", "KT_CORE_DOMAIN");
+    }
+
+    /**
+     * Titulek odeslaného e-mailu
+     * Pozn. přijímá při formátování parametr název webu
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    protected function getEmailTitle() {
+        return __("%s - kontakt", "KT_CORE_DOMAIN");
+    }
+    
+    /**
+     * Podpis, resp. hláška pod čarou e-mailu
+     * Pozn. přijímá při formátování parametr URL stránky
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    protected function getEmailSignature() {
+        return __("Tento e-mail byl vygenerován pomocí kontaktního formuláře na webu: %s", "KT_CORE_DOMAIN");
     }
 
     /**
@@ -237,11 +274,11 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
                 $content .= sprintf(__("Zpráva:", "KT_CORE_DOMAIN"), $message) . "<br /><br />";
                 $content .= $message;
                 $content .= "<br /><br />---<br />";
-                $content .= sprintf(__("Tento e-mail byl vygenerován pomocí kontaktního formuláře na webu: %s", "KT_CORE_DOMAIN"), $ktWpInfo->getUrl());
+                $content .= sprintf($this->getEmailSignature(), $ktWpInfo->getUrl());
 
                 $contactFormEmail = apply_filters("kt_contact_form_email_filter", $this->getFormEmail());
 
-                $mailer = new KT_Mailer($contactFormEmail, $ktWpInfo->getName(), sprintf(__("%s - kontakt", "KT_CORE_DOMAIN"), $ktWpInfo->getName()));
+                $mailer = new KT_Mailer($contactFormEmail, $ktWpInfo->getName(), sprintf($this->getEmailTitle(), $ktWpInfo->getName()));
                 $mailer->setSenderEmail($email);
                 $mailer->setSenderName($fullName);
                 $mailer->setContent($content);
@@ -261,8 +298,8 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      */
     protected function initForm() {
         $form = new KT_Form();
-        $form->setAttrId(self::FORM_ID);
-        //$form->setButtonClass("");
+        $form->setAttrId($this->getFormId());
+        $form->setButtonClass("submitButton");
         $form->setButtonValue(__("Odeslat dotaz", "KT_CORE_DOMAIN"));
         $form->addFieldSetByObject($this->getFieldset());
         return $this->form = $form;
