@@ -156,29 +156,28 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
 
                 $firstName = $_POST[KT_User_Profile_Config::USER_PROFILE_FIELDSET][KT_User_Profile_Config::FIRST_NAME];
                 if (KT::issetAndNotEmpty($firstName)) {
-                    if ($currentUser->first_name != $firstName) {
+                    if ($currentUser->getFirstName() != $firstName) {
                         $args[KT_User_Profile_Config::FIRST_NAME] = $firstName;
                     }
                 }
 
                 $lastName = $_POST[KT_User_Profile_Config::USER_PROFILE_FIELDSET][KT_User_Profile_Config::LAST_NAME];
                 if (KT::issetAndNotEmpty($lastName)) {
-                    if ($currentUser->last_name != $lastName) {
+                    if ($currentUser->getLastName() != $lastName) {
                         $args[KT_User_Profile_Config::LAST_NAME] = $lastName;
                     }
                 }
 
                 $email = $_POST[KT_User_Profile_Config::USER_PROFILE_FIELDSET][KT_User_Profile_Config::EMAIL];
                 if (KT::issetAndNotEmpty($email)) {
-                    if ($currentUser->user_email != $email) {
+                    if ($currentUser->getEmail() != $email) {
                         $args[KT_User_Profile_Config::EMAIL] = $email;
                     }
                 }
 
                 $phone = $_POST[KT_User_Profile_Config::USER_PROFILE_FIELDSET][KT_User_Profile_Config::PHONE];
-                $userPhoneKey = KT_User_Profile_Config::PHONE;
                 if (KT::issetAndNotEmpty($phone)) {
-                    if ($currentUser->$userPhoneKey != $phone) {
+                    if ($currentUser->getPhone() != $phone) {
                         $args[KT_User_Profile_Config::PHONE] = $phone;
                     }
                 }
@@ -225,7 +224,7 @@ class KT_User_Profile_Presenter extends KT_Current_User_Presenter_Base {
     }
 
     private function initForm(KT_Form $form) {
-        $fieldset = $this->fieldset = KT_User_Profile_Config::getUserProfileFieldset($this->getCurrentUser());
+        $fieldset = $this->fieldset = KT_User_Profile_Config::getUserProfileFieldset($this->getCurrentUser()->getWpUser());
         $form->addFieldSetByObject($fieldset);
         return $this->form = $form;
     }

@@ -45,9 +45,9 @@ abstract class KT_Current_User_Presenter_Base {
      * @return int|null
      */
     public function getCurrentUserId() {
-        $currentUser = getCurrentUser();
+        $currentUser = $this->getCurrentUser();
         if (KT::issetAndNotEmpty($currentUser)) {
-            return $currentUser->ID;
+            return $currentUser->getId();
         }
         return null;
     }
@@ -61,9 +61,9 @@ abstract class KT_Current_User_Presenter_Base {
      * @return string|null
      */
     public function getCurrentUserFirstName() {
-        $currentUser = getCurrentUser();
+        $currentUser = $this->getCurrentUser();
         if (KT::issetAndNotEmpty($currentUser)) {
-            return $currentUser->first_name;
+            return $currentUser->getFirstName();
         }
         return null;
     }
@@ -77,9 +77,9 @@ abstract class KT_Current_User_Presenter_Base {
      * @return string|null
      */
     public function getCurrentUserLastName() {
-        $currentUser = getCurrentUser();
+        $currentUser = $this->getCurrentUser();
         if (KT::issetAndNotEmpty($currentUser)) {
-            return $currentUser->last_name;
+            return $currentUser->getLastName();
         }
         return null;
     }
@@ -93,9 +93,9 @@ abstract class KT_Current_User_Presenter_Base {
      * @return string|null
      */
     public function getCurrentUserEmail() {
-        $currentUser = getCurrentUser();
+        $currentUser = $this->getCurrentUser();
         if (KT::issetAndNotEmpty($currentUser)) {
-            return $currentUser->user_email;
+            return $currentUser->getEmail();
         }
         return null;
     }
