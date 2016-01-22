@@ -380,7 +380,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
         return $this->value = filter_var($this->getCleanValue(), $this->getFilterSanitize());
     }
 
-    /** 
+    /**
      * @deprecated since version 1.7 
      * @see getValue()
      */
@@ -430,7 +430,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
         }
 
         $defaultValue = $this->getDefaultValue();
-        if (KT::issetAndNotEmpty($defaultValue)) {
+        if (isset($defaultValue)) {
             return $this->cleanValue = $defaultValue;
         }
         return $this->cleanValue = "";
