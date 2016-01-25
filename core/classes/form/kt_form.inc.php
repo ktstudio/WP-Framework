@@ -1466,14 +1466,9 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return html
      */
     public static function getSubmitButton($value = self::BUTTON_DEFAULT_VALUE, $class = "kt-form-submit button button-primary", $id = "kt-form-submit") {
-        if (KT::issetAndNotEmpty($id)) {
-            $idPart = " id=\"{$id}\"";
-        }
-        $classPart = null;
-        if (KT::issetAndNotEmpty($id)) {
-            $classPart = " class=\"{$class}\"";
-        }
-        return "<button type=\"submit\"{$idPart}{$classPart}>{$value}</button>";
+        $idAttribute = KT::issetAndNotEmpty($id) ? " id=\"{$id}\"" : "";
+        $classAttribute = KT::issetAndNotEmpty($id) ? " class=\"{$class}\"" : "";
+        return "<button type=\"submit\"{$idAttribute}{$classAttribute}>{$value}</button>";
     }
 
     /**

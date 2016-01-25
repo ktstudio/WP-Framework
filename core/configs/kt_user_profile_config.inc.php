@@ -8,12 +8,14 @@
  */
 class KT_User_Profile_Config {
 
+    const FORM_PREFIX = "kt-user";
     const USER_PROFILE_FIELDSET = "kt-user-profile";
     const FIRST_NAME = "first_name";
     const LAST_NAME = "last_name";
     const EMAIL = "user_email";
     const PHONE = "user_phone";
     const PASSWORD = "user_pass";
+    const NONCE = "kt-user-nonce";
 
     // --- fieldsets ---------------------------
 
@@ -54,6 +56,7 @@ class KT_User_Profile_Config {
                 $phoneField->addRule(KT_Field_Validator::REQUIRED, __("Telefon je povinná položka.", "KT_CORE_DOMAIN"));
             }
         }
+        $fieldset->addWpNonce(self::NONCE);
 
         return $fieldset;
     }

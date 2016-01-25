@@ -153,7 +153,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
         $form = $this->getForm();
         echo $form->getFormHeader();
         echo $form->getInputsToSimpleHtml();
-        echo "<button type=\"submit\">{$form->getButtonValue()}</button>";
+        echo "<button type=\"submit\" class=\"{$form->getButtonClass()}\">{$form->getButtonValue()}</button>";
         echo "</form>";
     }
 
@@ -177,7 +177,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
         echo "<p class=\"error\">";
         echo $this->getErrorMessage();
         $repairLinkTitle = $this->getRepairTitle();
-        echo " <a id=\"contactFormLink\" href=\"#{$this->getFormId()}\" data-target=\"#$formId\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
+        echo " <a id=\"contactFormLink\" href=\"#{$this->getFormId()}\" data-target=\"#{$this->getFormId()}\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
         echo "</p>";
     }
 
