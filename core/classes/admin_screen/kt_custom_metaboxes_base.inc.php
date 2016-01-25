@@ -531,7 +531,7 @@ abstract class KT_Custom_Metaboxes_Base {
                 );
 
                 $saveResult = apply_filters("kt-custom-metabox-save-$screenName", $saveResult, 1);
-                $this->crudInstance = $crudInstance = $saveResult["crud"];
+                $this->crudInstance = $crudInstance = KT::arrayTryGetValue($saveResult, "crud");
 
                 if (KT::arrayTryGetValue($saveResult, self::REDIRECT_ALLOWED) == false) {
                     return;
