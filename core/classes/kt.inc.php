@@ -765,6 +765,15 @@ class KT {
                     $original = wp_get_attachment_image_src($id, KT_WP_IMAGE_SIZE_ORIGINAL);
                     $linkUrl = $original[0];
                 }
+
+                // Defaultní atributy                
+                $title = get_the_title($id);
+                $defualtLinkArgs = ["title" => $title];
+                $defualtImgArgs = ["alt" => $title];
+                $linkArgs = array_merge($defualtLinkArgs, $linkArgs);
+                $imageArgs = array_merge($defualtImgArgs, $imageArgs);
+                //*******
+
                 $linkAttributes = "";
                 foreach ($linkArgs as $key => $value) {
                     $linkAttributes .= " $key=\"$value\"";

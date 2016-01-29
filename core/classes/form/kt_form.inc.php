@@ -1362,9 +1362,9 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
             if (!in_array($field->getName(), $excludeFields)) {
                 $fieldValue = $this->getSavableFieldValue($field);
                 if ($fieldValue !== "" && isset($fieldValue)) {
-                    KT_Termmeta::updateData($termId, $field->getName(), $fieldValue);
+                    update_term_meta($termId, $field->getName(), $fieldValue);
                 } else {
-                    KT_Termmeta::deleteData($termId, $field->getName());
+                    delete_term_meta($termId, $field->getName());
                 }
             }
         }
@@ -1386,9 +1386,9 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     private function saveFieldsetToTermMetaByGroup($termId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
         $fieldsetData = $this->getSavableFieldsetGroupValue($fieldset, $excludeFields);
         if (KT::arrayIssetAndNotEmpty($fieldsetData)) {
-            KT_Termmeta::updateData($termId, $fieldset->getName(), $fieldsetData);
+            update_term_meta($termId, $fieldset->getName(), $fieldsetData);
         } else {
-            KT_Termmeta::deleteData($termId, $fieldset->getName());
+            delete_term_meta($termId, $fieldset->getName());
         }
         return $this;
     }
