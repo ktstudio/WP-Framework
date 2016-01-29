@@ -1552,7 +1552,9 @@ class KT {
             return $file;
         }
         $category = get_category($categorySlug);
-        $file = TEMPLATEPATH . "/categories/category-{$category->slug}.php";
+        if (KT::issetAndNotEmpty($category) && !$category instanceof WP_Error) {
+            $file = TEMPLATEPATH . "/categories/category-{$category->slug}.php";
+        }
         if (file_exists($file)) {
             return $file;
         }
