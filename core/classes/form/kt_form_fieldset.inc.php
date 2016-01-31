@@ -306,7 +306,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addFieldCollection(array $fieldsCollection) {
         if ($this->hasFields()) {
-            $mergeColelctions = array_merge($this->fields, $fields);
+            $mergeColelctions = array_merge($this->fields, $fieldsCollection);
             $this->setFields($mergeColelctions);
         } else {
             $this->setFields($fieldsCollection);
