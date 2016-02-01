@@ -310,11 +310,13 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
             $excerptMore = $customExcerptMore ? : apply_filters("excerpt_more", " [&hellip;]");
             $excerptLength = $customExcerptLength ? : apply_filters("excerpt_length", self::DEFAULT_EXCERPT_LENGTH);
             $excerpt = wp_trim_words($excerpt, $excerptLength, $excerptMore);
-            $excerptFilterered = apply_filters("get_the_excerpt", $excerpt);
-            if ($withTheFilter) {
-                return apply_filters("the_excerpt", $excerptFilterered);
+            if (KT::issetAndNotEmpty($excerpt)) {
+                $excerptFilterered = apply_filters("get_the_excerpt", $excerpt);
+                if ($withTheFilter) {
+                    return apply_filters("the_excerpt", $excerptFilterered);
+                }
+                return strip_shortcodes(strip_tags($excerptFilterered));
             }
-            return strip_shortcodes(strip_tags($excerptFilterered));
         }
         return null;
     }
@@ -376,7 +378,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     public function getPublishDate($dateFormat = "d.m.Y") {
         return mysql2date($dateFormat, $this->getPost()->post_date);
     }
-    
+
     /**
      * Vrátí datum změny příspěvku v základním formátu "d.m.Y"
      *
@@ -569,7 +571,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
         }
         return false;
     }
-    
+
     /**
      * @deprecated since version 1.7
      * @see hasExcerpt()
@@ -592,7 +594,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
         }
         return false;
     }
-    
+
     /**
      * Zjistí, zda má model zadaný meta hodnotu na klíči - _thumbnail_id
      * 

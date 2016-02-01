@@ -301,7 +301,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @param array $fields
+     * @param array $fieldsCollection
      * @return \KT_Form
      */
     public function addFieldCollection(array $fieldsCollection) {
