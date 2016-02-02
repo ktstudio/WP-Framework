@@ -16,6 +16,8 @@ final class KT_WP_Configurator {
     const TS_POST_THUMBNAIL = "post-thumbnails";
     const THEME_SUBPAGE_PREFIX = "appearance_page_";
     const THEME_SETTING_PAGE_SLUG = "kt-theme-setting";
+    const TOOLS_SUBPAGE_PREFIX = "tools_page_";
+    const WP_CRON_PAGE_SLUG = "kt-wp-cron";
     const POST_TYPE_ARCHIVE_OBJECT_KEY = "kt-post-type-archive";
     const COOKIE_STATEMENT_KEY = "kt-cookie-statement-key";
 
@@ -1379,6 +1381,18 @@ final class KT_WP_Configurator {
      */
     public static function getThemeSettingSlug() {
         return $baseName = self::THEME_SUBPAGE_PREFIX . self::THEME_SETTING_PAGE_SLUG;
+    }
+    
+    /**
+     * Vrátí název WP_Screen base pro (založenou) stránku (KT) WP Cron
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public static function getWpCronSlug() {
+        return $baseName = self::TOOLS_SUBPAGE_PREFIX . self::WP_CRON_PAGE_SLUG;
     }
 
     /**
