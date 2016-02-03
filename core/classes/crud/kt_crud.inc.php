@@ -637,20 +637,23 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         $columns = array();
 
         foreach ($this->getColumns() as $column) {
-
-            if ($column->getName() == $this->getPrimaryKeyColumn()) {
+            $name = $column->getName();
+            if ($name == $this->getPrimaryKeyColumn()) {
                 continue;
             }
 
             $type = $column->getType();
             $value = $column->getValue();
 
-            if ($column->getNullable() && $value == "") {
+            $isNullable = $column->getNullable();
+            if ($value == null && !$isNullable) {
+                continue; // může "zachránit", resp. vyřešit výchozí hodnota v DB
+            }
+            if ($isNullable && $value == "") {
                 $formats[] = "%s";
                 $columns[$column->getName()] = "NULL";
                 continue;
             }
-
 
             switch ($type) {
                 case KT_CRUD_Column::INT:
