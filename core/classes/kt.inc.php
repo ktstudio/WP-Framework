@@ -329,7 +329,7 @@ class KT {
      * @return mixed type|null
      */
     public static function arrayTryGetValue(array $array, $key, $defaultValue = null) {
-        if (KT::issetAndNotEmpty($key)) {
+        if (isset($key)) {
             if (array_key_exists($key, $array)) {
                 return $array[$key];
             }
@@ -737,6 +737,22 @@ class KT {
         if (KT::issetAndNotEmpty($coordinate)) {
             $coordinateNumber = KT::tryGetFloat(preg_replace("/[^0-9,.\/-\/+]/", "", trim($coordinate)));
             return number_format($coordinateNumber, 6, ".", "");
+        }
+        return null;
+    }
+
+    /**
+     * VYčistí zadané souřadnice o nevhodné znaky, tj. nechá jen číslice, tečky a čárky
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $coordinates
+     * @return string
+     */
+    public static function clearGpsCoordinates($coordinates) {
+        if (KT::issetAndNotEmpty($coordinates)) {
+            return preg_replace("/[^0-9,.\/-\/+]/", "", trim($coordinates));
         }
         return null;
     }
