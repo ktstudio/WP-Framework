@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Abstraktní třída pro zakládání a definování stránek v rámci WP administrace
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 abstract class KT_Custom_Metaboxes_Base {
 
     const METABOX_SCREEN = "metaboxes";
@@ -16,9 +22,11 @@ abstract class KT_Custom_Metaboxes_Base {
     private $defaultCallbackFunction = array();
     private $metaboxCollection = array();
     private $crudList = null;
+    
+    private static $crudInstance = null;
 
     /**
-     * Abstraktní třída pro zakládání a definování stránke v rámci WP administrace
+     * Abstraktní třída pro zakládání a definování stránek v rámci WP administrace
      * A přidávání metaboxů
      * 
      * @author Tomáš Kocifaj
@@ -26,6 +34,7 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function __construct() {
         $this->defaultCallbackFunction = array($this, 'renderPage');
+        $this->crudInstance = null;
     }
 
     // --- gettery ----------------------
@@ -322,6 +331,10 @@ abstract class KT_Custom_Metaboxes_Base {
             case 1:
                 add_action("admin_notices", array($this, "adminNoticesSuccuess"));
                 break;
+            
+            case 2:
+                add_action("admin_notices", array($this, "adminNoticesCrudTableMissing"));
+                break;
         }
     }
 
@@ -334,7 +347,16 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function adminNoticesError() {
         echo "<div class=\"error\">";
-        echo "<p>" . __('POZOR! - K žádné zásadní chybě při operaci nedošlo, ale něco bylo špatně. Zkontrolujte prosím data nebo kontaktujte provozovatele serveru.', KT_DOMAIN) . "</p>";
+        
+        if($this->crudInstance->hasError()){
+            foreach($this->crudInstance->getErrors() as $error){
+                echo "<p>{$error["message"]}</p>";
+                echo "<p>{$error["data"]}</p>";
+            }
+        } else {
+            echo "<p>" . __('POZOR! - K žádné zásadní chybě při operaci nedošlo, ale něco bylo špatně. Zkontrolujte prosím data nebo kontaktujte provozovatele serveru.', "KT_CORE_DOMAIN") . "</p>";
+        }
+        
         echo "</div>";
     }
 
@@ -347,7 +369,7 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function adminNoticesSuccuess() {
         echo "<div class=\"updated\">";
-        echo "<p>" . __('Informace byly úspěšně uloženy.', KT_DOMAIN) . "</p>";
+        echo "<p>" . __('Informace byly úspěšně uloženy.', "KT_CORE_DOMAIN") . "</p>";
         echo "</div>";
     }
 
@@ -465,7 +487,7 @@ abstract class KT_Custom_Metaboxes_Base {
         }
 
         add_meta_box(
-                "kt-save-custom-page", __("Uložit nastavení", KT_DOMAIN), array($this, "saveMetaboxCallback"), $this->getPage(), KT_Metabox::CONTEXT_SIDE, KT_Metabox::PRIORITY_CORE
+                "kt-save-custom-page", __("Uložit nastavení", "KT_CORE_DOMAIN"), array($this, "saveMetaboxCallback"), $this->getPage(), KT_Metabox::CONTEXT_SIDE, KT_Metabox::PRIORITY_CORE
         );
 
         return $this;
@@ -484,7 +506,7 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function saveMetaboxCallback() {
         do_action("kt_theme_setting_box_" . KT_WP_Configurator::getThemeSettingSlug());
-        echo "<button type=\"submit\" class=\"button button-primary button-large\">" . __('Uložit nastavení', KT_DOMAIN) . "</button>";
+        echo "<button type=\"submit\" class=\"button button-primary button-large\">" . __('Uložit nastavení', "KT_CORE_DOMAIN") . "</button>";
     }
 
     // --- protected functions ------------------
@@ -502,20 +524,21 @@ abstract class KT_Custom_Metaboxes_Base {
         if (array_key_exists("kt-admin-screen-action", $_POST) && array_key_exists("page", $_GET)) {
             $pageSlug = $_GET["page"];
             if ($pageSlug == $this->getSlug()) {
-                
+
                 $saveResult = array(
                     self::SAVE_RESULT_KEY => true,
-                    self::REDIRECT_ALLOWED =>true
+                    self::REDIRECT_ALLOWED => true
                 );
-                
-                $saveResult = apply_filters("kt-custom-metabox-save-$screenName", $saveResult);
-                
-                if($saveResult[self::REDIRECT_ALLOWED] == false){
+
+                $saveResult = apply_filters("kt-custom-metabox-save-$screenName", $saveResult, 1);
+                $this->crudInstance = $crudInstance = KT::arrayTryGetValue($saveResult, "crud");
+
+                if (KT::arrayTryGetValue($saveResult, self::REDIRECT_ALLOWED) == false) {
                     return;
                 }
 
-                if ($saveResult[self::SAVE_RESULT_KEY] !== true) {
-                    add_action("admin_notices", array($this, "adminNoticesError"));
+                if (KT::arrayTryGetValue($saveResult, self::SAVE_RESULT_KEY) !== true) {                    
+                    add_action("admin_notices", array($this, "adminNoticesError"), 99, 1);
                     return;
                 }
 
@@ -525,7 +548,6 @@ abstract class KT_Custom_Metaboxes_Base {
                 );
 
                 if (array_key_exists("crud", $saveResult)) {
-                    $crudInstance = $saveResult["crud"];
                     $urlParams[$crudInstance::ID_COLUMN] = $crudInstance->getId();
                     $urlParams["action"] = "update";
                 }

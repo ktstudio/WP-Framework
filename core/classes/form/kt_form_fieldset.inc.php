@@ -270,7 +270,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
                 }
                 $value = $fieldsData[$field->getName()];
                 if ($value !== "" && isset($value)) {
-                    $field->setValue($this->convertFieldValue($field, $value));
+                    $field->setDefaultValue($this->convertFieldValue($field, $value));
                 }
             }
         }
@@ -301,12 +301,12 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @param array $fields
+     * @param array $fieldsCollection
      * @return \KT_Form
      */
     public function addFieldCollection(array $fieldsCollection) {
         if ($this->hasFields()) {
-            $mergeColelctions = array_merge($this->fields, $fields);
+            $mergeColelctions = array_merge($this->fields, $fieldsCollection);
             $this->setFields($mergeColelctions);
         } else {
             $this->setFields($fieldsCollection);
@@ -540,7 +540,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @return string
      */
-    public function getInputsDataToTable($class = null) {
+    public function getInputsDataToTable($excludeFields = array(), $class = null) {
 
         if (!$this->hasFields()) {
             return null;
@@ -555,7 +555,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
             /* @var $field \KT_Field */
             $value = $field->getValue();
 
-            if ($value === "") {
+            if ($value === "" || in_array($field->getName(), $excludeFields)) {
                 continue;
             }
 

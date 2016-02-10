@@ -11,6 +11,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     const DEFAULT_EXCERPT_LENGTH = 55;
 
     private $post;
+    private $postFormat;
     private $author;
     private $gallery;
     private $files;
@@ -39,6 +40,26 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     }
 
     // --- magic funkce ---------------------
+
+    /**
+     * Provádí odchychycení funkcí se začátkem názvu "get", který následně prověří
+     * existenci metody. Následně vrátí dle klíče konstanty hodnotu uloženou v DB
+     * v opačném případě neprovede nic nebo nechá dokončit existující funkci.
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param type $functionName
+     * @param array $attributes
+     * @return mixed
+     */
+    public function __call($functionName, array $attributes) {
+        $constValue = $this->getConstantValue($functionName);
+
+        if (KT::issetAndNotEmpty($constValue)) {
+            return $this->getMetaValue($constValue);
+        }
+    }
 
     public function __set($name, $value) {
         $this->data[$name] = $value;
@@ -70,13 +91,31 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     }
 
     /**
+     * Vrátí případný přiřazený post formát dle postu
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public function getPostFormat() {
+        if (KT::issetAndNotEmpty($this->postFormat)) {
+            return $this->postFormat;
+        }
+        $post = $this->getPost();
+        if (KT::issetAndNotEmpty($post)) {
+            return $this->postFormat = get_post_format($post);
+        }
+        return $this->postFormat = null;
+    }
+
+    /**
      * @return \KT_WP_User_Base_Model
      */
     public function getAuthor() {
         if (KT::notIssetOrEmpty($this->author)) {
             $this->initAuthor();
         }
-
         return $this->author;
     }
 
@@ -263,7 +302,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     public function getExcerpt($withTheFilter = true, $customExcerptLength = null, $customExcerptMore = null) {
         $post = $this->getPost();
         if (KT::issetAndNotEmpty($post)) {
-            if ($this->hasExcrept()) {
+            if ($this->hasExcerpt()) {
                 $excerpt = $post->post_excerpt;
             } else {
                 $excerpt = $post->post_content;
@@ -271,11 +310,13 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
             $excerptMore = $customExcerptMore ? : apply_filters("excerpt_more", " [&hellip;]");
             $excerptLength = $customExcerptLength ? : apply_filters("excerpt_length", self::DEFAULT_EXCERPT_LENGTH);
             $excerpt = wp_trim_words($excerpt, $excerptLength, $excerptMore);
-            $excerptFilterered = apply_filters("get_the_excerpt", $excerpt);
-            if ($withTheFilter) {
-                return apply_filters("the_excerpt", $excerptFilterered);
+            if (KT::issetAndNotEmpty($excerpt)) {
+                $excerptFilterered = apply_filters("get_the_excerpt", $excerpt);
+                if ($withTheFilter) {
+                    return apply_filters("the_excerpt", $excerptFilterered);
+                }
+                return strip_shortcodes(strip_tags($excerptFilterered));
             }
-            return strip_shortcodes(strip_tags($excerptFilterered));
         }
         return null;
     }
@@ -319,11 +360,9 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
      */
     public function getThumbnailId() {
         $thumbnailId = $this->getMetaValue("_thumbnail_id");
-
         if (KT::issetAndNotEmpty($thumbnailId)) {
             return $thumbnailId;
         }
-
         return null;
     }
 
@@ -341,6 +380,19 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     }
 
     /**
+     * Vrátí datum změny příspěvku v základním formátu "d.m.Y"
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $dateFormat
+     * @return string
+     */
+    public function getModifiedDate($dateFormat = "d.m.Y") {
+        return mysql2date($dateFormat, $this->getPost()->post_modified);
+    }
+
+    /**
      * Vrátí uběhnutý čas od datumu publikace příspěvku
      * 
      * @author Tomáš Kocifaj
@@ -355,31 +407,31 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
 
         switch ($diff->d) {
             case 1:
-                $dayString = __("den", KT_DOMAIN);
+                $dayString = __("den", "KT_CORE_DOMAIN");
                 break;
             case 2:
             case 3:
             case 4:
-                $dayString = _("dny", KT_DOMAIN);
+                $dayString = _("dny", "KT_CORE_DOMAIN");
 
             default:
-                $dayString = _("dní", KT_DOMAIN);
+                $dayString = _("dní", "KT_CORE_DOMAIN");
         }
 
         if ($diff->m > 0) {
-            $diffTimeFormat = $diff->m . __(' měs', KT_DOMAIN) . ' ';
+            $diffTimeFormat = $diff->m . __(' měs', "KT_CORE_DOMAIN") . ' ';
             $diffTimeFormat .= $diff->d . $dayString . ' ';
-            $diffTimeFormat .= $diff->h . __(' hod', KT_DOMAIN) . ' ';
-            $diffTimeFormat .= $diff->i . __(' min', KT_DOMAIN) . ' ';
+            $diffTimeFormat .= $diff->h . __(' hod', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         } elseif ($diff->d > 0) {
             $diffTimeFormat = $diff->d . $dayString . ' ';
-            $diffTimeFormat .= $diff->h . __(' hod', KT_DOMAIN) . ' ';
-            $diffTimeFormat .= $diff->i . __(' min', KT_DOMAIN) . ' ';
+            $diffTimeFormat .= $diff->h . __(' hod', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         } elseif ($diff->h > 0) {
-            $diffTimeFormat .= $diff->h . __(' hod', KT_DOMAIN) . ' ';
-            $diffTimeFormat .= $diff->i . __(' min', KT_DOMAIN) . ' ';
+            $diffTimeFormat .= $diff->h . __(' hod', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         } else {
-            $diffTimeFormat .= $diff->i . __(' min', KT_DOMAIN) . ' ';
+            $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         }
 
         return $diffTimeFormat;
@@ -395,6 +447,18 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
      */
     public function getPostType() {
         return $this->getPost()->post_type;
+    }
+
+    /**
+     * Vrátí (za/daný) post slug, resp. name
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getSlug() {
+        return $this->getPost()->post_name;
     }
 
     /**
@@ -501,8 +565,31 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
      * 
      * @return boolean
      */
-    public function hasExcrept() {
+    public function hasExcerpt() {
         if (KT::issetAndNotEmpty($this->getPost()->post_excerpt)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @deprecated since version 1.7
+     * @see hasExcerpt()
+     */
+    public function hasExcrept() {
+        return $this->hasExcerpt();
+    }
+
+    /**
+     * Vrátí, zda daný model má nebo nemá vyplněný post_content v DB tabulce.
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public function hasContent() {
+        if (KT::issetAndNotEmpty($this->getPost()->post_content)) {
             return true;
         }
         return false;
@@ -576,6 +663,46 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
             return $this->getWpCommentsCount()->total_comments;
         }
         return 0;
+    }
+
+    /**
+     * Nahraje a nastaví postu thumbnail ze zadané URL adresy
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $thumbnailUrl
+     * @return boolean
+     */
+    public function setThumbnailFromUrl($thumbnailUrl) {
+        $postId = $this->getPostId();
+        if (KT::issetAndNotEmpty($thumbnailUrl) && KT::isIdFormat($postId)) {
+            $thumbnailData = file_get_contents($thumbnailUrl);
+            if (KT::issetAndNotEmpty($thumbnailData)) {
+                $fileName = sanitize_file_name($this->getSlug()) . "-{$postId}." . strtolower(pathinfo($thumbnailUrl, PATHINFO_EXTENSION));
+                $uploadDir = wp_upload_dir();
+                $uploadDirPath = $uploadDir["path"];
+                if (wp_mkdir_p($uploadDirPath)) {
+                    $file = path_join($uploadDirPath, $fileName);
+                } else {
+                    $file = path_join($uploadDir["basedir"], $fileName);
+                }
+                file_put_contents($file, $thumbnailData);
+                $fileType = wp_check_filetype($fileName, null);
+                $args = array(
+                    "post_mime_type" => $fileType["type"],
+                    "post_title" => $fileName,
+                    "post_content" => $this->getTitleAttribute(),
+                    "post_status" => "inherit"
+                );
+                $attachmentId = wp_insert_attachment($args, $file, $postId);
+                require_once(ABSPATH . "wp-admin/includes/image.php");
+                $attachmentMetadata = wp_generate_attachment_metadata($attachmentId, $file);
+                wp_update_attachment_metadata($attachmentId, $attachmentMetadata);
+                return set_post_thumbnail($postId, $attachmentId);
+            }
+        }
+        return null;
     }
 
     // --- neveřejné funkce ---------------------

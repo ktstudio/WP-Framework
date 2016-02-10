@@ -34,6 +34,7 @@ jQuery(document).ready(function () {
         var methods = {
             validate: function (element) {
                 var validators = element.data(dataValidators);
+                var elementType = element.attr("type");
 
                 for (var index in validators) {
 
@@ -43,11 +44,20 @@ jQuery(document).ready(function () {
                     if (currentValidator.condition !== "required" && element.val() === "") {
                         continue;
                     }
+                    
+                    if(currentValidator.condition === "required" && elementType === "checkbox"){
+                        isValid = element.prop("checked");
+
+                        if(isValid === false){
+                            element.next().after(methods.errorMsgContent(currentValidator.msg, elementType));
+                            return;
+                        }
+                    }
 
                     var result = methods[validatorFunction](element.val(), currentValidator.params);
 
                     if (result === false) {
-                        element.after(methods.errorMsgContent(currentValidator.msg));
+                        element.after(methods.errorMsgContent(currentValidator.msg, elementType));
                         isValid = false;
                         return;
                     }
@@ -147,9 +157,9 @@ jQuery(document).ready(function () {
                 return patt.test(value);
             },
             // funkce vrátím HTML s chybovou hláškou na základě předané MSG
-            errorMsgContent: function (msg) {
+            errorMsgContent: function (msg, inputType) {
                 var html = "<div class=\"validator\">" +
-                        "<span class=\"erorr-s\">" + msg + "</span>" +
+                        "<span class=\"erorr-s input-" + inputType + "\">" + msg + "</span>" +
                         "</div>";
 
                 return html;

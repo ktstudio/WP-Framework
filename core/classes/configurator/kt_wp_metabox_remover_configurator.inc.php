@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída pro odstraňování (existujících) metaboxů z WP v rámci KT WP konfigurátoru
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ */
 final class KT_WP_Metabox_Remover_Configurator {
 
     private $data = array();
@@ -19,15 +25,26 @@ final class KT_WP_Metabox_Remover_Configurator {
      * Zruší metabox na základě názvu, stránky a contextu
      *
      * @param string $metaboxId
-     * @param string $page
+     * @param string $postType
      * @param string $context
      * @return \KT_WP_Metabox_Remover_Configurator
      */
-    public function removeMetabox($metaboxId, $page, $context) {
-        if (KT::issetAndNotEmpty($metaboxId) && KT::issetAndNotEmpty($page) && KT::issetAndNotEmpty($context)) {
-            array_push($this->data, array($metaboxId, $page, $context));
+    public function removeMetabox($metaboxId, $postType, $context) {
+        if (KT::issetAndNotEmpty($metaboxId) && KT::issetAndNotEmpty($postType) && KT::issetAndNotEmpty($context)) {
+            array_push($this->data, array($metaboxId, $postType, $context));
         }
         return $this;
+    }
+
+    /**
+     * Zruší dashboard metabox na základě názvu (a contextu)
+     *
+     * @param string $metaboxId
+     * @param string $context
+     * @return \KT_WP_Metabox_Remover_Configurator
+     */
+    public function removeDashboardMetabox($metaboxId, $context = "core") {
+        return $this->removeMetabox($metaboxId, "dashboard", $context);
     }
 
     /**
@@ -168,7 +185,7 @@ final class KT_WP_Metabox_Remover_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function removeDashboardRightNow() {
-        $this->removeMetabox("dashboard_right_now", "dashboard", "normal");
+        $this->removeDashboardMetabox("dashboard_right_now", "normal");
         return $this;
     }
 
@@ -178,7 +195,7 @@ final class KT_WP_Metabox_Remover_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function removeDashboardRecentComments() {
-        $this->removeMetabox("dashboard_recent_comments", "dashboard", "normal");
+        $this->removeDashboardMetabox("dashboard_recent_comments", "normal");
         return $this;
     }
 
@@ -188,7 +205,7 @@ final class KT_WP_Metabox_Remover_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function removeDashboardIncomingLinks() {
-        $this->removeMetabox("dashboard_incoming_links", "dashboard", "normal");
+        $this->removeDashboardMetabox("dashboard_incoming_links", "normal");
         return $this;
     }
 
@@ -198,7 +215,7 @@ final class KT_WP_Metabox_Remover_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function removeDashboardPlugins() {
-        $this->removeMetabox("dashboard_plugins", "dashboard", "normal");
+        $this->removeDashboardMetabox("dashboard_plugins", "normal");
         return $this;
     }
 
@@ -208,7 +225,7 @@ final class KT_WP_Metabox_Remover_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function removeDashboardActivity() {
-        $this->removeMetabox("dashboard_activity", "dashboard", "side");
+        $this->removeDashboardMetabox("dashboard_activity", "side");
         return $this;
     }
 
@@ -218,7 +235,7 @@ final class KT_WP_Metabox_Remover_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function removeDashboardQuickPress() {
-        $this->removeMetabox("dashboard_quick_press", "dashboard", "side");
+        $this->removeDashboardMetabox("dashboard_quick_press", "side");
         return $this;
     }
 
@@ -228,7 +245,7 @@ final class KT_WP_Metabox_Remover_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function removeDashboardRecentDrafts() {
-        $this->removeMetabox("dashboard_recent_drafts", "dashboard", "side");
+        $this->removeDashboardMetabox("dashboard_recent_drafts", "side");
         return $this;
     }
 
@@ -238,7 +255,7 @@ final class KT_WP_Metabox_Remover_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function removeDashboardPrimary() {
-        $this->removeMetabox("dashboard_primary", "dashboard", "side");
+        $this->removeDashboardMetabox("dashboard_primary", "side");
         return $this;
     }
 
@@ -248,7 +265,7 @@ final class KT_WP_Metabox_Remover_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function removeDashboardSecondary() {
-        $this->removeMetabox("dashboard_secondary", "dashboard", "side");
+        $this->removeDashboardMetabox("dashboard_secondary", "side");
         return $this;
     }
 

@@ -12,7 +12,7 @@ class KT_Not_Set_Argument_Exception extends Exception {
 
     public function __construct($argumentName, $code = 0, Exception $previous = null) {
         $this->argumentName = $argumentName;
-        $message = __("Zadaný argument je nepřiřazený nebo NULL!", KT_DOMAIN);
+        $message = __("Zadaný argument je nepřiřazený nebo NULL!", "KT_CORE_DOMAIN");
         parent::__construct($message, $code, $previous);
     }
 
@@ -21,7 +21,7 @@ class KT_Not_Set_Argument_Exception extends Exception {
     }
 
     public function __toString() {
-        return __("Argument: ", KT_DOMAIN) . $this->getArgumentName() . "\n" . parent::__toString();
+        return sprintf(__("Argument: %s \n %s", "KT_CORE_DOMAIN"), $this->getArgumentName(), parent::__toString());
     }
 
 }

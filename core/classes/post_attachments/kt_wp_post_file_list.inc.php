@@ -105,15 +105,15 @@ class KT_WP_Post_File_List extends KT_WP_Post_Attachments_Base {
         if (!$this->hasFiles()) {
             return "";
         }
-        
-        if(KT_Functions::notIssetOrEmpty($this->getAttrValueByName("id"))){
+
+        if (KT::notIssetOrEmpty($this->getAttrValueByName("id"))) {
             $this->setAttrId("ktFileListContainer");
         }
-        
-        if(KT_Functions::notIssetOrEmpty($this->getAttrClassString())){
+
+        if (KT::notIssetOrEmpty($this->getAttrClassString())) {
             $this->addAttrClass("ktFiles");
         }
-        
+
         $this->addAttrClass("postFilesId-" . $this->getPost()->ID)
                 ->addAttrClass($this->getPost()->post_type);
 

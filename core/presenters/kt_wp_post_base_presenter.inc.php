@@ -8,11 +8,11 @@
  */
 class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
 
-    const DEFAULT_OTHER_POSTS_COUNT = 4;
+    const DEFAULT_OTHER_POSTS_LIMIT = 4;
 
     private $thumbnailImagePermalink;
     private $otherPostsQuery;
-    private $otherPostsCount;
+    private $otherPostsLimit;
 
     /**
      * Základní presenter pro práci s daty postu
@@ -21,11 +21,11 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @link http://www.ktstudio.cz
      *
      * @param KT_Modelable|WP_Post $item
-     * @param int $otherPostsCount
+     * @param int $otherPostsLimit
      * 
      * @return \kt_post_type_presenter_base
      */
-    function __construct($item = null, $otherPostsCount = self::DEFAULT_OTHER_POSTS_COUNT) {
+    function __construct($item = null, $otherPostsLimit = self::DEFAULT_OTHER_POSTS_LIMIT) {
         if (KT::issetAndNotEmpty($item)) {
             if ($item instanceof KT_Postable) {
                 parent::__construct($item);
@@ -43,7 +43,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         } else {
             parent::__construct();
         }
-        $this->otherPostsCount = KT::tryGetInt($otherPostsCount);
+        $this->otherPostsLimit = KT::tryGetInt($otherPostsLimit);
     }
 
     // --- gettery ---------------------------
@@ -83,8 +83,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * 
      * @return int
      */
-    public function getOtherPostsCount() {
-        return $this->otherPostsCount;
+    public function getOtherPostsLimit() {
+        return $this->otherPostsLimit ? : self::DEFAULT_OTHER_POSTS_LIMIT;
     }
 
     // --- veřejné metody ---------------------------
@@ -97,9 +97,23 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * 
      * @return boolean
      */
-    public function haveOtherPosts() {
+    public function hasOtherPosts() {
         $otherPostsQuery = $this->getOtherPostsQuery();
         return KT::issetAndNotEmpty($otherPostsQuery) && $otherPostsQuery->have_posts();
+    }
+
+    /**
+     * Použijte hasOtherPosts
+     * 
+     * @deprecated since version 1.6
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public function haveOtherPosts() {
+        return $this->hasOtherPosts();
     }
 
     /**
@@ -111,7 +125,9 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @param string $loopName
      */
     public function theOtherPosts($loopName = KT_WP_POST_KEY) {
-        self::theQueryLoops($this->getOtherPostsQuery(), $loopName);
+        if ($this->hasOtherPosts()) {
+            self::theQueryLoops($this->getOtherPostsQuery(), $loopName);
+        }
     }
 
     /**
@@ -176,7 +192,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return mixed null|string (HTML)
      */
     public function getExcerpt() {
-        if ($this->getModel()->hasExcrept()) {
+        if ($this->getModel()->hasExcerpt()) {
             return $html = "<p class=\"perex\">{$this->getModel()->getExcerpt(false)}</p>";
         }
         return null;
@@ -194,7 +210,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     public function getAuthorBio($withAvatar = false) {
         $description = $this->getModel()->getAuthor()->getDescription();
         if (KT::issetAndNotEmpty($description)) {
-            $title = sprintf(__("O autorovi: %s", KT_DOMAIN), $this->getModel()->getAuthor()->getDisplayName());
+            $title = sprintf(__("O autorovi: %s", "KT_CORE_DOMAIN"), $this->getModel()->getAuthor()->getDisplayName());
             $html = "<h2>$title</h2>";
             if ($withAvatar) {
                 $avatar = $this->getModel()->getAuthor()->getAvatar();
@@ -274,8 +290,9 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             $image = $this->getThumbnailImage($imageSize, $imageAttr);
             $linkImage = $this->getThumbnailImagePermalink();
             $isTagContainer = (KT::issetAndNotEmpty($tagId) && KT::issetAndNotEmpty($tagClass));
+            $html = null;
             if ($isTagContainer) {
-                $html = KT::getTabsIndent(0, "<div id=\"$tagId\" class=\"$tagClass\">", true);
+                $html .= KT::getTabsIndent(0, "<div id=\"$tagId\" class=\"$tagClass\">", true);
             }
             $html .= KT::getTabsIndent(1, "<a href=\"$linkImage\" title=\"$titleAttribute\" class=\"fbx-link\" rel=\"lightbox\">", true);
             $html .= KT::getTabsIndent(2, $image, true);
@@ -334,11 +351,13 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             "post_type" => KT_WP_POST_KEY,
             "post_status" => "publish",
             "post_parent" => 0,
-            "post__not_in" => array($this->getModel()->getPostId()),
-            "posts_per_page" => $this->getOtherPostsCount(),
+            "posts_per_page" => $this->getOtherPostsLimit(),
             "orderby" => "date",
             "order" => "DESC",
         );
+        if (KT::issetAndNotEmpty($this->getModel())) {
+            $args["post__not_in"] = array($this->getModel()->getPostId());
+        }
         return $this->otherPostsQuery = new WP_Query($args);
     }
 

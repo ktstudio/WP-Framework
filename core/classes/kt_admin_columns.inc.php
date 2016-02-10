@@ -45,7 +45,7 @@ class KT_Admin_Columns {
 
     public function addColumns($defaults) {
         global $typenow;
-        $postType = filter_var($_REQUEST["post_type"])? : $typenow;
+        $postType = KT::arrayTryGetValue($_REQUEST, "post_type")? : $typenow;
         if ($this->postType == $postType) {
             $columns = array();
             $indexes = array();
@@ -77,7 +77,7 @@ class KT_Admin_Columns {
 
     public function sortableColumns($columns) {
         global $typenow;
-        $postType = filter_var($_REQUEST["post_type"])? : $typenow;
+        $postType = KT::arrayTryGetValue($_REQUEST, "post_type")? : $typenow;
         if ($this->postType == $postType) {
             foreach ($this->sortableColumns as $key => $args) {
                 if ($args[self::SORTABLE_PARAM_KEY]) {
@@ -148,7 +148,7 @@ class KT_Admin_Columns {
                 }
                 break;
             default:
-                throw new KT_Not_Supported_Exception(__("Typ sloupce: $columnType", KT_DOMAIN));
+                throw new KT_Not_Supported_Exception(sprintf(__("Typ sloupce: %s", "KT_CORE_DOMAIN"), $columnType));
         }
     }
 

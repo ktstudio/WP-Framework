@@ -204,6 +204,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
             $this->setId($rowIdFromData);
         }
 
+        /* @var $column KT_CRUD_Column */
         foreach ($this->getColumns() as $column) {
             if (array_key_exists($column->getName(), $data)) {
                 $column->setValue($data[$column->getName()]);
@@ -472,7 +473,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
      */
     public function saveRow() {
         if ($this->isInDatabase()) {
-            $this->updateRow();
+            return $this->updateRow();
         } else {
             return $this->insertRow();
         }
@@ -601,7 +602,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
     private function updateRow() {
 
         if (!$this->isInDatabase()) {
-            return;
+            return false;
         }
 
         global $wpdb;
@@ -614,7 +615,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         remove_filter("query", array($this, "nullUpdateFilterCallback")); // Zrušení předešlého filtru
 
         if ($sql) {
-            return $sql;
+            return true;
         }
         if (KT::issetAndNotEmpty($wpdb->last_error)) {
             $this->addError("Došlo k chybě při změně dat v DB", $wpdb->last_error);
@@ -636,20 +637,23 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         $columns = array();
 
         foreach ($this->getColumns() as $column) {
-
-            if ($column->getName() == $this->getPrimaryKeyColumn()) {
+            $name = $column->getName();
+            if ($name == $this->getPrimaryKeyColumn()) {
                 continue;
             }
 
             $type = $column->getType();
             $value = $column->getValue();
 
-            if ($column->getNullable() && $value == "") {
+            $isNullable = $column->getNullable();
+            if ($value == null && !$isNullable) {
+                continue; // může "zachránit", resp. vyřešit výchozí hodnota v DB
+            }
+            if ($isNullable && $value == "") {
                 $formats[] = "%s";
                 $columns[$column->getName()] = "NULL";
                 continue;
             }
-
 
             switch ($type) {
                 case KT_CRUD_Column::INT:

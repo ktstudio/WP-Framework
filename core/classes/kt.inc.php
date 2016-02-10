@@ -110,7 +110,7 @@ class KT {
      * @param mixed $value
      * @return array
      */
-    public static function arrayAdd(array $haystack, $value) {
+    public static function arrayAdd(array &$haystack, $value) {
         if (isset($value) && !in_array($value, $haystack)) {
             array_push($haystack, $value);
         }
@@ -244,6 +244,50 @@ class KT {
     }
 
     /**
+     * Vrátí pole na základě hodnoty zadaného parametru, pokud je to možné
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $paramName
+     * @param char $delimiter
+     * @return array
+     */
+    public static function arrayFromUrlParam($paramName, $delimiter = ",") {
+        $paramValue = filter_input(INPUT_GET, $paramName, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (KT::issetAndNotEmpty($paramValue)) {
+            if (is_serialized($paramValue)) {
+                return unserialize($paramValue);
+            }
+            return explode($delimiter, $paramValue);
+        }
+        return array();
+    }
+
+    /**
+     * Vrátí pole IDs na základě hodnoty zadaného parametru, pokud je to možné
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $idsParamName
+     * @param char $delimiter
+     * @return array
+     */
+    public static function arrayIdsFromUrlParam($idsParamName, $delimiter = ",") {
+        $ids = array();
+        $values = self::arrayFromUrlParam($idsParamName, $delimiter);
+        if (KT::arrayIssetAndNotEmpty($values)) {
+            foreach ($values as $value) {
+                if (KT::isIdFormat($value)) {
+                    array_push($ids, $value);
+                }
+            }
+        }
+        return $ids;
+    }
+
+    /**
      * Vrátí první klíč v poli
      * 
      * @author Martin Hlaváč
@@ -285,7 +329,7 @@ class KT {
      * @return mixed type|null
      */
     public static function arrayTryGetValue(array $array, $key, $defaultValue = null) {
-        if (KT::issetAndNotEmpty($key)) {
+        if (isset($key)) {
             if (array_key_exists($key, $array)) {
                 return $array[$key];
             }
@@ -480,7 +524,7 @@ class KT {
         if (current_user_can("manage_options")) {
             return true;
         } else {
-            wp_die(__("Nemáte dostatečná oprávnění k přístupu na tuto stránku.", KT_DOMAIN));
+            wp_die(__("Nemáte dostatečná oprávnění k přístupu na tuto stránku.", "KT_CORE_DOMAIN"));
             return false;
         }
     }
@@ -629,10 +673,26 @@ class KT {
         if (KT::arrayIssetAndNotEmpty($customWhitelist)) {
             $whitelist = array_merge($whitelist, $customWhitelist);
         }
-        if (in_array($_SERVER["REMOTE_ADDR"], $whitelist)) {
+        $ip = self::getIpAddress();
+        if (in_array($ip, $whitelist)) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Vrátí (aktuální) IP adresu z pole $_SERVER
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public static function getIpAddress() {
+        $ip = self::arrayTryGetValue($_SERVER, "HTTP_CLIENT_IP")
+                ? : self::arrayTryGetValue($_SERVER, "HTTP_X_FORWARDED_FOR")
+                ? : self::arrayTryGetValue($_SERVER, "REMOTE_ADDR");
+        return $ip;
     }
 
     /**
@@ -681,6 +741,22 @@ class KT {
         return null;
     }
 
+    /**
+     * VYčistí zadané souřadnice o nevhodné znaky, tj. nechá jen číslice, tečky a čárky
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $coordinates
+     * @return string
+     */
+    public static function clearGpsCoordinates($coordinates) {
+        if (KT::issetAndNotEmpty($coordinates)) {
+            return preg_replace("/[^0-9,.\/-\/+]/", "", trim($coordinates));
+        }
+        return null;
+    }
+
     // --- OBRÁZKY - IMAGE ---------------------------
 
     /**
@@ -705,6 +781,15 @@ class KT {
                     $original = wp_get_attachment_image_src($id, KT_WP_IMAGE_SIZE_ORIGINAL);
                     $linkUrl = $original[0];
                 }
+
+                // Defaultní atributy                
+                $title = get_the_title($id);
+                $defualtLinkArgs = ["title" => $title];
+                $defualtImgArgs = ["alt" => $title];
+                $linkArgs = array_merge($defualtLinkArgs, $linkArgs);
+                $imageArgs = array_merge($defualtImgArgs, $imageArgs);
+                //*******
+
                 $linkAttributes = "";
                 foreach ($linkArgs as $key => $value) {
                     $linkAttributes .= " $key=\"$value\"";
@@ -1031,7 +1116,7 @@ class KT {
     // --- STRÁNKOVÁNÍ ---------------------------
 
     /**
-     * Vytvoří stránkování odkazy
+     * Vytvoří stránkování (odkazy)
      *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
@@ -1056,8 +1141,8 @@ class KT {
             "format" => "page/%#%",
             "current" => max(1, $paged),
             "total" => $wp_query->max_num_pages,
-            "prev_text" => __("&laquo; Předchozí", KT_DOMAIN),
-            "next_text" => __("Další &raquo;", KT_DOMAIN)
+            "prev_text" => __("&laquo; Předchozí", "KT_CORE_DOMAIN"),
+            "next_text" => __("Další &raquo;", "KT_CORE_DOMAIN")
         );
 
         $argsPagination = wp_parse_args($userArgs, $defaultArgs);
@@ -1108,6 +1193,40 @@ class KT {
                 self::theTabsIndent(0, "</div>", true, true);
             }
         }
+    }
+
+    /**
+     * Vrátí odkazy předchozího a následujícího článku, pokud jsou k dispozici
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $class
+     * @param string $maxLength
+     * @param string $separator
+     * @param string $taxonomy
+     * @param boolean $inSameTerm
+     * @param string $excludedTerms
+     * @return string
+     */
+    public static function getPreviousNextPostLinks($class = null, $maxLength = 30, $separator = " | ", $taxonomy = KT_WP_CATEGORY_KEY, $inSameTerm = false, $excludedTerms = "") {
+        $links = array();
+        $previousPost = get_previous_post($inSameTerm, $excludedTerms, $taxonomy);
+        if (KT::issetAndNotEmpty($previousPost)) {
+            $previousUrl = get_permalink($previousPost);
+            $previousTitle = KT::stringCrop($previousPost->post_title, $maxLength);
+            array_push($links, "<a href=\"$previousUrl\" title=\"{$previousPost->post_title}\" class=\"prev $class\">$previousTitle</a>");
+        }
+        $nextPost = get_next_post($inSameTerm, $excludedTerms, $taxonomy);
+        if (KT::issetAndNotEmpty($nextPost)) {
+            $nextUrl = get_permalink($nextPost);
+            $nextTitle = KT::stringCrop($nextPost->post_title, $maxLength);
+            array_push($links, "<a href=\"$nextUrl\" title=\"{$nextPost->post_title}\" class=\"next $class\">$nextTitle</a>");
+        }
+        if (KT::arrayIssetAndNotEmpty($links)) {
+            return implode($separator, $links);
+        }
+        return null;
     }
 
     // -- STRING - Textové řetězce ------------------
@@ -1247,6 +1366,22 @@ class KT {
     }
 
     /**
+     * Escapování HTML atribuntů v zadaném textu (+ trim) nebo null
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $text
+     * @return string
+     */
+    public static function stringEscape($text) {
+        if (self::issetAndNotEmpty($text)) {
+            return esc_attr(trim($text));
+        }
+        return null;
+    }
+
+    /**
      * Na základě odřádkování rozdělí zadaný text do pole (tzn. po řádcích)
      * 
      * @author Martin Hlaváč
@@ -1285,6 +1420,31 @@ class KT {
                 $output .= "<{$tag}{$classPart}>{$line}</{$tag}>";
             }
             return $output;
+        }
+        return null;
+    }
+
+    // --- cURL ---------------------------
+
+    /**
+     * Zpracování URL (callu) obecně pomocí cURL
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *  
+     * @param string $url
+     * @return string
+     */
+    public static function curlGetContents($url) {
+        if (self::issetAndNotEmpty($url)) {
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+            $data = curl_exec($curl);
+            curl_close($curl);
+            return $data;
         }
         return null;
     }
@@ -1408,7 +1568,9 @@ class KT {
             return $file;
         }
         $category = get_category($categorySlug);
-        $file = TEMPLATEPATH . "/categories/category-{$category->slug}.php";
+        if (KT::issetAndNotEmpty($category) && !$category instanceof WP_Error) {
+            $file = TEMPLATEPATH . "/categories/category-{$category->slug}.php";
+        }
         if (file_exists($file)) {
             return $file;
         }

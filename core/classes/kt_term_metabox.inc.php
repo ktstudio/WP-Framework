@@ -17,10 +17,14 @@ class KT_Term_Metabox implements KT_Registrable {
      * @throws Exception
      */
     public function __construct(KT_Form_Fieldset $fieldset, $taxonomy = KT_WP_CATEGORY_KEY) {
-        if (KT_Termmeta::getIsActive() == false) {
-            throw new KT_Not_Supported_Exception("KT Termmeta nejsou aktivní...", KT_DOMAIN);
-        }
+        /*  if (KT_Termmeta::getIsActive() == false) {
+          throw new KT_Not_Supported_Exception("KT Termmeta nejsou aktivní...", "KT_CORE_DOMAIN");
+          }
+         */
         $this->setTaxonomy($taxonomy);
+        if (!kt::issetAndNotEmpty($fieldset->getPostPrefix())) {
+            throw new KT_Not_Supported_Exception(__("Pri praci s termmeta je treba, aby fieldset mel setly PostPrefix.", "KT_CORE_DOMAIN"));
+        }
         $this->fieldset = $fieldset;
     }
 
@@ -59,7 +63,7 @@ class KT_Term_Metabox implements KT_Registrable {
         }
         foreach ($taxonomies as $taxonomy) {
             if (!taxonomy_exists($taxonomy)) {
-                //throw new KT_Not_Supported_Exception("Tato taxonomie \"$taxonomy\" neexistuje", KT_DOMAIN);
+                //throw new KT_Not_Supported_Exception(sprintf(__("Tato taxonomie \"%s\" neexistuje", "KT_CORE_DOMAIN"), $taxonomy));
             }
         }
         $this->taxonomies = $taxonomies;
@@ -103,7 +107,7 @@ class KT_Term_Metabox implements KT_Registrable {
     // --- veřejné metody ---------------------
 
     /**
-     * Vykreslí fieldset
+     * Vykreslí fieldset ve formuláři u výpisu všech termů
      * VOLÁ SE V HOOCE
      * 
      * @author Jan Pokorný
@@ -115,8 +119,8 @@ class KT_Term_Metabox implements KT_Registrable {
         $fieldset->setTitle("");
         foreach ($fieldset->getFields() as $field) {
             if ($termId) {
-                $value = KT_Termmeta::getData($termId, $field->getName(), true);
-                $field->setValue($value);
+                $value = get_term_meta($termId, $metaKey, true);
+                $field->setDefaultValue($value);
             }
         }
         echo $fieldset->getInputsToTable();
@@ -135,8 +139,8 @@ class KT_Term_Metabox implements KT_Registrable {
         $fieldset->setTitle("");
         foreach ($fieldset->getFields() as $field) {
             if ($termId) {
-                $value = KT_Termmeta::getData($termId, $field->getName(), true);
-                $field->setValue($value);
+                $value = get_term_meta($termId, $field->getName(), true);
+                $field->setDefaultValue($value);
             }
             echo $fieldset->getInputToTr($field);
         }
@@ -157,7 +161,7 @@ class KT_Term_Metabox implements KT_Registrable {
             $form->validate();
             if (!$form->hasError()) {
                 $form->saveFieldsetToTermMetaTable($termId);
-            } elseif (KT::isWpAjax()) {
+            } elseif (KT::isWpAjax()) { // Použito u formuláři u výpisu všech termů. Pracuje ajaxem.
                 $taxonomy = filter_input(INPUT_POST, "taxonomy", FILTER_SANITIZE_STRING);
                 wp_delete_term($termId, $taxonomy);
                 $errorMessage = "";

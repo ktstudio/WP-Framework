@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Založení nového Custom URL
+ *
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_Custom_Template {
 
     private $pageName;
@@ -100,9 +106,9 @@ class KT_Custom_Template {
     public function setFileName($fileName) {
         $this->fileName = $fileName;
         $file = $this->getFullFilePath();
-        if ( ! is_file($file)) {
+        if (!is_file($file)) {
             $this->fileName = '';
-            throw new InvalidArgumentException(__("Tento soubor $file neexistuje!", KT_DOMAIN));
+            throw new InvalidArgumentException(sprintf(__("Tento soubor %s neexistuje!", "KT_CORE_DOMAIN"), $file));
         }
 
         return $this;
@@ -132,7 +138,7 @@ class KT_Custom_Template {
         }
 
         if (!is_dir($path)) {
-            throw new InvalidArgumentException(__("Tato cesta $path neexistuje!", KT_DOMAIN));
+            throw new InvalidArgumentException(sprintf(__("Tato cesta %s neexistuje!", "KT_CORE_DOMAIN"), $path));
         }
 
         $this->templatePath = $path;

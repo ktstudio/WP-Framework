@@ -111,7 +111,7 @@ class KT_MetaBox implements KT_Registrable {
             $this->title = $title;
             return $this;
         }
-//throw new KT_Not_Set_Argument_Exception( "title" );
+        //throw new KT_Not_Set_Argument_Exception( "title" );
     }
 
     /**
@@ -309,7 +309,7 @@ class KT_MetaBox implements KT_Registrable {
      * @param boolean $isOnlyForFrontPage
      * @return \KT_MetaBox
      */
-    public function setIsOnlyForFrontPage($isOnlyForFrontPage) {
+    public function setIsOnlyForFrontPage($isOnlyForFrontPage = true) {
         $this->isOnlyForFrontPage = KT::tryGetBool($isOnlyForFrontPage);
         return $this;
     }
@@ -659,6 +659,7 @@ class KT_MetaBox implements KT_Registrable {
 
             if ($crudInstance->hasError()) {
                 $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = false;
+                $saveResult["crud"] = $crudInstance;
                 return $saveResult;
             }
 
@@ -744,7 +745,7 @@ class KT_MetaBox implements KT_Registrable {
                         if (KT::issetAndNotEmpty($postPrefix)) {
                             $fieldset->setFieldsData($crudInstance->getData());
                         } else {
-                            throw new KT_Not_Implemented_Exception(__("Zatím jsou podporované pouze formuláře se zadaným PostPrefixem", KT_DOMAIN));
+                            throw new KT_Not_Implemented_Exception(__("Zatím jsou podporované pouze formuláře se zadaným PostPrefixem", "KT_CORE_DOMAIN"));
                         }
                     }
                 }
@@ -754,7 +755,7 @@ class KT_MetaBox implements KT_Registrable {
                 call_user_func_array("$customCallback", array($post, $form ? : $args));
                 return;
             default:
-                throw new KT_Not_Implemented_Exception(__("Datový typ MetaBoxu: $currentValue", KT_DOMAIN));
+                throw new KT_Not_Implemented_Exception(sprintf(__("Datový typ MetaBoxu: %s", "KT_CORE_DOMAIN"), $currentValue));
         }
 
         echo $form->getInputsToTable();

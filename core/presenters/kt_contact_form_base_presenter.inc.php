@@ -27,12 +27,13 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
     public function __construct($withProcessing = true) {
         if ($withProcessing) {
             $this->process();
-            $processedParam = (array_key_exists(self::PROCESSED_PARAM, $_GET)) ? substr(htmlspecialchars($_GET[self::PROCESSED_PARAM]), 0, 1) : null;
-            if ($processedParam != null) {
-                if ($processedParam === "1") {
+            $processedParam = filter_input(INPUT_GET, self::PROCESSED_PARAM, FILTER_SANITIZE_ENCODED);
+            if (isset($processedParam)) {
+                $processed = substr($processedParam, 0, 1);
+                if ($processed === "1") {
                     $this->wasProcessed = true;
                     add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderSuccessNotice"));
-                } elseif ($processedParam === "0") {
+                } elseif ($processed === "0") {
                     $this->wasProcessed = false;
                     add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderErrorNotice"));
                 }
@@ -51,9 +52,8 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      * @return \KT_Form
      */
     public function getForm() {
-        $form = $this->form;
-        if (KT::issetAndNotEmpty($form)) {
-            return $form;
+        if (KT::issetAndNotEmpty($this->form)) {
+            return $this->form;
         }
         return $this->initForm();
     }
@@ -67,11 +67,34 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      * @return \KT_Form_Fieldset
      */
     public function getFieldset() {
-        $fieldset = $this->fieldset;
-        if (KT::issetAndNotEmpty($fieldset)) {
-            return $fieldset;
+        if (KT::issetAndNotEmpty($this->fieldset)) {
+            return $this->fieldset;
         }
         return $this->initFieldset();
+    }
+
+    /**
+     * Vrátí ID formuláře, možné přepsat, výchozí se je konstanta FORM_ID
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public function getFormId() {
+        return self::FORM_ID;
+    }
+
+    /**
+     * Vrátí email, na který se bude zpracovaný formulář odesílat, výchozí je administrační e-mail
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public function getFormEmail() {
+        return get_bloginfo("admin_email");
     }
 
     /**
@@ -98,41 +121,19 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
         if (KT::arrayIssetAndNotEmpty($_POST)) {
             $form = $this->getForm();
             if (!$form->nonceValidate()) {
-                wp_die(__("Chyba zpracování zdrojové adresy...", KT_DOMAIN));
+                wp_die(__("Chyba zpracování zdrojové adresy...", "KT_CORE_DOMAIN"));
                 exit;
             }
             $form->validate();
             if (!$form->hasError()) {
-                $spam = $_POST[KT_Contact_Form_Base_Config::FORM_PREFIX][KT_Contact_Form_Base_Config::FAVOURITE];
-                if (KT::issetAndNotEmpty($spam)) {
-                    wp_die(__("Vyplnili jste nepovolený kontrolní prvek...", KT_DOMAIN));
-                    exit;
-                }
-
-                $ktWpInfo = new KT_WP_Info();
-
-                $name = htmlspecialchars(trim($_POST[KT_Contact_Form_Base_Config::FORM_PREFIX][KT_Contact_Form_Base_Config::NAME]));
-                $email = htmlspecialchars(trim($_POST[KT_Contact_Form_Base_Config::FORM_PREFIX][KT_Contact_Form_Base_Config::EMAIL]));
-                $phone = htmlspecialchars(trim($_POST[KT_Contact_Form_Base_Config::FORM_PREFIX][KT_Contact_Form_Base_Config::PHONE]));
-                $message = htmlspecialchars(trim($_POST[KT_Contact_Form_Base_Config::FORM_PREFIX][KT_Contact_Form_Base_Config::MESSAGE]));
-                if (KT::issetAndNotEmpty($name) && KT::issetAndNotEmpty($email) && KT::issetAndNotEmpty($phone) && KT::issetAndNotEmpty($message) && is_email($email)) {
-
-                    $content .= sprintf(__("Jméno: %s", KT_DOMAIN), $name) . "<br />";
-                    $content .= sprintf(__("E-mail: %s", KT_DOMAIN), $email) . "<br />";
-                    $content .= sprintf(__("Telefon: %s", KT_DOMAIN), $phone) . "<br /><br />";
-                    $content .= sprintf(__("Zpráva:", KT_DOMAIN), $message) . "<br /><br />";
-                    $content .= $message;
-                    $content .= "<br /><br />---<br />";
-                    $content .= sprintf(__("Tento e-mail byl vygenerován pomocí kontaktního formuláře na webu: %s", KT_DOMAIN), $ktWpInfo->getUrl());
-
-                    $contactFormEmail = apply_filters("kt_contact_form_email_filter", $ktWpInfo->getAdminEmail());
-
-                    $mailer = new KT_Mailer($contactFormEmail, $ktWpInfo->getName(), sprintf(__("%s - kontakt", KT_DOMAIN), $ktWpInfo->getName()));
-                    $mailer->setSenderEmail($email);
-                    $mailer->setSenderName($name);
-                    $mailer->setContent($content);
-                    $sendResult = $mailer->send();
-                    if ($sendResult) {
+                $values = filter_input(INPUT_POST, KT_Contact_Form_Base_Config::FORM_PREFIX, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+                if (KT::arrayIssetAndNotEmpty($values)) {
+                    $spam = KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::FAVOURITE);
+                    if (KT::issetAndNotEmpty($spam)) {
+                        wp_die(__("Vyplnili jste nepovolený kontrolní prvek...", "KT_CORE_DOMAIN"));
+                        exit;
+                    }
+                    if ($this->processMail($values)) {
                         wp_redirect(add_query_arg(self::PROCESSED_PARAM, "1", KT::getRequestUrl()));
                         exit;
                     }
@@ -152,7 +153,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
         $form = $this->getForm();
         echo $form->getFormHeader();
         echo $form->getInputsToSimpleHtml();
-        echo "<button type=\"submit\">{$form->getButtonValue()}</button>";
+        echo "<button type=\"submit\" class=\"{$form->getButtonClass()}\">{$form->getButtonValue()}</button>";
         echo "</form>";
     }
 
@@ -163,9 +164,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      * @link http://www.ktstudio.cz
      */
     public function renderSuccessNotice() {
-        echo "<p class=\"success\">";
-        echo __("Váš dotaz byl úspěšně odeslán a bude co nejdříve vyřízen, děkujeme.", KT_DOMAIN);
-        echo "</p>";
+        echo "<p class=\"success\">{$this->getSuccessMessage()}</p>";
     }
 
     /**
@@ -176,14 +175,118 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      */
     public function renderErrorNotice() {
         echo "<p class=\"error\">";
-        _e("Při zpracování a odesílání kontaktního formuláře došlo k chybě. Je třeba zadat správně všechny údaje...", KT_DOMAIN);
-        $formId = self::FORM_ID;
-        $repairLinkTitle = __("Opravit", KT_DOMAIN);
-        echo " <a id=\"contactFormLink\" href=\"#$formId\" data-target=\"#$formId\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
+        echo $this->getErrorMessage();
+        $repairLinkTitle = $this->getRepairTitle();
+        echo " <a id=\"contactFormLink\" href=\"#{$this->getFormId()}\" data-kt-target=\"#{$this->getFormId()}\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
         echo "</p>";
     }
 
     // --- neveřejné metody ------------------------
+
+    /**
+     * Hláška pro úspěšné zpracování formuláře
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    protected function getSuccessMessage() {
+        return __("Váš dotaz byl úspěšně odeslán a bude co nejdříve vyřízen, děkujeme.", "KT_CORE_DOMAIN");
+    }
+
+    /**
+     * Hláška pro neúspěšné zpracování formuláře
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    protected function getErrorMessage() {
+        return __("Při zpracování a odesílání kontaktního formuláře došlo k chybě. Je třeba zadat správně všechny údaje...", "KT_CORE_DOMAIN");
+    }
+
+    /**
+     * Titulek odeslaného e-mailu
+     * Pozn. přijímá při formátování parametr název webu
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    protected function getEmailTitle() {
+        return __("%s - kontakt", "KT_CORE_DOMAIN");
+    }
+    
+    /**
+     * Podpis, resp. hláška pod čarou e-mailu
+     * Pozn. přijímá při formátování parametr URL stránky
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    protected function getEmailSignature() {
+        return __("Tento e-mail byl vygenerován pomocí kontaktního formuláře na webu: %s", "KT_CORE_DOMAIN");
+    }
+
+    /**
+     * Popisek pro opravu úspěšného zpracování formuláře
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    protected function getRepairTitle() {
+        return __("Opravit", "KT_CORE_DOMAIN");
+    }
+
+    /**
+     * Zpracování údajů z POSTu (bez spam validace) a případné zodeslání mailu
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param array $values
+     * @return boolean
+     */
+    protected function processMail(array $values) {
+        if (count($values) > 0) {
+            $firstName = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::FIRST_NAME));
+            $lastName = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::LAST_NAME));
+            $name = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::NAME));
+            $email = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::EMAIL));
+            $phone = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::PHONE));
+            $message = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::MESSAGE));
+
+            $fullName = $name ? : "$firstName $lastName";
+
+            if (KT::issetAndNotEmpty($fullName) && KT::issetAndNotEmpty($email) && KT::issetAndNotEmpty($phone) && KT::issetAndNotEmpty($message) && is_email($email)) {
+                $ktWpInfo = new KT_WP_Info();
+
+                $content = sprintf(__("Jméno: %s", "KT_CORE_DOMAIN"), $fullName) . "<br />";
+                $content .= sprintf(__("E-mail: %s", "KT_CORE_DOMAIN"), $email) . "<br />";
+                $content .= sprintf(__("Telefon: %s", "KT_CORE_DOMAIN"), $phone) . "<br /><br />";
+                $content .= sprintf(__("Zpráva:", "KT_CORE_DOMAIN"), $message) . "<br /><br />";
+                $content .= $message;
+                $content .= "<br /><br />---<br />";
+                $content .= sprintf($this->getEmailSignature(), $ktWpInfo->getUrl());
+
+                $contactFormEmail = apply_filters("kt_contact_form_email_filter", $this->getFormEmail());
+
+                $mailer = new KT_Mailer($contactFormEmail, $ktWpInfo->getName(), sprintf($this->getEmailTitle(), $ktWpInfo->getName()));
+                $mailer->setSenderEmail($email);
+                $mailer->setSenderName($fullName);
+                $mailer->setContent($content);
+                return $sendResult = $mailer->send();
+            }
+        }
+        return false;
+    }
 
     /**
      * Základní inicializace formuláře
@@ -195,9 +298,9 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      */
     protected function initForm() {
         $form = new KT_Form();
-        $form->setAttrId(self::FORM_ID);
-        //$form->setButtonClass("");
-        $form->setButtonValue(__("Odeslat dotaz", KT_DOMAIN));
+        $form->setAttrId($this->getFormId());
+        $form->setButtonClass("submitButton");
+        $form->setButtonValue(__("Odeslat dotaz", "KT_CORE_DOMAIN"));
         $form->addFieldSetByObject($this->getFieldset());
         return $this->form = $form;
     }

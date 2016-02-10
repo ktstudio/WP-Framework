@@ -23,6 +23,26 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
         $this->wpUserInitById($userId);
         parent::__construct($metaPrefix);
     }
+    
+    /**
+     * Provádí odchychycení funkcí se začátkem názvu "get", který následně prověří
+     * existenci metody. Následně vrátí dle klíče konstanty hodnotu uloženou v DB
+     * v opačném případě neprovede nic nebo nechá dokončit existující funkci.
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param type $functionName
+     * @param array $attributes
+     * @return mixed
+     */
+    public function __call($functionName, array $attributes) {
+        $constValue = $this->getConstantValue($functionName);
+
+        if (KT::issetAndNotEmpty($constValue)) {
+            return $this->getMetaValue($constValue);
+        }
+    }
 
     // --- getry & setry ------------------------
 
@@ -178,7 +198,7 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @return string
      */
     public function getTitleAttribute() {
-        return $titleAttributeContent = esc_attr(strip_tags(sprintf(__("Autor: %s", KT_DOMAIN), $this->getName())));
+        return $titleAttributeContent = esc_attr(strip_tags(sprintf(__("Autor: %s", "KT_CORE_DOMAIN"), $this->getName())));
     }
 
     /**
@@ -385,7 +405,7 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
             if ($wpUser) {
                 $this->setWpUser($wpUser);
             } else {
-                throw new KT_Not_Supported_Exception(__("ID uživatele neexistuje (ve WP databázi).", KT_DOMAIN));
+                throw new KT_Not_Supported_Exception(__("ID uživatele neexistuje (ve WP databázi).", "KT_CORE_DOMAIN"));
             }
         }
         return $this;

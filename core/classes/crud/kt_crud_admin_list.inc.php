@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída pro definici kolekce CRUD admin sloupců (v přehledech)
+ * 
+ * @author Tomáš Kocifaj
+ * @link www.ktstduio.cz
+ */
 class KT_CRUD_Admin_List {
 
     const GET_ACTION = "action";
@@ -134,7 +140,7 @@ class KT_CRUD_Admin_List {
         $this->templateTitle = $templateTitle;
         return $this;
     }
-    
+
     /**
      * @return type
      */
@@ -156,7 +162,6 @@ class KT_CRUD_Admin_List {
         return $this;
     }
 
-    
     // --- veřejné funkce ------------------
 
     /**
@@ -253,7 +258,7 @@ class KT_CRUD_Admin_List {
 
         return $html;
     }
-    
+
     /**
      * Vrátí, TRUE | FALSE zda je aktivované řazení položek pomocí DragAndDrop
      * 
@@ -262,7 +267,7 @@ class KT_CRUD_Admin_List {
      * 
      * @return type
      */
-    public function isSortable(){
+    public function isSortable() {
         return $this->getSortable();
     }
 
@@ -300,7 +305,7 @@ class KT_CRUD_Admin_List {
             if (array_key_exists("page", $_GET)) {
                 $pageSlug = $_GET["page"];
                 $createUrl = menu_page_url($pageSlug, false) . "&" . self::GET_ACTION . "=" . self::GET_ACTION_CREATE;
-                return "<a href=\"$createUrl\" id=\"addCrudButtonList\" class=\"button\">" . __("Přidat nový záznam", KT_DOMAIN) . "</a>";
+                return "<a href=\"$createUrl\" id=\"addCrudButtonList\" class=\"button\">" . __("Přidat nový záznam", "KT_CORE_DOMAIN") . "</a>";
             }
         }
         return null;
@@ -321,8 +326,8 @@ class KT_CRUD_Admin_List {
         if (!$this->hasListColumns()) {
             return $html;
         }
-        
-        if($this->isSortable()){
+
+        if ($this->isSortable()) {
             $sortableActivate = "data-sortable=\"true\"";
         }
 
@@ -350,11 +355,11 @@ class KT_CRUD_Admin_List {
 
         $html .= "<thead>";
         $html .= "<tr>";
-        
-        if($this->isSortable()){
-            $html .= "<th>". __("Pořadí", KT_DOMAIN)."</th>";
+
+        if ($this->isSortable()) {
+            $html .= "<th>" . __("Pořadí", "KT_CORE_DOMAIN") . "</th>";
         }
-        
+
         foreach ($columnList as $column) {
             /** @var $column \KT_CRUD_Column */
             $class = KT::issetAndNotEmpty($column->getCssClass()) ? " class=\"{$column->getCssClass()}\"" : "";
@@ -394,11 +399,11 @@ class KT_CRUD_Admin_List {
             $updatedClass = $item->getId() == $updatedRowId ? " class=\"updated\"" : "";
 
             $html .= "<tr id=\"row-{$item->getId()}\"$updatedClass data-item-id=\"{$item->getId()}\">";
-            
-            if($this->isSortable()){
+
+            if ($this->isSortable()) {
                 $html .= "<td class=\"sortable\"><span class=\"dashicons dashicons-menu\"></span></td>";
             }
-            
+
             foreach ($columnCollection as $column) {
 
                 $class = KT::issetAndNotEmpty($column->getCssClass()) ? " class=\"{$column->getCssClass()}\"" : "";

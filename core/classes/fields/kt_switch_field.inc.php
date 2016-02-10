@@ -17,10 +17,49 @@ class KT_Switch_Field extends KT_Field {
         parent::__construct($name, $label);
 
         $this->addAttrClass(self::FIELD_TYPE);
-        $this->setValue(self::NO);
+        $this->setDefaultValue(self::NO);
+        $this->setFilterSanitize(FILTER_SANITIZE_NUMBER_INT);
 
         return $this;
     }
+
+    // --- gettery -----------------------
+
+    /**
+     * Vrátí typ fieldu
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getFieldType() {
+        return self::FIELD_TYPE;
+    }
+
+    public function getValue() {
+        $value = parent::getValue();
+        if (self::isSwitchValue($value)) {
+            return $value;
+        }
+        return self::NO;
+    }
+
+    /**
+     * Vrátí hodnotu ve fieldu
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     *
+     * @param bolean $original - má vrátít originální hodnotu v DB nebo hodnotou pro zobrazení
+     * @return null
+     */
+    public function getConvertedValue() {
+        $value = parent::getValue();
+        return self::getSwitchConvertedValue($value);
+    }
+
+    // --- veřejné funkce -----------------------
 
     /**
      * Provede výpis fieldu pomocí echo $this->getField()
@@ -42,47 +81,16 @@ class KT_Switch_Field extends KT_Field {
      * @return string
      */
     public function getField() {
-        $html = "";
-
-        $html .= "<div {$this->getAttrClassString()}>";
+        $html = "<div {$this->getAttrClassString()}>";
         $html .= "<span for=\"{$this->getAttrValueByName("id")}\" {$this->getAttrClassString()} title=\"{$this->getToolTip()}\"></span>";
         $html .= "<input type=\"hidden\" ";
         $html .= $this->getBasicHtml();
-        $html .= " value=\"{$this->getValue()}\" ";
-        $html .= "/>";
+        $html .= " value=\"{$this->getValue()}\" />";
         $html .= "</div>";
         if ($this->hasErrorMsg()) {
             $html .= parent::getHtmlErrorMsg();
         }
-
         return $html;
-    }
-
-    /**
-     * Vrátí hodnotu ve fieldu
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param bolean $original - má vrátít originální hodnotu v DB nebo hodnotou pro zobrazení
-     * @return null
-     */
-    public function getConvertedValue() {
-        $fieldValue = parent::getValue();
-
-        return self::getSwitchConvertedValue($fieldValue);
-    }
-
-    /**
-     * Vrátí typ fieldu
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @return string
-     */
-    public function getFieldType() {
-        return self::FIELD_TYPE;
     }
 
     // --- statické funkce -----------------
@@ -104,7 +112,7 @@ class KT_Switch_Field extends KT_Field {
             } elseif ($value == false) {
                 return KT_Switch_Field::NO;
             }
-            throw new InvalidArgumentException(__("Hodnota \"$value\" není logického typu", KT_DOMAIN));
+            throw new InvalidArgumentException(sprintf(__("Hodnota \"%s\" není logického typu", "KT_CORE_DOMAIN", $value)));
         }
         return null;
     }
@@ -126,7 +134,7 @@ class KT_Switch_Field extends KT_Field {
             } elseif ($value == KT_Switch_Field::NO) {
                 return false;
             }
-            throw new InvalidArgumentException(__("Hodnota \"$value\" není typu KT Switch pole", KT_DOMAIN));
+            throw new InvalidArgumentException(sprintf(__("Hodnota \"%s\" není typu KT Switch pole", "KT_CORE_DOMAIN"), $value));
         }
         return null;
     }
@@ -142,9 +150,9 @@ class KT_Switch_Field extends KT_Field {
      */
     public static function getSwitchConvertedValue($value) {
         if ($value == KT_Switch_Field::YES || $value === true || $value === 1) {
-            return __("Ano", KT_DOMAIN);
+            return __("Ano", "KT_CORE_DOMAIN");
         } elseif ($value == KT_Switch_Field::NO || $value === false || $value === 0) {
-            return __("Ne", KT_DOMAIN);
+            return __("Ne", "KT_CORE_DOMAIN");
         } else {
             echo KT_EMPTY_SYMBOL;
         }

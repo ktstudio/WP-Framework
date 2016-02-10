@@ -12,6 +12,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      */
     public function __construct($name, $label) {
         parent::__construct($name, $label);
+        $this->setFilterSanitize(FILTER_SANITIZE_STRING);
     }
 
     // --- getry & settery ------------------------
@@ -20,8 +21,16 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
         return self::FIELD_TYPE;
     }
 
+    /**
+     * Vrátí field value na základě zaslaného postu, getu, prefixu nebo nastaveného value
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return array
+     */
     public function getValue() {
-        $value = parent::getValue();
+        $value = parent::getCleanValue();
         if (KT::arrayIsSerialized($value)) {
             return unserialize($value);
         }
@@ -50,7 +59,6 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      * @return string
      */
     public function getField() {
-
         if (KT::notIssetOrEmpty($this->getOptionsData())) {
             return "<span class=\"input-wrap checkbox\">" . KT_EMPTY_SYMBOL . "</span>";
         }
@@ -59,7 +67,7 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
 
         $html = "";
 
-        foreach ($this->getOptionsData() as $key => $val) {
+        foreach ($this->getOptionsData() as $key => $value) {
             $html .= "<span class=\"input-wrap\">";
             $html .= "<input type=\"checkbox\" ";
             $html .= $this->getBasicHtml($key);
@@ -71,7 +79,8 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
                 }
             }
 
-            $html .= "> <span class=\"desc-checkbox-{$this->getAttrValueByName("id")}\"><label for=\"{$this->getName()}-{$key}\">$val</label></span> ";
+            $filteredValue = filter_var($value, $this->getFilterSanitize());
+            $html .= "> <span class=\"desc-checkbox-{$this->getAttrValueByName("id")}\"><label for=\"{$this->getName()}-{$key}\">$filteredValue</label></span> ";
 
             if ($this->hasErrorMsg()) {
                 $html .= parent::getHtmlErrorMsg();
@@ -94,18 +103,26 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      * @return string
      */
     public function getBasicHtml($inputName = null) {
-
-        $html = "";
-
         $this->validatorJsonContentInit();
         $this->setAttrId($this->getName() . "-" . $inputName);
-        $html .= $this->getNameAttribute($inputName);
+        $html = $this->getNameAttribute($inputName);
         $html .= $this->getAttributeString();
-
         return $html;
     }
 
     // --- privátní funkce ------------------
+
+    /**
+     * Zajistí, aby hodnoty byly zpracovány jako pole
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    protected function getAfterNameValue() {
+        return "[]";
+    }
 
     /**
      * Vrátí HTML s attributem name fieldu
@@ -117,16 +134,11 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
      * @return string
      */
     protected function getNameAttribute($inputName = null) {
-
-        $html = "";
-
         if (KT::issetAndNotEmpty($this->getPostPrefix())) {
-            $html .= "name=\"{$this->getPostPrefix()}[{$this->getName()}][$inputName]\" ";
+            return $html = "name=\"{$this->getPostPrefix()}[{$this->getName()}][$inputName]\" ";
         } else {
-            $html .= "name=\"{$this->getName()}[$inputName]\" ";
+            return $html = "name=\"{$this->getName()}[$inputName]\" ";
         }
-
-        return $html;
     }
 
 }

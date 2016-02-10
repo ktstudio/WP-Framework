@@ -28,6 +28,10 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
      */
     public function __construct($term, $taxonomy = null, $metaPrefix = null) {
         $this->metaPrefix = $metaPrefix;
+        if ($term instanceof WP_Term) {
+            $this->setTerm($term);
+            return;
+        }
         if ($term instanceof stdClass) {
             $this->setTerm($term);
             return;
@@ -44,6 +48,26 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
             return;
         }
         throw new KT_Not_Supported_Exception("Initializace of term is not correct");
+    }
+
+    /**
+     * Provádí odchychycení funkcí se začátkem názvu "get", který následně prověří
+     * existenci metody. Následně vrátí dle klíče konstanty hodnotu uloženou v DB
+     * v opačném případě neprovede nic nebo nechá dokončit existující funkci.
+     * 
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     * 
+     * @param type $functionName
+     * @param array $attributes
+     * @return mixed
+     */
+    public function __call($functionName, array $attributes) {
+        $constValue = $this->getConstantValue($functionName);
+
+        if (KT::issetAndNotEmpty($constValue)) {
+            return $this->getMetaValue($constValue);
+        }
     }
 
     // --- gettery -----------------
@@ -82,10 +106,10 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
-     * @param stdClass $term
+     * @param WP_Term $term
      * @return \KT_WP_Term_Base_Model
      */
-    public function setTerm(stdClass $term) {
+    public function setTerm($term) {
         if (KT::issetAndNotEmpty($term->term_id)) {
             $this->term = $term;
         }
@@ -300,12 +324,46 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
      * @return \KT_Post_Type_Presenter_Base
      */
     private function initMetas() {
-        $metas = KT_Termmeta::getAllData($this->getId(), $this->getMetaPrefix());
-        $this->setMetas($metas);
+        $metas = self::getTermsMetas($this->getId(), $this->getMetaPrefix());
+        if (KT::arrayIssetAndNotEmpty($metas)) {
+            $this->setMetas($metas);
+        } else {
+            $this->setMetas(array());
+        }
         return $this;
     }
 
     // --- statické funkce ---------
+    
+    /**
+     * Funkcí vrátí všechny parametry příspěvku a to všechny nebo s prefixem
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @global WP_DB $wpdb
+     * @param int $postId
+     * @param string $prefix
+     * @return array
+     */
+    public static function getTermsMetas($termId = null, $prefix = null) {
+        global $wpdb;
+        if (KT::isIdFormat($termId)) {
+            $results = array();
+            $query = "SELECT meta_key, meta_value FROM {$wpdb->termmeta} WHERE term_id = %d";
+            $prepareData[] = $termId;
+            if (isset($prefix)) {
+                $query .= " AND meta_key LIKE '%s'";
+                $prepareData[] = "{$prefix}%";
+            }
+            $metas = $wpdb->get_results($wpdb->prepare($query, $prepareData), ARRAY_A);
+            foreach ($metas as $meta) {
+                $results[$meta["meta_key"]] = $meta["meta_value"];
+            }
+            return $results;
+        }
+        return null;
+    }
 
     /**
      * Stejně jako funkce get_terms vrátí kolekci všech termů ve formě stdClass, funkce

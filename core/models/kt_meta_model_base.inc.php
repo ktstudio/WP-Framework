@@ -63,6 +63,7 @@ abstract class KT_Meta_Model_Base extends KT_Model_Base {
         if (array_key_exists($key, $metas)) {
             $value = $metas[$key];
             if (isset($value)) {
+                $value = (is_serialized($value)) ? unserialize($value) : $value;
                 return $value;
             }
         }

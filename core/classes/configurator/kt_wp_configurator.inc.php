@@ -16,6 +16,8 @@ final class KT_WP_Configurator {
     const TS_POST_THUMBNAIL = "post-thumbnails";
     const THEME_SUBPAGE_PREFIX = "appearance_page_";
     const THEME_SETTING_PAGE_SLUG = "kt-theme-setting";
+    const TOOLS_SUBPAGE_PREFIX = "tools_page_";
+    const WP_CRON_PAGE_SLUG = "kt-wp-cron";
     const POST_TYPE_ARCHIVE_OBJECT_KEY = "kt-post-type-archive";
     const COOKIE_STATEMENT_KEY = "kt-cookie-statement-key";
 
@@ -506,8 +508,8 @@ final class KT_WP_Configurator {
 
         // změna login url - loga a URL redirect
         if ($this->getDisplayLogo()) {
-            add_filter('login_headerurl', array($this, "registerLoginLogoUrlFilter"), 10, 4);
-            add_action('login_head', array($this, "registerLoginLogoImageAction"));
+            add_filter("login_headerurl", array($this, "registerLoginLogoUrlFilter"), 10, 4);
+            add_action("login_head", array($this, "registerLoginLogoImageAction"));
         }
 
         // registrace a načítání scriptů zavedené v configurátoru
@@ -522,7 +524,7 @@ final class KT_WP_Configurator {
 
         // stránka nastavení šablony
         if (KT::issetAndNotEmpty($this->getThemeSettingPage())) {
-            $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", KT_DOMAIN), __("Nastavení šablony", KT_DOMAIN), "update_core", self::THEME_SETTING_PAGE_SLUG);
+            $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", "KT_CORE_DOMAIN"), __("Nastavení šablony", "KT_CORE_DOMAIN"), "update_core", self::THEME_SETTING_PAGE_SLUG);
             $themeSettings->setRenderSaveButton()->register();
         }
 
@@ -802,7 +804,7 @@ final class KT_WP_Configurator {
      * @return array
      */
     public function registerUserProfilePhone($profileFields) {
-        $profileFields[KT_User_Profile_Config::PHONE] = __("Telefon", KT_DOMAIN);
+        $profileFields[KT_User_Profile_Config::PHONE] = __("Telefon", "KT_CORE_DOMAIN");
         return $profileFields;
     }
 
@@ -987,7 +989,7 @@ final class KT_WP_Configurator {
             return;
         }
 
-        $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", KT_DOMAIN), __("Nastavení šablony", KT_DOMAIN), $capability, self::THEME_SETTING_PAGE_SLUG);
+        $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", "KT_CORE_DOMAIN"), __("Nastavení šablony", "KT_CORE_DOMAIN"), $capability, self::THEME_SETTING_PAGE_SLUG);
         $themeSettings->setRenderSaveButton()->register();
 
         return $this;
@@ -1031,7 +1033,7 @@ final class KT_WP_Configurator {
      * @return string
      */
     public function registerLoginLogoUrlFilter() {
-        return 'http://www.wpframework.cz';
+        return "http://www.wpframework.cz";
     }
 
     /**
@@ -1042,7 +1044,7 @@ final class KT_WP_Configurator {
      * @link http://www.ktstudio.cz
      */
     public function registerLoginLogoImageAction() {
-        wp_enqueue_style('kt-core-style');
+        wp_enqueue_style(KT_WPFW_LOGIN_STYLE);
     }
 
     /**
@@ -1229,7 +1231,7 @@ final class KT_WP_Configurator {
      * @param string $html
      */
     public function addPostArchivesMenuMetaBox() {
-        add_meta_box("kt-post-archive-nav-menu", __("Archivy", KT_DOMAIN), array($this, "postArchivesMenuMetaBoxCallBack"), "nav-menus", "side", "default");
+        add_meta_box("kt-post-archive-nav-menu", __("Archivy", "KT_CORE_DOMAIN"), array($this, "postArchivesMenuMetaBoxCallBack"), "nav-menus", "side", "default");
     }
 
     /**
@@ -1270,7 +1272,7 @@ final class KT_WP_Configurator {
             KT::theTabsIndent(1, "</div>", true);
             KT::theTabsIndent(0, "</div>", true, true);
 
-            $addMenuTitle = htmlspecialchars(__("Přidat do menu", KT_DOMAIN));
+            $addMenuTitle = htmlspecialchars(__("Přidat do menu", "KT_CORE_DOMAIN"));
 
             KT::theTabsIndent(0, "<p class=\"button-controls\">", true);
             KT::theTabsIndent(1, "<span class=\"add-to-menu\">", true);
@@ -1349,19 +1351,21 @@ final class KT_WP_Configurator {
     public function renderCookieStatement() {
         $cookueStatementKey = KT::arrayTryGetValue($_COOKIE, self::COOKIE_STATEMENT_KEY);
         if (KT::notIssetOrEmpty($cookueStatementKey)) {
-            $text = __("Tyto stránky využívají Cookies. Používáním těchto stránek vyjadřujete souhlas s používáním Cookies.", KT_DOMAIN);
-            $moreInfoTitle = __("Zjistit více", KT_DOMAIN);
+            $text = __("Tyto stránky využívají Cookies. Používáním těchto stránek vyjadřujete souhlas s používáním Cookies.", "KT_CORE_DOMAIN");
+            $moreInfoTitle = __("Zjistit více", "KT_CORE_DOMAIN");
             $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
-            $confirmTitle = __("OK, rozumím", KT_DOMAIN);
+            $confirmTitle = __("OK, rozumím", "KT_CORE_DOMAIN");
 
             $content = "<span id=\"ktCookieStatementText\">$text</span>";
             $content .= "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
             $content .= "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
 
+            echo "<!-- ktcookiestatement W3TC_DYNAMIC_SECURITY -->";
             echo "<div id=\"ktCookieStatement\">";
             echo apply_filters("kt_cookie_statement_content_filter", $content);
             echo "</div>";
             echo "<noscript><style scoped>#ktCookieStatement { display:none; }</style></noscript>";
+            echo "<!-- /ktcookiestatement W3TC_DYNAMIC_SECURITY -->";
         }
     }
 
@@ -1377,6 +1381,18 @@ final class KT_WP_Configurator {
      */
     public static function getThemeSettingSlug() {
         return $baseName = self::THEME_SUBPAGE_PREFIX . self::THEME_SETTING_PAGE_SLUG;
+    }
+    
+    /**
+     * Vrátí název WP_Screen base pro (založenou) stránku (KT) WP Cron
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public static function getWpCronSlug() {
+        return $baseName = self::TOOLS_SUBPAGE_PREFIX . self::WP_CRON_PAGE_SLUG;
     }
 
     /**

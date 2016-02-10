@@ -40,9 +40,31 @@ img.kt-loading-image
     vertical-align: middle;
 }
 
+.kt-custom-screen-page table.wp-list-table tr td .id-link
+{
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.kt-custom-screen-page table.wp-list-table .row-actions .delete-row
+{
+    color: #a00;
+    cursor: pointer;
+}
+
+.kt-custom-screen-page table.wp-list-table .row-actions .delete-row:hover
+{
+    color: red;
+}
+
 .kt-custom-screen-page #addCrudButtonList
 {
     margin-top: 15px;
+}
+
+.kt-custom-screen-page table.wp-list-table span.dashicons-menu
+{
+    cursor: n-resize;
 }
 
 .kt-loading-gif
@@ -85,83 +107,13 @@ img.kt-loading-image
     margin-top: -10px;
 }
 
+/**** POST TYPE LIST ****/
 
-/** LOGIN KT LOGO */
-
-body.login
-{
-    background: #193340;
-}
-
-div#login h1 a
-{
-    background: url('../images/logo.png') center top no-repeat;
-    background-size: 240px 55px;
-    width: 240px;
-    height: 55px;
-}
-
-/** TABLE LIST **/
-
-table.wp-list-table thead th#image
-{
-    width: 110px;
-}
-
-table.wp-list-table tbody tr td.column-image a img
-{
-    width: 100px !important;
-    height: 100px !important;
-}
-
-table.wp-list-table tbody tr td span.row-actions
-{   
-    display: block;
-}
-
-table.wp-list-table tbody tr td span.row-actions span.delete-row
-{
-    color: #ffc4c4;
-    cursor: pointer;
-}
-
-table.wp-list-table tbody tr td span.row-actions span.delete-row:hover
-{
-    color: #FF0000;
-}
-
-table.wp-list-table tbody tr.status-pending
-{
-    background: #FFBFBF;
-}
-
-table.wp-list-table tbody tr.status-publish
-{
-    background: #DAFF75;
-}
-
-table.wp-list-table .column-post_thumbnail
+.wp-list-table .column-post_thumbnail
 {
     width: 40px;
+    max-width: 40px;
 }
-
-table.kt-rez-table thead tr th#title
-{
-    padding-left: 10px;
-}
-
-table.item-list td.sortable
-{
-    width: 20px;
-    cursor: move;
-}
-
-table.item-list tr.ui-sortable-helper
-{
-    border: 1px dashed #c7c7c7;
-    background: rgba(199, 199, 199, 0.7);
-}
-
 
 /**** FORM BASIC STYLES ****/
 
@@ -248,6 +200,11 @@ span.erorr-s:after
     border-style: solid;
     border-width: 0 5px 10px 5px;
     border-color: transparent transparent #c92a2a transparent;
+}
+
+span.erorr-s.input-checkbox
+{
+    top: 5px;
 }
 
 .kt_fieldset input[type="number"],

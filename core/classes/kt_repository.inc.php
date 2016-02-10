@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Založení objektu se sadou CRUD itemů pro iterování kolekce 
+ *
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_Repository {
 
     const DEFAULT_LIMIT = 30;

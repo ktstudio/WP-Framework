@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Třída pro nastavení Facebook dat v rámci KT WP konfigurátoru
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_WP_Facebook_Data_Configurator {
 
     const OG_LOCALE = "og:locale";
@@ -16,10 +22,6 @@ class KT_WP_Facebook_Data_Configurator {
     private $url = null;
     private $description = null;
     private $moduleEnabled = false;
-
-    public function __construct() {
-        
-    }
 
     // --- gettery a settery ------------------
 
@@ -210,7 +212,7 @@ class KT_WP_Facebook_Data_Configurator {
         }
 
         if (is_search()) {
-            $this->setTitle(sprintf(__("Vyhledávání pro výraz: %s", KT_DOMAIN), trim(esc_attr(get_search_query()))));
+            $this->setTitle(sprintf(__("Vyhledávání pro výraz: %s", "KT_CORE_DOMAIN"), trim(esc_attr(get_search_query()))));
             return $this;
         }
 
@@ -230,7 +232,7 @@ class KT_WP_Facebook_Data_Configurator {
         }
 
         if (is_404()) {
-            $this->setTitle(sprintf(__("Chyba 404 - %s", KT_DOMAIN), $this->getTitle()));
+            $this->setTitle(sprintf(__("Chyba 404 - %s", "KT_CORE_DOMAIN"), $this->getTitle()));
             return $this;
         }
 

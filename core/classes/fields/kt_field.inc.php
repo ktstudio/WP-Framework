@@ -8,7 +8,10 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
     private $name = null;
     private $postPrefix = null;
     private $unit = null;
-    private $value = null;
+    private $value;
+    private $cleanValue;
+    private $defaultValue = null;
+    private $filterSanitize = FILTER_SANITIZE_SPECIAL_CHARS;
     private $error = false;
     private $validators = array();
 
@@ -41,7 +44,6 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
      */
     public function setLabel($label) {
         $this->label = $label;
-
         return $this;
     }
 
@@ -56,7 +58,6 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
      */
     public function setName($name) {
         $this->name = $name;
-
         return $this;
     }
 
@@ -88,7 +89,6 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
      */
     public function setToolTip($toolTip) {
         $this->setAttrTitle($toolTip);
-
         return $this;
     }
 
@@ -104,8 +104,15 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
      */
     public function setUnit($unit) {
         $this->unit = $unit;
-
         return $this;
+    }
+
+    /**
+     * @deprecated since version 1.7 
+     * @see setDefaultValue
+     */
+    public function setValue($value) {
+        return $this->setDefaultValue($value);
     }
 
     /**
@@ -117,9 +124,22 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
      * @param string $value
      * @return \KT_Field
      */
-    public function setValue($value) {
-        $this->value = $value;
+    public function setDefaultValue($value) {
+        $this->defaultValue = $value;
+        return $this;
+    }
 
+    /**
+     * Nastavení (vlastní) sanatizační kód pro hodnotu(y) (výpis)
+     * 
+     * @author Matin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param int $code
+     * @return \KT_Field
+     */
+    public function setFilterSanitize($code) {
+        $this->filterSanitize = KT::tryGetInt($code);
         return $this;
     }
 
@@ -135,7 +155,6 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
      */
     public function setError($error) {
         $this->error = $error;
-
         return $this;
     }
 
@@ -286,6 +305,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
      * @return boolean
      */
     public function Validate() {
+        // TODO: sanitace
         if (KT::notIssetOrEmpty($this->getValidators())) {
             return true;
         }
@@ -348,47 +368,97 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
     /**
      * Vrátí field value na základě zaslaného postu, getu, prefixu nebo nastaveného value
      *
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @return null
+     * @return string
      */
     public function getValue() {
-        if (KT::issetAndNotEmpty($this->getPostPrefix())) {
-            if (isset($_POST[$this->getPostPrefix()][$this->getName()])) {
-                return $_POST[$this->getPostPrefix()][$this->getName()];
-            }
-
-            if (isset($_GET[$this->getPostPrefix()][$this->getName()])) {
-                return $_GET[$this->getPostPrefix()][$this->getName()];
-            }
-        }
-
-        if (isset($_POST[$this->getName()])) {
-            return $_POST[$this->getName()];
-        }
-
-
-        if (isset($_GET[$this->getName()])) {
-            return $_GET[$this->getName()];
-        }
-
-        if ($this->getFieldType() == KT_Checkbox_Field::FIELD_TYPE) {
-            if (isset($_POST[$this->getPostPrefix()])) {
-                return $_POST[$this->getPostPrefix()];
-            }
-
-            if (isset($_GET[$this->getPostPrefix()])) {
-                return $_GET[$this->getPostPrefix()];
-            }
-        }
-
-
-        if ($this->value !== "" && isset($this->value)) {
+        if (isset($this->value)) {
             return $this->value;
         }
+        return $this->value = filter_var($this->getCleanValue(), $this->getFilterSanitize());
+    }
 
-        return null;
+    /**
+     * @deprecated since version 1.7 
+     * @see getValue()
+     */
+    public function getFieldValue() {
+        return $this->getValue();
+    }
+
+    /**
+     * Vrátí přímo čistou hodnotu bez zpracování - sanitizace
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getCleanValue() {
+        if (isset($this->cleanValue)) {
+            return $this->cleanValue;
+        }
+        $name = $this->getName();
+
+        $postPrefix = $this->getPostPrefix();
+        if (KT::issetAndNotEmpty($postPrefix)) {
+            $postValues = filter_input(INPUT_POST, $postPrefix, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+            if (KT::arrayIssetAndNotEmpty($postValues)) {
+                $postPrefixValue = KT::arrayTryGetValue($postValues, $name);
+                if (isset($postPrefixValue)) {
+                    return $this->cleanValue = $postPrefixValue;
+                }
+            }
+            $getValues = filter_input(INPUT_GET, $postPrefix, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+            if (KT::arrayIssetAndNotEmpty($getValues)) {
+                $getPrefixValue = KT::arrayTryGetValue($getValues, $name);
+                if (isset($getPrefixValue)) {
+                    return $this->cleanValue = $getPrefixValue;
+                }
+            }
+        }
+
+        $postValue = KT::arrayTryGetValue($_POST, $name);
+        if (isset($postValue)) {
+            return $this->cleanValue = $postValue;
+        }
+        $getValue = KT::arrayTryGetValue($_GET, $name);
+        if (isset($getValue)) {
+            return $this->cleanValue = $getValue;
+        }
+
+        $defaultValue = $this->getDefaultValue();
+        if (isset($defaultValue)) {
+            return $this->cleanValue = $defaultValue;
+        }
+        return $this->cleanValue = "";
+    }
+
+    /**
+     * Vrátí přímo výchozí hodnotu fieldu, pokud je zadána
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    protected function getDefaultValue() {
+        return $this->defaultValue;
+    }
+
+    /**
+     * Vrátí nastavený sanatizační kód pro (výpis) hodnotu(y)
+     * Pozn.: výchozí je FILTER_SANITIZE_SPECIAL_CHARS
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public function getFilterSanitize() {
+        return $this->filterSanitize;
     }
 
     // --- protected funkce -------

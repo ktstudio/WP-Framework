@@ -34,8 +34,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 ->setAction($action)
                 ->setMethod(self::METHOD_POST)
                 ->setAttrId($id)
-                ->setSuccessMessage(__("Data byla uložena", KT_DOMAIN))
-                ->setErrorMessage(__("Ve formuláři se vyskytla chyba", KT_DOMAIN));
+                ->setSuccessMessage(__("Data byla uložena", "KT_CORE_DOMAIN"))
+                ->setErrorMessage(__("Ve formuláři se vyskytla chyba", "KT_CORE_DOMAIN"));
 
         $this->addAttribute("data-validate", "jquery");
 
@@ -457,9 +457,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @return string
      */
-    public function returnSuccessMsg($class = "kt-no-error") {
-        $html = "<p class=\"$class\">{$this->getSuccessMessage()}</p>";
-
+    public function returnSuccessMsg($class = "kt-no-error alert alert-success") {
+        $html = "<p class=\"$class\" role=\"alert\">{$this->getSuccessMessage()}</p>";
         return $html;
     }
 
@@ -471,9 +470,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @return string
      */
-    public function returnErrorMsg($class = "kt-error") {
-        $html = "<p class=\"$class\">{$this->getErrorMessage()}</p>";
-
+    public function returnErrorMsg($class = "kt-error alert alert-danger") {
+        $html = "<p class=\"$class\" role=\"alert\">{$this->getErrorMessage()}</p>";
         return $html;
     }
 
@@ -585,7 +583,20 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return string (HTML)
      */
     public function getFormHeader() {
-        $html = "<form " . $this->getAttributeString() . ">";
+        $html = "\n<form " . $this->getAttributeString() . ">";
+        return $html;
+    }
+
+    /**
+     * Vrátí patičku formuláře 
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string (HTML)
+     */
+    public function getFormFooter() {
+        $html = "</form>\n";
         return $html;
     }
 
@@ -662,7 +673,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                     foreach ($fieldset->getFields() as $field) {
                         $value = get_option($field->getName(), null);
                         if ($value !== "" && isset($value)) {
-                            $field->setValue($fieldset->convertFieldValue($field, $value));
+                            $field->setDefaultValue($fieldset->convertFieldValue($field, $value));
                         }
                     }
                 }
@@ -1046,7 +1057,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         if (KT::issetAndNotEmpty($transientValue)) {
             echo "<div class=\"error\">";
-            echo "<p>" . __("Některé data nebyla uložena. Zkontrolujte prosím vstupní data a proces opakujte", KT_DOMAIN) . ".</p>";
+            echo "<p>" . __("Některé data nebyla uložena. Zkontrolujte prosím vstupní data a proces opakujte", "KT_CORE_DOMAIN") . ".</p>";
             echo "</div>";
         }
     }
@@ -1334,7 +1345,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
-     * Uloží data poslané postem do tabulky kt_wp_termmeta - každý field jako extra row
+     * Uloží data poslané postem do tabulky kt_termmeta - každý field jako extra row
      * @see saveFieldsToTermmetaTable
      *
      * @author Martin Hlaváč
@@ -1351,9 +1362,9 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
             if (!in_array($field->getName(), $excludeFields)) {
                 $fieldValue = $this->getSavableFieldValue($field);
                 if ($fieldValue !== "" && isset($fieldValue)) {
-                    KT_Termmeta::updateData($termId, $field->getName(), $fieldValue);
+                    update_term_meta($termId, $field->getName(), $fieldValue);
                 } else {
-                    KT_Termmeta::deleteData($termId, $field->getName());
+                    delete_term_meta($termId, $field->getName());
                 }
             }
         }
@@ -1361,7 +1372,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
-     * Uloží data poslané postem do tabulky kt_wp_termmeta - celý fieldset jako realizované pole fieldů ($fieldName => $fieldValue)
+     * Uloží data poslané postem do tabulky kt_termmeta - celý fieldset jako realizované pole fieldů ($fieldName => $fieldValue)
      * @see saveFieldsToTermmetaTable
      *
      * @author Martin Hlaváč
@@ -1375,9 +1386,9 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     private function saveFieldsetToTermMetaByGroup($termId, KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
         $fieldsetData = $this->getSavableFieldsetGroupValue($fieldset, $excludeFields);
         if (KT::arrayIssetAndNotEmpty($fieldsetData)) {
-            KT_Termmeta::updateData($termId, $fieldset->getName(), $fieldsetData);
+            update_term_meta($termId, $fieldset->getName(), $fieldsetData);
         } else {
-            KT_Termmeta::deleteData($termId, $fieldset->getName());
+            delete_term_meta($termId, $fieldset->getName());
         }
         return $this;
     }
@@ -1417,11 +1428,27 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
             if (!in_array($field->getName(), $excludeFields) && KT::issetAndNotEmpty($field->getValue())) {
                 $fieldValue = $field->getValue();
                 if ($fieldValue !== "" || $fieldValue === 0 || $fieldValue === "0") {
-                    $fieldsetData[$field->getName()] = $field->getFieldValue();
+                    $fieldsetData[$field->getName()] = $field->getValue();
                 }
             }
         }
         return $fieldsetData;
+    }
+
+    /**
+     * Vypíše třídu submit tlačítka jako HTML atribut, pokud je zadána
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public function getButtonClassAttr() {
+        $class = $this->getButtonClass();
+        if (KT::issetAndNotEmpty($class)) {
+            return " class=\"$class\"";
+        }
+        return null;
     }
 
     // --- statické metody ---------------
@@ -1439,14 +1466,9 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return html
      */
     public static function getSubmitButton($value = self::BUTTON_DEFAULT_VALUE, $class = "kt-form-submit button button-primary", $id = "kt-form-submit") {
-        if (KT::issetAndNotEmpty($id)) {
-            $idPart = " id=\"{$id}\"";
-        }
-        $classPart = null;
-        if (KT::issetAndNotEmpty($id)) {
-            $classPart = " class=\"{$class}\"";
-        }
-        return "<button type=\"submit\"{$idPart}{$classPart}>{$value}</button>";
+        $idAttribute = KT::issetAndNotEmpty($id) ? " id=\"{$id}\"" : "";
+        $classAttribute = KT::issetAndNotEmpty($id) ? " class=\"{$class}\"" : "";
+        return "<button type=\"submit\"{$idAttribute}{$classAttribute}>{$value}</button>";
     }
 
     /**
