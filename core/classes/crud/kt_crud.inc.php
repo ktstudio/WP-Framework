@@ -460,7 +460,9 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
             return $sql;
         }
 
-        $this->addError("Došlo k chybě při vkládání dat do DB", $wpdb->last_error);
+        $error = $wpdb->last_error;
+        $this->addError("Došlo k chybě při mazání dat v DB", $error);
+        KT_Logger::error($error);
         return false;
     }
 
@@ -586,7 +588,9 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
             return $this->getId();
         }
 
-        $this->addError("Došlo k chybě při vkládání dat do DB", $wpdb->last_error);
+        $error = $wpdb->last_error;
+        $this->addError("Došlo k chybě při vkládání dat do DB", $error);
+        KT_Logger::error($error);
         return false;
     }
 
