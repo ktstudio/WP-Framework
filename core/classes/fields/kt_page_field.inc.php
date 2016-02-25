@@ -1,11 +1,18 @@
 <?php
 
+/**
+ * Field typu select, který jako <option> načte sadu všech stránek
+ * 
+ * @author Tomáš Kocifaj
+ * @link http://www.ktstudio.cz
+ */
 class KT_Page_Field extends KT_Select_Field {
 
     const FIELD_TYPE = "pages";
     const DEFAUL_PAGE_COUNT = -1;
 
     private $parentPage = null;
+    private $pageTemplate = null;
 
     /**
      * Field typu select, který jako <option> načte sadu všech stránek
@@ -16,9 +23,11 @@ class KT_Page_Field extends KT_Select_Field {
      * @param type $name
      * @param type $label
      */
-    public function __construct($name, $label) {
-        $this->pageQueryArgsInit();
+    public function __construct($name, $label, $parentPage = null, $pageTemplate = null) {
         parent::__construct($name, $label);
+        $this->setParentPage($parentPage);
+        $this->setPageTemplate($pageTemplate);
+        $this->pageQueryArgsInit();
     }
 
     // --- gettery & settery ---------------------
@@ -27,15 +36,13 @@ class KT_Page_Field extends KT_Select_Field {
         return self::FIELD_TYPE;
     }
 
-    /**
-     * @return int
-     */
+    /** @return int */
     private function getParentPage() {
         return $this->parentPage;
     }
 
     /**
-     * Nastaví případnou parent_page, jejížš děti budou nabídnuty v selectu
+     * Nastaví případnou parent_page, jejíž děti budou nabídnuty v selectu
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
@@ -46,12 +53,28 @@ class KT_Page_Field extends KT_Select_Field {
         if (KT::isIdFormat($parentPage)) {
             $this->parentPage = $parentPage;
         }
-
         return $this;
     }
 
-    // --- veřejné funkce ---------------------
-    // --- privátní funkce ---------------------
+    /** @return string */
+    private function getPageTemplate() {
+        return $this->pageTemplate;
+    }
+
+    /**
+     * Nastaví případný page template pro omezení výpisu dat
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param int $pageTemplate
+     */
+    public function setPageTemplate($pageTemplate) {
+        $this->pageTemplate = $pageTemplate;
+        return $this;
+    }
+
+    // --- neveřejné metody ---------------------
 
     /**
      * Objektu automaticky nastaví query po selekci stránek
@@ -67,8 +90,19 @@ class KT_Page_Field extends KT_Select_Field {
             "order" => KT_Repository::ORDER_ASC,
         );
 
-        if (KT::issetAndNotEmpty($this->getParentPage())) {
-            $args["post_parent"] = $this->getParentPage();
+        $parentPage = $this->getParentPage();
+        if (KT::issetAndNotEmpty($parentPage)) {
+            $args["post_parent"] = $parentPage;
+        }
+
+        $pageTemplate = $this->getPageTemplate();
+        if (KT::issetAndNotEmpty($pageTemplate)) {
+            $args["meta_query"] = array(
+                array(
+                    "key" => KT_WP_META_KEY_PAGE_TEMPLATE,
+                    "value" => "$pageTemplate"
+                )
+            );
         }
 
         $dataManager = new KT_Custom_Post_Data_Manager();

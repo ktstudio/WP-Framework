@@ -791,8 +791,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Page_Field
      */
-    public function addWpPage($name, $label) {
-        $field = $this->fields[$name] = new KT_Page_Field($name, $label);
+    public function addWpPage($name, $label, $parentPage = null, $pageTemplate = null) {
+        $field = $this->fields[$name] = new KT_Page_Field($name, $label, $parentPage, $pageTemplate);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
     }
