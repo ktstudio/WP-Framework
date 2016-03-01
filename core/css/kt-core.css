@@ -115,6 +115,18 @@ img.kt-loading-image
     max-width: 40px;
 }
 
+.wp-list-table .column-menu-order
+{
+    width: 60px;
+    max-width: 60px;
+}
+
+.wp-list-table .visibility-column
+{
+    width: 100px;
+    max-width: 100px;
+}
+
 /**** FORM BASIC STYLES ****/
 
 form#kt-form input[type="number"],
