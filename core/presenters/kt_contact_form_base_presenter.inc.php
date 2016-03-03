@@ -27,7 +27,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
     public function __construct($withProcessing = true) {
         if ($withProcessing) {
             $this->process();
-            $processedParam = filter_input(INPUT_GET, self::PROCESSED_PARAM, FILTER_SANITIZE_ENCODED);
+            $processedParam = filter_input(INPUT_GET, $this->getProcessdParam(), FILTER_SANITIZE_ENCODED);
             if (isset($processedParam)) {
                 $processed = substr($processedParam, 0, 1);
                 if ($processed === "1") {
@@ -84,7 +84,19 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
     public function getFormId() {
         return self::FORM_ID;
     }
-
+    
+    /**
+     * Vrátí URL parametr formuláře pro/po zpracování, možné přepsat, výchozí se je konstanta PROCESSED_PARAM
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return string
+     */
+    public function getProcessdParam() {
+        return self::PROCESSED_PARAM;
+    }
+    
     /**
      * Vrátí email, na který se bude zpracovaný formulář odesílat, výchozí je administrační e-mail
      * 
@@ -134,7 +146,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
                         exit;
                     }
                     if ($this->processMail($values)) {
-                        wp_redirect(add_query_arg(self::PROCESSED_PARAM, "1", KT::getRequestUrl()));
+                        wp_redirect(add_query_arg($this->getProcessdParam(), "1", KT::getRequestUrl()));
                         exit;
                     }
                 }
