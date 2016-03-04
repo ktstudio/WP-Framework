@@ -58,6 +58,19 @@ abstract class KT_Presenter_Base implements KT_Presentable {
     public static function getCurrentQueryLoopIndex() {
         return self::$currentQueryLoopIndex;
     }
+    
+
+    /**
+     * Vrátí aktuální číslo v rámci výpisu šablon pomocí @see theQueryLoops
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public static function getCurrentQueryLoopNumber() {
+        return self::getCurrentQueryLoopIndex() + 1;
+    }
 
     /**
      * Vrátí aktuální index v rámci výpisu šablon pomocí @see theItemsLoops
@@ -71,6 +84,18 @@ abstract class KT_Presenter_Base implements KT_Presentable {
         return self::$currentItemsLoopIndex;
     }
 
+    /**
+     * Vrátí aktuální číslo v rámci výpisu šablon pomocí @see theItemsLoops
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return int
+     */
+    public static function getCurrentItemsLoopNumber() {
+        return self::getCurrentItemsLoopIndex() + 1;
+    }
+    
     // --- veřejné funkce ---------------------
 
     /**

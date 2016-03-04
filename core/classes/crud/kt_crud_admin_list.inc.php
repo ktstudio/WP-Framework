@@ -357,7 +357,7 @@ class KT_CRUD_Admin_List {
         $html .= "<tr>";
 
         if ($this->isSortable()) {
-            $html .= "<th>" . __("Pořadí", "KT_CORE_DOMAIN") . "</th>";
+            $html .= "<th class=\"column-menu-order\">" . __("Pořadí", "KT_CORE_DOMAIN") . "</th>";
         }
 
         foreach ($columnList as $column) {

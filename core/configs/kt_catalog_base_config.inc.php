@@ -71,14 +71,17 @@ class KT_Catalog_Base_Config {
         $crudList->addColumn(KT_Catalog_Model_Base::TITLE_COLUMN)
                 ->setType(KT_CRUD_Admin_Column::EDIT_LINK_TYPE)
                 ->setDeletable()
+                ->setCssClass("title-column")
                 ->setLabel(__("Titulek", "KT_CORE_DOMAIN"));
 
         $crudList->addColumn(KT_Catalog_Model_Base::CODE_COLUMN)
+                ->setCssClass("code-column")
                 ->setLabel(__("Kód", "KT_CORE_DOMAIN"));
 
         $crudList->addColumn(KT_Catalog_Model_Base::VISIBILITY_COLUMN)
                 ->setType(KT_CRUD_Admin_Column::SWITCH_BUTTON_TYPE)
                 ->setPosition(99)
+                ->setCssClass("visibility-column")
                 ->setLabel(__("Viditelnost", "KT_CORE_DOMAIN"));
 
         // výchozí řazení
