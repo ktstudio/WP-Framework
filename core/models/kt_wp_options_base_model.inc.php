@@ -164,7 +164,15 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
     public function getOptionTranslateId($name, $postType) {
         $value = $this->getOption($name);
         if (defined("ICL_LANGUAGE_CODE")) {
-            $value = icl_object_id($value, $postType, true, ICL_LANGUAGE_CODE);
+            if (is_array($value)) {
+                $ids = array();
+                foreach ($value as $id) {
+                    array_push($ids, icl_object_id($id, $postType, true, ICL_LANGUAGE_CODE));
+                }
+                return $ids;
+            } else {
+                $value = icl_object_id($value, $postType, true, ICL_LANGUAGE_CODE);
+            }
         }
         return $value;
     }

@@ -71,6 +71,30 @@ abstract class KT_Meta_Model_Base extends KT_Model_Base {
     }
 
     /**
+     * Vrátí buď požadované originální nebo "přeložené" ID pro zadaný post type 
+     * (pozn.: dle aktuálního jazyka + zavislé na pluginu WPML)
+     *
+     * @param string $key
+     * @param string $postType
+     * @return mixed
+     */
+    public function getMetaTranslateId($key, $postType) {
+        $value = $this->getMetaValue($key);
+        if (defined("ICL_LANGUAGE_CODE")) {
+            if (is_array($value)) {
+                $ids = array();
+                foreach ($value as $id) {
+                    array_push($ids, icl_object_id($id, $postType, true, ICL_LANGUAGE_CODE));
+                }
+                return $ids;
+            } else {
+                $value = icl_object_id($value, $postType, true, ICL_LANGUAGE_CODE);
+            }
+        }
+        return $value;
+    }
+
+    /**
      * @deprecated since version 1.3
      * @see getMetaValue
      */
