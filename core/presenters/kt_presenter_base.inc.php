@@ -11,6 +11,7 @@ abstract class KT_Presenter_Base implements KT_Presentable {
     private $model = null;
     private static $currentQueryLoopIndex;
     private static $currentItemsLoopIndex;
+    private static $isFrontPageHome;
 
     public function __construct(KT_Modelable $model = null) {
         kt_check_loaded(); // kontrola KT Frameworku
@@ -58,7 +59,6 @@ abstract class KT_Presenter_Base implements KT_Presentable {
     public static function getCurrentQueryLoopIndex() {
         return self::$currentQueryLoopIndex;
     }
-    
 
     /**
      * Vrátí aktuální číslo v rámci výpisu šablon pomocí @see theQueryLoops
@@ -95,7 +95,22 @@ abstract class KT_Presenter_Base implements KT_Presentable {
     public static function getCurrentItemsLoopNumber() {
         return self::getCurrentItemsLoopIndex() + 1;
     }
-    
+
+    /**
+     * Vrátí označení zda je právě aktivní Front nebo Home page
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @return boolean
+     */
+    public static function getIsFrontPageHome() {
+        if (isset(self::$isFrontPageHome)) {
+            return self::$isFrontPageHome;
+        }
+        return self::$isFrontPageHome = (is_front_page() || is_home());
+    }
+
     // --- veřejné funkce ---------------------
 
     /**
