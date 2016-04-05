@@ -211,6 +211,18 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
     }
 
     /**
+     * Označení, zda je k dispozici, resp. vyplněn popisek
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz 
+     * 
+     * @return boolean
+     */
+    public function isDescription() {
+        return KT::issetAndNotEmpty($this->getDescription());
+    }
+
+    /**
      * Vrátí, zda má term přiřazené některé posty
      * 
      * @author Tomáš Kocifaj
@@ -334,7 +346,7 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
     }
 
     // --- statické funkce ---------
-    
+
     /**
      * Funkcí vrátí všechny parametry příspěvku a to všechny nebo s prefixem
      *
