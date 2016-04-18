@@ -539,8 +539,10 @@ final class KT_WP_Configurator {
             // archivy post typů v menu
             if ($postArchiveMenu === true) {
                 add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
+                add_filter("image_send_to_editor", array($this, "htmlImageLinkClassFilter"), 10, 8);
             } elseif ($postArchiveMenu === false) {
                 add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
+                remove_filter("image_send_to_editor", array($this, "htmlImageLinkClassFilter"), 10, 8);
             }
         } else {
             // (images) lazy loading
@@ -1222,6 +1224,23 @@ final class KT_WP_Configurator {
     }
 
     /**
+     * Zpracování filtru za účelem aplikace css classy na linky pro obrázky
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public function htmlImageLinkClassFilter($html, $id, $caption, $title, $align, $url, $size, $alt = "") {
+        $class = "kt-img-link";
+        if (preg_match('/<a.*? class=".*?">/', $html)) {
+            $html = preg_replace('/(<a.*? class=".*?)(".*?>)/', "$1 {$class}$2", $html);
+        } else {
+            $html = preg_replace('/(<a.*?)>/', "$1 class=\"$class\" >", $html);
+        }
+        return $html;
+    }
+
+    /**
      * Přidání metaboxu pro archivy post typů v menu
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
@@ -1382,7 +1401,7 @@ final class KT_WP_Configurator {
     public static function getThemeSettingSlug() {
         return $baseName = self::THEME_SUBPAGE_PREFIX . self::THEME_SETTING_PAGE_SLUG;
     }
-    
+
     /**
      * Vrátí název WP_Screen base pro (založenou) stránku (KT) WP Cron
      * 

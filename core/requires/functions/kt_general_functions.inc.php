@@ -95,5 +95,3 @@ function kt_wp_before_admin_bar_render_callback() {
         "href" => admin_url("themes.php") . "?page=" . KT_WP_Configurator::THEME_SETTING_PAGE_SLUG,
     ));
 }
-
-
