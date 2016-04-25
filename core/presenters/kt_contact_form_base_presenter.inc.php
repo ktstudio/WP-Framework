@@ -11,9 +11,9 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
     const FORM_ID = "kt-contact-form";
     const PROCESSED_PARAM = "contact-processed";
 
-    private $form;
-    private $fieldset;
-    private $wasProcessed;
+    protected $form;
+    protected $fieldset;
+    protected $wasProcessed;
 
     /**
      * Obecný presenter pro obsluhu kontakního formuláře
