@@ -37,6 +37,7 @@ final class KT_WP_Configurator {
     private $displayLogo = true;
     private $assetsConfigurator = null;
     private $imagesLazyLoading = null;
+    private $imagesLinkClasses = null;
     private $postArchiveMenu = null;
     private $allowSession = false;
     private $allowCookieStatement = false;
@@ -154,6 +155,13 @@ final class KT_WP_Configurator {
     /**
      * @return boolean
      */
+    private function getImagesLinkClasses() {
+        return $this->imagesLinkClasses;
+    }
+
+    /**
+     * @return boolean
+     */
     private function getPostArchiveMenu() {
         return $this->postArchiveMenu;
     }
@@ -191,7 +199,7 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * 
+     *
      * @return boolean
      */
     public function getEmojiSwitch() {
@@ -202,10 +210,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví KT_WP_Metabox_Remover_Configurátor do objektu
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param KT_WP_Metabox_Remover_Configurator $metaboxRemover
      * @return \KT_WP_Configurator
      */
@@ -217,10 +225,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví KT_WP_Page_Remover_Configurator do objektu
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param KT_WP_Page_Remover_Configurator $pageRemover
      * @return \KT_WP_Configurator
      */
@@ -232,10 +240,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví KT_WP_Widget_Remover_Configurator do objektu
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param KT_WP_Widget_Remover_Configurator $widgetRemover
      * @return \KT_WP_Configurator
      */
@@ -246,10 +254,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví KT_WP_Head_Remover_Configurator do objektu
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param KT_WP_Head_Remover_Configurator $headRemover
      * @return \KT_WP_Configurator
      */
@@ -337,10 +345,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví KT_WP_Asset_Configurator do objektu
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param \KT_WP_Asset_Configurator $assetsConfigurator
      * @return \KT_WP_Configurator
      */
@@ -351,10 +359,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví, zda se má v rámci šablony zapnout SESSION pro WP
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param boolean $allowSession
      * @return \KT_WP_Configurator
      */
@@ -376,10 +384,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví, zda se má v rámci šablony zapnout odsouhlasení cookie
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param boolean $allowCookieStatement
      * @return \KT_WP_Configurator
      */
@@ -404,12 +412,23 @@ final class KT_WP_Configurator {
 
     /**
      * Aktivace automatické aplikace lazy loadingu na obrázky pomocí skriptu unveil
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
     public function setImagesLazyLoading($imagesLazyLoading) {
         $this->imagesLazyLoading = $imagesLazyLoading;
+        return $this;
+    }
+
+    /**
+     * Aktivace aplikace (css) class na odkazy obrázků při editaci v administraci
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public function setImagesLinkClasses($imagesLinkClasses) {
+        $this->imagesLinkClasses = $imagesLinkClasses;
         return $this;
     }
 
@@ -539,9 +558,14 @@ final class KT_WP_Configurator {
             // archivy post typů v menu
             if ($postArchiveMenu === true) {
                 add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
-                add_filter("image_send_to_editor", array($this, "htmlImageLinkClassFilter"), 10, 8);
             } elseif ($postArchiveMenu === false) {
                 add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
+            }
+            // (iamges) link classes
+            $imageLinkClass = $this->getImagesLinkClasses();
+            if ($imageLinkClass === true) {
+                add_filter("image_send_to_editor", array($this, "htmlImageLinkClassFilter"), 10, 8);
+            } elseif ($imageLinkClass === false) {
                 remove_filter("image_send_to_editor", array($this, "htmlImageLinkClassFilter"), 10, 8);
             }
         } else {
