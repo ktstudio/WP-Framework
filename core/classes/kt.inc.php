@@ -1360,7 +1360,7 @@ class KT {
      * @param array $tags [$tag => $wildcard]
      * @return string
      */
-    public static function stringLineFormat($text, array $tags = null) {
+    public static function stringLineFormat($text, array $tags = array()) {
         if (self::issetAndNotEmpty($text)) {
             foreach ($tags as $tag => $wildcard) {
                 $text = str_replace($tag, $wildcard, $text);
