@@ -84,11 +84,11 @@ abstract class KT_Meta_Model_Base extends KT_Model_Base {
             if (is_array($value)) {
                 $ids = array();
                 foreach ($value as $id) {
-                    array_push($ids, icl_object_id($id, $postType, true, ICL_LANGUAGE_CODE));
+                    array_push($ids, wpml_object_id_filter($id, $postType, true, ICL_LANGUAGE_CODE));
                 }
                 return $ids;
             } else {
-                $value = icl_object_id($value, $postType, true, ICL_LANGUAGE_CODE);
+                $value = wpml_object_id_filter($value, $postType, true, ICL_LANGUAGE_CODE);
             }
         }
         return $value;
