@@ -130,7 +130,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      * @link http://www.ktstudio.cz
      */
     public function process() {
-        if (KT::arrayIssetAndNotEmpty($_POST)) {
+        if (KT::arrayIssetAndNotEmpty($_POST) && array_key_exists(KT_Contact_Form_Base_Config::FORM_PREFIX, $_POST)) {
             $form = $this->getForm();
             if (!$form->nonceValidate()) {
                 wp_die(__("Chyba zpracování zdrojové adresy...", "KT_CORE_DOMAIN"));
