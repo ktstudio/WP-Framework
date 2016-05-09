@@ -29,10 +29,13 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
      * @return mixed
      */
     public function __call($functionName, array $attributes) {
-        $constValue = $this->getConstantValue($functionName);
-
-        if (KT::issetAndNotEmpty($constValue)) {
-            return $this->getOption($constValue);
+        $autoIsserKey = $this->getAutoIsserKey($functionName);
+        if (KT::issetAndNotEmpty($autoIsserKey)) {
+            return KT::issetAndNotEmpty($this->getOption($autoIsserKey));
+        }
+        $autoGetterKey = $this->getAutoGetterKey($functionName);
+        if (KT::issetAndNotEmpty($autoGetterKey)) {
+            return $this->getOption($autoGetterKey);
         }
     }
 

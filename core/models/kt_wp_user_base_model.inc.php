@@ -37,10 +37,13 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @return mixed
      */
     public function __call($functionName, array $attributes) {
-        $constValue = $this->getConstantValue($functionName);
-
-        if (KT::issetAndNotEmpty($constValue)) {
-            return $this->getMetaValue($constValue);
+        $autoIsserKey = $this->getAutoIsserKey($functionName);
+        if (KT::issetAndNotEmpty($autoIsserKey)) {
+            return KT::issetAndNotEmpty($this->getMetaValue($autoIsserKey));
+        }
+        $autoGetterKey = $this->getAutoGetterKey($functionName);
+        if (KT::issetAndNotEmpty($autoGetterKey)) {
+            return $this->getMetaValue($autoGetterKey);
         }
     }
 

@@ -63,10 +63,13 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
      * @return mixed
      */
     public function __call($functionName, array $attributes) {
-        $constValue = $this->getConstantValue($functionName);
-
-        if (KT::issetAndNotEmpty($constValue)) {
-            return $this->getMetaValue($constValue);
+        $autoIsserKey = $this->getAutoIsserKey($functionName);
+        if (KT::issetAndNotEmpty($autoIsserKey)) {
+            return KT::issetAndNotEmpty($this->getMetaValue($autoIsserKey));
+        }
+        $autoGetterKey = $this->getAutoGetterKey($functionName);
+        if (KT::issetAndNotEmpty($autoGetterKey)) {
+            return $this->getMetaValue($autoGetterKey);
         }
     }
 
