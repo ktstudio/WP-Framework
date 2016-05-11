@@ -95,3 +95,16 @@ function kt_wp_before_admin_bar_render_callback() {
         "href" => admin_url("themes.php") . "?page=" . KT_WP_Configurator::THEME_SETTING_PAGE_SLUG,
     ));
 }
+
+add_action("wp_ajax_kt_load_cookie_statement_content", "kt_load_cookie_statement_content_callback");
+add_action("wp_ajax_nopriv_kt_load_cookie_statement_content", "kt_load_cookie_statement_content_callback");
+
+/**
+ * Funce zajistí načtení, resp. vrácení cookie statement obsahu ajaxem
+ * 
+ * @author Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ */
+function kt_load_cookie_statement_content_callback() {
+    die(KT_WP_Configurator::getCookieStatementHtml());
+}

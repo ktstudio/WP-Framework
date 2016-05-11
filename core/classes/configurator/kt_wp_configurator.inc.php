@@ -1392,6 +1392,17 @@ final class KT_WP_Configurator {
      * @link http://www.ktstudio.cz
      */
     public function renderCookieStatement() {
+        echo "<div id=\"ktCookieStatementContainer\"></div>";
+    }
+
+    /**
+     * Vrátí obsah proužku s potvrzením cookie (v patičce)
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public static function getCookieStatementHtml() {
         $cookueStatementKey = KT::arrayTryGetValue($_COOKIE, self::COOKIE_STATEMENT_KEY);
         if (KT::notIssetOrEmpty($cookueStatementKey)) {
             $text = __("Tyto stránky využívají Cookies. Používáním těchto stránek vyjadřujete souhlas s používáním Cookies.", "KT_CORE_DOMAIN");
@@ -1399,17 +1410,17 @@ final class KT_WP_Configurator {
             $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
             $confirmTitle = __("OK, rozumím", "KT_CORE_DOMAIN");
 
-            $content = "<span id=\"ktCookieStatementText\">$text</span>";
-            $content .= "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
-            $content .= "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
+            $html = "<span id=\"ktCookieStatementText\">$text</span>";
+            $html .= "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
+            $html .= "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
 
-            echo "<!-- ktcookiestatement W3TC_DYNAMIC_SECURITY -->";
-            echo "<div id=\"ktCookieStatement\">";
-            echo apply_filters("kt_cookie_statement_content_filter", $content);
-            echo "</div>";
-            echo "<noscript><style scoped>#ktCookieStatement { display:none; }</style></noscript>";
-            echo "<!-- /ktcookiestatement W3TC_DYNAMIC_SECURITY -->";
+            $content = apply_filters("kt_cookie_statement_content_filter", $html);
+            
+            $output = "<div id=\"ktCookieStatement\">$content</div>";
+            $output .= "<noscript><style scoped>#ktCookieStatement { display:none; }</style></noscript>";
+            return $output;
         }
+        return null;
     }
 
     // --- statické funkce --------------
