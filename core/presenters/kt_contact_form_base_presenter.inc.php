@@ -52,7 +52,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      * @return \KT_Form
      */
     public function getForm() {
-        if (KT::issetAndNotEmpty($this->form)) {
+        if (isset($this->form)) {
             return $this->form;
         }
         return $this->initForm();
@@ -67,7 +67,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      * @return \KT_Form_Fieldset
      */
     public function getFieldset() {
-        if (KT::issetAndNotEmpty($this->fieldset)) {
+        if (isset($this->fieldset)) {
             return $this->fieldset;
         }
         return $this->initFieldset();
