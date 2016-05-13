@@ -39,6 +39,7 @@ final class KT_WP_Configurator {
     private $imagesLazyLoading = null;
     private $imagesLinkClasses = null;
     private $postArchiveMenu = null;
+    private $postsArchiveSlug = null;
     private $allowSession = false;
     private $allowCookieStatement = false;
     private $facebookManager = null;
@@ -164,6 +165,13 @@ final class KT_WP_Configurator {
      */
     private function getPostArchiveMenu() {
         return $this->postArchiveMenu;
+    }
+
+    /**
+     * @return string
+     */
+    private function getPostsArchiveSlug() {
+        return $this->postsArchiveSlug;
     }
 
     /**
@@ -411,6 +419,20 @@ final class KT_WP_Configurator {
     }
 
     /**
+     * Aktivace archivu pro příspěvky na základě vlastního slugu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $postsArchiveSlug
+     * @return \KT_WP_Configurator
+     */
+    public function setPostsArchiveSlug($postsArchiveSlug = "blog") {
+        $this->postsArchiveSlug = $postsArchiveSlug;
+        return $this;
+    }
+
+    /**
      * Aktivace automatické aplikace lazy loadingu na obrázky pomocí skriptu unveil
      *
      * @author Martin Hlaváč
@@ -553,6 +575,9 @@ final class KT_WP_Configurator {
             add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"), 10);
         } elseif ($postArchiveMenu === false) {
             add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"), 10);
+        }
+        if (KT::issetAndNotEmpty($this->getPostsArchiveSlug())) {
+            add_action("init", array($this, "addPostsArchiveDefinitionRewrite"));
         }
         if (is_admin()) {
             // archivy post typů v menu
@@ -1350,6 +1375,22 @@ final class KT_WP_Configurator {
         }
         return $items;
     }
+    
+    /**
+     * Provede inicializaci definice post typu a rewritu pro archiv příspěvků
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public function addPostsArchiveDefinitionRewrite() {
+        global $wp_post_types;
+        
+        $wp_post_types["post"]->has_archive = $this->getPostsArchiveSlug();
+        $wp_post_types["post"]->rewrite = array("with_front" => true, "feeds" => false);
+        
+        add_rewrite_rule("{$this->getPostsArchiveSlug()}/?$", sprintf("index.php?post_type=%s", KT_WP_POST_KEY), "top");
+    }
 
     /**
      * Provede inicializaci facebook modulu a výpíše OG tagy do hlavičky webu
@@ -1415,7 +1456,7 @@ final class KT_WP_Configurator {
             $html .= "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
 
             $content = apply_filters("kt_cookie_statement_content_filter", $html);
-            
+
             $output = "<div id=\"ktCookieStatement\">$content</div>";
             $output .= "<noscript><style scoped>#ktCookieStatement { display:none; }</style></noscript>";
             return $output;
