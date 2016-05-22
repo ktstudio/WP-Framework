@@ -29,7 +29,7 @@ class KT_Mailer {
      * @throws invalidArgumentException
      */
     public function __construct($recipientEmail, $recipientName = null, $subject = null) {
-        $this->setRecipients($recipientEmail, $recipientName)->setSubject($subject);
+        $this->setRecipient($recipientEmail, $recipientName)->setSubject($subject);
     }
 
     // --- gettery -------------------------
@@ -128,7 +128,7 @@ class KT_Mailer {
     }
 
     /**
-     * Nastaví příjemce emailu - nepřidá, pouze setne
+     * Nastaví jednoho příjemce emailu - nepřidá, pouze setne
      * Provede validaci emailové adresy
      * 
      * @author Tomáš Kocifaj
@@ -139,12 +139,21 @@ class KT_Mailer {
      * @return \KT_Mailer
      * @throws InvalidArgumentException
      */
-    public function setRecipients($recipientEmail, $recipientName = null) {
+    public function setRecipient($recipientEmail, $recipientName = null) {
         if (self::isEmail($recipientEmail)) {
             $this->recipients = self::getHeaderEmail($recipientEmail, $recipientName);
             return $this;
         }
         throw new InvalidArgumentException(sprintf(__("Příjemce \"%s\" není platnný e-mail!", "KT_CORE_DOMAIN"), $recipientEmail));
+    }
+
+    /**
+     * @deprecated since version 1.8
+     * @see setRecipient
+     * @see addRecipient
+     */
+    public function setRecipients($recipientEmail, $recipientName = null) {
+        $this->setRecipient($recipientEmail, $recipientName);
     }
 
     /**
@@ -260,7 +269,7 @@ class KT_Mailer {
         if (self::isEmail($recipientEmail)) {
             $recipients = $this->getRecipients();
             $recipients .= "; " . self::getHeaderEmail($recipientEmail, $recipientName);
-            $this->setRecipients($recipients);
+            $this->recipients = $recipients;
             return $this;
         }
         throw new InvalidArgumentException(sprintf(__("Příjmence \"%s\" není platnný e-mail!", "KT_CORE_DOMAIN"), $recipientEmail));

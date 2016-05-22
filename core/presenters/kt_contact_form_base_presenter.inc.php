@@ -11,9 +11,9 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
     const FORM_ID = "kt-contact-form";
     const PROCESSED_PARAM = "contact-processed";
 
-    private $form;
-    private $fieldset;
-    private $wasProcessed;
+    protected $form;
+    protected $fieldset;
+    protected $wasProcessed;
 
     /**
      * Obecný presenter pro obsluhu kontakního formuláře
@@ -52,7 +52,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      * @return \KT_Form
      */
     public function getForm() {
-        if (KT::issetAndNotEmpty($this->form)) {
+        if (isset($this->form)) {
             return $this->form;
         }
         return $this->initForm();
@@ -67,7 +67,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      * @return \KT_Form_Fieldset
      */
     public function getFieldset() {
-        if (KT::issetAndNotEmpty($this->fieldset)) {
+        if (isset($this->fieldset)) {
             return $this->fieldset;
         }
         return $this->initFieldset();
@@ -130,7 +130,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
      * @link http://www.ktstudio.cz
      */
     public function process() {
-        if (KT::arrayIssetAndNotEmpty($_POST)) {
+        if (KT::arrayIssetAndNotEmpty($_POST) && array_key_exists(KT_Contact_Form_Base_Config::FORM_PREFIX, $_POST)) {
             $form = $this->getForm();
             if (!$form->nonceValidate()) {
                 wp_die(__("Chyba zpracování zdrojové adresy...", "KT_CORE_DOMAIN"));

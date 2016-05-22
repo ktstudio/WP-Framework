@@ -51,10 +51,10 @@ class KT_Contact_Form_Base_Config {
 
         $fieldset->addText(self::EMAIL, __("E-mail*:", "KT_CORE_DOMAIN"))
                 ->setPlaceholder(__("E-mail*", "KT_CORE_DOMAIN"))
-                ->addAttribute("maxlength", 50)
+                ->addAttribute("maxlength", 100)
                 ->addRule(KT_Field_Validator::REQUIRED, __("E-mail je povinná položka", "KT_CORE_DOMAIN"))
                 ->addRule(KT_Field_Validator::EMAIL, __("E-mail je ve špatném tvaru", "KT_CORE_DOMAIN"))
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("E-mail může mít maximálně 50 znaků", "KT_CORE_DOMAIN"), 50);
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("E-mail může mít maximálně 100 znaků", "KT_CORE_DOMAIN"), 100);
 
         $phoneField = $fieldset->addText(self::PHONE, __("Telefon*:", "KT_CORE_DOMAIN"))
                 ->setPlaceholder(__("Telefon*", "KT_CORE_DOMAIN"))

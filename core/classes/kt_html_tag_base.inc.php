@@ -233,11 +233,10 @@ abstract class KT_HTML_Tag_Base {
      * 
      * @return array
      */
-    private function getClasses() {
+    protected function getClasses() {
         if (array_key_exists(self::CLASS_KEY, $this->getAttributes())) {
             return $this->attributes[self::CLASS_KEY];
         }
-
         return array();
     }
 

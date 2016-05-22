@@ -2,94 +2,121 @@
 
 /**
  * Společný základ pro všechny modely
- * 
+ *
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
 abstract class KT_Model_Base implements KT_Modelable {
 
-    const MAGIC_GETTER_KEY = "get";
+    const MAGIC_ISSER_PREFIX = "is";
+    const MAGIC_GETTER_PREFIX = "get";
 
     /**
-     * Vytvoří jméno constanty na základě názvu funkce a to tak, že rozdělí
-     * string na základě velkých písmen, vloží mezi slovo podtržítka a převed vše na velké písmena.
-     * 
+     * Vytvoří jméno constanty na základě názvu funkce a to tak, že rozdělí string
+     * na základě velkých písmen, vloží mezi slovo podtržítka a převed vše na velké písmena.
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $functionName
      * @return string
      */
-    protected function getConstantFromFunctionName($functionName) {
-
+    protected function getConstantNameFromFunction($functionName) {
         if (KT::notIssetOrEmpty($functionName)) {
             return null;
         }
-
         $parts = preg_split('/(?=[A-Z])/', $functionName, -1, PREG_SPLIT_NO_EMPTY);
         unset($parts[0]);
         $constantName = strtoupper(implode($parts, "_"));
-
         return $constantName;
     }
 
     /**
      * Vytvoří název configu, který odpovídá volanému modelu.
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
-     * @return type
+     *
+     * @return string
      */
-    protected function getConfigFromModelName() {
+    protected function getConfigNameFromModel() {
         return $configName = str_replace("Model", "Config", get_called_class());
     }
 
     /**
-     * Metoda prověří, zda se jedná o funkci, která začíná znaky "get" pokud ano
-     * provede vyčtení příslušné hodnoty constanty a vrátí její hodnotu na základě
-     * volané třídy.
-     * 
+     * Metoda prověří, zda se jedná o funkci, která začíná znaky "is" pokud ano provede
+     * vyčtení příslušné hodnoty constanty a vrátí její hodnotu na základě volané třídy.
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $functionName
+     * @return string
+     * @throws KT_Not_Exist_Config_Constant_Exception
+     */
+    protected function getAutoIsserKey($functionName) {
+        return $this->getAutoMethodKey($functionName, self::MAGIC_ISSER_PREFIX);
+    }
+
+    /**
+     * Metoda prověří, zda se jedná o funkci, která začíná znaky "get" pokud ano provede
+     * vyčtení příslušné hodnoty constanty a vrátí její hodnotu na základě volané třídy.
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
+     * @param string $functionName
      * @return string
+     * @throws KT_Not_Exist_Config_Constant_Exception
      */
-    protected function getConstantValue($functionName) {
-        
-        $firstChars = substr($functionName, 0, 3);
+    protected function getAutoGetterKey($functionName) {
+        return $this->getAutoMethodKey($functionName, self::MAGIC_GETTER_PREFIX);
+    }
 
-        if ($firstChars != self::MAGIC_GETTER_KEY) {
+    /**
+     * Metoda prověří, zda se jedná o funkci, která začíná zadaným prefixem a pokud ano, tak provede
+     * vyčtení příslušné hodnoty constanty a vrátí její hodnotu na základě volané třídy.
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $functionName
+     * @param string $prefix
+     * @return string
+     * @throws KT_Not_Exist_Config_Constant_Exception
+     */
+    private function getAutoMethodKey($functionName, $prefix) {
+        $firstChars = substr($functionName, 0, strlen($prefix));
+        if ($firstChars !== $prefix) {
             return null;
         }
 
         if (method_exists($this, $functionName)) {
             return null;
         }
-        
-        $configName = $this->getConfigFromModelName();
-        
-        if(!class_exists($configName)){
+
+        $configName = $this->getConfigNameFromModel();
+        if (!class_exists($configName)) {
             return null;
         }
 
-        $classRef = new ReflectionClass($configName);
-        $constantName = $this->getConstantFromFunctionName($functionName);
-
+        $reflectionClass = new ReflectionClass($configName);
+        $constantName = $this->getConstantNameFromFunction($functionName);
         if (KT::notIssetOrEmpty($constantName)) {
             throw new KT_Not_Exist_Config_Constant_Exception($constantName);
         }
 
-        return $constValue = $classRef->getConstant($constantName);
+        $constantValue = $reflectionClass->getConstant($constantName);
+        return $constantValue;
     }
 
     /**
-     * Vypíše (HTML) hodnotu, pokud je zadána a to dle zadaných parametrů 
+     * Vypíše (HTML) hodnotu, pokud je zadána a to dle zadaných parametrů
      * (tzn. případně vč. tagu. labelu, itemprop a class)
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param mixed $value
      * @param string $tag
      * @param string $itemprop

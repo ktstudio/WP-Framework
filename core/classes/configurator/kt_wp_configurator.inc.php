@@ -37,7 +37,9 @@ final class KT_WP_Configurator {
     private $displayLogo = true;
     private $assetsConfigurator = null;
     private $imagesLazyLoading = null;
+    private $imagesLinkClasses = null;
     private $postArchiveMenu = null;
+    private $postsArchiveSlug = null;
     private $allowSession = false;
     private $allowCookieStatement = false;
     private $facebookManager = null;
@@ -154,8 +156,22 @@ final class KT_WP_Configurator {
     /**
      * @return boolean
      */
+    private function getImagesLinkClasses() {
+        return $this->imagesLinkClasses;
+    }
+
+    /**
+     * @return boolean
+     */
     private function getPostArchiveMenu() {
         return $this->postArchiveMenu;
+    }
+
+    /**
+     * @return string
+     */
+    private function getPostsArchiveSlug() {
+        return $this->postsArchiveSlug;
     }
 
     /**
@@ -191,7 +207,7 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * 
+     *
      * @return boolean
      */
     public function getEmojiSwitch() {
@@ -202,10 +218,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví KT_WP_Metabox_Remover_Configurátor do objektu
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param KT_WP_Metabox_Remover_Configurator $metaboxRemover
      * @return \KT_WP_Configurator
      */
@@ -217,10 +233,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví KT_WP_Page_Remover_Configurator do objektu
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param KT_WP_Page_Remover_Configurator $pageRemover
      * @return \KT_WP_Configurator
      */
@@ -232,10 +248,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví KT_WP_Widget_Remover_Configurator do objektu
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param KT_WP_Widget_Remover_Configurator $widgetRemover
      * @return \KT_WP_Configurator
      */
@@ -246,10 +262,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví KT_WP_Head_Remover_Configurator do objektu
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param KT_WP_Head_Remover_Configurator $headRemover
      * @return \KT_WP_Configurator
      */
@@ -337,10 +353,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví KT_WP_Asset_Configurator do objektu
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param \KT_WP_Asset_Configurator $assetsConfigurator
      * @return \KT_WP_Configurator
      */
@@ -351,10 +367,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví, zda se má v rámci šablony zapnout SESSION pro WP
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param boolean $allowSession
      * @return \KT_WP_Configurator
      */
@@ -376,10 +392,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví, zda se má v rámci šablony zapnout odsouhlasení cookie
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param boolean $allowCookieStatement
      * @return \KT_WP_Configurator
      */
@@ -403,13 +419,38 @@ final class KT_WP_Configurator {
     }
 
     /**
+     * Aktivace archivu pro příspěvky na základě vlastního slugu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $postsArchiveSlug
+     * @return \KT_WP_Configurator
+     */
+    public function setPostsArchiveSlug($postsArchiveSlug = "blog") {
+        $this->postsArchiveSlug = $postsArchiveSlug;
+        return $this;
+    }
+
+    /**
      * Aktivace automatické aplikace lazy loadingu na obrázky pomocí skriptu unveil
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
     public function setImagesLazyLoading($imagesLazyLoading) {
         $this->imagesLazyLoading = $imagesLazyLoading;
+        return $this;
+    }
+
+    /**
+     * Aktivace aplikace (css) class na odkazy obrázků při editaci v administraci
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public function setImagesLinkClasses($imagesLinkClasses) {
+        $this->imagesLinkClasses = $imagesLinkClasses;
         return $this;
     }
 
@@ -535,12 +576,22 @@ final class KT_WP_Configurator {
         } elseif ($postArchiveMenu === false) {
             add_filter("wp_get_nav_menu_items", array($this, "postArchivesMenuFilter"), 10);
         }
+        if (KT::issetAndNotEmpty($this->getPostsArchiveSlug())) {
+            add_action("init", array($this, "addPostsArchiveDefinitionRewrite"));
+        }
         if (is_admin()) {
             // archivy post typů v menu
             if ($postArchiveMenu === true) {
                 add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
             } elseif ($postArchiveMenu === false) {
                 add_action("admin_head-nav-menus.php", array($this, "addPostArchivesMenuMetaBox"));
+            }
+            // (iamges) link classes
+            $imageLinkClass = $this->getImagesLinkClasses();
+            if ($imageLinkClass === true) {
+                add_filter("image_send_to_editor", array($this, "htmlImageLinkClassFilter"), 10, 8);
+            } elseif ($imageLinkClass === false) {
+                remove_filter("image_send_to_editor", array($this, "htmlImageLinkClassFilter"), 10, 8);
             }
         } else {
             // (images) lazy loading
@@ -1222,6 +1273,23 @@ final class KT_WP_Configurator {
     }
 
     /**
+     * Zpracování filtru za účelem aplikace css classy na linky pro obrázky
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public function htmlImageLinkClassFilter($html, $id, $caption, $title, $align, $url, $size, $alt = "") {
+        $class = "kt-img-link";
+        if (preg_match('/<a.*? class=".*?">/', $html)) {
+            $html = preg_replace('/(<a.*? class=".*?)(".*?>)/', "$1 {$class}$2", $html);
+        } else {
+            $html = preg_replace('/(<a.*?)>/', "$1 class=\"$class\" >", $html);
+        }
+        return $html;
+    }
+
+    /**
      * Přidání metaboxu pro archivy post typů v menu
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
@@ -1307,6 +1375,22 @@ final class KT_WP_Configurator {
         }
         return $items;
     }
+    
+    /**
+     * Provede inicializaci definice post typu a rewritu pro archiv příspěvků
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public function addPostsArchiveDefinitionRewrite() {
+        global $wp_post_types;
+        
+        $wp_post_types["post"]->has_archive = $this->getPostsArchiveSlug();
+        $wp_post_types["post"]->rewrite = array("with_front" => true, "feeds" => false);
+        
+        add_rewrite_rule("{$this->getPostsArchiveSlug()}/?$", sprintf("index.php?post_type=%s", KT_WP_POST_KEY), "top");
+    }
 
     /**
      * Provede inicializaci facebook modulu a výpíše OG tagy do hlavičky webu
@@ -1349,6 +1433,17 @@ final class KT_WP_Configurator {
      * @link http://www.ktstudio.cz
      */
     public function renderCookieStatement() {
+        echo "<div id=\"ktCookieStatementContainer\"></div>";
+    }
+
+    /**
+     * Vrátí obsah proužku s potvrzením cookie (v patičce)
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public static function getCookieStatementHtml() {
         $cookueStatementKey = KT::arrayTryGetValue($_COOKIE, self::COOKIE_STATEMENT_KEY);
         if (KT::notIssetOrEmpty($cookueStatementKey)) {
             $text = __("Tyto stránky využívají Cookies. Používáním těchto stránek vyjadřujete souhlas s používáním Cookies.", "KT_CORE_DOMAIN");
@@ -1356,17 +1451,17 @@ final class KT_WP_Configurator {
             $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
             $confirmTitle = __("OK, rozumím", "KT_CORE_DOMAIN");
 
-            $content = "<span id=\"ktCookieStatementText\">$text</span>";
-            $content .= "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
-            $content .= "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
+            $html = "<span id=\"ktCookieStatementText\">$text</span>";
+            $html .= "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
+            $html .= "<span id=\"ktCookieStatementConfirm\">$confirmTitle</span>";
 
-            echo "<!-- ktcookiestatement W3TC_DYNAMIC_SECURITY -->";
-            echo "<div id=\"ktCookieStatement\">";
-            echo apply_filters("kt_cookie_statement_content_filter", $content);
-            echo "</div>";
-            echo "<noscript><style scoped>#ktCookieStatement { display:none; }</style></noscript>";
-            echo "<!-- /ktcookiestatement W3TC_DYNAMIC_SECURITY -->";
+            $content = apply_filters("kt_cookie_statement_content_filter", $html);
+
+            $output = "<div id=\"ktCookieStatement\">$content</div>";
+            $output .= "<noscript><style scoped>#ktCookieStatement { display:none; }</style></noscript>";
+            return $output;
         }
+        return null;
     }
 
     // --- statické funkce --------------
@@ -1382,7 +1477,7 @@ final class KT_WP_Configurator {
     public static function getThemeSettingSlug() {
         return $baseName = self::THEME_SUBPAGE_PREFIX . self::THEME_SETTING_PAGE_SLUG;
     }
-    
+
     /**
      * Vrátí název WP_Screen base pro (založenou) stránku (KT) WP Cron
      * 

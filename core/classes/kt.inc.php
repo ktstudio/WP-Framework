@@ -1351,6 +1351,26 @@ class KT {
     }
 
     /**
+     * Provede aplikaci (nových HTML) řádků na zadaný text včetně náhrady případných tagů za zastupné
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $text
+     * @param array $tags [$tag => $wildcard]
+     * @return string
+     */
+    public static function stringLineFormat($text, array $tags = array()) {
+        if (self::issetAndNotEmpty($text)) {
+            foreach ($tags as $tag => $wildcard) {
+                $text = str_replace($tag, $wildcard, $text);
+            }
+            return nl2br($text);
+        }
+        return null;
+    }
+
+    /**
      * Na základě zadaného pole hodnot vrátí odpovídající SQL placeholdery jako string 
      * Pozn. vhodné pro @see WPDB a prepare IN
      * 

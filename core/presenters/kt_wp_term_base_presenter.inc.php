@@ -26,7 +26,7 @@ class KT_WP_Term_Base_Presenter extends KT_Presenter_Base {
              * Kvůli zpětné kompatibilitě, časem bude zrušeno -> používejte modely...
              */
             if (KT::issetAndNotEmpty($item)) {
-                parent::__construct(new KT_WP_Term_Base_Model($item));
+                parent::__construct(new KT_WP_Term_Base_Model($item, $taxonomy));
             } else {
                 parent::__construct(new KT_WP_Term_Base_Model(get_queried_object()));
             }

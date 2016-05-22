@@ -29,10 +29,13 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
      * @return mixed
      */
     public function __call($functionName, array $attributes) {
-        $constValue = $this->getConstantValue($functionName);
-
-        if (KT::issetAndNotEmpty($constValue)) {
-            return $this->getOption($constValue);
+        $autoIsserKey = $this->getAutoIsserKey($functionName);
+        if (KT::issetAndNotEmpty($autoIsserKey)) {
+            return KT::issetAndNotEmpty($this->getOption($autoIsserKey));
+        }
+        $autoGetterKey = $this->getAutoGetterKey($functionName);
+        if (KT::issetAndNotEmpty($autoGetterKey)) {
+            return $this->getOption($autoGetterKey);
         }
     }
 
@@ -164,7 +167,15 @@ class KT_WP_Options_Base_Model extends KT_Model_Base {
     public function getOptionTranslateId($name, $postType) {
         $value = $this->getOption($name);
         if (defined("ICL_LANGUAGE_CODE")) {
-            $value = icl_object_id($value, $postType, true, ICL_LANGUAGE_CODE);
+            if (is_array($value)) {
+                $ids = array();
+                foreach ($value as $id) {
+                    array_push($ids, wpml_object_id_filter($id, $postType, true, ICL_LANGUAGE_CODE));
+                }
+                return $ids;
+            } else {
+                $value = wpml_object_id_filter($value, $postType, true, ICL_LANGUAGE_CODE);
+            }
         }
         return $value;
     }

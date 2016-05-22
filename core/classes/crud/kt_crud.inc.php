@@ -650,7 +650,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
             $value = $column->getValue();
 
             $isNullable = $column->getNullable();
-            if ($value == null && !$isNullable) {
+            if (is_null($value) && !$isNullable) {
                 continue; // může "zachránit", resp. vyřešit výchozí hodnota v DB
             }
             if ($isNullable && $value == "") {

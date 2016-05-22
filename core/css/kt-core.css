@@ -11,7 +11,7 @@ img.kt-loading-image
     margin: 0 10px;
 }
 
-.kt-custom-screen-page > h2
+#wpbody-content .kt-custom-screen-page > h2
 {
     background: #222;
     color: #fff;
@@ -20,49 +20,49 @@ img.kt-loading-image
     font-size: 15px;
 }
 
-.kt-custom-screen-page div.updated
+#wpbody-content .kt-custom-screen-page div.updated
 {
     margin-top: 15px;
 }
 
-.kt-custom-screen-page table.wp-list-table
+#wpbody-content .kt-custom-screen-page table.wp-list-table
 {
     margin-top: 15px;
 }
 
-.kt-custom-screen-page table.wp-list-table tr.updated
+#wpbody-content .kt-custom-screen-page table.wp-list-table tr.updated
 {
     background-color: #DAFF75;
 }
 
-.kt-custom-screen-page table.wp-list-table tr td
+#wpbody-content .kt-custom-screen-page table.wp-list-table tr td
 {
     vertical-align: middle;
 }
 
-.kt-custom-screen-page table.wp-list-table tr td .id-link
+#wpbody-content .kt-custom-screen-page table.wp-list-table tr td .id-link
 {
     display: inline-block;
     margin-right: 10px;
 }
 
-.kt-custom-screen-page table.wp-list-table .row-actions .delete-row
+#wpbody-content .kt-custom-screen-page table.wp-list-table .row-actions .delete-row
 {
     color: #a00;
     cursor: pointer;
 }
 
-.kt-custom-screen-page table.wp-list-table .row-actions .delete-row:hover
+#wpbody-content .kt-custom-screen-page table.wp-list-table .row-actions .delete-row:hover
 {
     color: red;
 }
 
-.kt-custom-screen-page #addCrudButtonList
+#wpbody-content .kt-custom-screen-page #addCrudButtonList
 {
     margin-top: 15px;
 }
 
-.kt-custom-screen-page table.wp-list-table span.dashicons-menu
+#wpbody-content .kt-custom-screen-page table.wp-list-table span.dashicons-menu
 {
     cursor: n-resize;
 }
