@@ -14,4 +14,4 @@ Třetí strany:
 - [Magnific Popup](http://dimsemenov.com/plugins/magnific-popup/)
 - [Chosen Multi Select](http://harvesthq.github.io/chosen/)
 
-Copyright © [KTStudio.cz](http://www.ktstudio.cz/) 2014-2015
+Copyright © [KTStudio.cz](http://www.ktstudio.cz/) 2014-2016
