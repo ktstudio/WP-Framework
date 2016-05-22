@@ -177,14 +177,15 @@ class KT_Admin_Columns {
             self::INDEX_PARAM_KEY => null,
         );
         $this->columns[$key] = array_merge($defaults, $args);
-
         if ($this->columns[$key][self::SORTABLE_PARAM_KEY]) {
             $this->sortableColumns[$key] = $this->columns[$key];
         }
+        return $this;
     }
 
     public function removeColumn($key) {
         $this->removeColumns[] = $key;
+        return $this;
     }
 
 }
