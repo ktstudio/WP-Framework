@@ -1190,7 +1190,7 @@ class KT {
                     self::theTabsIndent(1, "<li $latestClass><a href='" . get_pagenum_link($pages) . "'>&raquo;</a></li>", true);
                 }
 
-                self::theTabsIndent(0, "</div>", true, true);
+                self::theTabsIndent(0, "</ul>", true, true);
             }
         }
     }
