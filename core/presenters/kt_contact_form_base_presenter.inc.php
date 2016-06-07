@@ -166,7 +166,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
         echo $form->getFormHeader();
         echo $form->getInputsToSimpleHtml();
         echo "<button type=\"submit\" class=\"{$form->getButtonClass()}\">{$form->getButtonValue()}</button>";
-        echo "</form>";
+        echo $form->getFormFooter();
     }
 
     /**
@@ -279,13 +279,14 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
 
             if (KT::issetAndNotEmpty($fullName) && KT::issetAndNotEmpty($email) && KT::issetAndNotEmpty($phone) && KT::issetAndNotEmpty($message) && is_email($email)) {
                 $ktWpInfo = new KT_WP_Info();
+                $requestUrl = KT::getRequestUrl();
+                $requestLink = "<a href=\"$requestUrl\">$requestUrl</a>";
 
-                $content = sprintf(__("Jméno: %s", "KT_CORE_DOMAIN"), $fullName) . "<br />";
-                $content .= sprintf(__("E-mail: %s", "KT_CORE_DOMAIN"), $email) . "<br />";
-                $content .= sprintf(__("Telefon: %s", "KT_CORE_DOMAIN"), $phone) . "<br /><br />";
-                $content .= sprintf(__("Zpráva:", "KT_CORE_DOMAIN"), $message) . "<br /><br />";
-                $content .= $message;
-                $content .= "<br /><br />---<br />";
+                $content = sprintf(__("Jméno: %s", "KT_CORE_DOMAIN"), $fullName) . "<br>";
+                $content .= sprintf(__("E-mail: %s", "KT_CORE_DOMAIN"), $email) . "<br>";
+                $content .= sprintf(__("Telefon: %s", "KT_CORE_DOMAIN"), $phone) . "<br><br>";
+                $content .= __("Zpráva:", "KT_CORE_DOMAIN") . "<br><br>$message<br><br>";
+                $content .= sprintf(__("Provedeno z URL adresy: %s", "KT_CORE_DOMAIN"), $requestLink) . "<br><br>---<br>";
                 $content .= sprintf($this->getEmailSignature(), $ktWpInfo->getUrl());
 
                 $contactFormEmail = apply_filters("kt_contact_form_email_filter", $this->getFormEmail());
