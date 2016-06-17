@@ -269,11 +269,13 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
+     * @param $class string
      * @return string
      */
-    public function getLabelHtml() {
-        return "<label for=\"" . $this->getAttrValueByName("id") . "\">" . $this->getLabel() . "</label>";
+    public function getLabelHtml($class = null) {
+        $classAttribute = KT::issetAndNotEmpty($class) ? " class=\"$class\"" : "";
+        return "<label for=\"" . $this->getAttrValueByName("id") . "\"$classAttribute>" . $this->getLabel() . "</label>";
     }
 
     /**
