@@ -174,6 +174,25 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
     }
 
     /**
+     * Vytvoří kolekci setů pro html tag picture
+     * 
+     * @author Jan Pokorný
+     * @param string $defaultSize Wordpress velikost obrázku pro <img>
+     * @param int $width Šířka - nutné pro lazyload
+     * @param int $height Výška - nutné pro lazyload
+     * @param array min-width => wordpress velikost - 1024 => KT_IMG_SIZE_SLIDER
+     * @param array $imgAttrs Attributy pro img tag atribute => hodnota
+     * @return array Kolekce kolekcí tagů <img> x * <source>
+     */
+    public function getPictureSets($defaultSize, $width, $height, array $sizes = [], array $imgAttrs = null) {
+        $set = [];
+        foreach ($this->getFiles() as $post) {
+            $set[] = KT::imageGetPictureSet($post, $defaultSize, $width, $height, $sizes, $imgAttrs);
+        }
+        return $set;
+    }
+
+    /**
      * Provede inicializaci a načtení všech obrázků dle zadaného Post objektu a nastavení
      * 
      * @author Tomáš Kocifaj

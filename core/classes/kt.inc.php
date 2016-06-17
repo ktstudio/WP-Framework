@@ -866,7 +866,9 @@ class KT {
      * Vratí html tag img připravený na lazy load
      * 
      * @author Jan Pokorný
-     * 
+     * @deprecated
+     * @see KT::imageGetHtmlByUrl()
+     * @see KT::imageGetHtmlByFileName()
      * @param string $file URL nebo cesta k souboru ve složce images
      * @param int $width Šířka obrázku
      * @param int $height Výška obrázku
@@ -887,6 +889,79 @@ class KT {
         }
         $html = sprintf('<img src="%s" width="%d" height="%d" %s />', $fileUrl, $width, $height, $htmlAttrs);
         return apply_filters("kt_image_prepare_lazyload", $html);
+    }
+
+    /**
+     * Vratí html tag img připravený na lazy load
+     * 
+     * @author Jan Pokorný
+     * @param string $url URL adresa obrázku
+     * @param int $width Šířka obrázku
+     * @param int $height Výška obrázku
+     * @param array $attrs Další html atributy
+     * 
+     */
+    public static function imageGetHtmlByUrl($url, $width, $height, array $attrs = []) {
+        $attrs = array_merge($attrs, ["width" => $width, "height" => $height]);
+        $htmlAttrs = "";
+        foreach ($attrs as $param => $value) {
+            $htmlAttrs .= sprintf(' %s="%s"', $param, esc_attr($value));
+        }
+
+        $html = sprintf('<img src="%s"%s />', esc_url($url), $htmlAttrs);
+        return apply_filters("kt_image_prepare_lazyload", $html);
+    }
+
+    /**
+     * Vratí html tag img připravený na lazy load
+     * 
+     * @author Jan Pokorný
+     * @param string $fileName path themes/{your-theme}/images/{$fileName}
+     * @param int $width Šířka obrázku
+     * @param int $height Výška obrázku
+     * @param array $attrs Další html atributy
+     * 
+     */
+    public static function imageGetHtmlByFileName($fileName, $width, $height, array $attrs = []) {
+        return self::imageGetHtmlByUrl(self::imageGetUrlFromTheme($fileName), $width, $height, $attrs);
+    }
+
+    /**
+     * Dekorátor pro funkci wp_get_attachment_image. Přidán lazyload
+     * 
+     * @see wp_get_attachment_image()
+     * @author Jan Pokorný
+     * @param int $attachment_id
+     * @param string $size
+     * @param bools $icon
+     * @param array $attr
+     * @return string HTML <img>
+     */
+    public static function imageGetHtmlByAttachmentId($attachment_id, $size = 'thumbnail', $icon = false, $attr = []) {
+        $html = wp_get_attachment_image($attachment_id, $size, $icon, $attr);
+        return apply_filters("kt_image_prepare_lazyload", $html);
+    }
+
+    /**
+     * Vytvoří set pro html tag picture
+     * 
+     * @author Jan Pokorný
+     * @param WP_Post $post Attachment
+     * @param string $defaultSize Wordpress velikost obrázku pro <img>
+     * @param int $width Šířka - nutné pro lazyload
+     * @param int $height Výška - nutné pro lazyload
+     * @param array min-width => wordpress velikost - 1024 => KT_IMG_SIZE_SLIDER
+     * @param array $imgAttrs Attributy pro img tag atribute => hodnota
+     * @return string Kolekce tagů <img> x * <source>
+     */
+    public static function imageGetPictureSet(WP_Post $post, $defaultSize, $width, $height, $sizes = [], $imgAttrs = []) {
+        $picture = "";
+        foreach ($sizes as $minWidth => $size) {
+            $picture .= sprintf('<source srcset="%s" media="(min-width:%spx)">', wp_get_attachment_image_url($post->ID, $size), $minWidth);
+        }
+        $imgAttrs = array_merge($imgAttrs, ["alt" => $post->title]);
+        $picture .= KT::imageGetHtmlByUrl(wp_get_attachment_image_url($post->ID, $defaultSize), $width, $height, $imgAttrs);
+        return $picture;
     }
 
     // --- MENU ---------------------------
