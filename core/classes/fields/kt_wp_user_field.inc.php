@@ -131,6 +131,7 @@ class KT_WP_User_Field extends KT_Select_Field {
             if (KT::issetAndNotEmpty($optionHead)) {
                 $html .= "<optgroup label=\"$optionHead\">";
             }
+            $selected = "";
             foreach ($usersList as $user) {
                 if ($fieldValue == $user->ID) {
                     $selected = "selected=\"selected\"";

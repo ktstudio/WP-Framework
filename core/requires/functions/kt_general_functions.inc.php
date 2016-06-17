@@ -86,8 +86,8 @@ add_action("wp_before_admin_bar_render", "kt_wp_before_admin_bar_render_callback
  * @global WP_Admin_Bar $wp_admin_bar
  */
 function kt_wp_before_admin_bar_render_callback() {
-    global $wp_admin_bar;   
-    
+    global $wp_admin_bar;
+
     $wp_admin_bar->add_menu(array(
         "id" => KT_WP_Configurator::THEME_SETTING_PAGE_SLUG,
         "parent" => "site-name",
@@ -108,3 +108,6 @@ add_action("wp_ajax_nopriv_kt_load_cookie_statement_content", "kt_load_cookie_st
 function kt_load_cookie_statement_content_callback() {
     die(KT_WP_Configurator::getCookieStatementHtml());
 }
+
+add_action("wp_ajax_" . KT_Fieldset_Field::AJAX_HOOK, [KT_Fieldset_Field::class, KT_Fieldset_Field::AJAX_CB]);
+add_action("wp_ajax_nopriv_" . KT_Fieldset_Field::AJAX_HOOK, [KT_Fieldset_Field::class, KT_Fieldset_Field::AJAX_CB]);

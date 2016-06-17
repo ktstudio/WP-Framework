@@ -234,7 +234,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function getFieldByName($name) {
         $fieldsCollection = $this->getFields();
-        return $field = $fieldsCollection[$name];
+        if (isset($fieldsCollection[$name]))
+            return $field = $fieldsCollection[$name];
     }
 
     /**
@@ -436,10 +437,14 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
             return "";
         }
 
+        if ($field->getFieldType() === KT_Fieldset_Field::FIELD_TYPE) {
+            return "<tr><td colspan=2>{$field->getField()}</td></tr>";
+        }
+
         $html = "<tr>";
 
         if (KT::issetAndNotEmpty($field->getLabel())) {
-            $html .= "<td><label for=\"{$field->getName()}\">{$field->getLabel()}</label></td>";
+            $html .= "<td><label for = \"{$field->getName()}\">{$field->getLabel()}</label></td>";
         }
 
         $html .= "<td>{$field->getField()}</td>";
@@ -893,6 +898,11 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     public function addWpNonce($name, $label = null) {
         $field = $this->fields[$name] = new KT_WP_Nonce_Field($this->getName(), $name, $label);
         $field->setPostPrefix($this->getPostPrefix());
+        return $field;
+    }
+
+    public function addFieldset($name, $label = null, $fieldsetRecipy) {
+        $field = $this->fields[$name] = new KT_Fieldset_Field($name, $label, $fieldsetRecipy);
         return $field;
     }
 
