@@ -1,64 +1,194 @@
 <?php
 
+/**
+ * Field sloužící pro generování dynamických fieldsetů
+ * Field na základě receptu na fieldset generuje fieldsety. 
+ * Recept se skláda z config třídy a jméno fieldsetu. 
+ * Na config třídě je třeba mít metodu getAllGeneratableFiedlsets a zde mít fieldset registrovaný.
+ * Výsledná kolekce je pak uložena v sežazené poli. Řadit ji lze v administaci pomocí drag and drop.
+ * Pro práci je nutný mít vložený javascript kt-dynamic-fields.js
+ * Určeno a testováno pro backend do metaboxů.
+ * Rekurzivní definice není dodělaná. Pull request vítán.
+ * Třída extenduje kvůli zpětné kompatibilitě třídu KT_Field, avšak mnoho metod z KT_Field nemají efekt, je třeba dávat si na to pozor.
+ * Validace backend není implementována front-end funguje bežně.
+ * 
+ * 
+ * @author Jan Pokorný
+ */
 class KT_Fieldset_Field extends KT_Field {
 
     const FIELD_TYPE = "fieldset";
-    const COUNT_FIELD = "ff_count";
     const AJAX_HOOK = "kt_generate_fieldset";
-    const AJAX_CB = "ajaxGenerate";
+    const AJAX_CB = "ajaxGenerateFieldset";
 
+    /**
+     * Recept pro vygenerování fieldsetu. 
+     * Pole [config, fieldset] 
+     * Př. ["KT_ZZZ_Post_Config", KT_ZZZ_Post_Config::DYNAMIC_FIELDSET"]
+     * 
+     * @var array 
+     */
     private $fieldsetRecipy;
+
+    /**
+     * Seřazené pole hodnot jednotlivých fieldsetů
+     *
+     * @var array 
+     */
     private $value;
+
+    /**
+     * Výchozí seřazené pole hodnot jednotlivých fieldsetů
+     *
+     * @var array 
+     */
     private $defaultValue;
 
     /**
+     * Field který počítá počet dynamických fieldsetů.
+     * Nutná informace při ukládaní.
      *
      * @var KT_Hidden_Field
      */
     private $coutField;
 
+    /**
+     * 
+     * @param string $name
+     * @param string $label 
+     * @param array $fieldsetRecipy Recept na fieldset
+     */
     public function __construct($name, $label, array $fieldsetRecipy) {
         parent::__construct($name, $label);
         $this->fieldsetRecipy = $fieldsetRecipy;
     }
 
+    /**
+     * Vraté field type
+     * 
+     * @return string
+     */
     public function getFieldType() {
         return self::FIELD_TYPE;
     }
 
+    /**
+     * Vygeneruje fieldset na základě receptu
+     * 
+     * @return \KT_Form_Fieldset
+     */
     public function getFieldset() {
         return self::generateFieldset($this->fieldsetRecipy);
     }
 
-    private function getCoutField() {
-        if (!isset($this->coutField)) {
-            $this->coutField = new KT_Hidden_Field(self::COUNT_FIELD . "-" . $this->getName(), "");
-            $this->coutField->setPostPrefix($this->getName())
-                    ->setDefaultValue(($this->getDefaultValue()) ? count($this->getDefaultValue()) : 1)
-                    ->addAttrClass(self::COUNT_FIELD);
-        }
-        return $this->coutField;
+    /**
+     * Vrátí defaultní hodnotu
+     * 
+     * @return array
+     */
+    public function getDefaultValue() {
+        return $this->defaultValue;
     }
 
+    /**
+     * Provede deserializaci a setne defaultní hodnotu 
+     * 
+     * @param array $value
+     * @return \KT_Fieldset_Field
+     */
     public function setDefaultValue($value) {
         $this->defaultValue = maybe_unserialize($value);
         return $this;
     }
 
-    public function getDefaultValue() {
-        return $this->defaultValue;
+    /**
+     * Vrátí hodnoty fieldetů
+     * POZOR sanitizase probíhá na úrovní filedů ve generované fieldsetu 
+     * 
+     * @return array
+     */
+    public function getValue() {
+        if (!isset($this->value)) {
+            $this->value = $this->prepareValue();
+        }
+        return $this->value;
     }
 
+    /**
+     * Vrátí hodnoty fieldetů
+     * POZOR sanitizase probíhá na úrovní filedů ve generované fieldsetu 
+     * 
+     * @return array
+     */
+    public function getCleanValue() {
+        return $this->getValue();
+    }
+
+    /**
+     * Vykreslí field
+     */
+    public function renderField() {
+        echo $this->getField();
+    }
+
+    /**
+     * POZOR Backend validace zatím není podporováná.
+     * @todo 
+     * @return boolean True
+     */
+    public function Validate() {
+        return true;
+    }
+
+    /**
+     * Vratí field pro vykreslení
+     * @return string
+     */
     public function getField() {
+        return $this->getFieldHeader() . $this->getFieldBody() . $this->getFieldFooter();
+    }
+
+    /**
+     * Ajax callback pro generování fieldsetů
+     */
+    public static function ajaxGenerateFieldset() {
+        $class = filter_input(INPUT_GET, "config", FILTER_SANITIZE_STRING);
+        $fieldSet = filter_input(INPUT_GET, "fieldset", FILTER_SANITIZE_STRING);
+        $number = filter_input(INPUT_GET, "number", FILTER_SANITIZE_NUMBER_INT);
+        if ($class && $fieldSet && $number) {
+            $fieldSet = self::generateFieldset([$class, $fieldSet]);
+            $fieldSet->setPostPrefix($fieldSet->getName() . "-" . ($number - 1));
+            echo self::getFieldsetHtml($fieldSet);
+        }
+        wp_die();
+    }
+
+    /**
+     * Vratí záhlaví fieldu
+     * 
+     * @return string
+     */
+    private function getFieldHeader() {
         $fieldWrapp = "<div class=\"fieldset-field\" data-fieldset=\"{$this->fieldsetRecipy[1]}\" data-config=\"{$this->fieldsetRecipy[0]}\" >";
-        $i = 0;
         $fieldWrapp .= "<table>";
         $fieldWrapp .= "<thead><tr>";
+        $fieldWrapp .= "<td style=\"width:10px\" ></td>"; // Drag and drop sloupec
         foreach ($this->getFieldset()->getFields() as $field) {
             $fieldWrapp .= "<td>{$field->getLabel()}</td>";
         }
-        $fieldWrapp .= "<td></td>";
-        $fieldWrapp .= "</tr></thead><tbody class=\"sets\">";
+        $fieldWrapp .= "<td></td>"; // odebrat tlačíko
+        $fieldWrapp .= "</tr></thead>";
+        return $fieldWrapp;
+    }
+
+    /**
+     * Vratí tělo fieldu
+     * @return string
+     */
+    private function getFieldBody() {
+        $fieldWrapp = "<tbody class = \"sets\">";
+        // Vygeneruje fieldsety na základě defaultValues nebo alepoň jeden prazdný 
+        $i = 0;
         do {
             $fieldSet = $this->getFieldset();
             $fieldSet->setPostPrefix($fieldSet->getName() . "-" . $i);
@@ -69,46 +199,39 @@ class KT_Fieldset_Field extends KT_Field {
             $i++;
         } while ($i < count($this->getDefaultValue()));
         $fieldWrapp .= "</tbody></table>";
-        $fieldWrapp .= $this->getCoutField()->getField();
+        return $fieldWrapp;
+    }
+
+    /**
+     * Vratí konec fieldu
+     * 
+     * @return string
+     */
+    private function getFieldFooter() {
+        $fieldWrapp = $this->getCoutField()->getField();
         $fieldWrapp .= "<a href = \"javascript:void(0);\" class=\"kt-add-fieldset button\">" . __("Přidat kolekci", "KT_CORE_ADMIN") . "</a>";
         $fieldWrapp .= "</div>";
         return $fieldWrapp;
     }
 
-    public function getValue() {
-        if (!isset($this->value)) {
-            $this->value = $this->prepareValue();
-        }
-        return $this->value;
-    }
-
-    public function getCleanValue() {
-        return $this->getValue();
-    }
-
-    public function renderField() {
-        echo $this->getField();
-    }
-
-    public function Validate() {
-        $fieldset = $this->getFieldset();
-        foreach ($fieldset->getFields() as $field) {
-            if (!$field->Validate()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
+    /**
+     * Vratí seřazené pole s odeslanými hodnoty
+     * @return array
+     */
     private function prepareValue() {
+        $finalValue = [];
+        // Počet vygenerovaných fieldů uživatelem
         $count = KT::tryGetInt($this->getCoutField()->getValue());
         for ($i = 0; $i < $count; $i++) {
+            // Vygenerování příslušného fieldsetu
             $fieldset = $this->getFieldset();
             $postPrefix = $fieldset->getName() . "-" . $i;
+            $fieldset->setPostPrefix($postPrefix);
+            // Kontrola odelasní dat
             if (!isset($_REQUEST[$postPrefix])) {
                 continue;
             }
-            $fieldset->setPostPrefix($postPrefix);
+            //Sběr dat
             $fieldsetValues = [];
             foreach ($fieldset->getFields() as $field) {
                 $fieldsetValues[$field->getName()] = $field->getValue();
@@ -118,6 +241,13 @@ class KT_Fieldset_Field extends KT_Field {
         return $finalValue;
     }
 
+    /**
+     * Vygeneruje fieldset na základě receptu
+     * 
+     * @param array $recipy
+     * @return type
+     * @throws Exception
+     */
     private static function generateFieldset(array $recipy) {
         $fieldsets = call_user_func([$recipy[0], "getAllGeneratableFieldsets"]);
         if (!$fieldsets) {
@@ -129,27 +259,35 @@ class KT_Fieldset_Field extends KT_Field {
         return $fieldsets[$recipy[1]];
     }
 
+    /**
+     * Vygenruje fieldy z fieldsetu do tabulky fieldů
+     * @param KT_Form_Fieldset $fieldset
+     * @return string
+     */
     private static function getFieldsetHtml(KT_Form_Fieldset $fieldset) {
         $fieldWrapp = "<tr class = \"set\">";
+        $fieldWrapp .= "<td style=\"width:10px\"><span class=\"dashicons dashicons-move\"></span></td>";
         foreach ($fieldset->getFields() as $field) {
             /* @var $field \KT_Field */
             $fieldWrapp .= "<td>{$field->getField()}</td>";
         }
-        $fieldWrapp .= "<td><a href = \"javascript:void(0);\" class=\"kt-remove-fieldset\">" . __("Odebrat kolekci", "KT_CORE_ADMIN") . "</a><td>";
+        $fieldWrapp .= "<td><a href = \"javascript:void(0);\" class=\"kt-remove-fieldset\">" . __("Odebrat", "KT_CORE_ADMIN") . "</a><td>";
         $fieldWrapp .= "</tr>";
         return $fieldWrapp;
     }
 
-    public static function ajaxGenerate() {
-        $class = filter_input(INPUT_GET, "config", FILTER_SANITIZE_STRING);
-        $fieldSet = filter_input(INPUT_GET, "fieldset", FILTER_SANITIZE_STRING);
-        $number = filter_input(INPUT_GET, "number", FILTER_SANITIZE_NUMBER_INT);
-        if ($class && $fieldSet && $number) {
-            $fieldSet = self::generateFieldset([$class, $fieldSet]);
-            $fieldSet->setPostPrefix($fieldSet->getName() . "-" . ($number - 1));
-            echo self::getFieldsetHtml($fieldSet);
+    /**
+     * Vratí hidden field pro počétaní vygenrovaný fieldsetů
+     * @return KT_Hidden_Field
+     */
+    private function getCoutField() {
+        if (!isset($this->coutField)) {
+            $this->coutField = new KT_Hidden_Field("ff_count-" . $this->getName(), "");
+            $this->coutField->setPostPrefix($this->getName())
+                    ->setDefaultValue(($this->getDefaultValue()) ? count($this->getDefaultValue()) : 1)
+                    ->addAttrClass("ff_count");
         }
-        wp_die();
+        return $this->coutField;
     }
 
 }

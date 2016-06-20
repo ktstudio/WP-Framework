@@ -901,7 +901,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         return $field;
     }
 
-    public function addFieldset($name, $label = null, $fieldsetRecipy) {
+    public function addFieldset($name, $label, $fieldsetRecipy) {
         $field = $this->fields[$name] = new KT_Fieldset_Field($name, $label, $fieldsetRecipy);
         return $field;
     }
