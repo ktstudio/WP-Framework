@@ -1101,14 +1101,20 @@ class KT {
             if (is_bool($value)) {
                 return $value;
             }
-            return (bool) $value;
-        }
-        $text = strtolower((string) $value);
-        if ($text === "1" || $text === "true" || $text === "ano" || $text === "yes") {
-            return false;
-        }
-        if ($text === "0" || $text === "false" || $text === "ne" || $text === "no") {
-            return false;
+            switch (strtolower($value)) {
+                case "1":
+                case "true":
+                case "ano":
+                case "yes":
+                case "on":
+                    return true;
+                case "0":
+                case "false":
+                case "ne":
+                case "no":
+                case "off":
+                    return false;
+            }
         }
         return null;
     }
