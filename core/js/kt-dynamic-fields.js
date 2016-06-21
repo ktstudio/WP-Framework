@@ -1,7 +1,11 @@
-console.log("Welcome in dynamic madness");
+//console.log("Welcome in dynamic madness");
 jQuery(document).ready(function () {
+    
     if (typeof ajaxurl === undefined) {
         console.log("Unknown ajaxurl dynamic forms wont work !!!");
+        return;
+    }
+    if (jQuery(".fieldset-field").length < 1){
         return;
     }
     jQuery("body").on('click', '.fieldset-field .kt-add-fieldset', function () {

@@ -4,7 +4,7 @@
  * Field sloužící pro generování dynamických fieldsetů
  * Field na základě receptu na fieldset generuje fieldsety. 
  * Recept se skláda z config třídy a jméno fieldsetu. 
- * Na config třídě je třeba mít metodu getAllGeneratableFiedlsets a zde mít fieldset registrovaný.
+ * Na config třídě je třeba mít metodu getAllDynamicFieldsets a zde mít fieldset registrovaný.
  * Výsledná kolekce je pak uložena v sežazené poli. Řadit ji lze v administaci pomocí drag and drop.
  * Pro práci je nutný mít vložený javascript kt-dynamic-fields.js
  * Určeno a testováno pro backend do metaboxů.
@@ -132,11 +132,27 @@ class KT_Fieldset_Field extends KT_Field {
     }
 
     /**
-     * POZOR Backend validace zatím není podporováná.
-     * @todo 
-     * @return boolean True
+     *
+     * @return boolean
      */
     public function Validate() {
+        $count = KT::tryGetInt($this->getCoutField()->getValue());
+        for ($i = 0; $i < $count; $i++) {
+            // Vygenerování příslušného fieldsetu
+            $fieldset = $this->getFieldset();
+            $postPrefix = $fieldset->getName() . "-" . $i;
+            $fieldset->setPostPrefix($postPrefix);
+            // Kontrola odelasní dat
+            if (!isset($_REQUEST[$postPrefix])) {
+                continue;
+            }
+            foreach ($fieldset->getFields() as $field) {
+                if (!$field->Validate()) {
+                    $this->setError(__("Chyba v dynamickém formuláři", "KT_CORE_ADMIN_DOMAIN"));
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
@@ -249,9 +265,9 @@ class KT_Fieldset_Field extends KT_Field {
      * @throws Exception
      */
     private static function generateFieldset(array $recipy) {
-        $fieldsets = call_user_func([$recipy[0], "getAllGeneratableFieldsets"]);
+        $fieldsets = call_user_func([$recipy[0], "getAllDynamicFieldsets"]);
         if (!$fieldsets) {
-            throw new Exception("Cannot find getAllGeneratableFieldsets() method on {$recipy[0]}");
+            throw new Exception("Cannot find getAllDynamicFieldsets() method on {$recipy[0]}");
         }
         if (!isset($fieldsets[$recipy[1]])) {
             throw new Exception("Cannot find fieldset {$recipy[0]} on {$recipy[1]}");

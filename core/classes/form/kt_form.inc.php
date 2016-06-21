@@ -837,7 +837,6 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 }
             }
         }
-
         return $this;
     }
 
