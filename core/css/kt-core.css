@@ -241,19 +241,6 @@ span.erorr-s.input-checkbox
     width: 20%;
 }
 
-.ui-tooltip
-{
-    color: #acff1c !important;
-    background: #111111 !important;
-    box-shadow: none !important;
-    border: solid #fff 1px !important;
-    padding: 8px;
-    position: absolute;
-    z-index: 9999;
-    max-width: 300px;
-    text-align: left;
-}
-
 /** file picker **/
 
 div.file-load-box span.span-url
