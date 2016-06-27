@@ -238,6 +238,20 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
+     * Kontrola, zda je zadán field objekt na základě zvoleného názvu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $name
+     * @return boolean
+     */
+    public function hasFieldByName($name) {
+        $fieldsCollection = $this->getFields();
+        return array_key_exists($name, $fieldsCollection);
+    }
+
+    /**
      * Odstraní field z kolekce filedsetu
      *
      * @author Tomáš Kocifaj
