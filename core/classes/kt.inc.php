@@ -959,7 +959,7 @@ class KT {
         foreach ($sizes as $minWidth => $size) {
             $picture .= sprintf('<source srcset="%s" media="(min-width:%spx)">', wp_get_attachment_image_url($post->ID, $size), $minWidth);
         }
-        $imgAttrs = array_merge($imgAttrs, ["alt" => $post->title]);
+        $imgAttrs = array_merge(["alt" => $post->post_title], $imgAttrs);
         $picture .= KT::imageGetHtmlByUrl(wp_get_attachment_image_url($post->ID, $defaultSize), $width, $height, $imgAttrs);
         return $picture;
     }

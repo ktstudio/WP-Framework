@@ -50,6 +50,10 @@ class KT_WP_Editor_Field extends KT_Field {
         $this->renderField();
     }
 
+    public function getValue() {
+        return stripslashes(parent::getValue());
+    }
+
     // --- veřejné metody ---------------------------
 
     public function renderField() {
