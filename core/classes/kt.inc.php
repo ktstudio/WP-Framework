@@ -1144,7 +1144,7 @@ class KT {
     }
 
     /**
-     * Vyčistí zadané telefonní číslo o mezery a znak + nahradí za 00
+     * Vyčistí zadané telefonní číslo + nahradí za 00 a ostatní zbytečné znaky odstraní
      * 
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -1154,8 +1154,9 @@ class KT {
      */
     public static function clearPhoneNumber($phoneNumber) {
         if (KT::issetAndNotEmpty($phoneNumber)) {
-            $phoneNumber = str_replace("+", "00", str_replace(" ", "", trim($phoneNumber)));
-            return $phoneNumber;
+            $before = ["+", "(", ")", " "];
+            $after = ["00", "", "", ""];
+            return $phoneNumber = str_replace($before, $after, $phoneNumber);
         }
         return null;
     }
@@ -1535,6 +1536,28 @@ class KT {
             return $output;
         }
         return null;
+    }
+
+    /**
+     * Provede zvýraznení v text. Syntaxe převzdata z Markdown.
+     * *text* -> kurzíva, **text** -> tučný text, ~~text~~ -> přeškrtnutý text 
+     * 
+     * @author Jan Pokorný
+     * @param string $text Vstupní text
+     * @return string Zvýrazněný výstupní text
+     */
+    public static function textMarkdownEmphasis($text) {
+        $patterns = [
+            "/\*\*(.+?)\*\*/i",
+            "/\*(.+?)\*/i",
+            "/\~\~(.+?)\~\~/i",
+        ];
+        $replaces = [
+            "<b>$1</b>",
+            "<i>$1</i>",
+            "<del>$1</del>"
+        ];
+        return preg_replace($patterns, $replaces, $text);
     }
 
     // --- cURL ---------------------------
