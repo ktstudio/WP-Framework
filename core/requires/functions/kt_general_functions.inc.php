@@ -109,5 +109,7 @@ function kt_load_cookie_statement_content_callback() {
     die(KT_WP_Configurator::getCookieStatementHtml());
 }
 
-add_action("wp_ajax_" . KT_Fieldset_Field::AJAX_HOOK, ["KT_Fieldset_Field", KT_Fieldset_Field::AJAX_CB]);
-add_action("wp_ajax_nopriv_" . KT_Fieldset_Field::AJAX_HOOK, ["KT_Fieldset_Field", KT_Fieldset_Field::AJAX_CB]);
+// dynamicke fieldy
+add_action("wp_ajax_kt_generate_fieldset", ["KT_Fieldset_Field", "ajaxGenerateFieldset"]);
+add_action("wp_ajax_nopriv_kt_generate_fieldset", ["KT_Fieldset_Field", "ajaxGenerateFieldset"]);
+add_action("wp_ajax_kt_clone_fieldset", ["KT_Fieldset_Field", "ajaxCloneFieldset"]);

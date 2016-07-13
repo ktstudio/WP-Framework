@@ -6,11 +6,10 @@
  * Recept se skláda z config třídy a jméno fieldsetu. 
  * Na config třídě je třeba mít metodu getAllDynamicFieldsets a zde mít fieldset registrovaný.
  * Výsledná kolekce je pak uložena v sežazené poli. Řadit ji lze v administaci pomocí drag and drop.
- * Pro práci je nutný mít vložený javascript kt-dynamic-fields.js
+ * Pro práci je nutný mít vložený a lokalizovaný javascript wp_enqueue_script(KT_DYNAMIC_FIELDSET_SCRIPT);
  * Určeno a testováno pro backend do metaboxů.
  * Rekurzivní definice není dodělaná. Pull request vítán.
  * Třída extenduje kvůli zpětné kompatibilitě třídu KT_Field, avšak mnoho metod z KT_Field nemají efekt, je třeba dávat si na to pozor.
- * Validace backend není implementována front-end funguje bežně.
  * 
  * 
  * @author Jan Pokorný
@@ -18,8 +17,6 @@
 class KT_Fieldset_Field extends KT_Field {
 
     const FIELD_TYPE = "fieldset";
-    const AJAX_HOOK = "kt_generate_fieldset";
-    const AJAX_CB = "ajaxGenerateFieldset";
 
     /**
      * Recept pro vygenerování fieldsetu. 
@@ -43,6 +40,12 @@ class KT_Fieldset_Field extends KT_Field {
      * @var array 
      */
     private $defaultValue;
+
+    /**
+     *
+     * @var array 
+     */
+    private $predefinedValue;
 
     /**
      * Field který počítá počet dynamických fieldsetů.
@@ -87,7 +90,19 @@ class KT_Fieldset_Field extends KT_Field {
      * @return array
      */
     public function getDefaultValue() {
-        return $this->defaultValue;
+        if (KT::arrayIssetAndNotEmpty($this->defaultValue)) {
+            return $this->defaultValue;
+        } else {
+            return $this->getPredefinedValue();
+        }
+    }
+
+    public function getPredefinedValue() {
+        if (!isset($this->predefinedValue)) {
+            $values = get_option($this->getName());
+            $this->predefinedValue = (is_array($values) ? $values : []);
+        }
+        return $this->predefinedValue;
     }
 
     /**
@@ -185,7 +200,7 @@ class KT_Fieldset_Field extends KT_Field {
      * @return string
      */
     private function getFieldHeader() {
-        $fieldWrapp = "<div class=\"fieldset-field\" data-fieldset=\"{$this->fieldsetRecipy[1]}\" data-config=\"{$this->fieldsetRecipy[0]}\" >";
+        $fieldWrapp = "<div class=\"fieldset-field\" id=\"{$this->getName()}\" data-fieldset=\"{$this->fieldsetRecipy[1]}\" data-config=\"{$this->fieldsetRecipy[0]}\" >";
         $fieldWrapp .= "<table>";
         $fieldWrapp .= "<thead><tr>";
         $fieldWrapp .= "<td style=\"width:10px\" ></td>"; // Drag and drop sloupec

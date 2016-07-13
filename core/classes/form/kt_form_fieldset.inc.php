@@ -916,6 +916,20 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
+     * Přidá key=> value fieldsefield
+     * 
+     * @author Jan Pokorný
+     * @param string $name
+     * @param string $label
+     * @param array $fieldsetRecipy Recept pro vygenerování fieldsetu. Př. ["KT_ZZZ_Post_Config", KT_ZZZ_Post_Config::DYNAMIC_FIELDSET"]
+     * @return \KT_Fieldset_Field
+     */
+    public function addKeyValueFieldset($name, $label) {
+        $field = $this->fields[$name] = new KT_Fieldset_Field($name, $label, ["KT_Dynamic_Fieldset_Predefined_Config", KT_Dynamic_Fieldset_Predefined_Config::KEY_VALUE_FIELDSET]);
+        return $field;
+    }
+
+    /**
      * Přidá text field s rulem na e-mail
      * 
      * @author Jan Pokorný
