@@ -901,8 +901,73 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         return $field;
     }
 
+    /**
+     * Přidá fieldsefield
+     * 
+     * @author Jan Pokorný
+     * @param string $name
+     * @param string $label
+     * @param array $fieldsetRecipy Recept pro vygenerování fieldsetu. Př. ["KT_ZZZ_Post_Config", KT_ZZZ_Post_Config::DYNAMIC_FIELDSET"]
+     * @return \KT_Fieldset_Field
+     */
     public function addFieldset($name, $label, $fieldsetRecipy) {
         $field = $this->fields[$name] = new KT_Fieldset_Field($name, $label, $fieldsetRecipy);
+        return $field;
+    }
+
+    /**
+     * Přidá text field s rulem na e-mail
+     * 
+     * @author Jan Pokorný
+     * @param string $name
+     * @param string $label
+     * @return KT_Text_Field
+     */
+    public function addEmail($name, $label) {
+        $field = $this->addText($name, $label);
+        $field->addRule(KT_Field_Validator::EMAIL, __("Zadejte prosím platný e-mail", "KT_CORE_DOMAIN"));
+        return $field;
+    }
+
+    /**
+     * Přidá text field s rulem na url
+     * 
+     * @author Jan Pokorný
+     * @param string $name
+     * @param string $label
+     * @return KT_Text_Field
+     */
+    public function addUrl($name, $label) {
+        $field = $this->addText($name, $label);
+        $field->addRule(KT_Field_Validator::URL, __("Zadejte prosím platnou url", "KT_CORE_DOMAIN"));
+        return $field;
+    }
+
+    /**
+     * Přidá text field s rulem na int
+     * 
+     * @author Jan Pokorný
+     * @param string $name
+     * @param string $label
+     * @return KT_Text_Field
+     */
+    public function addInt($name, $label) {
+        $field = $this->addText($name, $label);
+        $field->addRule(KT_Field_Validator::INTEGER, __("Zadejte prosím celé číslo", "KT_CORE_DOMAIN"));
+        return $field;
+    }
+
+    /**
+     * Přidá text field s rulem na float
+     * 
+     * @author Jan Pokorný
+     * @param string $name
+     * @param string $label
+     * @return KT_Text_Field
+     */
+    public function addFloat($name, $label) {
+        $field = $this->addText($name, $label);
+        $field->addRule(KT_Field_Validator::FLOAT, __("Zadejte prosím desetinné číslo", "KT_CORE_DOMAIN"));
         return $field;
     }
 
