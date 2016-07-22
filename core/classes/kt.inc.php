@@ -317,6 +317,18 @@ class KT {
         }
     }
 
+    public static function arrayGetLastValue(array $array) {
+        foreach ($array as $key => $value)
+            ;
+        return $value;
+    }
+
+    public static function arrayGetLastKey(array $array) {
+        foreach ($array as $key => $value)
+            ;
+        return $key;
+    }
+
     /**
      * Vrátí hodnotu pro zadaný klíč pokud existuje nebo výchozí zadanou hodnotu (NULL)
      * 
@@ -467,6 +479,16 @@ class KT {
      */
     public static function isWpAjax() {
         return defined("DOING_AJAX") && DOING_AJAX;
+    }
+
+    /**
+     * Odhad zda se provadí ajax
+     * 
+     * @author Jan Pokorný
+     * @return bool
+     */
+    public static function isAjax() {
+        return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
     }
 
     /**
@@ -826,7 +848,7 @@ class KT {
      * @return string
      */
     public static function imageReplaceLazySrc($html) {
-        if (self::issetAndNotEmpty($html)) {
+        if (self::issetAndNotEmpty($html) && !KT::isAjax()) { // @todo Možno prováděd i při ajaxu, avšak je třeba dodělat javascript trigger
             $libxmlInternalErrorsState = libxml_use_internal_errors(true);
             $dom = new DOMDocument();
             $dom->preserveWhiteSpace = false;
@@ -1213,7 +1235,7 @@ class KT {
             global $wp_query;
         }
 
-        $paged = get_query_var("paged");
+        $paged = $wp_query->get("paged");
 
         if (KT::notIssetOrEmpty($paged)) {
             $paged = htmlspecialchars($paged);
@@ -1228,7 +1250,6 @@ class KT {
         );
 
         $argsPagination = wp_parse_args($userArgs, $defaultArgs);
-
         return paginate_links($argsPagination);
     }
 
