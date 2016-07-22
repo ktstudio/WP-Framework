@@ -5,7 +5,7 @@ class KT_Select_Field extends KT_Options_Field_Base {
     const FIELD_TYPE = "select";
     const OPTION_GROUP_NAME = "optgroup";
 
-    private $firstEmpty = false; // Má se v SELECTU nabídnout možnost, která nevybere nic
+    private $firstEmpty; // Má se v SELECTU nabídnout možnost, která nevybere nic
 
     /**
      * Založení objektu typu Select
@@ -25,7 +25,7 @@ class KT_Select_Field extends KT_Options_Field_Base {
     }
 
     /**
-     * @return boolean
+     * @return string
      */
     protected function getFirstEmpty() {
         return $this->firstEmpty;
@@ -34,11 +34,13 @@ class KT_Select_Field extends KT_Options_Field_Base {
     /**
      * Nastavuje se, zda má mít select možnost vybrat první položku jako prázdnou - odešle null
      * 
-     * @param bolean $firstEmpty
+     * @param string $firstEmpty
      * @return \KT_Select_Field
      */
     public function setFirstEmpty($firstEmpty = true) {
         if (is_bool($firstEmpty)) {
+            $this->firstEmpty = KT_EMPTY_SYMBOL;
+        } else {
             $this->firstEmpty = $firstEmpty;
         }
 
@@ -87,8 +89,8 @@ class KT_Select_Field extends KT_Options_Field_Base {
     public function getOptionsContent() {
         $html = "";
 
-        $emptyOption = "<option value=\"\">" . KT_EMPTY_SYMBOL . "</option>";
-        if ($this->getFirstEmpty() == true) {
+        $emptyOption = "<option value=\"\">" . $this->getFirstEmpty() . "</option>";
+        if (KT::issetAndNotEmpty($this->getFirstEmpty())) {
             $html .= $emptyOption;
         }
 
