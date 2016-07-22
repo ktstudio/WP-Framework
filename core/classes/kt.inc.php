@@ -317,6 +317,18 @@ class KT {
         }
     }
 
+    public static function arrayGetLastValue(array $array) {
+        foreach ($array as $key => $value)
+            ;
+        return $value;
+    }
+
+    public static function arrayGetLastKey(array $array) {
+        foreach ($array as $key => $value)
+            ;
+        return $key;
+    }
+
     /**
      * Vrátí hodnotu pro zadaný klíč pokud existuje nebo výchozí zadanou hodnotu (NULL)
      * 
@@ -467,6 +479,16 @@ class KT {
      */
     public static function isWpAjax() {
         return defined("DOING_AJAX") && DOING_AJAX;
+    }
+
+    /**
+     * Odhad zda se provadí ajax
+     * 
+     * @author Jan Pokorný
+     * @return bool
+     */
+    public static function isAjax() {
+        return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
     }
 
     /**
@@ -826,7 +848,7 @@ class KT {
      * @return string
      */
     public static function imageReplaceLazySrc($html) {
-        if (self::issetAndNotEmpty($html)) {
+        if (self::issetAndNotEmpty($html) && !KT::isAjax()) { // @todo Možno prováděd i při ajaxu, avšak je třeba dodělat javascript trigger
             $libxmlInternalErrorsState = libxml_use_internal_errors(true);
             $dom = new DOMDocument();
             $dom->preserveWhiteSpace = false;
@@ -866,7 +888,9 @@ class KT {
      * Vratí html tag img připravený na lazy load
      * 
      * @author Jan Pokorný
-     * 
+     * @deprecated
+     * @see KT::imageGetHtmlByUrl()
+     * @see KT::imageGetHtmlByFileName()
      * @param string $file URL nebo cesta k souboru ve složce images
      * @param int $width Šířka obrázku
      * @param int $height Výška obrázku
@@ -887,6 +911,79 @@ class KT {
         }
         $html = sprintf('<img src="%s" width="%d" height="%d" %s />', $fileUrl, $width, $height, $htmlAttrs);
         return apply_filters("kt_image_prepare_lazyload", $html);
+    }
+
+    /**
+     * Vratí html tag img připravený na lazy load
+     * 
+     * @author Jan Pokorný
+     * @param string $url URL adresa obrázku
+     * @param int $width Šířka obrázku
+     * @param int $height Výška obrázku
+     * @param array $attrs Další html atributy
+     * 
+     */
+    public static function imageGetHtmlByUrl($url, $width, $height, array $attrs = []) {
+        $attrs = array_merge($attrs, ["width" => $width, "height" => $height]);
+        $htmlAttrs = "";
+        foreach ($attrs as $param => $value) {
+            $htmlAttrs .= sprintf(' %s="%s"', $param, esc_attr($value));
+        }
+
+        $html = sprintf('<img src="%s"%s />', esc_url($url), $htmlAttrs);
+        return apply_filters("kt_image_prepare_lazyload", $html);
+    }
+
+    /**
+     * Vratí html tag img připravený na lazy load
+     * 
+     * @author Jan Pokorný
+     * @param string $fileName path themes/{your-theme}/images/{$fileName}
+     * @param int $width Šířka obrázku
+     * @param int $height Výška obrázku
+     * @param array $attrs Další html atributy
+     * 
+     */
+    public static function imageGetHtmlByFileName($fileName, $width, $height, array $attrs = []) {
+        return self::imageGetHtmlByUrl(self::imageGetUrlFromTheme($fileName), $width, $height, $attrs);
+    }
+
+    /**
+     * Dekorátor pro funkci wp_get_attachment_image. Přidán lazyload
+     * 
+     * @see wp_get_attachment_image()
+     * @author Jan Pokorný
+     * @param int $attachment_id
+     * @param string $size
+     * @param bools $icon
+     * @param array $attr
+     * @return string HTML <img>
+     */
+    public static function imageGetHtmlByAttachmentId($attachment_id, $size = 'thumbnail', $icon = false, $attr = []) {
+        $html = wp_get_attachment_image($attachment_id, $size, $icon, $attr);
+        return apply_filters("kt_image_prepare_lazyload", $html);
+    }
+
+    /**
+     * Vytvoří set pro html tag picture
+     * 
+     * @author Jan Pokorný
+     * @param WP_Post $post Attachment
+     * @param string $defaultSize Wordpress velikost obrázku pro <img>
+     * @param int $width Šířka - nutné pro lazyload
+     * @param int $height Výška - nutné pro lazyload
+     * @param array min-width => wordpress velikost - 1024 => KT_IMG_SIZE_SLIDER
+     * @param array $imgAttrs Attributy pro img tag atribute => hodnota
+     * @return string Kolekce tagů <img> x * <source>
+     */
+    public static function imageGetPictureSet(WP_Post $post, $defaultSize, $width, $height, $sizes = [], $imgAttrs = []) {
+        $picture = "";
+        foreach ($sizes as $minWidth => $size) {
+            $picture .= sprintf('<source srcset="%s" media="(min-width:%spx)">', wp_get_attachment_image_url($post->ID, $size), $minWidth);
+        }
+        $imgAttrs = array_merge(["alt" => $post->post_title], $imgAttrs);
+        $picture .= KT::imageGetHtmlByUrl(wp_get_attachment_image_url($post->ID, $defaultSize), $width, $height, $imgAttrs);
+        return $picture;
     }
 
     // --- MENU ---------------------------
@@ -1069,7 +1166,7 @@ class KT {
     }
 
     /**
-     * Vyčistí zadané telefonní číslo o mezery a znak + nahradí za 00
+     * Vyčistí zadané telefonní číslo + nahradí za 00 a ostatní zbytečné znaky odstraní
      * 
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -1079,8 +1176,9 @@ class KT {
      */
     public static function clearPhoneNumber($phoneNumber) {
         if (KT::issetAndNotEmpty($phoneNumber)) {
-            $phoneNumber = str_replace("+", "00", str_replace(" ", "", trim($phoneNumber)));
-            return $phoneNumber;
+            $before = ["+", "(", ")", " "];
+            $after = ["00", "", "", ""];
+            return $phoneNumber = str_replace($before, $after, $phoneNumber);
         }
         return null;
     }
@@ -1137,7 +1235,7 @@ class KT {
             global $wp_query;
         }
 
-        $paged = get_query_var("paged");
+        $paged = $wp_query->get("paged");
 
         if (KT::notIssetOrEmpty($paged)) {
             $paged = htmlspecialchars($paged);
@@ -1152,7 +1250,6 @@ class KT {
         );
 
         $argsPagination = wp_parse_args($userArgs, $defaultArgs);
-
         return paginate_links($argsPagination);
     }
 
@@ -1460,6 +1557,28 @@ class KT {
             return $output;
         }
         return null;
+    }
+
+    /**
+     * Provede zvýraznení v text. Syntaxe převzdata z Markdown.
+     * *text* -> kurzíva, **text** -> tučný text, ~~text~~ -> přeškrtnutý text 
+     * 
+     * @author Jan Pokorný
+     * @param string $text Vstupní text
+     * @return string Zvýrazněný výstupní text
+     */
+    public static function textMarkdownEmphasis($text) {
+        $patterns = [
+            "/\*\*(.+?)\*\*/i",
+            "/\*(.+?)\*/i",
+            "/\~\~(.+?)\~\~/i",
+        ];
+        $replaces = [
+            "<b>$1</b>",
+            "<i>$1</i>",
+            "<del>$1</del>"
+        ];
+        return preg_replace($patterns, $replaces, $text);
     }
 
     // --- cURL ---------------------------

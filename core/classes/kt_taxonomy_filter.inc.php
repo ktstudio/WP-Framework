@@ -48,11 +48,11 @@ class KT_Taxonomy_Filter {
      * @param  string  $selected
      */
     public function generate_taxonomy_options($tax_slug, $parent = "", $level = 0, $selected = null) {
-        $args = array("show_empty" => 1);
+        $args = array("show_empty" => 1, "taxonomy" => $tax_slug);
         if (!is_null($parent)) {
             $args = array("parent" => $parent);
         }
-        $terms = get_terms($tax_slug, $args);
+        $terms = get_terms($args);
         $tab = "";
         for ($i = 0; $i < $level; $i ++) {
             $tab .= "-";

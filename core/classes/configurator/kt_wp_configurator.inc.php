@@ -45,6 +45,7 @@ final class KT_WP_Configurator {
     private $facebookManager = null;
     private $emojiSwitch = false;
     private $autoRemoveShortcodesParagraphs = false;
+    private $enableDynamicFieldsets = false;
 
     // --- gettery ----------------------
 
@@ -215,6 +216,14 @@ final class KT_WP_Configurator {
     /** @return boolean */
     public function getAutoRemoveShortcodesParagraphs() {
         return $this->autoRemoveShortcodesParagraphs;
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function getEnableDynamicFieldsets() {
+        return $this->enableDynamicFieldsets;
     }
 
     // --- settery ----------------------
@@ -495,6 +504,16 @@ final class KT_WP_Configurator {
         return $this;
     }
 
+    /**
+     * 
+     * @param boolean $enableAdmin
+     * @return \KT_WP_Configurator
+     */
+    public function setEnableDynamicFieldsets($enableAdmin = true) {
+        $this->enableDynamicFieldsets = $enableAdmin;
+        return $this;
+    }
+
     // --- veřejné funkce ---------------
 
     /**
@@ -566,6 +585,10 @@ final class KT_WP_Configurator {
         if ($this->getDisplayLogo()) {
             add_filter("login_headerurl", array($this, "registerLoginLogoUrlFilter"), 10, 4);
             add_action("login_head", array($this, "registerLoginLogoImageAction"));
+        }
+
+        if ($this->getEnableDynamicFieldsets()) {
+            add_action("admin_enqueue_scripts", array($this, "registerDynamicFieldsetScript"));
         }
 
         // registrace a načítání scriptů zavedené v configurátoru
@@ -1486,8 +1509,6 @@ final class KT_WP_Configurator {
         return null;
     }
 
-    // --- statické funkce --------------
-
     /**
      * Vrátí název WP_Screen base pro založenou stránku theme setting.
      *
@@ -1561,37 +1582,46 @@ final class KT_WP_Configurator {
             return $content;
         }
         $tagregexp = join("|", array_map("preg_quote", array_keys($shortcode_tags)));
-        $pattern =
-            '/'
-            . '<p>'                              // Opening paragraph
-            . '\\s*+'                            // Optional leading whitespace
-            . '('                                // 1: The shortcode
-            .     '\\['                          // Opening bracket
-            .     "($tagregexp)"                 // 2: Shortcode name
-            .     '(?![\\w-])'                   // Not followed by word character or hyphen
-            // Unroll the loop: Inside the opening shortcode tag
-            .     '[^\\]\\/]*'                   // Not a closing bracket or forward slash
-            .     '(?:'
-            .         '\\/(?!\\])'               // A forward slash not followed by a closing bracket
-            .         '[^\\]\\/]*'               // Not a closing bracket or forward slash
-            .     ')*?'
-            .     '(?:'
-            .         '\\/\\]'                   // Self closing tag and closing bracket
-            .     '|'
-            .         '\\]'                      // Closing bracket
-            .         '(?:'                      // Unroll the loop: Optionally, anything between the opening and closing shortcode tags
-            .             '[^\\[]*+'             // Not an opening bracket
-            .             '(?:'
-            .                 '\\[(?!\\/\\2\\])' // An opening bracket not followed by the closing shortcode tag
-            .                 '[^\\[]*+'         // Not an opening bracket
-            .             ')*+'
-            .             '\\[\\/\\2\\]'         // Closing shortcode tag
-            .         ')?'
-            .     ')'
-            . ')'
-            . '\\s*+'                            // optional trailing whitespace
-            . '<\\/p>'                           // closing paragraph
-            . '/s';
+        $pattern = '/'
+                . '<p>'                              // Opening paragraph
+                . '\\s*+'                            // Optional leading whitespace
+                . '('                                // 1: The shortcode
+                . '\\['                          // Opening bracket
+                . "($tagregexp)"                 // 2: Shortcode name
+                . '(?![\\w-])'                   // Not followed by word character or hyphen
+                // Unroll the loop: Inside the opening shortcode tag
+                . '[^\\]\\/]*'                   // Not a closing bracket or forward slash
+                . '(?:'
+                . '\\/(?!\\])'               // A forward slash not followed by a closing bracket
+                . '[^\\]\\/]*'               // Not a closing bracket or forward slash
+                . ')*?'
+                . '(?:'
+                . '\\/\\]'                   // Self closing tag and closing bracket
+                . '|'
+                . '\\]'                      // Closing bracket
+                . '(?:'                      // Unroll the loop: Optionally, anything between the opening and closing shortcode tags
+                . '[^\\[]*+'             // Not an opening bracket
+                . '(?:'
+                . '\\[(?!\\/\\2\\])' // An opening bracket not followed by the closing shortcode tag
+                . '[^\\[]*+'         // Not an opening bracket
+                . ')*+'
+                . '\\[\\/\\2\\]'         // Closing shortcode tag
+                . ')?'
+                . ')'
+                . ')'
+                . '\\s*+'                            // optional trailing whitespace
+                . '<\\/p>'                           // closing paragraph
+                . '/s';
         return preg_replace($pattern, '$1', $content);
     }
+
+    /**
+     * Registrace scriptu pro dynamické fieldsety
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     * @author Jan Pokorný
+     */
+    public function registerDynamicFieldsetScript() {
+        wp_enqueue_script(KT_DYNAMIC_FIELDSET_SCRIPT);
+    }
+
 }

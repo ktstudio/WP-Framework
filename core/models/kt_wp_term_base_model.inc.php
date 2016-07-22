@@ -392,10 +392,10 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
      * @param array $args
      * @return array
      */
-    public static function getModels($taxonomy, $args) {
-
+    public static function getModels($taxonomy, $args = []) {
+        $args["taxonomy"] = $taxonomy;
         $modelCollection = array();
-        $terms = get_terms($taxonomy, $args);
+        $terms = get_terms($args);
 
         if (KT::notIssetOrEmpty($terms)) {
             return $modelCollection;

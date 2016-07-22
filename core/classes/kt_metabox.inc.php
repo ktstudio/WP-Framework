@@ -669,6 +669,7 @@ class KT_MetaBox implements KT_Registrable {
         }
 
         $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = false;
+        $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_ERRORS][] = $form->getErrorMessage();
         return $saveResult;
     }
 
@@ -687,6 +688,7 @@ class KT_MetaBox implements KT_Registrable {
 
         if ($form->hasError() || !$isDefaultAutoSave) {
             $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = false;
+            $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_ERRORS][] = $form->getErrorMessage();
             return $saveResult;
         }
 
@@ -694,7 +696,7 @@ class KT_MetaBox implements KT_Registrable {
         $form->saveFieldsetToOptionsTable();
         do_action("kt_after_metabox_save_options", $form);
 
-        $saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = true;
+        //$saveResult[KT_Custom_Metaboxes_Base::SAVE_RESULT_KEY] = true;
 
         return $saveResult;
     }
