@@ -29,6 +29,10 @@ class KT_String_Text {
         return $this->string;
     }
 
+    public function __toString() {
+        return $this->getLined();
+    }
+
     /**
      * Provede aplikaci (nových HTML) řádků na zadaný text
      * 
