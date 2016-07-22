@@ -39,10 +39,10 @@ function kt_dynamic_fieldset_setup() {
     jQuery(".fieldset-field .sets").sortable({
         update: function (event, ui) {
             var parentDom = ui.item.parent().parent().parent();
-            var namePrefix = parentDom.attr("data-fieldset");
+            var namePrefix = parentDom.closest(".kt_fieldset").attr("id");
             var reg = new RegExp(namePrefix + "\\-\\d+", "i");
             parentDom.find(".set").each(function (index, _) {
-                var inputDoms = jQuery(this).find("[name|='" + namePrefix + "']");
+                var inputDoms = jQuery(this).find("[name|='" + namePrefix + "']");           
                 inputDoms.each(function () {
                     var oldName = jQuery(this).attr("name");
                     var newName = oldName.replace(reg, namePrefix + "-" + index);
