@@ -12,6 +12,8 @@ class KT_Mailer {
     private $senderName = null;
     private $content = null;
     private $recipients = null;
+    private $carbonCopies = null;
+    private $blindCarbonCopies = null;
     private $subject = null;
     private $header = null;
     private $contentReplacer = null;
@@ -34,50 +36,47 @@ class KT_Mailer {
 
     // --- gettery -------------------------
 
-    /**
-     * @return \KT_Content_Replacer
-     */
+    /** @return \KT_Content_Replacer */
     protected function getContentReplacer() {
         return $this->contentReplacer;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     private function getSenderEmail() {
         return $this->senderEmail;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     private function getSenderName() {
         return $this->senderName;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     private function getContent() {
         return $this->content;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     private function getRecipients() {
         return $this->recipients;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
+    private function getCarbonCopies() {
+        return $this->carbonCopies;
+    }
+
+    /** @return string */
+    private function getBlindCarbonCopies() {
+        return $this->blindCarbonCopies;
+    }
+
+    /** @return string */
     private function getSubject() {
         return $this->subject;
     }
 
-    /**
-     * @return string
+    /** @return string
      */
     private function getHeader() {
         if (KT::notIssetOrEmpty($this->header)) {
@@ -128,8 +127,7 @@ class KT_Mailer {
     }
 
     /**
-     * Nastaví jednoho příjemce emailu - nepřidá, pouze setne
-     * Provede validaci emailové adresy
+     * Nastaví jednoho příjemce emailu - nepřidá, pouze setne + provede validaci emailové adresy
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
@@ -154,6 +152,44 @@ class KT_Mailer {
      */
     public function setRecipients($recipientEmail, $recipientName = null) {
         $this->setRecipient($recipientEmail, $recipientName);
+    }
+
+    /**
+     * Nastaví jednu kopii emailu - nepřidá, pouze setne + provede validaci emailové adresy
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $copyEmail
+     * @param string $copyName
+     * @return \KT_Mailer
+     * @throws InvalidArgumentException
+     */
+    public function setCarbonCopy($copyEmail, $copyName = null) {
+        if (self::isEmail($copyEmail)) {
+            $this->carbonCopies = self::getHeaderEmail($copyEmail, $copyName);
+            return $this;
+        }
+        throw new InvalidArgumentException(sprintf(__("Kopie \"%s\" není platnný e-mail!", "KT_CORE_DOMAIN"), $recipientEmail));
+    }
+
+    /**
+     * Nastaví jednu skrytou kopii emailu - nepřidá, pouze setne + provede validaci emailové adresy
+     * 
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     * 
+     * @param string $copyEmail
+     * @param string $copyName
+     * @return \KT_Mailer
+     * @throws InvalidArgumentException
+     */
+    public function setBlindCarbonCopy($copyEmail, $copyName = null) {
+        if (self::isEmail($copyEmail)) {
+            $this->blindCarbonCopies = self::getHeaderEmail($copyEmail, $copyName);
+            return $this;
+        }
+        throw new InvalidArgumentException(sprintf(__("Skrytá kopie \"%s\" není platnný e-mail!", "KT_CORE_DOMAIN"), $recipientEmail));
     }
 
     /**
@@ -261,7 +297,6 @@ class KT_Mailer {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz 
      * 
-     * @param type $senderEmail
      * @return \KT_Mailer
      * @throws KT_Not_Set_Argument_Exception
      */
@@ -273,6 +308,44 @@ class KT_Mailer {
             return $this;
         }
         throw new InvalidArgumentException(sprintf(__("Příjmence \"%s\" není platnný e-mail!", "KT_CORE_DOMAIN"), $recipientEmail));
+    }
+
+    /**
+     * Přidá další kopii - nepřepíše původní!
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz 
+     * 
+     * @return \KT_Mailer
+     * @throws KT_Not_Set_Argument_Exception
+     */
+    public function addCarbonCopy($copyEmail, $copyName = null) {
+        if (self::isEmail($copyEmail)) {
+            $copies = $this->getCarbonCopies();
+            $copies .= "; " . self::getHeaderEmail($copyEmail, $copyName);
+            $this->carbonCopies = $copies;
+            return $this;
+        }
+        throw new InvalidArgumentException(sprintf(__("Kopie \"%s\" není platnný e-mail!", "KT_CORE_DOMAIN"), $copyEmail));
+    }
+
+    /**
+     * Přidá další skrytou kopii - nepřepíše původní!
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz 
+     * 
+     * @return \KT_Mailer
+     * @throws KT_Not_Set_Argument_Exception
+     */
+    public function addBlindCarbonCopy($copyEmail, $copyName = null) {
+        if (self::isEmail($copyEmail)) {
+            $copies = $this->getBlindCarbonCopies();
+            $copies .= "; " . self::getHeaderEmail($copyEmail, $copyName);
+            $this->blindCarbonCopies = $copies;
+            return $this;
+        }
+        throw new InvalidArgumentException(sprintf(__("Skytá kopie \"%s\" není platnný e-mail!", "KT_CORE_DOMAIN"), $copyEmail));
     }
 
     /**
@@ -418,6 +491,14 @@ class KT_Mailer {
         $header .= "From: " . self::getHeaderEmail($this->getSenderEmail(), $this->getSenderName()) . "" . PHP_EOL;
         $header .= "Reply-To: {$this->getSenderEmail()}" . PHP_EOL;
         $header .= "Return-Path: {$this->getSenderEmail()}" . PHP_EOL;
+        $carbonCopies = $this->getCarbonCopies();
+        if (KT::issetAndNotEmpty($carbonCopies)) {
+            $header .= "Cc: $carbonCopies" . PHP_EOL;
+        }
+        $blindCarbonCopies = $this->getBlindCarbonCopies();
+        if (KT::issetAndNotEmpty($blindCarbonCopies)) {
+            $header .= "Bcc: $blindCarbonCopies" . PHP_EOL;
+        }
         $this->setHeader($header);
         return $this;
     }
