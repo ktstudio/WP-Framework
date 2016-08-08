@@ -11,3 +11,15 @@ add_filter("kt_switch_field_value_to_string", "kt_switch_field_value_to_string",
 function kt_switch_field_value_to_string($value) {
     return KT_Switch_Field::getSwitchConvertedValue($value);
 }
+
+add_filter("kt_date_to_fancy_date", "kt_date_to_fancy_date", 10, 1);
+
+/**
+ * Filtrační funkce převede libovolné datum na hezké datum
+ * @author Jan Pokorný
+ * @param string $date
+ * @return sting
+ */
+function kt_date_to_fancy_date($date) {
+    return date("j.n.Y", strtotime($date));
+}
