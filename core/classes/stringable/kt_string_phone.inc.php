@@ -36,7 +36,7 @@ class KT_String_Phone extends KT_String_Base implements KT_Stringable {
     public function tryGetHighlighted() {
         $phone = $this->getValue();
         $regepx = "/(^\(?(?:\+|00?)?42(?:0|1)\)?)\s?(.+)?/";
-        $replacement = "<span class=\"prefix\">$1</span><span class=\"rest\">$2</span>";
+        $replacement = "<span class=\"prefix\">$1</span> <span class=\"rest\">$2</span>";
         return preg_replace($regepx, $replacement, $phone);
     }
 
