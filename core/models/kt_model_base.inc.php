@@ -102,11 +102,10 @@ abstract class KT_Model_Base implements KT_Modelable {
 
         $reflectionClass = new ReflectionClass($configName);
         $constantName = $this->getConstantNameFromFunction($functionName);
-        if (KT::notIssetOrEmpty($constantName)) {
-            throw new KT_Not_Exist_Config_Constant_Exception($constantName);
-        }
-
         $constantValue = $reflectionClass->getConstant($constantName);
+        if (KT::notIssetOrEmpty($constantValue)) {
+            throw new KT_Not_Exist_Config_Constant_Exception($constantValue);
+        }
         return $constantValue;
     }
 
