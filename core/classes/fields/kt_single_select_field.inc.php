@@ -30,11 +30,6 @@ class KT_Single_Select_Field extends KT_Select_Field {
         $this->addAttrClass(self::PRIMARY_CLASS_IDENTIFICATOR);
     }
 
-    protected function getFirstEmpty() {
-        $firstEmpty = parent::getFirstEmpty();
-        return (KT::issetAndNotEmpty($firstEmpty)) ? $firstEmpty : KT_EMPTY_TEXT;
-    }
-
     // --- getry & settery ------------------------
 
     /**
