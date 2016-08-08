@@ -1021,8 +1021,9 @@ class KT {
      * 
      * @param string $themeLocation
      * @param int $depth
+     * @param Walker_Nav_Menu $customWalker
      */
-    public static function theWpNavMenu($themeLocation, $depth = 0, $customWalker = null) {
+    public static function theWpNavMenu($themeLocation, $depth = 0, Walker_Nav_Menu $customWalker = null) {
         $args = array(
             "theme_location" => $themeLocation,
             "container" => false,
