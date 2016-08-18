@@ -292,8 +292,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
                 $contactFormEmail = apply_filters("kt_contact_form_email_filter", $this->getFormEmail());
 
                 $mailer = new KT_Mailer($contactFormEmail, $ktWpInfo->getName(), sprintf($this->getEmailTitle(), $ktWpInfo->getName()));
-                $mailer->setSenderEmail($email);
-                $mailer->setSenderName($fullName);
+                $mailer->setReplyToEmail($email);
                 $mailer->setContent($content);
                 return $sendResult = $mailer->send();
             }
