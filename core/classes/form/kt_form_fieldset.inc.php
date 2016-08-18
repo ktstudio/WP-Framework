@@ -953,6 +953,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addEmail($name, $label) {
         $field = $this->addText($name, $label);
+        $field->setInputType(KT_Text_Field::INPUT_EMAIL);
         $field->addRule(KT_Field_Validator::EMAIL, __("Zadejte prosím platný e-mail", "KT_CORE_DOMAIN"));
         return $field;
     }
@@ -967,6 +968,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function addUrl($name, $label) {
         $field = $this->addText($name, $label);
+        $field->setInputType(KT_Text_Field::INPUT_URL);
         $field->addRule(KT_Field_Validator::URL, __("Zadejte prosím platnou url", "KT_CORE_DOMAIN"));
         return $field;
     }

@@ -65,23 +65,17 @@ class KT_String_Text {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param string $tag HTML tag pro jednotlivé řádky
-     * @param string $class CSS třída pro jednotlivé HTML tagy
+     * @param string $format @see sprintf()
      * @return string (HTML)
      */
-    public function getList($tag, $class = "", $unsafe = false) {
+    public function getList($format = "%s", $unsafe = false) {
         $lines = $this->getLinesArray($unsafe);
         if (!KT::arrayIssetAndNotEmpty($lines)) {
             return;
         }
-        $classPart = "";
-        $tagPart = esc_attr($tag);
-        if (KT::issetAndNotEmpty($class)) {
-            $classPart = " class=\"" . esc_attr($class) . "\"";
-        }
         $output = "";
         foreach ($lines as $line) {
-            $output .= "<{$tagPart}{$classPart}>{$line}</{$tagPart}>";
+            $output .= sprintf($format, $line);
         }
         return $output;
     }

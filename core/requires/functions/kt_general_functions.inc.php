@@ -112,4 +112,3 @@ function kt_load_cookie_statement_content_callback() {
 // dynamicke fieldy
 add_action("wp_ajax_kt_generate_fieldset", ["KT_Fieldset_Field", "ajaxGenerateFieldset"]);
 add_action("wp_ajax_nopriv_kt_generate_fieldset", ["KT_Fieldset_Field", "ajaxGenerateFieldset"]);
-add_action("wp_ajax_kt_clone_fieldset", ["KT_Fieldset_Field", "ajaxCloneFieldset"]);

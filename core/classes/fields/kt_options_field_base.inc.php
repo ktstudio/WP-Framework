@@ -36,7 +36,7 @@ abstract class KT_Options_Field_Base extends KT_Field {
     /**
      * @return array
      */
-    protected function getOptionsData() {
+    public function getOptionsData() {
         if (KT::issetAndNotEmpty($this->dataManager)) {
             return $this->getDataManager()->getData();
         }
