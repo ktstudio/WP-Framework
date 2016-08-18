@@ -104,7 +104,7 @@ abstract class KT_Model_Base implements KT_Modelable {
         $constantName = $this->getConstantNameFromFunction($functionName);
         $constantValue = $reflectionClass->getConstant($constantName);
         if (KT::notIssetOrEmpty($constantValue)) {
-            throw new KT_Not_Exist_Config_Constant_Exception($constantValue);
+            throw new KT_Not_Exist_Config_Constant_Exception($constantName);
         }
         return $constantValue;
     }
