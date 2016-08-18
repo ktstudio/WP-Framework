@@ -10,6 +10,7 @@ class KT_Mailer {
 
     private $senderEmail = null;
     private $senderName = null;
+    private $replyToEmail;
     private $content = null;
     private $recipients = null;
     private $carbonCopies = null;
@@ -43,7 +44,20 @@ class KT_Mailer {
 
     /** @return string */
     private function getSenderEmail() {
+        if (!$this->senderEmail) {
+            $siteUrl = get_option("siteurl", $_SERVER['SERVER_NAME']);
+            $regex = "/^(?:https?\\:\\/\\/)?(?:www\\.)?([^\\/|?|#]+).*$/i";
+            $matches = [];
+            if (preg_match($regex, $siteUrl, $matches)) {
+                $this->senderEmail = "no-reply@{$matches[1]}";
+            }
+        }
         return $this->senderEmail;
+    }
+
+    /** @return string */
+    public function getReplyToEmail() {
+        return $this->replyToEmail;
     }
 
     /** @return string */
@@ -111,7 +125,7 @@ class KT_Mailer {
     }
 
     /**
-     * Nastaveí předmět odesílaného emailu
+     * Nastaví předmět odesílaného emailu
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
@@ -212,7 +226,23 @@ class KT_Mailer {
     }
 
     /**
-     * Nastaveí jméno odesílatele
+     * Nastaví reply to email
+     * 
+     * @author Jan Pokorný
+     * @param string $email
+     * @return \KT_Mailer
+     * @throws InvalidArgumentException
+     */
+    public function setReplyToEmail($email) {
+        if (self::isEmail($email)) {
+            $this->replyToEmail = $email;
+            return $this;
+        }
+        throw new InvalidArgumentException(sprintf(__("Reply to \"%s\" není platnný e-mail!", "KT_CORE_DOMAIN"), $email));
+    }
+
+    /**
+     * Nastaví jméno odesílatele
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz  
@@ -489,8 +519,10 @@ class KT_Mailer {
         $header .= "Content-Type: text/html; charset=utf-8" . PHP_EOL;
         $header .= "Content-Transfer-Encoding: 8bit" . PHP_EOL;
         $header .= "From: " . self::getHeaderEmail($this->getSenderEmail(), $this->getSenderName()) . "" . PHP_EOL;
-        $header .= "Reply-To: {$this->getSenderEmail()}" . PHP_EOL;
-        $header .= "Return-Path: {$this->getSenderEmail()}" . PHP_EOL;
+        if (KT::issetAndNotEmpty($this->getReplyToEmail())) {
+            $header .= "Reply-To: {$this->getReplyToEmail()}" . PHP_EOL;
+            $header .= "Return-Path: {$this->getReplyToEmail()}" . PHP_EOL;
+        }
         $carbonCopies = $this->getCarbonCopies();
         if (KT::issetAndNotEmpty($carbonCopies)) {
             $header .= "Cc: $carbonCopies" . PHP_EOL;
