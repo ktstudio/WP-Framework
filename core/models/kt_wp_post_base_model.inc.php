@@ -341,7 +341,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
         }
         $excerpt = $this->getPost()->post_excerpt;
         if ($withTheFilters) {
-            $excerpt = strip_shortcodes(strip_tags(apply_filters("the_excerpt", $excerpt)));
+            $excerpt = strip_shortcodes(apply_filters("the_excerpt", $excerpt));
         }
         return $excerpt;
     }

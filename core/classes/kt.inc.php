@@ -1564,6 +1564,7 @@ class KT {
      * Provede zvýraznení v text. Syntaxe převzdata z Markdown.
      * *text* -> kurzíva, **text** -> tučný text, ~~text~~ -> přeškrtnutý text 
      * 
+     * @deprecated use KT_String_Markdown
      * @author Jan Pokorný
      * @param string $text Vstupní text
      * @return string Zvýrazněný výstupní text
