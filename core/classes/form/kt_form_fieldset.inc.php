@@ -414,7 +414,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
             $html .= "<table class=\"kt-form-table $class\">";
 
             foreach ($this->getFields() as $field) {
-                if ($field->getFieldType() != KT_Hidden_Field::FIELD_TYPE) {
+                if ($field->getVisible()) {
                     $html .= $this->getInputToTr($field);
                 }
             }
@@ -422,7 +422,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
             $html .= "</table>";
 
             foreach ($this->getFields() as $field) {
-                if ($field->getFieldType() == KT_Hidden_Field::FIELD_TYPE) {
+                if (!$field->getVisible()) {
                     $fieldHtml = $field->getField();
                     $html .= $fieldHtml . "\n";
                 }
@@ -1051,7 +1051,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
             return;
         }
 
-        if ($field->getFieldType() == KT_Hidden_Field::FIELD_TYPE) {
+        if (!$field->getVisible()) {
             return;
         }
 

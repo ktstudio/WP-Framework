@@ -4,6 +4,8 @@ class KT_Hidden_Field extends KT_Field {
 
     const FIELD_TYPE = "hidden";
 
+    protected $visible = false;
+
     /**
      * Založení objektu typu Hidden
      *
@@ -35,7 +37,7 @@ class KT_Hidden_Field extends KT_Field {
      * @return string
      */
     public function getField() {
-        
+
         $html = "";
 
         $html .= "<input type=\"hidden\" ";

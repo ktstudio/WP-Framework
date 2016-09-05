@@ -14,6 +14,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
     private $filterSanitize = FILTER_SANITIZE_SPECIAL_CHARS;
     private $error = false;
     private $validators = array();
+    protected $visible = true;
 
     /**
      * Abstraktní třída pro všechny KT_Fields
@@ -190,6 +191,16 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
         return $this;
     }
 
+    /**
+     * Má se field veřejně zobrazovat
+     * 
+     * @author Jan Pokorný
+     * @param bool $visible
+     */
+    public function setVisible($visible) {
+        $this->visible = $visible;
+    }
+
     // --- gettery ------------------------
 
     /**
@@ -232,6 +243,14 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
      */
     public function getError() {
         return $this->error;
+    }
+
+    /**
+     * @author Jan Pokorný
+     * @return bool
+     */
+    public function getVisible() {
+        return $this->visible;
     }
 
     /**
