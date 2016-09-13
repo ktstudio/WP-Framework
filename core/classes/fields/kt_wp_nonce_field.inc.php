@@ -12,6 +12,7 @@ class KT_WP_Nonce_Field extends KT_Field {
     const DEFAULT_NONCE_NAME = "kt_wpnonce";
 
     private $action = null;
+    protected $visible = false;
 
     /**
      * @param string $action - WP nonce akce

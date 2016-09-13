@@ -114,15 +114,8 @@ class KT_Term_Metabox implements KT_Registrable {
      */
     public function renderFieldsetAdd() {
         wp_enqueue_media();
-        $termId = filter_input(INPUT_GET, "tag_ID", FILTER_SANITIZE_NUMBER_INT);
         $fieldset = $this->getFieldset();
         $fieldset->setTitle("");
-        foreach ($fieldset->getFields() as $field) {
-            if ($termId) {
-                $value = get_term_meta($termId, $metaKey, true);
-                $field->setDefaultValue($value);
-            }
-        }
         echo $fieldset->getInputsToTable();
     }
 
@@ -136,12 +129,9 @@ class KT_Term_Metabox implements KT_Registrable {
         wp_enqueue_media();
         $termId = filter_input(INPUT_GET, "tag_ID", FILTER_SANITIZE_NUMBER_INT);
         $fieldset = $this->getFieldset();
-        $fieldset->setTitle("");
+        $fieldsData = ($fieldset->getSerializeSave()) ? get_term_meta($termId, $fieldset->getName(), true) : KT_WP_Term_Base_Model::getTermsMetas($termId);
+        $fieldset->setFieldsData($fieldsData);
         foreach ($fieldset->getFields() as $field) {
-            if ($termId) {
-                $value = get_term_meta($termId, $field->getName(), true);
-                $field->setDefaultValue($value);
-            }
             echo $fieldset->getInputToTr($field);
         }
     }
@@ -155,7 +145,6 @@ class KT_Term_Metabox implements KT_Registrable {
     public function saveFieldset($termId) {
         $fieldset = $this->getFieldset();
         if (isset($_POST[$fieldset->getPostPrefix()])) {
-            $fieldset = $this->getFieldset();
             $form = new KT_form();
             $form->addFieldSetByObject($fieldset);
             $form->validate();

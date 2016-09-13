@@ -1,7 +1,7 @@
 jQuery(document).ready(function () {
 
     // Validování metaboxu v editaci postu (custom post_type)
-    jQuery("form#post, form#kt-custom-page-screen, #edittag").submit(function () {
+    jQuery("form#post, form#kt-custom-page-screen, #edittag, #your-profile").submit(function () {
         jQuery("#jquery-kt-validator").remove();
 
         var validationResult = jQuery(this).formValidation();
@@ -27,31 +27,8 @@ jQuery(document).ready(function () {
         jQuery(this).parents('form').formValidation();
     });
 
-    // Inicializace switchFieldu
-    jQuery('.switch').each(function () {
-        var input = jQuery(this).children('input[type=hidden]');
-        var toggle = jQuery(this).children('span.switch-toggle');
-
-        if (input.length) {
-            input.addClass('hidden');
-            toggle.removeClass('hidden');
-            if (input.val() == '1') {
-                toggle.addClass('on');
-                toggle.removeClass('off');
-            } else {
-                toggle.addClass('off');
-                toggle.removeClass('on');
-            }
-            ;
-        }
-    });
-
-    // Aktivace tooltip pro inputy KT_Field
-    jQuery('.kt-field').tooltip();
-    jQuery('.kt-tooltip').tooltip();
-    jQuery('body').tooltip({
-        selector: 'div.chosen-container'
-    });
+    
+    
 
     // Přepínání switch fieldu
     jQuery('body').on("click", ".switch-toggle", function () {
@@ -59,18 +36,7 @@ jQuery(document).ready(function () {
         var input = element.next('input[type=hidden]');
         var toggle = element;
         switchToggle(input, toggle);
-    });
-
-    // Počeštění jQuery data pickeru
-    jQuery(".datapicker").datepicker({
-        dateFormat: "dd.mm.yy",
-        dayNames: ["Neděle", "Pondělí", "Úterý", "Sřteda", "Čtvrtek", "Pátek", "Sobota"],
-        dayNamesMin: ["Ne", "Po", "Út", "St", "Čt", "Pá", "So"],
-        monthNames: ["Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec"],
-        monthNamesShort: ["Led", "Úno", "Bře", "Dub", "Kvě", "Čer", "Červ", "Srp", "Zář", "Říj", "Lis", "Pro"],
-        nextText: "Další",
-        prevText: "Předchozí"
-    });
+    });    
 
     // Ajax událost pro smazání záznamu z Item tables
     jQuery("table.item-list span.delete-row").click(function () {
@@ -212,6 +178,39 @@ jQuery(document).ready(function () {
         }).disableSelection();
     }
 
+    // cookie statement
+    jQuery("#ktCookieStatementConfirm").click(function () {
+        var date = new Date();
+        date.setFullYear(date.getFullYear() + 10);
+        document.cookie = "kt-cookie-statement-key=1; path=/; expires=" + date.toGMTString();
+        jQuery("#ktCookieStatement").fadeOut();
+    });
+    kt_core_setup_forms_fields();
+});
+
+function kt_core_setup_forms_fields(){
+     // chosen - multi select
+    jQuery(".multiSelect").chosen({
+        disable_search_threshold: 10,
+        no_results_text: "Žádné výsledky pro",
+        placeholder_text_multiple: "Prázdný výběr",
+        placeholder_text_single: "Prázdný výběr",
+        width: "90%"
+    });
+    // chosen - single select
+    jQuery(".singleSelect").chosen({
+        no_results_text: "Žádné výsledky pro",
+        placeholder_text_single: "Prázdný výběr",
+        width: "90%"
+    });
+    // chosen - single select deselect
+    jQuery(".singleSelectDeselect").chosen({
+        allow_single_deselect: true,
+        no_results_text: "Žádné výsledky pro",
+        placeholder_text_single: "Prázdný výběr",
+        width: "90%"
+    });
+    
     // Slider input - jQuery UI
 
     jQuery(".sliderInputElement").each(function () {
@@ -242,36 +241,42 @@ jQuery(document).ready(function () {
                 jQuery(this).find(".ui-slider-handle").text(value);
             }
         });
+    });   
+    
+    // Počeštění jQuery data pickeru
+    jQuery(".datapicker").datepicker({
+        dateFormat: "dd.mm.yy",
+        dayNames: ["Neděle", "Pondělí", "Úterý", "Sřteda", "Čtvrtek", "Pátek", "Sobota"],
+        dayNamesMin: ["Ne", "Po", "Út", "St", "Čt", "Pá", "So"],
+        monthNames: ["Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec"],
+        monthNamesShort: ["Led", "Úno", "Bře", "Dub", "Kvě", "Čer", "Červ", "Srp", "Zář", "Říj", "Lis", "Pro"],
+        nextText: "Další",
+        prevText: "Předchozí"
     });
+    
+    // Inicializace switchFieldu
+    jQuery('.switch').each(function () {
+        var input = jQuery(this).children('input[type=hidden]');
+        var toggle = jQuery(this).children('span.switch-toggle');
 
-    // chosen - multi select
-    jQuery(".multiSelect").chosen({
-        disable_search_threshold: 10,
-        no_results_text: "Žádné výsledky pro",
-        placeholder_text_multiple: "Prázdný výběr",
-        placeholder_text_single: "Prázdný výběr",
-        width: "90%"
+        if (input.length) {
+            input.addClass('hidden');
+            toggle.removeClass('hidden');
+            if (input.val() == '1') {
+                toggle.addClass('on');
+                toggle.removeClass('off');
+            } else {
+                toggle.addClass('off');
+                toggle.removeClass('on');
+            }
+            ;
+        }
     });
-    // chosen - single select
-    jQuery(".singleSelect").chosen({
-        no_results_text: "Žádné výsledky pro",
-        placeholder_text_single: "Prázdný výběr",
-        width: "90%"
+    
+    // Aktivace tooltip pro inputy KT_Field
+    jQuery('.kt-field').tooltip();
+    jQuery('.kt-tooltip').tooltip();
+    jQuery('body').tooltip({
+        selector: 'div.chosen-container'
     });
-    // chosen - single select deselect
-    jQuery(".singleSelectDeselect").chosen({
-        allow_single_deselect: true,
-        no_results_text: "Žádné výsledky pro",
-        placeholder_text_single: "Prázdný výběr",
-        width: "90%"
-    });
-
-    // cookie statement
-    jQuery("#ktCookieStatementConfirm").click(function () {
-        var date = new Date();
-        date.setFullYear(date.getFullYear() + 10);
-        document.cookie = "kt-cookie-statement-key=1; path=/; expires=" + date.toGMTString();
-        jQuery("#ktCookieStatement").fadeOut();
-    });
-
-});
+}

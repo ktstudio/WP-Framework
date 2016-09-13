@@ -234,7 +234,22 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function getFieldByName($name) {
         $fieldsCollection = $this->getFields();
-        return $field = $fieldsCollection[$name];
+        if (isset($fieldsCollection[$name]))
+            return $field = $fieldsCollection[$name];
+    }
+
+    /**
+     * Kontrola, zda je zadán field objekt na základě zvoleného názvu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $name
+     * @return boolean
+     */
+    public function hasFieldByName($name) {
+        $fieldsCollection = $this->getFields();
+        return array_key_exists($name, $fieldsCollection);
     }
 
     /**
@@ -399,7 +414,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
             $html .= "<table class=\"kt-form-table $class\">";
 
             foreach ($this->getFields() as $field) {
-                if ($field->getFieldType() != KT_Hidden_Field::FIELD_TYPE) {
+                if ($field->getVisible()) {
                     $html .= $this->getInputToTr($field);
                 }
             }
@@ -407,7 +422,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
             $html .= "</table>";
 
             foreach ($this->getFields() as $field) {
-                if ($field->getFieldType() == KT_Hidden_Field::FIELD_TYPE) {
+                if (!$field->getVisible()) {
                     $fieldHtml = $field->getField();
                     $html .= $fieldHtml . "\n";
                 }
@@ -436,10 +451,14 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
             return "";
         }
 
+        if ($field->getFieldType() === KT_Fieldset_Field::FIELD_TYPE) {
+            return "<tr><td colspan=2>{$field->getField()}</td></tr>";
+        }
+
         $html = "<tr>";
 
         if (KT::issetAndNotEmpty($field->getLabel())) {
-            $html .= "<td><label for=\"{$field->getName()}\">{$field->getLabel()}</label></td>";
+            $html .= "<td><label for = \"{$field->getName()}\">{$field->getLabel()}</label></td>";
         }
 
         $html .= "<td>{$field->getField()}</td>";
@@ -896,6 +915,92 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         return $field;
     }
 
+    /**
+     * Přidá fieldsefield
+     * 
+     * @author Jan Pokorný
+     * @param string $name
+     * @param string $label
+     * @param array $fieldsetRecipy Recept pro vygenerování fieldsetu. Př. ["KT_ZZZ_Post_Config", KT_ZZZ_Post_Config::DYNAMIC_FIELDSET"]
+     * @return \KT_Fieldset_Field
+     */
+    public function addFieldset($name, $label, $fieldsetRecipy) {
+        $field = $this->fields[$name] = new KT_Fieldset_Field($name, $label, $fieldsetRecipy);
+        return $field;
+    }
+
+    /**
+     * Přidá key=> value fieldsefield
+     * 
+     * @author Jan Pokorný
+     * @param string $name
+     * @param string $label
+     * @param array $fieldsetRecipy Recept pro vygenerování fieldsetu. Př. ["KT_ZZZ_Post_Config", KT_ZZZ_Post_Config::DYNAMIC_FIELDSET"]
+     * @return \KT_Fieldset_Field
+     */
+    public function addKeyValueFieldset($name, $label) {
+        $field = $this->fields[$name] = new KT_Fieldset_Field($name, $label, ["KT_Dynamic_Fieldset_Predefined_Config", KT_Dynamic_Fieldset_Predefined_Config::KEY_VALUE_FIELDSET]);
+        return $field;
+    }
+
+    /**
+     * Přidá text field s rulem na e-mail
+     * 
+     * @author Jan Pokorný
+     * @param string $name
+     * @param string $label
+     * @return KT_Text_Field
+     */
+    public function addEmail($name, $label) {
+        $field = $this->addText($name, $label);
+        $field->setInputType(KT_Text_Field::INPUT_EMAIL);
+        $field->addRule(KT_Field_Validator::EMAIL, __("Zadejte prosím platný e-mail", "KT_CORE_DOMAIN"));
+        return $field;
+    }
+
+    /**
+     * Přidá text field s rulem na url
+     * 
+     * @author Jan Pokorný
+     * @param string $name
+     * @param string $label
+     * @return KT_Text_Field
+     */
+    public function addUrl($name, $label) {
+        $field = $this->addText($name, $label);
+        $field->setInputType(KT_Text_Field::INPUT_URL);
+        $field->addRule(KT_Field_Validator::URL, __("Zadejte prosím platnou url", "KT_CORE_DOMAIN"));
+        return $field;
+    }
+
+    /**
+     * Přidá text field s rulem na int
+     * 
+     * @author Jan Pokorný
+     * @param string $name
+     * @param string $label
+     * @return KT_Text_Field
+     */
+    public function addInt($name, $label) {
+        $field = $this->addText($name, $label);
+        $field->addRule(KT_Field_Validator::INTEGER, __("Zadejte prosím celé číslo", "KT_CORE_DOMAIN"));
+        return $field;
+    }
+
+    /**
+     * Přidá text field s rulem na float
+     * 
+     * @author Jan Pokorný
+     * @param string $name
+     * @param string $label
+     * @return KT_Text_Field
+     */
+    public function addFloat($name, $label) {
+        $field = $this->addText($name, $label);
+        $field->addRule(KT_Field_Validator::FLOAT, __("Zadejte prosím desetinné číslo", "KT_CORE_DOMAIN"));
+        return $field;
+    }
+
     // --- privátní metody ----------------------
 
     /**
@@ -946,7 +1051,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
             return;
         }
 
-        if ($field->getFieldType() == KT_Hidden_Field::FIELD_TYPE) {
+        if (!$field->getVisible()) {
             return;
         }
 

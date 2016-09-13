@@ -582,7 +582,8 @@ class KT_Repository {
         $this->setLimit(1);
         $this->selectData();
         if ($this->haveItems()) {
-            return reset($this->getItems());
+            $items = $this->getItems();
+            return reset($items);
         }
         return null;
     }

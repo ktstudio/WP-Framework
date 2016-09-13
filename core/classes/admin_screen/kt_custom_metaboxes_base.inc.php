@@ -15,6 +15,7 @@ abstract class KT_Custom_Metaboxes_Base {
     const UPDATED_GET_KEY = "redirect";
     const SAVE_RESULT_KEY = "result";
     const REDIRECT_ALLOWED = "redirect-allowed";
+    const SAVE_RESULT_ERRORS = "errors";
 
     private $renderSaveButton = false;
     private $NumberColumns = self::COLUMN_TWO;
@@ -22,7 +23,7 @@ abstract class KT_Custom_Metaboxes_Base {
     private $defaultCallbackFunction = array();
     private $metaboxCollection = array();
     private $crudList = null;
-    
+    private $saveResult = [];
     private static $crudInstance = null;
 
     /**
@@ -331,7 +332,7 @@ abstract class KT_Custom_Metaboxes_Base {
             case 1:
                 add_action("admin_notices", array($this, "adminNoticesSuccuess"));
                 break;
-            
+
             case 2:
                 add_action("admin_notices", array($this, "adminNoticesCrudTableMissing"));
                 break;
@@ -347,16 +348,15 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function adminNoticesError() {
         echo "<div class=\"error\">";
-        
-        if($this->crudInstance->hasError()){
-            foreach($this->crudInstance->getErrors() as $error){
+        if (isset($this->crudInstance) && $this->crudInstance->hasError()) {
+            foreach ($this->crudInstance->getErrors() as $error) {
                 echo "<p>{$error["message"]}</p>";
                 echo "<p>{$error["data"]}</p>";
             }
-        } else {
-            echo "<p>" . __('POZOR! - K žádné zásadní chybě při operaci nedošlo, ale něco bylo špatně. Zkontrolujte prosím data nebo kontaktujte provozovatele serveru.', "KT_CORE_DOMAIN") . "</p>";
         }
-        
+        foreach ($this->saveResult[self::SAVE_RESULT_ERRORS] as $error) {
+            printf('<p>%s</p>', $error);
+        }
         echo "</div>";
     }
 
@@ -525,19 +525,20 @@ abstract class KT_Custom_Metaboxes_Base {
             $pageSlug = $_GET["page"];
             if ($pageSlug == $this->getSlug()) {
 
-                $saveResult = array(
+                $this->saveResult = array(
                     self::SAVE_RESULT_KEY => true,
-                    self::REDIRECT_ALLOWED => true
+                    self::REDIRECT_ALLOWED => true,
+                    self::SAVE_RESULT_ERRORS => []
                 );
 
-                $saveResult = apply_filters("kt-custom-metabox-save-$screenName", $saveResult, 1);
-                $this->crudInstance = $crudInstance = KT::arrayTryGetValue($saveResult, "crud");
+                $this->saveResult = apply_filters("kt-custom-metabox-save-$screenName", $this->saveResult, 1);
+                $this->crudInstance = $crudInstance = KT::arrayTryGetValue($this->saveResult, "crud");
 
-                if (KT::arrayTryGetValue($saveResult, self::REDIRECT_ALLOWED) == false) {
+                if (KT::arrayTryGetValue($this->saveResult, self::REDIRECT_ALLOWED) == false) {
                     return;
                 }
 
-                if (KT::arrayTryGetValue($saveResult, self::SAVE_RESULT_KEY) !== true) {                    
+                if (KT::arrayTryGetValue($this->saveResult, self::SAVE_RESULT_KEY) !== true) {
                     add_action("admin_notices", array($this, "adminNoticesError"), 99, 1);
                     return;
                 }
@@ -547,7 +548,7 @@ abstract class KT_Custom_Metaboxes_Base {
                     self::UPDATED_GET_KEY => true
                 );
 
-                if (array_key_exists("crud", $saveResult)) {
+                if (array_key_exists("crud", $this->saveResult)) {
                     $urlParams[$crudInstance::ID_COLUMN] = $crudInstance->getId();
                     $urlParams["action"] = "update";
                 }

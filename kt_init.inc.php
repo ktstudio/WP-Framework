@@ -2,7 +2,7 @@
 
 define("KT_LOADED", true);
 
-define("KT_VERSION", "1.8");
+define("KT_VERSION", "1.9");
 
 define("KT_BASE_PATH", path_join(TEMPLATEPATH, "kt"));
 define("KT_BASE_URL", get_template_directory_uri() . "/kt");
@@ -16,9 +16,9 @@ define("KT_PHP_ADMIN_FILE_SUFFIX", ".admin.inc.php");
 define("KT_INIT_MODULE_FILE", "kt_init.inc.php");
 define("KT_BASE_STATIC_CLASS", "KT");
 define("KT_EMPTY_SYMBOL", __("---", "KT_CORE_DOMAIN"));
-define("KT_EMPTY_TEXT", __("<Prázdné>", "KT_CORE_DOMAIN"));
-define("KT_ALL_TEXT", __("<Vše>", "KT_CORE_DOMAIN"));
-define("KT_SELECT_TEXT", __("<Vybrat>", "KT_CORE_DOMAIN"));
+define("KT_EMPTY_TEXT", __("Prázdné", "KT_CORE_DOMAIN"));
+define("KT_ALL_TEXT", __("Vše", "KT_CORE_DOMAIN"));
+define("KT_SELECT_TEXT", __("Vybrat", "KT_CORE_DOMAIN"));
 define("KT_SELECT_SYMBOL", __("...", "KT_CORE_DOMAIN"));
 define("KT_BASE_CLASS_SUFFIX", "base");
 define("KT_INTERFACES_FOLDER", "interfaces");

@@ -14,6 +14,7 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
     private $filterSanitize = FILTER_SANITIZE_SPECIAL_CHARS;
     private $error = false;
     private $validators = array();
+    protected $visible = true;
 
     /**
      * Abstraktní třída pro všechny KT_Fields
@@ -190,6 +191,16 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
         return $this;
     }
 
+    /**
+     * Má se field veřejně zobrazovat
+     * 
+     * @author Jan Pokorný
+     * @param bool $visible
+     */
+    public function setVisible($visible) {
+        $this->visible = $visible;
+    }
+
     // --- gettery ------------------------
 
     /**
@@ -235,6 +246,14 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
     }
 
     /**
+     * @author Jan Pokorný
+     * @return bool
+     */
+    public function getVisible() {
+        return $this->visible;
+    }
+
+    /**
      * @return array
      */
     private function getValidators() {
@@ -269,11 +288,13 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
      * 
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
+     * @param $class string
      * @return string
      */
-    public function getLabelHtml() {
-        return "<label for=\"" . $this->getAttrValueByName("id") . "\">" . $this->getLabel() . "</label>";
+    public function getLabelHtml($class = null) {
+        $classAttribute = KT::issetAndNotEmpty($class) ? " class=\"$class\"" : "";
+        return "<label for=\"" . $this->getAttrValueByName("id") . "\"$classAttribute>" . $this->getLabel() . "</label>";
     }
 
     /**

@@ -79,10 +79,6 @@ class KT_Single_Select_Field extends KT_Select_Field {
         return $this;
     }
 
-    public function getOptionsContent() {
-        return "<option value=\"\"></option>" . parent::getOptionsContent();
-    }
-
     // --- veřejné funkce -----------------
 
     /**

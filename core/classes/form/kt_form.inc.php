@@ -32,7 +32,6 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     function __construct($method = self::METHOD_POST, $action = '#', $id = 'kt-form') {
         $this->setMethod($method)
                 ->setAction($action)
-                ->setMethod(self::METHOD_POST)
                 ->setAttrId($id)
                 ->setSuccessMessage(__("Data byla uložena", "KT_CORE_DOMAIN"))
                 ->setErrorMessage(__("Ve formuláři se vyskytla chyba", "KT_CORE_DOMAIN"));
@@ -484,11 +483,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return string
      */
     public function getFormNotice() {
-        if ($this->getMethod() == self::METHOD_POST && KT::notIssetOrEmpty($_POST)) {
-            return;
-        }
-
-        if ($this->getMethod() == self::METHOD_GET && KT::notIssetOrEmpty($_GET)) {
+        if (!$this->isFormSend()) {
             return;
         }
 
@@ -837,7 +832,6 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
                 }
             }
         }
-
         return $this;
     }
 
@@ -1065,6 +1059,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     /**
      * Funkce prověří, zda byl formulář odeslán na základě metody a postu nebo getu
      *
+     * @todo Nefunguje pokud není post prefix
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
@@ -1402,7 +1397,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param KT_Field $field
      * @return string
      */
-    private function getSavableFieldValue(KT_Field $field) {
+    public function getSavableFieldValue(KT_Field $field) {
         $value = $field->getValue();
         if ($field->getFieldType() == KT_Text_Field::FIELD_TYPE) {
             if ($field->getInputType() == KT_Text_Field::INPUT_DATE) {
@@ -1422,7 +1417,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param array $excludeFields
      * @return array
      */
-    private function getSavableFieldsetGroupValue(KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
+    public function getSavableFieldsetGroupValue(KT_Form_Fieldset $fieldset, array $excludeFields = array()) {
         /* @var $field \KT_Field */
         foreach ($fieldset->getFields() as $field) {
             if (!in_array($field->getName(), $excludeFields) && KT::issetAndNotEmpty($field->getValue())) {

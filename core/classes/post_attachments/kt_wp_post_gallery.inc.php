@@ -81,6 +81,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
      */
     public function setCustomImageIds(array $customImageIds) {
         $this->customImageIds = $customImageIds;
+        return $this;
     }
 
     /**
@@ -94,6 +95,7 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
      */
     public function setThumbnailSize($thumbnailSize) {
         $this->thumbnailSize = $thumbnailSize;
+        return $this;
     }
 
     /**
@@ -174,6 +176,58 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
     }
 
     /**
+     * Vratí ten nejjednodušší seznam obrázků 
+     * 
+     * @author Jan Pokorný
+     * @param array $imgAttrs atributy pro každy img tag
+     * @param bool $withSelfLink obalit img tagy odkazy
+     * @param array $linkAttrs  atributy pro každy a tag
+     * @param string $format  format @see sprintf();
+     * @return string (html)
+     */
+    public function getImageList($imgAttrs = [], $withSelfLink = true, $linkAttrs = [], $format = "%s") {
+        $html = "";
+        if (KT::notIssetOrEmpty($this->getFiles())) {
+            return $html;
+        }
+        foreach ($this->getFiles() as $image) {
+            /* @var $image \WP_Post */
+            $imgHtml = "";
+            if ($withSelfLink) {
+                $large = wp_get_attachment_image_src($image->ID, $this->getLargeSize());
+                $imgHtml .= $this->getLinkTagToLargeImage($large, $linkAttrs, $image->post_title);
+            }
+
+            $imgHtml .= KT::imageGetHtmlByAttachmentId($image->ID, $this->getThumbnailSize(), false, $imgAttrs);
+
+            if ($withSelfLink) {
+                $imgHtml .= "</a>";
+            }
+            $html .= sprintf($format, $imgHtml);
+        }
+        return $html;
+    }
+
+    /**
+     * Vytvoří kolekci setů pro html tag picture
+     * 
+     * @author Jan Pokorný
+     * @param string $defaultSize Wordpress velikost obrázku pro <img>
+     * @param int $width Šířka - nutné pro lazyload
+     * @param int $height Výška - nutné pro lazyload
+     * @param array min-width => wordpress velikost - 1024 => KT_IMG_SIZE_SLIDER
+     * @param array $imgAttrs Attributy pro img tag atribute => hodnota
+     * @return array Kolekce kolekcí tagů <img> x * <source>
+     */
+    public function getPictureSets($defaultSize, $width, $height, array $sizes = [], array $imgAttrs = null) {
+        $set = [];
+        foreach ($this->getFiles() as $post) {
+            $set[] = KT::imageGetPictureSet($post, $defaultSize, $width, $height, $sizes, $imgAttrs);
+        }
+        return $set;
+    }
+
+    /**
      * Provede inicializaci a načtení všech obrázků dle zadaného Post objektu a nastavení
      * 
      * @author Tomáš Kocifaj
@@ -227,8 +281,9 @@ class KT_WP_Post_Gallery extends KT_WP_Post_Attachments_Base {
      * @param string $title // attribut title
      * @return string
      */
-    private function getLinkTagToLargeImage(array $large, array $attr = array(), $title) {
+    private function getLinkTagToLargeImage(array $large, $attr = array(), $title) {
 
+        $htmlAttr = "";
         if (KT::issetAndNotEmpty($attr) && is_array($attr)) {
             foreach ($attr as $attrName => $attrValue) {
                 $htmlAttr = " $attrName = \"$attrValue\" ";

@@ -313,8 +313,8 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
                 $excerpt = $post->post_content;
             }
             if (KT::issetAndNotEmpty($excerpt)) {
-                $excerptMore = $customExcerptMore ?: apply_filters("excerpt_more", " [&hellip;]");
-                $excerptLength = $customExcerptLength ?: apply_filters("excerpt_length", self::DEFAULT_EXCERPT_LENGTH);
+                $excerptMore = $customExcerptMore ? : apply_filters("excerpt_more", " [&hellip;]");
+                $excerptLength = $customExcerptLength ? : apply_filters("excerpt_length", self::DEFAULT_EXCERPT_LENGTH);
                 $excerpt = wp_trim_words($excerpt, $excerptLength, $excerptMore);
                 if (KT::issetAndNotEmpty($excerpt)) {
                     $excerptFilterered = apply_filters("get_the_excerpt", $excerpt);
@@ -326,6 +326,24 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
             }
         }
         return null;
+    }
+
+    /**
+     * Vrátí celý excerpt pokud byl zadán
+     * 
+     * @author Jan Pokorný
+     * @param bool $withTheFilters
+     * @return string
+     */
+    public function getFullExcerpt($withTheFilters = true) {
+        if (!$this->hasExcerpt()) {
+            return;
+        }
+        $excerpt = $this->getPost()->post_excerpt;
+        if ($withTheFilters) {
+            $excerpt = strip_shortcodes(apply_filters("the_excerpt", $excerpt));
+        }
+        return $excerpt;
     }
 
     /**

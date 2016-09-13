@@ -5,7 +5,7 @@
  * Po zadání nastavení a různých parametrů je
  * potřeba configurátor initializovat
  * ->initialize()
- * 
+ *
  * @author Tomáš Kocifaj
  * @link http://www.ktstudio.cz
  */
@@ -26,7 +26,7 @@ final class KT_WP_Configurator {
     private $sidebarCollection = array();
     private $postTypesFeaturesToAdd = array();
     private $postTypesFeaturesToRemove = array();
-    private $excerptLenght = null;
+    private $excerptLength = null;
     private $excerptText = null;
     private $metaboxRemover = null;
     private $pageRemover = null;
@@ -44,6 +44,8 @@ final class KT_WP_Configurator {
     private $allowCookieStatement = false;
     private $facebookManager = null;
     private $emojiSwitch = false;
+    private $autoRemoveShortcodesParagraphs = false;
+    private $enableDynamicFieldsets = false;
 
     // --- gettery ----------------------
 
@@ -87,7 +89,7 @@ final class KT_WP_Configurator {
      * @return int
      */
     public function getExcerptLength() {
-        return $this->excerptLenght;
+        return $this->excerptLength;
     }
 
     /**
@@ -206,12 +208,22 @@ final class KT_WP_Configurator {
         return $this->facebookManager;
     }
 
-    /**
-     *
-     * @return boolean
-     */
+    /** @return boolean */
     public function getEmojiSwitch() {
         return $this->emojiSwitch;
+    }
+
+    /** @return boolean */
+    public function getAutoRemoveShortcodesParagraphs() {
+        return $this->autoRemoveShortcodesParagraphs;
+    }
+
+    /**
+     * 
+     * @return boolean
+     */
+    public function getEnableDynamicFieldsets() {
+        return $this->enableDynamicFieldsets;
     }
 
     // --- settery ----------------------
@@ -287,7 +299,7 @@ final class KT_WP_Configurator {
         $excerptLenght = KT::tryGetInt($excerptLenght);
 
         if (KT::issetAndNotEmpty($excerptLenght)) {
-            $this->excerptLenght = $excerptLenght;
+            $this->excerptLength = $excerptLenght;
         }
 
         return $this;
@@ -456,10 +468,10 @@ final class KT_WP_Configurator {
 
     /**
      * Nastaví facebook data manager do configurátoru
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param KT_WP_Facebook_Data_Configurator $facebookManager
      * @return \KT_WP_Configurator
      */
@@ -470,13 +482,35 @@ final class KT_WP_Configurator {
 
     /**
      * Zapne / vypne emoji smajlíky a vše s nimi spojené
-     * 
+     *
      * @author Jan Pokorný
      * @param boolean $switch
      * @return \KT_WP_Configurator
      */
     public function setEmojiSwitch($switch = true) {
-        $this->emojiSwitch = $switch;
+        $this->emojiSwitch = KT::tryGetBool($switch);
+        return $this;
+    }
+
+    /**
+     * Zapne / vypne elimininaci nechtěného odřádkování v contentu se shortcody
+     *
+     * @author Martin Hlaváč
+     * @param boolean $enabled
+     * @return \KT_WP_Configurator
+     */
+    public function setAutoRemoveShortcodesParagraphs($enabled = true) {
+        $this->autoRemoveShortcodesParagraphs = KT::tryGetBool($enabled);
+        return $this;
+    }
+
+    /**
+     * 
+     * @param boolean $enableAdmin
+     * @return \KT_WP_Configurator
+     */
+    public function setEnableDynamicFieldsets($enableAdmin = true) {
+        $this->enableDynamicFieldsets = $enableAdmin;
         return $this;
     }
 
@@ -553,6 +587,10 @@ final class KT_WP_Configurator {
             add_action("login_head", array($this, "registerLoginLogoImageAction"));
         }
 
+        if ($this->getEnableDynamicFieldsets()) {
+            add_action("admin_enqueue_scripts", array($this, "registerDynamicFieldsetScript"));
+        }
+
         // registrace a načítání scriptů zavedené v configurátoru
         if (KT::issetAndNotEmpty($this->getAssetsConfigurator())) {
             add_action("init", array($this, "registerScriptsAction"));
@@ -626,9 +664,16 @@ final class KT_WP_Configurator {
             add_action("wp_head", array($this, "facebookTagsInit"), 99);
         }
 
-        //emoji
+        // emoji
         if ($this->getEmojiSwitch() === false) {
             add_action("init", array($this, "removeEmoji"), 1);
+        }
+
+        // Auto Remove Shortcodes Paragraphs
+        if ($this->getAutoRemoveShortcodesParagraphs() === true) {
+            remove_filter("the_content", "wpautop");
+            add_filter("the_content", "wpautop", 99);
+            add_filter("the_content", array($this, "autoRemoveShortcodesParagraphs"), 100);
         }
     }
 
@@ -679,7 +724,7 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * Přidá Theme Support do Wordpressu 
+     * Přidá Theme Support do Wordpressu
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -824,10 +869,10 @@ final class KT_WP_Configurator {
 
     /**
      * Založí configurátoru možnost přidat assety k registraci a případnému začlenění do frontendu
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @return type
      */
     public function assetsConfigurator() {
@@ -1101,7 +1146,7 @@ final class KT_WP_Configurator {
     /**
      * Provede registraci všech scriptů, které byly přidáno do assetConfigurátoru
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
@@ -1129,7 +1174,7 @@ final class KT_WP_Configurator {
     /**
      * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
@@ -1152,7 +1197,7 @@ final class KT_WP_Configurator {
     /**
      * Provede vložení scriptů, které mají nastaveno načtení, do frotnendu
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
@@ -1180,7 +1225,7 @@ final class KT_WP_Configurator {
     /**
      * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
@@ -1207,7 +1252,7 @@ final class KT_WP_Configurator {
     /**
      * Provede vložení scriptů, které mají nastaveno načtení, do admin sekce
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
@@ -1235,7 +1280,7 @@ final class KT_WP_Configurator {
     /**
      * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru v rámci admin sekce
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
@@ -1265,7 +1310,7 @@ final class KT_WP_Configurator {
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $html
      */
     public function htmlImageLazyLoadingFilter($html) {
@@ -1295,7 +1340,7 @@ final class KT_WP_Configurator {
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $html
      */
     public function addPostArchivesMenuMetaBox() {
@@ -1308,7 +1353,7 @@ final class KT_WP_Configurator {
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $html
      */
     public function postArchivesMenuMetaBoxCallBack() {
@@ -1358,7 +1403,7 @@ final class KT_WP_Configurator {
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param array $items
      */
     public function postArchivesMenuFilter($items) {
@@ -1375,27 +1420,27 @@ final class KT_WP_Configurator {
         }
         return $items;
     }
-    
+
     /**
      * Provede inicializaci definice post typu a rewritu pro archiv příspěvků
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
     public function addPostsArchiveDefinitionRewrite() {
         global $wp_post_types;
-        
+
         $wp_post_types["post"]->has_archive = $this->getPostsArchiveSlug();
         $wp_post_types["post"]->rewrite = array("with_front" => true, "feeds" => false);
-        
+
         add_rewrite_rule("{$this->getPostsArchiveSlug()}/?$", sprintf("index.php?post_type=%s", KT_WP_POST_KEY), "top");
     }
 
     /**
      * Provede inicializaci facebook modulu a výpíše OG tagy do hlavičky webu
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
@@ -1405,7 +1450,7 @@ final class KT_WP_Configurator {
 
     /**
      * Povolení a zahájení SESSION v rámci WP
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
@@ -1417,7 +1462,7 @@ final class KT_WP_Configurator {
 
     /**
      * Obsluha ukončení SESSION v rámci WP
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      */
@@ -1428,7 +1473,7 @@ final class KT_WP_Configurator {
     /**
      * Provede povolení, resp. inicializaci proužku s potvrzením cookie (v patičce)
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
@@ -1439,7 +1484,7 @@ final class KT_WP_Configurator {
     /**
      * Vrátí obsah proužku s potvrzením cookie (v patičce)
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
@@ -1464,11 +1509,9 @@ final class KT_WP_Configurator {
         return null;
     }
 
-    // --- statické funkce --------------
-
     /**
      * Vrátí název WP_Screen base pro založenou stránku theme setting.
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
@@ -1480,7 +1523,7 @@ final class KT_WP_Configurator {
 
     /**
      * Vrátí název WP_Screen base pro (založenou) stránku (KT) WP Cron
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
@@ -1492,7 +1535,7 @@ final class KT_WP_Configurator {
 
     /**
      * Smaže akce spojené s emoji
-     * 
+     *
      * @author Jan Pokorný
      */
     public function removeEmoji() {
@@ -1510,7 +1553,7 @@ final class KT_WP_Configurator {
 
     /**
      * Filtr pro odstranění emoji z Tinymc
-     * 
+     *
      * @author Jan Pokorný
      * @param array $plugins
      * @return array
@@ -1521,6 +1564,64 @@ final class KT_WP_Configurator {
         } else {
             return array();
         }
+    }
+
+    /**
+     * Don't auto-p wrap shortcodes that stand alone
+     * Ensures that shortcodes are not wrapped in <<p>>...<</p>>.
+     *
+     * @author Paulund
+     * @link https://paulund.co.uk/remove-line-breaks-in-shortcodes
+     *
+     * @param string $content The content.
+     * @return string The filtered content.
+     */
+    public function autoRemoveShortcodesParagraphs($content) {
+        global $shortcode_tags;
+        if (empty($shortcode_tags) || !is_array($shortcode_tags)) {
+            return $content;
+        }
+        $tagregexp = join("|", array_map("preg_quote", array_keys($shortcode_tags)));
+        $pattern = '/'
+                . '<p>'                              // Opening paragraph
+                . '\\s*+'                            // Optional leading whitespace
+                . '('                                // 1: The shortcode
+                . '\\['                          // Opening bracket
+                . "($tagregexp)"                 // 2: Shortcode name
+                . '(?![\\w-])'                   // Not followed by word character or hyphen
+                // Unroll the loop: Inside the opening shortcode tag
+                . '[^\\]\\/]*'                   // Not a closing bracket or forward slash
+                . '(?:'
+                . '\\/(?!\\])'               // A forward slash not followed by a closing bracket
+                . '[^\\]\\/]*'               // Not a closing bracket or forward slash
+                . ')*?'
+                . '(?:'
+                . '\\/\\]'                   // Self closing tag and closing bracket
+                . '|'
+                . '\\]'                      // Closing bracket
+                . '(?:'                      // Unroll the loop: Optionally, anything between the opening and closing shortcode tags
+                . '[^\\[]*+'             // Not an opening bracket
+                . '(?:'
+                . '\\[(?!\\/\\2\\])' // An opening bracket not followed by the closing shortcode tag
+                . '[^\\[]*+'         // Not an opening bracket
+                . ')*+'
+                . '\\[\\/\\2\\]'         // Closing shortcode tag
+                . ')?'
+                . ')'
+                . ')'
+                . '\\s*+'                            // optional trailing whitespace
+                . '<\\/p>'                           // closing paragraph
+                . '/s';
+        return preg_replace($pattern, '$1', $content);
+    }
+
+    /**
+     * Registrace scriptu pro dynamické fieldsety
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     * @author Jan Pokorný
+     */
+    public function registerDynamicFieldsetScript() {
+        wp_enqueue_script(KT_DYNAMIC_FIELDSET_SCRIPT);
     }
 
 }
