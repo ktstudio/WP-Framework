@@ -1784,7 +1784,7 @@ class KT {
             extract($wp_query->query_vars, EXTR_SKIP);
         }
         extract($args);
-        require_once $template;
+        require $template;
     }
 
     // --- TERMS ---------------------
