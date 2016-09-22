@@ -46,6 +46,7 @@ final class KT_WP_Configurator {
     private $emojiSwitch = false;
     private $autoRemoveShortcodesParagraphs = false;
     private $enableDynamicFieldsets = false;
+    private $disableOembed = false;
 
     // --- gettery ----------------------
 
@@ -218,12 +219,14 @@ final class KT_WP_Configurator {
         return $this->autoRemoveShortcodesParagraphs;
     }
 
-    /**
-     * 
-     * @return boolean
-     */
+    /** @return boolean */
     public function getEnableDynamicFieldsets() {
         return $this->enableDynamicFieldsets;
+    }
+
+    /** @return boolean */
+    public function getDisableOembed() {
+        return $this->disableOembed;
     }
 
     // --- settery ----------------------
@@ -514,6 +517,18 @@ final class KT_WP_Configurator {
         return $this;
     }
 
+    /**
+     * Vypne / ponechá funkce WP Oembed
+     *
+     * @author Martin Hlaváč
+     * @param boolean $disable
+     * @return \KT_WP_Configurator
+     */
+    public function setDisableOembed($disable = true) {
+        $this->disableOembed = KT::tryGetBool($disable);
+        return $this;
+    }
+
     // --- veřejné funkce ---------------
 
     /**
@@ -666,7 +681,7 @@ final class KT_WP_Configurator {
 
         // emoji
         if ($this->getEmojiSwitch() === false) {
-            add_action("init", array($this, "removeEmoji"), 1);
+            add_action("init", array($this, "removeEmoji"), 99);
         }
 
         // Auto Remove Shortcodes Paragraphs
@@ -674,6 +689,11 @@ final class KT_WP_Configurator {
             remove_filter("the_content", "wpautop");
             add_filter("the_content", "wpautop", 99);
             add_filter("the_content", array($this, "autoRemoveShortcodesParagraphs"), 100);
+        }
+
+        // Oembed
+        if ($this->getDisableOembed() === false) {
+            add_action("init", array($this, "disableOembed"), 99);
         }
     }
 
@@ -1535,6 +1555,7 @@ final class KT_WP_Configurator {
 
     /**
      * Smaže akce spojené s emoji
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
      * @author Jan Pokorný
      */
@@ -1553,6 +1574,7 @@ final class KT_WP_Configurator {
 
     /**
      * Filtr pro odstranění emoji z Tinymc
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
      * @author Jan Pokorný
      * @param array $plugins
@@ -1622,6 +1644,26 @@ final class KT_WP_Configurator {
      */
     public function registerDynamicFieldsetScript() {
         wp_enqueue_script(KT_DYNAMIC_FIELDSET_SCRIPT);
+    }
+
+
+    /**
+     * Zruší WP Oembed
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     */
+    public function disableOembed() {
+        remove_action('admin_print_styles', 'print_emoji_styles');
+        remove_action('wp_head', 'print_emoji_detection_script', 7);
+        remove_action('admin_print_scripts', 'print_emoji_detection_script');
+        remove_action('wp_print_styles', 'print_emoji_styles');
+        remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
+        remove_filter('the_content_feed', 'wp_staticize_emoji');
+        remove_filter('comment_text_rss', 'wp_staticize_emoji');
+
+        // filter to remove TinyMCE emojis
+        add_filter('tiny_mce_plugins', array($this, "disableEmojiInTinymc"));
     }
 
 }
