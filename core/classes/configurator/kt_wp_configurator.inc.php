@@ -225,7 +225,7 @@ final class KT_WP_Configurator {
     }
 
     /** @return boolean */
-    public function getDisableOembed() {
+    public function getDisableJsonOembed() {
         return $this->disableOembed;
     }
 
@@ -508,7 +508,7 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * 
+     *
      * @param boolean $enableAdmin
      * @return \KT_WP_Configurator
      */
@@ -518,13 +518,13 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * Vypne / ponechá funkce WP Oembed
+     * Vypne / ponechá funkce WP JSON Oembed
      *
      * @author Martin Hlaváč
      * @param boolean $disable
      * @return \KT_WP_Configurator
      */
-    public function setDisableOembed($disable = true) {
+    public function setDisableJsonOembed($disable = true) {
         $this->disableOembed = KT::tryGetBool($disable);
         return $this;
     }
@@ -691,9 +691,9 @@ final class KT_WP_Configurator {
             add_filter("the_content", array($this, "autoRemoveShortcodesParagraphs"), 100);
         }
 
-        // Oembed
-        if ($this->getDisableOembed() === false) {
-            add_action("init", array($this, "disableOembed"), 99);
+        // JSON Oembed
+        if ($this->getDisableJsonOembed() === true) {
+            add_action("init", array($this, "disableJsonOembed"), 99);
         }
     }
 
@@ -1560,16 +1560,17 @@ final class KT_WP_Configurator {
      * @author Jan Pokorný
      */
     public function removeEmoji() {
-        remove_action('admin_print_styles', 'print_emoji_styles');
-        remove_action('wp_head', 'print_emoji_detection_script', 7);
-        remove_action('admin_print_scripts', 'print_emoji_detection_script');
-        remove_action('wp_print_styles', 'print_emoji_styles');
-        remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
-        remove_filter('the_content_feed', 'wp_staticize_emoji');
-        remove_filter('comment_text_rss', 'wp_staticize_emoji');
+        remove_action("admin_print_styles", "print_emoji_styles");
+        remove_action("wp_head", "print_emoji_detection_script", 7);
+        remove_action("admin_print_scripts", "print_emoji_detection_script");
+        remove_action("wp_print_styles", "print_emoji_styles");
+        remove_filter("wp_mail", "wp_staticize_emoji_for_email");
+        remove_filter("the_content_feed", "wp_staticize_emoji");
+        remove_filter("comment_text_rss", "wp_staticize_emoji");
 
         // filter to remove TinyMCE emojis
-        add_filter('tiny_mce_plugins', array($this, "disableEmojiInTinymc"));
+        add_filter("tiny_mce_plugins", array($this, "disableEmojiInTinymc"));
+        add_filter("emoji_svg_url", array($this, "disableEmojiSvgUrl"));
     }
 
     /**
@@ -1586,6 +1587,18 @@ final class KT_WP_Configurator {
         } else {
             return array();
         }
+    }
+
+    /**
+     * Filtr pro odstranění emoji SVG URL
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @param string $url
+     * @return array
+     */
+    public function disableEmojiSvgUrl($url) {
+        return null;
     }
 
     /**
@@ -1648,22 +1661,20 @@ final class KT_WP_Configurator {
 
 
     /**
-     * Zruší WP Oembed
+     * Zruší WP JSON Oembed
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
      * @author Martin Hlaváč
      */
-    public function disableOembed() {
-        remove_action('admin_print_styles', 'print_emoji_styles');
-        remove_action('wp_head', 'print_emoji_detection_script', 7);
-        remove_action('admin_print_scripts', 'print_emoji_detection_script');
-        remove_action('wp_print_styles', 'print_emoji_styles');
-        remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
-        remove_filter('the_content_feed', 'wp_staticize_emoji');
-        remove_filter('comment_text_rss', 'wp_staticize_emoji');
-
-        // filter to remove TinyMCE emojis
-        add_filter('tiny_mce_plugins', array($this, "disableEmojiInTinymc"));
+    public function disableJsonOembed() {
+        remove_action("wp_head", "rest_output_link_wp_head", 10);
+        remove_action("wp_head", "wp_oembed_add_discovery_links", 10);
+        remove_action("rest_api_init", "wp_oembed_register_route");
+        add_filter("embed_oembed_discover", "__return_false");
+        remove_filter("oembed_dataparse", "wp_filter_oembed_result", 10);
+        remove_action("wp_head", "wp_oembed_add_discovery_links");
+        remove_action("wp_head", "wp_oembed_add_host_js");
+        add_filter("rewrite_rules_array", "disable_embeds_rewrites");
     }
 
 }
