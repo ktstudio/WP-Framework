@@ -1047,9 +1047,10 @@ class KT {
      * @param string $themeLocation
      * @param int $depth
      * @param Walker_Nav_Menu $customWalker
+     * @param array $customArgs
      */
-    public static function theWpNavMenu($themeLocation, $depth = 0, Walker_Nav_Menu $customWalker = null) {
-        $args = array(
+    public static function theWpNavMenu($themeLocation, $depth = 0, Walker_Nav_Menu $customWalker = null, array $customArgs = null) {
+        $defaults = array(
             "theme_location" => $themeLocation,
             "container" => false,
             "depth" => $depth,
@@ -1057,8 +1058,9 @@ class KT {
             "fallback_cb" => false,
         );
         if (KT::issetAndNotEmpty($customWalker)) {
-            $args["walker"] = $customWalker;
+            $defaults["walker"] = $customWalker;
         }
+        $args = wp_parse_args($customArgs, $defaults);
         wp_nav_menu($args);
     }
 
