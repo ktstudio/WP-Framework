@@ -1014,6 +1014,31 @@ class KT {
     }
 
     /**
+     * Vrátí (term) ID menu podle jeho lokace nebo null
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $location
+     *
+     * @return string
+     */
+    public static function getCustomMenuIdByLocation($location) {
+        $locations = get_nav_menu_locations();
+        $menuLocation = $locations[$location];
+        if (self::issetAndNotEmpty($menuLocation)) {
+            $menuObject = wp_get_nav_menu_object($menuLocation);
+            if (self::issetAndNotEmpty($menuObject)) {
+                $menuId = $menuObject->term_id;
+                if (self::isIdFormat($menuId)) {
+                    return $menuId;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * Vypíše požadované menu bez "obalujícího" divu
      * 
      * @author Martin Hlaváč
