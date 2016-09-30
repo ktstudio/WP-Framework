@@ -176,24 +176,18 @@ class KT_Field_Validator {
     }
 
     /**
-     * Je hodnota float?
+     * Je hodnota float? (validace ekvivalentní v js)
      * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
+     * @author Jan Pokorný
      * 
      * @param string $value - validovaná hodnota
      * @return boolean
      */
     private function float($value) {
-        if ($value == '') {
+        if (empty($value)) {
             return true;
         }
-
-        if (is_numeric($value)) {
-            return true;
-        }
-
-        return false;
+        return preg_match('/^\-?\d+(?:[\.|\,]\d+)?$/', $value);
     }
 
     /**

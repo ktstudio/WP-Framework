@@ -1,7 +1,7 @@
 //console.log("Welcome in dynamic madness");
 jQuery(document).ready(function () {
 
-    if (typeof kt_urls === undefined) {
+    if (typeof kt_urls === "undefined") {
         console.log("kt_urls not set dynamic forms wont work !!!");
         return;
     }

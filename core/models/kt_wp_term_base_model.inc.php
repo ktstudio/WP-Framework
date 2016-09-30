@@ -76,7 +76,7 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
     // --- gettery -----------------
 
     /**
-     * @return object stdClass
+     * @return WP_Term
      */
     public function getTerm() {
         return $this->term;

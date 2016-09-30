@@ -407,7 +407,7 @@ function kt_load_template_from_subdir($template) {
     global $taxonomy;
     global $cat;
     // --- front-page ---------------------------
-    if (is_front_page()) {
+    if (is_front_page() || is_embed()) {
         return $template;
     }
     // --- single ---------------------------
