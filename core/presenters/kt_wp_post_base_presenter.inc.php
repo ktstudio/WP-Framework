@@ -382,10 +382,10 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             $image = wp_get_attachment_image_src($thumbnailId, $imageSize);
             $imageSrc = $image[0];
             $defaults = array("alt" => $post->post_title);
-            if (!array_key_exists("class", $imageAttr) || !KT::stringContains($imageAttr["class"], "img-responsive")) { // pro responzivní obrázky nechceme pevné rozměry
-                $defaults["width"] = $image[1];
-                $defaults["height"] = $image[2];
-            }
+            //if (!array_key_exists("class", $imageAttr) || !KT::stringContains($imageAttr["class"], "img-responsive")) { // pro responzivní obrázky nechceme pevné rozměry
+            $defaults["width"] = $image[1];
+            $defaults["height"] = $image[2];
+            //}
             $imageAttr = wp_parse_args($imageAttr, $defaults);
         } else {
             $imageSrc = $defaultImageSrc;
