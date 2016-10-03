@@ -11,6 +11,7 @@ jQuery(document).ready(function () {
 
         if (validationResult === false) {
             jQuery("div.wrap h2.screenTitle").after(formNotice);
+            jQuery("div.wrap h1").after(formNotice); // edit.php
         }               
 
         return validationResult;
