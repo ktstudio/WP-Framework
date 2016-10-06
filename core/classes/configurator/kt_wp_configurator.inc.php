@@ -1668,13 +1668,15 @@ final class KT_WP_Configurator {
      * @author Martin Hlaváč
      */
     public function disableJsonOembed() {
-        remove_action("wp_head", "rest_output_link_wp_head");
-        remove_action("wp_head", "wp_oembed_add_discovery_links");
-        remove_action("rest_api_init", "wp_oembed_register_route");
-        add_filter("embed_oembed_discover", "__return_false");
-        remove_filter("oembed_dataparse", "wp_filter_oembed_result");
-        remove_action("wp_head", "wp_oembed_add_discovery_links");
-        remove_action("wp_head", "wp_oembed_add_host_js");
-        add_filter("rewrite_rules_array", "disable_embeds_rewrites");
+        if (!is_admin()) {
+            remove_action("wp_head", "rest_output_link_wp_head");
+            remove_action("wp_head", "wp_oembed_add_discovery_links");
+            remove_action("rest_api_init", "wp_oembed_register_route");
+            add_filter("embed_oembed_discover", "__return_false");
+            remove_filter("oembed_dataparse", "wp_filter_oembed_result");
+            remove_action("wp_head", "wp_oembed_add_discovery_links");
+            remove_action("wp_head", "wp_oembed_add_host_js");
+            add_filter("rewrite_rules_array", "disable_embeds_rewrites");
+        }
     }
 }
