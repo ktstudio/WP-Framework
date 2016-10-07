@@ -317,11 +317,11 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
                 $excerptLength = $customExcerptLength ? : apply_filters("excerpt_length", self::DEFAULT_EXCERPT_LENGTH);
                 $excerpt = wp_trim_words($excerpt, $excerptLength, $excerptMore);
                 if (KT::issetAndNotEmpty($excerpt)) {
-                    $excerptFilterered = apply_filters("get_the_excerpt", $excerpt);
+                    $excerptFiltered = strip_shortcodes(apply_filters("get_the_excerpt", $excerpt));
                     if ($withTheFilter) {
-                        return apply_filters("the_excerpt", $excerptFilterered);
+                        return apply_filters("the_excerpt", $excerptFiltered);
                     }
-                    return strip_shortcodes(strip_tags($excerptFilterered));
+                    return strip_tags($excerptFiltered);
                 }
             }
         }
@@ -336,14 +336,14 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
      * @return string
      */
     public function getFullExcerpt($withTheFilters = true) {
-        if (!$this->hasExcerpt()) {
-            return;
+        if ($this->hasExcerpt()) {
+            $excerpt = strip_shortcodes($this->getPost()->post_excerpt);
+            if ($withTheFilters) {
+                $excerpt = apply_filters("the_excerpt", $excerpt);
+            }
+            return $excerpt;
         }
-        $excerpt = $this->getPost()->post_excerpt;
-        if ($withTheFilters) {
-            $excerpt = strip_shortcodes(apply_filters("the_excerpt", $excerpt));
-        }
-        return $excerpt;
+        return null;
     }
 
     /**
