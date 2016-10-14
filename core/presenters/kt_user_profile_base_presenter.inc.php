@@ -6,12 +6,13 @@
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
-
+class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
+{
     const FORM_ID = "kt-user-profile-form";
     const PROCESSED_PARAM = "profile-processed";
 
     private $form;
+    private $fieldset;
     private $permalink;
     private $wasProcessed;
 
@@ -24,10 +25,8 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
      * @param KT_Form $form
      * @param string $permalink
      */
-    public function __construct(KT_Form $form, $permalink, $withProcessing = true) {
+    public function __construct($withProcessing = true) {
         parent::__construct();
-        $this->initForm($form);
-        $this->initPermalink($permalink);
         if ($withProcessing) {
             $this->process();
             $processedParam = filter_input(INPUT_GET, self::PROCESSED_PARAM, FILTER_SANITIZE_ENCODED);
@@ -44,12 +43,14 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
         }
     }
 
+    // --- getry & setry ------------------------------
+
     /**
      * Vrátí ID formuláře, možné přepsat, výchozí se je konstanta FORM_ID
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @return string
      */
     public function getFormId() {
@@ -58,17 +59,15 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
 
     /**
      * Kontrola, zda byl kontaktní formulář již zpracován
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @return boolean
      */
     public function getWasProcessed() {
         return $this->wasProcessed;
     }
-
-    // --- getry & setry ------------------------------
 
     /**
      * Vrátí (základní) formulář uživatelského profilu
@@ -76,10 +75,28 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @return \KT_Form
+     * @return KT_Form
      */
     public function getForm() {
-        return $this->form;
+        if (isset($this->form)) {
+            return $this->form;
+        }
+        return $this->form = $this->initForm();
+    }
+
+    /**
+     * Vrátí (základní) fieldset uživatelského profilu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return KT_Form_Fieldset
+     */
+    public function getFieldset() {
+        if (isset($this->fieldset)) {
+            return $this->fieldset;
+        }
+        return $this->fieldset = $this->initFieldset();
     }
 
     /**
@@ -91,14 +108,17 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
      * @return string
      */
     public function getPermalink() {
-        return $this->permalink;
+        if (isset($this->permalink)) {
+            return $this->permalink;
+        }
+        return $this->initPermalink();
     }
 
     // --- veřejné metody ------------------------------
 
     /**
      * Vykreselní formuláře (obecně)
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
@@ -107,7 +127,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
         echo $form->getFormHeader();
         echo $form->getInputsToTable();
         echo KT_Form::getSubmitButton($form->getButtonValue(), $form->getButtonClass());
-        echo "</form>";
+        echo $form->getFormFooter();
     }
 
     /**
@@ -128,7 +148,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
 
     /**
      * Kontrola a zpracování (odeslaných) dat (z POSTu), pokud je to možné, je třeba v rámci hlavičky stránky
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
@@ -150,7 +170,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
                     }
                 }
                 if (KT::arrayIssetAndNotEmpty($allValues)) {
-                    $result = $this->checkPostParams($allValues) || $this->checkPostPassword($allValues);
+                    $result = ($this->checkPostParams($allValues) || $this->checkPostPassword($allValues)) && ($this->checkAdditionalPostParams() !== false);
                     if (!$result) {
                         $form->setErrorMessage(__("Chyba při ukládání uživatelského profilu...", "KT_CORE_DOMAIN"));
                         $form->setError(true);
@@ -166,7 +186,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
 
     /**
      * Vykreslení hlášky (HTML) po úspěšném zpracování formuláře
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
@@ -176,7 +196,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
 
     /**
      * Vykreslení hlášky (HTML) po neúspěšném zpracování formuláře
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
@@ -191,11 +211,21 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
     // --- neveřejné metody ------------------------------
 
     /**
-     * Hláška pro úspěšné zpracování formuláře
-     * 
+     * Případné vlastní dodteční pracování uložení např. user meta
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     */
+    protected function checkAdditionalPostParams() {
+        return null;
+    }
+
+    /**
+     * Hláška pro úspěšné zpracování formuláře
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
      * @return string
      */
     protected function getSuccessMessage() {
@@ -204,10 +234,10 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
 
     /**
      * Hláška pro neúspěšné zpracování formuláře
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @return string
      */
     protected function getErrorMessage() {
@@ -216,10 +246,10 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
 
     /**
      * Popisek pro opravu úspěšného zpracování formuláře
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @return string
      */
     protected function getRepairTitle() {
@@ -269,7 +299,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
                 }
             }
 
-            $this->getPasword($values); // kvůli validaci
+            $this->getPassword($values); // kvůli validaci
 
             if (count($args) > 1) {
                 $result = wp_update_user($args);
@@ -284,7 +314,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
     }
 
     /**
-     * Kontrola hesla 
+     * Kontrola hesla
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -296,7 +326,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
         $form->validate();
         if (!$form->hasError()) {
             $args = array("ID" => $this->getCurrentUserId(),);
-            $password = $this->getPasword($values);
+            $password = $this->getPassword($values);
             if (KT::issetAndNotEmpty($password)) {
                 $args[KT_User_Profile_Config::PASSWORD] = $password;
                 $result = wp_update_user($args);
@@ -313,7 +343,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
         return null;
     }
 
-    protected function getPasword(array $values) {
+    protected function getPassword(array $values) {
         $form = $this->getForm();
         $password = KT::arrayTryGetValue($values, KT_User_Profile_Config::PASSWORD);
         if (KT::issetAndNotEmpty($password)) {
@@ -336,14 +366,19 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base {
         return null;
     }
 
-    /** @return \KT_Form */
+    /** @return KT_Form */
     protected function initForm() {
         $form = new KT_Form();
         $form->setAttrId($this->getFormId());
         $form->setButtonValue(__("Uložit nastavení", "KT_CORE_DOMAIN"));
         $form->setButtonClass("kt-form-submit button button-primary");
-        $form->addFieldSetByObject(KT_User_Profile_Config::getUserProfileFieldset($this->getCurrentUser()->getWpUser()));
+        $form->addFieldSetByObject($this->getFieldset());
         return $this->form = $form;
+    }
+
+    /** @return KT_Form_Fieldset */
+    protected function initFieldset() {
+        return $this->fieldset = KT_User_Profile_Config::getUserProfileFieldset($this->getCurrentUser()->getWpUser());
     }
 
     /** @return string */
