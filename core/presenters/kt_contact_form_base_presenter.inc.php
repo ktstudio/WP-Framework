@@ -140,7 +140,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
             if (!$form->hasError()) {
                 $values = filter_input(INPUT_POST, KT_Contact_Form_Base_Config::FORM_PREFIX, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
                 if (KT::arrayIssetAndNotEmpty($values)) {
-                    $spam = KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::FAVOURITE);
+                    $spam = filter_var(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::FAVOURITE), FILTER_SANITIZE_STRING);
                     if (KT::issetAndNotEmpty($spam)) {
                         wp_die(__("Vyplnili jste nepovolený kontrolní prvek...", "KT_CORE_DOMAIN"));
                         exit;

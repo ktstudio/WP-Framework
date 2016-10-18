@@ -26,7 +26,7 @@ class KT_Contact_Form_Base_Config {
      * 
      * @return \KT_Form_Fieldset
      */
-    public static function getFieldset($splittedName = false, $exactedPhone = true) {
+    public static function getFieldset($splittedName = false, $exactedPhone = true, $requiredPhone = true) {
         $fieldset = new KT_Form_Fieldset(self::FORM_PREFIX, __("Kontakt", "KT_CORE_DOMAIN"));
         $fieldset->setPostPrefix(self::FORM_PREFIX);
 
@@ -59,8 +59,10 @@ class KT_Contact_Form_Base_Config {
         $phoneField = $fieldset->addText(self::PHONE, __("Telefon*:", "KT_CORE_DOMAIN"))
                 ->setPlaceholder(__("Telefon*", "KT_CORE_DOMAIN"))
                 ->addAttribute("maxlength", 30)
-                ->addRule(KT_Field_Validator::REQUIRED, __("Telefon je povinná položka", "KT_CORE_DOMAIN"))
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("Telefon může mít maximálně 30 znaků", "KT_CORE_DOMAIN"), 30);
+        if ($requiredPhone) {
+            $phoneField->addRule(KT_Field_Validator::REQUIRED, __("Telefon je povinná položka", "KT_CORE_DOMAIN"));
+        }
         if ($exactedPhone) {
             $phoneField->addRule(KT_Field_Validator::REGULAR, __("Telefon je ve špatném tvaru", "KT_CORE_DOMAIN"), "^((\+|0)(420|421) ?)?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$");
         }
