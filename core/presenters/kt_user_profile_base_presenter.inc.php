@@ -170,7 +170,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
                     }
                 }
                 if (KT::arrayIssetAndNotEmpty($allValues)) {
-                    $result = ($this->checkPostParams($allValues) || $this->checkPostPassword($allValues)) && ($this->checkAdditionalPostParams() !== false);
+                    $result = (($this->checkPostParams($allValues) || $this->checkPostPassword($allValues)) || $this->checkAdditionalPostParams($allValues));
                     if (!$result) {
                         $form->setErrorMessage(__("Chyba při ukládání uživatelského profilu...", "KT_CORE_DOMAIN"));
                         $form->setError(true);
@@ -216,7 +216,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
-    protected function checkAdditionalPostParams() {
+    protected function checkAdditionalPostParams(array $allValues = null) {
         return null;
     }
 

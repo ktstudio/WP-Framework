@@ -564,7 +564,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         }
 
         $html .= self::getSubmitButton($this->getButtonValue(), $this->getButtonClass());
-        $html .= "</form>";
+
+        $html .= $this->getFormFooter();
 
         return $html;
     }
@@ -591,8 +592,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return string (HTML)
      */
     public function getFormFooter() {
-        $html = "</form>\n";
-        return $html;
+        return "</form>\n";
     }
 
     /**
@@ -611,12 +611,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
-     * Vrátí ukončení formuláře </form>
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @return type
+     * @deprecated since 1.10
+     * @see getFormFooter()
      */
     public function getEndForm() {
         return $html = "</form>";
