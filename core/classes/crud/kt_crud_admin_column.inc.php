@@ -456,7 +456,7 @@ class KT_CRUD_Admin_Column {
         if ($selfCallback === true) {
             $html .= $item->$customCallbackFunction($item);
         } else {
-            $html .= apply_filters($customCallbackFunction, $string, $item);
+            $html .= apply_filters($customCallbackFunction, $item);
         }
 
         $html .= $this->getSuffixContent();

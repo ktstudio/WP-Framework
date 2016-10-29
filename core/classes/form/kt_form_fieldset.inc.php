@@ -8,6 +8,7 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     private $postPrefix = null;
     private $fields = array();
     private $serializeSave = false;
+    private $beforeFieldsetContent = null;
     private $afterFieldsetContent = null;
 
     public function __construct($name, $title = null, $description = null) {
@@ -86,6 +87,13 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      */
     public function getSerializeSave() {
         return $this->serializeSave;
+    }
+
+    /**
+     * @return string
+     */
+    function getBeforeFieldsetContent() {
+        return $this->beforeFieldsetContent;
     }
 
     /**
@@ -184,6 +192,20 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
             $this->serializeSave = $serializeSave;
         }
 
+        return $this;
+    }
+
+    /**
+     * Nastaví HTML / String, který se vypíše na začátku fieldsetu
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $beforeFieldsetContent
+     * @return \KT_Form_Fieldset
+     */
+    public function setBeforeFieldsetContent($beforeFieldsetContent = null) {
+        $this->beforeFieldsetContent = $beforeFieldsetContent;
         return $this;
     }
 
@@ -524,6 +546,9 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         $html .= "<$tag class=\"panel-body\">";
         if (KT::issetAndNotEmpty($this->getDescription())) {
             $html .= "<p class=\"fieldset-description\">{$this->getDescription()}</p>";
+        }
+        if (KT::issetAndNotEmpty($this->getBeforeFieldsetContent())) {
+            $html .= "<div class=\"fieldsetBeforeContent\">{$this->getBeforeFieldsetContent()}</div>";
         }
 
         return $html;
