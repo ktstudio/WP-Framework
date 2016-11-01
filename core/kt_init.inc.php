@@ -42,6 +42,7 @@ define("KT_META_KEY_SINGLE_TEMPLATE", "kt-single-template");
 // --- post types ------------------------
 define("KT_WP_POST_KEY", "post");
 define("KT_WP_PAGE_KEY", "page");
+define("KT_WP_TAXONOMY_KEY", "taxonomy");
 define("KT_WP_COMMENT_KEY", "comment");
 define("KT_WP_ATTACHMENT_KEY", "attachment");
 define("KT_WP_REVISION_KEY", "revision");

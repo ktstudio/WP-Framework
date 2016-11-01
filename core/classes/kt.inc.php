@@ -220,10 +220,10 @@ class KT {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param array|type $array
+     * @param array $array
      * @return boolean
      */
-    public static function arrayIssetAndNotEmpty($array) {
+    public static function arrayIssetAndNotEmpty($array = null) {
         return self::issetAndNotEmpty($array) && is_array($array) && count($array) > 0;
     }
 

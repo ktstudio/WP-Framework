@@ -110,10 +110,10 @@ jQuery(document).ready(function () {
             fileContent += '<a class="remove-file" data-id="' + selectedId + '"><span class="dashicons dashicons-no"></span></a>';
             selectedIds.push(selectedId);
             jQuery("." + kt_input_id).html(fileContent);
-            jQuery("#" + kt_input_id).val(selectedIds);
+            jQuery("#" + kt_input_id).val(selectedIds).trigger("change");
         };
 
-        wp.media.editor.open(button, {multiple: isMultiple});
+        wp.media.editor.open(null, {multiple: isMultiple});
 
         return false;
     });
@@ -130,7 +130,7 @@ jQuery(document).ready(function () {
         var newValues = jQuery.grep(oldValues, function (value) {
             return value != dataId;
         });
-        jQuery(this).parents(".file-load-box").find("input").val(newValues);
+        jQuery(this).parents(".file-load-box").find("input").val(newValues).trigger("change");
     });
 
     // Přepínání switch toggle buttonu na základě inputu a a toggle
