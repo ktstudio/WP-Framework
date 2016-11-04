@@ -170,7 +170,10 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
                     }
                 }
                 if (KT::arrayIssetAndNotEmpty($allValues)) {
-                    $result = (($this->checkPostParams($allValues) || $this->checkPostPassword($allValues)) || $this->checkAdditionalPostParams($allValues));
+                    $defaultResult = $this->checkPostParams($allValues);
+                    $passwordResult = $this->checkPostPassword($allValues);
+                    $customResult = $this->checkCustomPostParams($allValues);
+                    $result = (($defaultResult || $passwordResult) || $customResult);
                     if (!$result) {
                         $form->setErrorMessage(__("Chyba při ukládání uživatelského profilu...", "KT_CORE_DOMAIN"));
                         $form->setError(true);
@@ -211,12 +214,12 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
     // --- neveřejné metody ------------------------------
 
     /**
-     * Případné vlastní dodteční pracování uložení např. user meta
+     * Případné vlastní dodatečné zpracování a uložení dalších parametrů, např. do user meta
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      */
-    protected function checkAdditionalPostParams(array $allValues = null) {
+    protected function checkCustomPostParams(array $allValues = null) {
         return null;
     }
 
@@ -299,6 +302,8 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
                 }
             }
 
+            $args = $this->checkAdditionalPostArgs($args, $values, $currentUser);
+
             $this->getPassword($values); // kvůli validaci
 
             if (count($args) > 1) {
@@ -311,6 +316,18 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
             }
         }
         return null;
+    }
+
+    /**
+     * Kontrola a případná editace dodatečných (přímo na USERovi) výchozích parametrů po postu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return array
+     */
+    protected function checkAdditionalPostArgs(array $args, array $values, KT_WP_User_Base_Model $currentUser) {
+        return $args;
     }
 
     /**
