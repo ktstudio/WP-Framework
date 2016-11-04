@@ -1588,11 +1588,12 @@ class KT {
     }
 
     /**
-     * Provede zvýraznení v text. Syntaxe převzdata z Markdown.
-     * *text* -> kurzíva, **text** -> tučný text, ~~text~~ -> přeškrtnutý text 
-     * 
+     * Provede zvýraznění v textu. Syntaxe převzdata z Markdown.
+     * *text* -> kurzíva, **text** -> tučný text, ~~text~~ -> přeškrtnutý text
+     *
      * @deprecated use KT_String_Markdown
      * @author Jan Pokorný
+     *
      * @param string $text Vstupní text
      * @return string Zvýrazněný výstupní text
      */
@@ -1608,6 +1609,45 @@ class KT {
             "<del>$1</del>"
         ];
         return preg_replace($patterns, $replaces, $text);
+    }
+
+    /**
+     * Na zadaný text provede aplikaci MarkDownu, odřádkování a vložení do HTML containeru (výchozí odstavec - <p>)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $text text k aplikaci formátu
+     * @param string $containerElement obalující HTML element, výchozí odstavec - <p>
+     * @param string $containerClass volitelná CSS class container elementu
+     *
+     * @return string (HTML)
+     */
+    public static function formatText($text, $containerElement = "p", $containerClass = null) {
+        if (KT::issetAndNotEmpty($text)) {
+            $output = KT::stringLineFormat(KT_String_Markdown::doMarkdownEmphasis($text));
+            $classAttribute = KT::issetAndNotEmpty($containerClass) ? " class=\"$containerClass\"" : "";
+            return "<{$containerElement}{$classAttribute}>{$output}</{$containerElement}>";
+        }
+        return null;
+    }
+
+    /**
+     * Fotmát čísla do textové podoby počesku, tj. oddělovače tisíců mezery a případná desetinná čárka
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param int|float $number
+     * @param int $decimals počet desetinných míst, výchozí 0
+     *
+     * @return string
+     */
+    public static function formatNumber($number, $decimals = 0) {
+        if (isset($number) && is_numeric($number)) {
+            return number_format($number, $decimals, ",", " ");
+        }
+        return null;
     }
 
     // --- cURL ---------------------------
