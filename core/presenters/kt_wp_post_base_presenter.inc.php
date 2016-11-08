@@ -72,7 +72,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         if (KT::issetAndNotEmpty($this->otherPostsQuery)) {
             return $this->otherPostsQuery;
         }
-        return $this->initOtherPostsQuery();
+        return $this->otherPostsQuery = $this->initOtherPostsQuery();
     }
 
     /**
@@ -346,7 +346,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * 
      * @return \WP_Query
      */
-    private function initOtherPostsQuery() {
+    protected function initOtherPostsQuery() {
         $args = array(
             "post_type" => $this->getModel()->getPostType(),
             "post_status" => "publish",
