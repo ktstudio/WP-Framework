@@ -213,7 +213,8 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @return type
      */
     public function getPhone() {
-        return $this->getMetaValue(KT_User_Profile_Config::PHONE);
+        $key = KT_User_Profile_Config::PHONE;
+        return $this->getWpUser()->$key;
     }
 
     /**

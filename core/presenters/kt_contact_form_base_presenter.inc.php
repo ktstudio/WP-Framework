@@ -294,10 +294,29 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
                 $mailer = new KT_Mailer($contactFormEmail, $ktWpInfo->getName(), sprintf($this->getEmailTitle(), $ktWpInfo->getName()));
                 $mailer->setReplyToEmail($email);
                 $mailer->setContent($content);
-                return $sendResult = $mailer->send();
+                $sendResult = $mailer->send();
+                $this->logMailProcessed($sendResult, sprintf(__("E-mail pro %s <%s> z URL %s zpracován: %s.", "KT_CORE_DOMAIN"), $fullName, $email, $requestUrl, $sendResult));
+                return $sendResult;
             }
         }
         return false;
+    }
+
+    /**
+     * Pomocná funkce pro zápis výsledku odeslání mailu do KT Logu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    protected function logMailProcessed($sendResult, $logMessage) {
+        $onlyForSignedUsers = KT_Logger::getOnlyForSignedUsers();
+        KT_Logger::setOnlyForSignedUsers(false);
+        if ($sendResult) {
+            KT_Logger::info($logMessage);
+        } else {
+            KT_Logger::warning($logMessage);
+        }
+        KT_Logger::setOnlyForSignedUsers($onlyForSignedUsers);
     }
 
     /**
