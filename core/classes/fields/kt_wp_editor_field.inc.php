@@ -35,6 +35,7 @@ class KT_WP_Editor_Field extends KT_Field {
      */
     public function setOption($key, $value) {
         $this->options[$key] = $value;
+        return $this;
     }
 
     protected function getNameAttribute() {
