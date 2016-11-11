@@ -83,6 +83,7 @@ jQuery(document).ready(function () {
 
     // Obsluha a vyvolání WP Gallery pop up okna pro výběr obrázku
     jQuery('body').on("click", ".kt-file-loader", function (e) {
+        var kt_image_input = jQuery(this).prev("input.kt-field");
         var kt_input_id = jQuery(this).attr('id');
         var button = jQuery(this);
         var fileContent = "";
@@ -109,8 +110,10 @@ jQuery(document).ready(function () {
             }
             fileContent += '<a class="remove-file" data-id="' + selectedId + '"><span class="dashicons dashicons-no"></span></a>';
             selectedIds.push(selectedId);
-            jQuery("." + kt_input_id).html(fileContent);
-            jQuery("#" + kt_input_id).val(selectedIds).trigger("change");
+            //jQuery("." + kt_input_id).html(fileContent);
+            kt_image_input.prev("span").html(fileContent);
+            kt_image_input.attr("value", selectedIds).trigger("change");
+            //jQuery("input#" + kt_input_id).attr("value", selectedIds).trigger("change");
         };
 
         wp.media.editor.open(null, {multiple: isMultiple});
