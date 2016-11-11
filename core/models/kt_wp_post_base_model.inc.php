@@ -432,28 +432,28 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
 
         switch ($diff->d) {
             case 1:
-                $dayString = __("den", "KT_CORE_DOMAIN");
+                $dayString = __("Day", "KT_CORE_DOMAIN");
                 break;
             case 2:
             case 3:
             case 4:
-                $dayString = _("dny", "KT_CORE_DOMAIN");
+                $dayString = _("days", "KT_CORE_DOMAIN");
 
             default:
-                $dayString = _("dní", "KT_CORE_DOMAIN");
+                $dayString = _("days", "KT_CORE_DOMAIN");
         }
 
         if ($diff->m > 0) {
-            $diffTimeFormat = $diff->m . __(' měs', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat = $diff->m . __(' month', "KT_CORE_DOMAIN") . ' ';
             $diffTimeFormat .= $diff->d . $dayString . ' ';
-            $diffTimeFormat .= $diff->h . __(' hod', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat .= $diff->h . __(' hour', "KT_CORE_DOMAIN") . ' ';
             $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         } elseif ($diff->d > 0) {
             $diffTimeFormat = $diff->d . $dayString . ' ';
-            $diffTimeFormat .= $diff->h . __(' hod', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat .= $diff->h . __(' hours', "KT_CORE_DOMAIN") . ' ';
             $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         } elseif ($diff->h > 0) {
-            $diffTimeFormat .= $diff->h . __(' hod', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat .= $diff->h . __(' hours', "KT_CORE_DOMAIN") . ' ';
             $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         } else {
             $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';

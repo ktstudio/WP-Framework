@@ -12,7 +12,7 @@ class KT_Null_Reference_Exception extends Exception {
 
     public function __construct($referenceName, $code = 0, Exception $previous = null) {
         $this->referenceName = $referenceName;
-        $message = __("Zadaný argument je nepřiřazený nebo NULL!", "KT_CORE_DOMAIN");
+        $message = __("The argument is unassigned or NULL!", "KT_CORE_DOMAIN");
         parent::__construct($message, $code, $previous);
     }
 
@@ -21,7 +21,7 @@ class KT_Null_Reference_Exception extends Exception {
     }
 
     public function __toString() {
-        return sprintf(__("Prázdná hodnota pro: %s n %s", "KT_CORE_DOMAIN"), $this->getReferenceName(), parent::__toString());
+        return sprintf(__("Empty value for: %s n %s", "KT_CORE_DOMAIN"), $this->getReferenceName(), parent::__toString());
     }
 
 }

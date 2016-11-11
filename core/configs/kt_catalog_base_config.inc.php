@@ -24,22 +24,22 @@ class KT_Catalog_Base_Config {
         $fieldset = new KT_Form_Fieldset($name, $title);
         $fieldset->setPostPrefix($prefix);
 
-        $fieldset->addText(KT_Catalog_Model_Base::TITLE_COLUMN, __("Název*: ", "KT_CORE_DOMAIN"))
-                ->addRule(KT_Field_Validator::REQUIRED, "Název je povinná položka", "KT_CORE_DOMAIN")
-                ->addRule(KT_Field_Validator::MIN_LENGTH, __("Název musí mít alespoň 3 znaky", "KT_CORE_DOMAIN"), 3)
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Název může mít maximálně 50 znaků", "KT_CORE_DOMAIN"), 50);
+        $fieldset->addText(KT_Catalog_Model_Base::TITLE_COLUMN, __("Name*: ", "KT_CORE_DOMAIN"))
+                ->addRule(KT_Field_Validator::REQUIRED, "Name is required", "KT_CORE_DOMAIN")
+                ->addRule(KT_Field_Validator::MIN_LENGTH, __("The name must have at least 3 characters", "KT_CORE_DOMAIN"), 3)
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The name can have a maximum of 50 characters", "KT_CORE_DOMAIN"), 50);
 
-        $fieldset->addTextarea(KT_Catalog_Model_Base::DESCRIPTION_COLUMN, __("Popis: ", "KT_CORE_DOMAIN"))
+        $fieldset->addTextarea(KT_Catalog_Model_Base::DESCRIPTION_COLUMN, __("Description: ", "KT_CORE_DOMAIN"))
                 ->setRows(5)
-                ->setTooltip(__("Doplňující údaj informačního charakteru...", "KT_CORE_DOMAIN"));
+                ->setTooltip(__("Additional detail - information character...", "KT_CORE_DOMAIN"));
 
-        $fieldset->addText(KT_Catalog_Model_Base::CODE_COLUMN, __("Kód: ", "KT_CORE_DOMAIN"))
+        $fieldset->addText(KT_Catalog_Model_Base::CODE_COLUMN, __("Code: ", "KT_CORE_DOMAIN"))
                 ->addAttribute("maxlength", 30)
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("Kód může mít maximálně 30 znaků", "KT_CORE_DOMAIN"), 30);
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The code can have a maximum of 30 characters", "KT_CORE_DOMAIN"), 30);
 
-        $fieldset->addSwitch(KT_Catalog_Model_Base::VISIBILITY_COLUMN, __("Viditelnost*: ", "KT_CORE_DOMAIN"))
+        $fieldset->addSwitch(KT_Catalog_Model_Base::VISIBILITY_COLUMN, __("Visibility*: ", "KT_CORE_DOMAIN"))
                 ->setDefaultValue(KT_Switch_Field::YES)
-                ->addRule(KT_Field_Validator::REQUIRED, __("Viditelnost je povinná položka", "KT_CORE_DOMAIN"));
+                ->addRule(KT_Field_Validator::REQUIRED, __("Visibility is required", "KT_CORE_DOMAIN"));
 
         if (KT::issetAndNotEmpty($item) && $item->isInDatabase()) {
             $fieldset->addHidden(KT_Catalog_Model_Base::ID_COLUMN)
@@ -72,17 +72,17 @@ class KT_Catalog_Base_Config {
                 ->setType(KT_CRUD_Admin_Column::EDIT_LINK_TYPE)
                 ->setDeletable()
                 ->setCssClass("title-column")
-                ->setLabel(__("Titulek", "KT_CORE_DOMAIN"));
+                ->setLabel(__("Title", "KT_CORE_DOMAIN"));
 
         $crudList->addColumn(KT_Catalog_Model_Base::CODE_COLUMN)
                 ->setCssClass("code-column")
-                ->setLabel(__("Kód", "KT_CORE_DOMAIN"));
+                ->setLabel(__("Code", "KT_CORE_DOMAIN"));
 
         $crudList->addColumn(KT_Catalog_Model_Base::VISIBILITY_COLUMN)
                 ->setType(KT_CRUD_Admin_Column::SWITCH_BUTTON_TYPE)
                 ->setPosition(99)
                 ->setCssClass("visibility-column")
-                ->setLabel(__("Viditelnost", "KT_CORE_DOMAIN"));
+                ->setLabel(__("Visibility", "KT_CORE_DOMAIN"));
 
         // výchozí řazení
         $crudList->getRepository()

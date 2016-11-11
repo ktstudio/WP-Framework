@@ -38,32 +38,32 @@ class KT_Comment_Config
             $currentUser = wp_get_current_user();
         }
 
-        $fieldset->addTextarea(self::COMMENT, __("Komentář*:", "KT_CORE_DOMAIN"))
+        $fieldset->addTextarea(self::COMMENT, __("Comments*:", "KT_CORE_DOMAIN"))
             ->setAttrMaxlength(1000)
-            ->addRule(KT_Field_Validator::REQUIRED, __("Komentář je povinná položka.", "KT_CORE_DOMAIN"))
-            ->addRule(KT_Field_Validator::MAX_LENGTH, __("Komentář může mít maximálně 1000 znaků.", "KT_CORE_DOMAIN"), 1000);
+            ->addRule(KT_Field_Validator::REQUIRED, __("Comments is required.", "KT_CORE_DOMAIN"))
+            ->addRule(KT_Field_Validator::MAX_LENGTH, __("Comments can be up to 1000 characters.", "KT_CORE_DOMAIN"), 1000);
 
-        $fieldset->addText(self::AUTHOR, __("Jméno*:", "KT_CORE_DOMAIN"))
+        $fieldset->addText(self::AUTHOR, __("Name*:", "KT_CORE_DOMAIN"))
             ->setDefaultValue($currentUser->display_name)
             ->setAttrMaxlength(50)
-            ->addRule(KT_Field_Validator::REQUIRED, __("Jméno je povinná položka.", "KT_CORE_DOMAIN"))
-            ->addRule(KT_Field_Validator::MAX_LENGTH, __("Jméno může mít maximálně 50 znaků.", "KT_CORE_DOMAIN"), 50);
+            ->addRule(KT_Field_Validator::REQUIRED, __("Name is required.", "KT_CORE_DOMAIN"))
+            ->addRule(KT_Field_Validator::MAX_LENGTH, __("Name can be up to 50 characters.", "KT_CORE_DOMAIN"), 50);
 
         $fieldset->addText(self::EMAIL, __("E-mail*:", "KT_CORE_DOMAIN"))
             ->setInputType(KT_Text_Field::INPUT_EMAIL)
             ->setDefaultValue($currentUser->user_email)
             ->setAttrMaxlength(100)
-            ->addRule(KT_Field_Validator::REQUIRED, __("E-mail je povinná položka.", "KT_CORE_DOMAIN"))
-            ->addRule(KT_Field_Validator::EMAIL, __("E-mail musí být ve správném tvaru.", "KT_CORE_DOMAIN"))
-            ->addRule(KT_Field_Validator::MAX_LENGTH, __("E-mail může mít maximálně 100 znaků.", "KT_CORE_DOMAIN"), 100);
+            ->addRule(KT_Field_Validator::REQUIRED, __("E-mail is required.", "KT_CORE_DOMAIN"))
+            ->addRule(KT_Field_Validator::EMAIL, __("Invalid e-mail address.", "KT_CORE_DOMAIN"))
+            ->addRule(KT_Field_Validator::MAX_LENGTH, __("E-mail can be up to 10 characters.", "KT_CORE_DOMAIN"), 100);
 
-        $fieldset->addText(self::URL, __("Webová stránka:", "KT_CORE_DOMAIN"))
+        $fieldset->addText(self::URL, __("Website:", "KT_CORE_DOMAIN"))
             ->setAttrMaxlength(100)
-            ->addRule(KT_Field_Validator::MAX_LENGTH, __("Webová stránka může mít maximálně 100 znaků.", "KT_CORE_DOMAIN"), 100);
+            ->addRule(KT_Field_Validator::MAX_LENGTH, __("Website can be up to 50 characters.", "KT_CORE_DOMAIN"), 100);
 
-        $fieldset->addField(self::getCommentFavouriteField(__("Kontrola:", "KT_CORE_DOMAIN")));
+        $fieldset->addField(self::getCommentFavouriteField(__("Checker:", "KT_CORE_DOMAIN")));
 
-        $fieldset->addField(self::getCommentNonceField($fieldset->getName(), __("Kontrola:", "KT_CORE_DOMAIN")));
+        $fieldset->addField(self::getCommentNonceField($fieldset->getName(), __("Checker:", "KT_CORE_DOMAIN")));
 
         return $fieldset;
     }
@@ -84,8 +84,8 @@ class KT_Comment_Config
         $field = new KT_Textarea_Field($name, $label);
         $field->setPostPrefix($postPrefix);
         $field->setAttrMaxlength(1000)
-            ->addRule(KT_Field_Validator::REQUIRED, __("Komentář je povinná položka.", "KT_CORE_DOMAIN"))
-            ->addRule(KT_Field_Validator::MAX_LENGTH, __("Komentář může mít maximálně 1000 znaků.", "KT_CORE_DOMAIN"), 1000);
+            ->addRule(KT_Field_Validator::REQUIRED, __("Comments are required.", "KT_CORE_DOMAIN"))
+            ->addRule(KT_Field_Validator::MAX_LENGTH, __("Comments can be up to 1000 characters.", "KT_CORE_DOMAIN"), 1000);
         return $field;
     }
 
@@ -104,7 +104,7 @@ class KT_Comment_Config
     public static function getCommentFavouriteField($label = "", $postPrefix = self::COMMENT_FIELDSET, $name = self::FAVOURITE) {
         $field = new KT_Text_Field($name, $label);
         $field->setPostPrefix($postPrefix);
-        $field->setPlaceholder(__("Nevyplňujte, pokud jste člověk", "KT_CORE_DOMAIN"))
+        $field->setPlaceholder(__("Do not fill if you are human", "KT_CORE_DOMAIN"))
             ->addAttrClass("hidden")
             ->addAttribute("maxlength", 30);
         return $field;

@@ -3,7 +3,7 @@
 $ktWpCronPage = new KT_Custom_Metaboxes_Subpage("tools.php", __("(KT) WP CRON", "KT_CORE_DOMAIN"), __("(KT) WP CRON", "KT_CORE_DOMAIN"), "edit_theme_options", KT_WP_Configurator::WP_CRON_PAGE_SLUG);
 $ktWpCronPage->register();
 
-KT_Metabox::createCustom(KT_WP_Configurator::WP_CRON_PAGE_SLUG . "-events-metabox", __("Naplánované eventy", "KT_CORE_DOMAIN"), KT_WP_Configurator::getWpCronSlug(), "kt_cron_events_metabox_callback");
+KT_Metabox::createCustom(KT_WP_Configurator::WP_CRON_PAGE_SLUG . "-events-metabox", __("scheduled events", "KT_CORE_DOMAIN"), KT_WP_Configurator::getWpCronSlug(), "kt_cron_events_metabox_callback");
 
 function kt_cron_events_metabox_callback() {
     $crons = _get_cron_array();
@@ -29,7 +29,7 @@ function kt_cron_events_metabox_callback() {
     }
 }
 
-$intervalsMetabox = KT_Metabox::createCustom(KT_WP_Configurator::WP_CRON_PAGE_SLUG . "-intervals-metabox", __("Zavedené intervaly", "KT_CORE_DOMAIN"), KT_WP_Configurator::getWpCronSlug(), "kt_cron_schedules_metabox_callback", false);
+$intervalsMetabox = KT_Metabox::createCustom(KT_WP_Configurator::WP_CRON_PAGE_SLUG . "-intervals-metabox", __("established intervals", "KT_CORE_DOMAIN"), KT_WP_Configurator::getWpCronSlug(), "kt_cron_schedules_metabox_callback", false);
 $intervalsMetabox->setContext(KT_MetaBox::CONTEXT_SIDE)
         ->register();
 

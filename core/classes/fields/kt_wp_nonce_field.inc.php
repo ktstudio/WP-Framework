@@ -116,7 +116,7 @@ class KT_WP_Nonce_Field extends KT_Field {
         if (wp_verify_nonce($value, $this->getAction())) {
             return true;
         }
-        $this->setError(__("Chyba zpracování - volání", "KT_CORE_DOMAIN"));
+        $this->setError(__("Error processing - call", "KT_CORE_DOMAIN"));
         return false;
     }
 

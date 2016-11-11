@@ -141,8 +141,8 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
     public function renderInformation($class = null) {
         $classAttribute = KT::issetAndNotEmpty($class) ? " class=\"$class\"" : "";
         echo KT::getTabsIndent(0, "<p$classAttribute>", true);
-        echo KT::getTabsIndent(1, __("*) Změní se pouze ty hodnoty, které jsou vyplněné a změněné.", "KT_CORE_DOMAIN") . "<br />", true);
-        echo KT::getTabsIndent(1, __("**) Hesla musejí být v případě změny shodná.", "KT_CORE_DOMAIN"), true);
+        echo KT::getTabsIndent(1, __("*) It changes only those values that are filled and altered.", "KT_CORE_DOMAIN") . "<br />", true);
+        echo KT::getTabsIndent(1, __("**) Passwords must be identical in the case of changes.", "KT_CORE_DOMAIN"), true);
         echo KT::getTabsIndent(0, "</p>", true, true);
     }
 
@@ -156,7 +156,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
         if (KT::arrayIssetAndNotEmpty($_POST)) {
             $form = $this->getForm();
             if (!$form->nonceValidate()) {
-                wp_die(__("Chyba zpracování zdrojové adresy...", "KT_CORE_DOMAIN"));
+                wp_die(__("Error processing resource addresses...", "KT_CORE_DOMAIN"));
                 exit;
             }
             $form->validate();
@@ -175,7 +175,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
                     $customResult = $this->checkCustomPostParams($allValues);
                     $result = (($defaultResult || $passwordResult) || $customResult);
                     if (!$result) {
-                        $form->setErrorMessage(__("Chyba při ukládání uživatelského profilu...", "KT_CORE_DOMAIN"));
+                        $form->setErrorMessage(__("Error at saving user profile...", "KT_CORE_DOMAIN"));
                         $form->setError(true);
                     } else {
                         wp_redirect(add_query_arg(self::PROCESSED_PARAM, "1", KT::getRequestUrl()));
@@ -232,7 +232,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
      * @return string
      */
     protected function getSuccessMessage() {
-        return __("Váš profil byl úspěšně upraven a změny uloženy.", "KT_CORE_DOMAIN");
+        return __("Your profile has been successfully edited and saved changes.", "KT_CORE_DOMAIN");
     }
 
     /**
@@ -244,7 +244,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
      * @return string
      */
     protected function getErrorMessage() {
-        return __("Při zpracování profilu došlo k chybě. Je třeba zadat správně všechny údaje...", "KT_CORE_DOMAIN");
+        return __("When processing a profile error. You need to enter all your information correctly...", "KT_CORE_DOMAIN");
     }
 
     /**
@@ -256,7 +256,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
      * @return string
      */
     protected function getRepairTitle() {
-        return __("Opravit", "KT_CORE_DOMAIN");
+        return __("Repair", "KT_CORE_DOMAIN");
     }
 
     /**
@@ -348,7 +348,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
                 $args[KT_User_Profile_Config::PASSWORD] = $password;
                 $result = wp_update_user($args);
                 if (is_wp_error($result)) {
-                    $form->setErrorMessage(__("Chyba při změně hesla...", "KT_CORE_DOMAIN"));
+                    $form->setErrorMessage(__("Error on password change", "KT_CORE_DOMAIN"));
                     $form->setError(true);
                     wp_redirect($this->getPermalink());
                     return false;
@@ -371,12 +371,12 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
                     return $password;
                 } else { // hesla se nerovnají
                     $passwordConfirmField = $fieldset->getFieldByName(KT_User_Profile_Config::PASSWORD_CONFIRM);
-                    $passwordConfirmField->setErrorMsg("Heslo a jeho potvrzení musejí být stejné.");
+                    $passwordConfirmField->setErrorMsg("Password and confirmation must be the same.");
                     $form->setError(true);
                 }
             } else { // heslo je zadané, ale potvrzení ne
                 $passwordField = $fieldset->getFieldByName(KT_User_Profile_Config::PASSWORD);
-                $passwordField->setErrorMsg("Pro změnu hesla musí být zadané heslo i jeho potvrzení.");
+                $passwordField->setErrorMsg("To change the password must be entered password and confirmation.");
                 $form->setError(true);
             }
         }
@@ -387,7 +387,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
     protected function initForm() {
         $form = new KT_Form();
         $form->setAttrId($this->getFormId());
-        $form->setButtonValue(__("Uložit nastavení", "KT_CORE_DOMAIN"));
+        $form->setButtonValue(__("Save setting", "KT_CORE_DOMAIN"));
         $form->setButtonClass("kt-form-submit button button-primary");
         $form->addFieldSetByObject($this->getFieldset());
         return $this->form = $form;

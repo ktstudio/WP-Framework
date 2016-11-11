@@ -108,7 +108,7 @@ class KT_Custom_Template {
         $file = $this->getFullFilePath();
         if (!is_file($file)) {
             $this->fileName = '';
-            throw new InvalidArgumentException(sprintf(__("Tento soubor %s neexistuje!", "KT_CORE_DOMAIN"), $file));
+            throw new InvalidArgumentException(sprintf(__("This file %s doesn`t exist!", "KT_CORE_DOMAIN"), $file));
         }
 
         return $this;
@@ -138,7 +138,7 @@ class KT_Custom_Template {
         }
 
         if (!is_dir($path)) {
-            throw new InvalidArgumentException(sprintf(__("Tato cesta %s neexistuje!", "KT_CORE_DOMAIN"), $path));
+            throw new InvalidArgumentException(sprintf(__("This path %s doesn`t exist!", "KT_CORE_DOMAIN"), $path));
         }
 
         $this->templatePath = $path;

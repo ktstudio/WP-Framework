@@ -369,7 +369,7 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function adminNoticesSuccuess() {
         echo "<div class=\"updated\">";
-        echo "<p>" . __('Informace byly úspěšně uloženy.', "KT_CORE_DOMAIN") . "</p>";
+        echo "<p>" . __('Data were stored.', "KT_CORE_DOMAIN") . "</p>";
         echo "</div>";
     }
 
@@ -487,7 +487,7 @@ abstract class KT_Custom_Metaboxes_Base {
         }
 
         add_meta_box(
-                "kt-save-custom-page", __("Uložit nastavení", "KT_CORE_DOMAIN"), array($this, "saveMetaboxCallback"), $this->getPage(), KT_Metabox::CONTEXT_SIDE, KT_Metabox::PRIORITY_CORE
+                "kt-save-custom-page", __("Save setting", "KT_CORE_DOMAIN"), array($this, "saveMetaboxCallback"), $this->getPage(), KT_Metabox::CONTEXT_SIDE, KT_Metabox::PRIORITY_CORE
         );
 
         return $this;
@@ -506,7 +506,7 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function saveMetaboxCallback() {
         do_action("kt_theme_setting_box_" . KT_WP_Configurator::getThemeSettingSlug());
-        echo "<button type=\"submit\" class=\"button button-primary button-large\">" . __('Uložit nastavení', "KT_CORE_DOMAIN") . "</button>";
+        echo "<button type=\"submit\" class=\"button button-primary button-large\">" . __('Save setting', "KT_CORE_DOMAIN") . "</button>";
     }
 
     // --- protected functions ------------------
