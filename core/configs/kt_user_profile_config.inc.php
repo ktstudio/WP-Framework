@@ -31,18 +31,18 @@ class KT_User_Profile_Config {
                 ->setDefaultValue($currentUser->user_firstname)
                 ->setAttrMaxlength(30)
                 ->addRule(KT_Field_Validator::REQUIRED, __("First name is required.", "KT_CORE_DOMAIN"))
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The first name must have at least 3, characters.", "KT_CORE_DOMAIN"), 30);
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The first name can be up to 30 characters.", "KT_CORE_DOMAIN"), 30);
         $fieldset->addText(self::LAST_NAME, __("Last name*:", "KT_CORE_DOMAIN"))
                 ->setDefaultValue($currentUser->user_lastname)
                 ->setAttrMaxlength(30)
                 ->addRule(KT_Field_Validator::REQUIRED, __("Last name is required.", "KT_CORE_DOMAIN"))
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The last name must have at least 30 characters.", "KT_CORE_DOMAIN"), 30);
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The last name can be up to 30 characters.", "KT_CORE_DOMAIN"), 30);
         $fieldset->addText(self::EMAIL, __("E-mail*:", "KT_CORE_DOMAIN"))
                 ->setDefaultValue($currentUser->user_email)
                 ->setAttrMaxlength(50)
                 ->addRule(KT_Field_Validator::REQUIRED, __("E-mail is required.", "KT_CORE_DOMAIN"))
                 ->addRule(KT_Field_Validator::EMAIL, __("Invalid e-mail address.", "KT_CORE_DOMAIN"))
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The e-mail address must have at least 50 characters.", "KT_CORE_DOMAIN"), 50);
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The e-mail address can be up to 50 characters.", "KT_CORE_DOMAIN"), 50);
         $userPhoneKey = KT_User_Profile_Config::PHONE;
         if ($withPhone) {
             $phoneLabel = ($isPhoneRequired) ? __("Phone*:", "KT_CORE_DOMAIN") : __("Phone:", "KT_CORE_DOMAIN");

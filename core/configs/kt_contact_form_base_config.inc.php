@@ -27,7 +27,7 @@ class KT_Contact_Form_Base_Config {
      * @return \KT_Form_Fieldset
      */
     public static function getFieldset($splittedName = false, $exactedPhone = true, $requiredPhone = true) {
-        $fieldset = new KT_Form_Fieldset(self::FORM_PREFIX, __("Kontakt", "KT_CORE_DOMAIN"));
+        $fieldset = new KT_Form_Fieldset(self::FORM_PREFIX, __("Contact", "KT_CORE_DOMAIN"));
         $fieldset->setPostPrefix(self::FORM_PREFIX);
 
         if ($splittedName) {
@@ -35,18 +35,18 @@ class KT_Contact_Form_Base_Config {
                     ->setPlaceholder(__("First name*", "KT_CORE_DOMAIN"))
                     ->addAttribute("maxlength", 30)
                     ->addRule(KT_Field_Validator::REQUIRED, __("First name is required", "KT_CORE_DOMAIN"))
-                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("The first name must have at least 30 characters", "KT_CORE_DOMAIN"), 30);
+                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("The first can be up to 30 characters", "KT_CORE_DOMAIN"), 30);
             $fieldset->addText(self::LAST_NAME, __("Last name*:", "KT_CORE_DOMAIN"))
                     ->setPlaceholder(__("Last name*", "KT_CORE_DOMAIN"))
                     ->addAttribute("maxlength", 30)
                     ->addRule(KT_Field_Validator::REQUIRED, __("Last name is required", "KT_CORE_DOMAIN"))
-                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("The last name must have at least 30 characters", "KT_CORE_DOMAIN"), 30);
+                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("The last name can be up to 30 characters", "KT_CORE_DOMAIN"), 30);
         } else {
             $fieldset->addText(self::NAME, __("Name*:", "KT_CORE_DOMAIN"))
                     ->setPlaceholder(__("Name*", "KT_CORE_DOMAIN"))
                     ->addAttribute("maxlength", 30)
                     ->addRule(KT_Field_Validator::REQUIRED, __("Name is required", "KT_CORE_DOMAIN"))
-                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("The name must have at least 30 characters", "KT_CORE_DOMAIN"), 30);
+                    ->addRule(KT_Field_Validator::MAX_LENGTH, __("The name can be up to 30 characters", "KT_CORE_DOMAIN"), 30);
         }
 
         $fieldset->addText(self::EMAIL, __("E-mail*:", "KT_CORE_DOMAIN"))
@@ -54,12 +54,12 @@ class KT_Contact_Form_Base_Config {
                 ->addAttribute("maxlength", 100)
                 ->addRule(KT_Field_Validator::REQUIRED, __("E-mail is required", "KT_CORE_DOMAIN"))
                 ->addRule(KT_Field_Validator::EMAIL, __("Invalid e-mail address", "KT_CORE_DOMAIN"))
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The e-mail must have at least 100 characters", "KT_CORE_DOMAIN"), 100);
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The e-mail can be up to 100 characters", "KT_CORE_DOMAIN"), 100);
 
         $phoneField = $fieldset->addText(self::PHONE, __("Phone*:", "KT_CORE_DOMAIN"))
                 ->setPlaceholder(__("Phone*", "KT_CORE_DOMAIN"))
                 ->addAttribute("maxlength", 30)
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The phone number must have at least 30 characters", "KT_CORE_DOMAIN"), 30);
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The phone number can be up to 30 characters", "KT_CORE_DOMAIN"), 30);
         if ($requiredPhone) {
             $phoneField->addRule(KT_Field_Validator::REQUIRED, __("Phone is required", "KT_CORE_DOMAIN"));
         }
@@ -71,7 +71,7 @@ class KT_Contact_Form_Base_Config {
                 ->setPlaceholder(__("Message*", "KT_CORE_DOMAIN"))
                 ->addAttribute("maxlength", 1000)
                 ->addRule(KT_Field_Validator::REQUIRED, __("Message is required", "KT_CORE_DOMAIN"))
-                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The message must have at least 1000 characters", "KT_CORE_DOMAIN"), 1000);
+                ->addRule(KT_Field_Validator::MAX_LENGTH, __("The message can be up to 1000 characters", "KT_CORE_DOMAIN"), 1000);
 
         $fieldset->addText(self::FAVOURITE, __("Checker:", "KT_CORE_DOMAIN"))
                 ->setPlaceholder(__("Do not fill if your are the human", "KT_CORE_DOMAIN"))
