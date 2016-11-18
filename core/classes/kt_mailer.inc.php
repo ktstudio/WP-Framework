@@ -156,7 +156,7 @@ class KT_Mailer {
             $this->recipients = self::getHeaderEmail($recipientEmail, $recipientName);
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("Příjemce \"%s\" není platnný e-mail!", "KT_CORE_DOMAIN"), $recipientEmail));
+        throw new InvalidArgumentException(sprintf(__("Reciver \"%s\" is not valid e-mail address!", "KT_CORE_DOMAIN"), $recipientEmail));
     }
 
     /**
