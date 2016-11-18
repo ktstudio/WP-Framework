@@ -12,7 +12,7 @@ class KT_Not_Implemented_Exception extends Exception {
 
     public function __construct($note, $code = 0, Exception $previous = null) {
         $this->note = $note;
-        $message = __("Operace není implementována!", "KT_CORE_DOMAIN");
+        $message = __("Operation is not implemented!", "KT_CORE_DOMAIN");
         parent::__construct($message, $code, $previous);
     }
 
@@ -21,7 +21,7 @@ class KT_Not_Implemented_Exception extends Exception {
     }
 
     public function __toString() {
-        return sprintf(__("Neimplementovaná operace: %s \n %s", "KT_CORE_DOMAIN"), $this->getNote(), parent::__toString());
+        return sprintf(__("unimplemented operations: %s \n %s", "KT_CORE_DOMAIN"), $this->getNote(), parent::__toString());
     }
 
 }

@@ -112,7 +112,7 @@ class KT_Switch_Field extends KT_Field {
             } elseif ($value == false) {
                 return KT_Switch_Field::NO;
             }
-            throw new InvalidArgumentException(sprintf(__("Hodnota \"%s\" není logického typu", "KT_CORE_DOMAIN", $value)));
+            throw new InvalidArgumentException(sprintf(__("Value \"%s\" is not a logical type", "KT_CORE_DOMAIN", $value)));
         }
         return null;
     }
@@ -134,7 +134,7 @@ class KT_Switch_Field extends KT_Field {
             } elseif ($value == KT_Switch_Field::NO) {
                 return false;
             }
-            throw new InvalidArgumentException(sprintf(__("Hodnota \"%s\" není typu KT Switch pole", "KT_CORE_DOMAIN"), $value));
+            throw new InvalidArgumentException(sprintf(__("Value \"%s\" is not type of KT Switch array", "KT_CORE_DOMAIN"), $value));
         }
         return null;
     }
@@ -150,9 +150,9 @@ class KT_Switch_Field extends KT_Field {
      */
     public static function getSwitchConvertedValue($value) {
         if ($value == KT_Switch_Field::YES || $value === true || $value === 1) {
-            return __("Ano", "KT_CORE_DOMAIN");
+            return __("Yes", "KT_CORE_DOMAIN");
         } elseif ($value == KT_Switch_Field::NO || $value === false || $value === 0) {
-            return __("Ne", "KT_CORE_DOMAIN");
+            return __("No", "KT_CORE_DOMAIN");
         } else {
             echo KT_EMPTY_SYMBOL;
         }

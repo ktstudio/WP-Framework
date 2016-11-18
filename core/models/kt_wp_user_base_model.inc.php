@@ -201,7 +201,7 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @return string
      */
     public function getTitleAttribute() {
-        return $titleAttributeContent = esc_attr(strip_tags(sprintf(__("Autor: %s", "KT_CORE_DOMAIN"), $this->getName())));
+        return $titleAttributeContent = esc_attr(strip_tags(sprintf(__("Author: %s", "KT_CORE_DOMAIN"), $this->getName())));
     }
 
     /**
@@ -409,7 +409,7 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
             if ($wpUser) {
                 $this->setWpUser($wpUser);
             } else {
-                throw new KT_Not_Supported_Exception(__("ID uživatele neexistuje (ve WP databázi).", "KT_CORE_DOMAIN"));
+                throw new KT_Not_Supported_Exception(__("User`s id is not exist (in WP database).", "KT_CORE_DOMAIN"));
             }
         }
         return $this;

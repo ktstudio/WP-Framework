@@ -67,8 +67,8 @@ abstract class KT_Options_Field_Base extends KT_Field {
         if ($withFirtEmpty === true) {
             $options[KT_EMPTY_SYMBOL] = KT_EMPTY_SYMBOL;
         }
-        $options[KT_Switch_Field::YES] = __("Ano", "KT_CORE_DOMAIN");
-        $options[KT_Switch_Field::NO] = __("Ne", "KT_CORE_DOMAIN");
+        $options[KT_Switch_Field::YES] = __("Yes", "KT_CORE_DOMAIN");
+        $options[KT_Switch_Field::NO] = __("No", "KT_CORE_DOMAIN");
         return $options;
     }
 

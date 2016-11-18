@@ -105,7 +105,7 @@ class KT_Media_Field extends KT_Field {
         $html .= $this->getFullSpanUrl();
         $html .= "<input type=\"hidden\" {$this->getBasicHtml()} value=\"{$this->getValue()}\" />";
         $multiple = ($this->getIsMultiple()) ? "true" : "false";
-        $html .= "<span id=\"{$this->getAttrValueByName("id")}\" {$this->getAttrClassString()} data-multiple=\"$multiple\">" . __("Vybrat soubor", "KT_CORE_DOMAIN") . "</span>";
+        $html .= "<span id=\"{$this->getAttrValueByName("id")}\" {$this->getAttrClassString()} data-multiple=\"$multiple\">" . __("Select file", "KT_CORE_DOMAIN") . "</span>";
         if ($this->hasErrorMsg()) {
             $html .= parent::getHtmlErrorMsg();
         }

@@ -104,3 +104,5 @@ define("KT_WP_JQUERY_UI_TOOLTIP_SCRIPT", "jquery-ui-tooltip");
 // --- inicializace ------------------------
 
 kt_include_all(KT_CORE_REQUIRES_PATH);
+
+kt_load_textdomain("KT_CORE_DOMAIN", KT_CORE_PATH);

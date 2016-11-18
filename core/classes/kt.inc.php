@@ -546,7 +546,7 @@ class KT {
         if (current_user_can("manage_options")) {
             return true;
         } else {
-            wp_die(__("Nemáte dostatečná oprávnění k přístupu na tuto stránku.", "KT_CORE_DOMAIN"));
+            wp_die(__("You do not have sufficient privileges to access this page.", "KT_CORE_DOMAIN"));
             return false;
         }
     }
@@ -1273,8 +1273,8 @@ class KT {
             "format" => "page/%#%",
             "current" => max(1, $paged),
             "total" => $wp_query->max_num_pages,
-            "prev_text" => __("&laquo; Předchozí", "KT_CORE_DOMAIN"),
-            "next_text" => __("Další &raquo;", "KT_CORE_DOMAIN")
+            "prev_text" => __("&laquo; Previous", "KT_CORE_DOMAIN"),
+            "next_text" => __("Next &raquo;", "KT_CORE_DOMAIN")
         );
 
         $argsPagination = wp_parse_args($userArgs, $defaultArgs);

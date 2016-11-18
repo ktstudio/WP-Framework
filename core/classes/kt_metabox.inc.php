@@ -747,7 +747,7 @@ class KT_MetaBox implements KT_Registrable {
                         if (KT::issetAndNotEmpty($postPrefix)) {
                             $fieldset->setFieldsData($crudInstance->getData());
                         } else {
-                            throw new KT_Not_Implemented_Exception(__("Zatím jsou podporované pouze formuláře se zadaným PostPrefixem", "KT_CORE_DOMAIN"));
+                            throw new KT_Not_Implemented_Exception(__("Only form with set postPrefix are supported", "KT_CORE_DOMAIN"));
                         }
                     }
                 }
@@ -757,7 +757,7 @@ class KT_MetaBox implements KT_Registrable {
                 call_user_func_array("$customCallback", array($post, $form ? : $args));
                 return;
             default:
-                throw new KT_Not_Implemented_Exception(sprintf(__("Datový typ MetaBoxu: %s", "KT_CORE_DOMAIN"), $currentValue));
+                throw new KT_Not_Implemented_Exception(sprintf(__("Date type of metabox: %s", "KT_CORE_DOMAIN"), $currentValue));
         }
 
         echo $form->getInputsToTable();
