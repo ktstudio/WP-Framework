@@ -317,6 +317,24 @@ function kt_include_all($folder) {
 }
 
 /**
+ * Načtení a aplikace jazykového souboru pro doménu zadaného modulu
+ *
+ * @author Tomáš Kocifaj, Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ *
+ * @param string $domain požadováná doména. reps. klíč překladů
+ * @param string $modulePath Cesta k adresáři s modulem
+ * @param string string $lang kód jazyka
+ */
+function kt_load_textdomain($domain, $modulePath, $lang = "cs_CZ") {
+    $moFile = path_join($modulePath, path_join("languages", "{$domain}-{$lang}.mo"));
+    if (file_exists($moFile)) {
+        return load_textdomain("$domain", $moFile);
+    }
+    return null;
+}
+
+/**
  * Kontrola, zda je načten KT framework pro šablony apod.
  *
  * @author Tomáš Kocifaj
