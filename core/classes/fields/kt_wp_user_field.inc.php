@@ -133,9 +133,7 @@ class KT_WP_User_Field extends KT_Select_Field {
             }
             $selected = "";
             foreach ($usersList as $user) {
-                if ($fieldValue == $user->ID) {
-                    $selected = "selected=\"selected\"";
-                }
+                $selected = ($fieldValue == $user->ID) ? "selected=\"selected\"" : "";
                 $html .= "<option value=\"$user->ID\" $selected>$user->display_name [$user->user_login]</option>";
             }
             if (KT::issetAndNotEmpty($optionHead)) {
