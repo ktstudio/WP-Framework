@@ -17,6 +17,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     private $files;
     private $data = array();
     private $permalink;
+    private $editPostLink;
     private $categoriesIds;
     private $wpCommentsCount;
     private $postTypeObject;
@@ -355,11 +356,25 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
      * @return string
      */
     public function getPermalink() {
-        $permalink = $this->permalink;
-        if (KT::issetAndNotEmpty($permalink)) {
-            return $permalink;
+        if (isset($this->permalink)) {
+            return $this->permalink;
         }
         return $this->permalink = get_the_permalink($this->getPostId());
+    }
+
+    /**
+     * Vrátí URL pro editaci detailu postu v administraci
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getEditPostLink() {
+        if (isset($this->editPostLink)) {
+            return $this->editPostLink;
+        }
+        return $this->editPostLink = get_edit_post_link($this->getPostId());
     }
 
     /**
