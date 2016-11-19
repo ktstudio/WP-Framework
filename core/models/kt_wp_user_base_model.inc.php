@@ -10,6 +10,7 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
 
     private $wpUser = null;
     private $permalink;
+    private $editUserLink;
 
     /**
      * Sestavení základního modelu pro práci s uživatelem a jeho daty podle ID
@@ -250,10 +251,25 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @return string
      */
     public function getPermalink() {
-        if (KT::issetAndNotEmpty($this->permalink)) {
+        if (isset($this->permalink)) {
             return $this->permalink;
         }
         return $this->permalink = get_author_posts_url($this->getId());
+    }
+
+    /**
+     * Vrátí URL pro editaci detailu uživatele v administraci
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getEditUserLink() {
+        if (isset($this->editUserLink)) {
+            return $this->editUserLink;
+        }
+        return $this->editUserLink = get_edit_user_link($this->getId());
     }
 
     // --- veřejné metody ------------------------
