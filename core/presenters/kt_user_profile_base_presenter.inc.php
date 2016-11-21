@@ -374,11 +374,11 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
                     return $password;
                 } else { // hesla se nerovnají
                     $passwordConfirmField = $fieldset->getFieldByName(KT_User_Profile_Config::PASSWORD_CONFIRM);
-                    $passwordConfirmField->setError("Password and confirmation must be the same.", "KT_CORE_DOMAIN");
+                    $passwordConfirmField->setError(__("Password and confirmation must be the same.", "KT_CORE_DOMAIN"));
                 }
             } else { // heslo je zadané, ale potvrzení ne
                 $passwordField = $fieldset->getFieldByName(KT_User_Profile_Config::PASSWORD);
-                $passwordField->setError("To change the password must be entered password and confirmation.", "KT_CORE_DOMAIN");
+                $passwordField->setError(__("To change the password must be entered password and confirmation.", "KT_CORE_DOMAIN"));
             }
         }
         return null;
