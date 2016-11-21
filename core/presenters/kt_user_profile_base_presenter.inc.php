@@ -173,8 +173,8 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
                     $defaultResult = $this->checkPostParams($allValues);
                     $passwordResult = $this->checkPostPassword($allValues);
                     $customResult = $this->checkCustomPostParams($allValues);
-                    $result = (($defaultResult || $passwordResult) || $customResult);
-                    if (!$result) {
+                    $result = ($defaultResult === false || $passwordResult === false || $customResult === false);
+                    if ($result) {
                         $form->setErrorMessage(__("Error at saving user profile...", "KT_CORE_DOMAIN"));
                         $form->setError(true);
                     } else {
@@ -275,28 +275,28 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
             $args = array("ID" => $this->getCurrentUserId(),);
 
             $firstName = KT::arrayTryGetValue($values, KT_User_Profile_Config::FIRST_NAME);
-            if (KT::issetAndNotEmpty($firstName)) {
+            if (isset($firstName)) {
                 if ($currentUser->getFirstName() != $firstName) {
                     $args[KT_User_Profile_Config::FIRST_NAME] = $firstName;
                 }
             }
 
             $lastName = KT::arrayTryGetValue($values, KT_User_Profile_Config::LAST_NAME);
-            if (KT::issetAndNotEmpty($lastName)) {
+            if (isset($lastName)) {
                 if ($currentUser->getLastName() != $lastName) {
                     $args[KT_User_Profile_Config::LAST_NAME] = $lastName;
                 }
             }
 
             $email = KT::arrayTryGetValue($values, KT_User_Profile_Config::EMAIL);
-            if (KT::issetAndNotEmpty($email)) {
+            if (isset($email)) {
                 if ($currentUser->getEmail() != $email) {
                     $args[KT_User_Profile_Config::EMAIL] = $email;
                 }
             }
 
             $phone = KT::arrayTryGetValue($values, KT_User_Profile_Config::PHONE);
-            if (KT::issetAndNotEmpty($phone)) {
+            if (isset($phone)) {
                 if ($currentUser->getPhone() != $phone) {
                     $args[KT_User_Profile_Config::PHONE] = $phone;
                 }
@@ -304,7 +304,11 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
 
             $args = $this->checkAdditionalPostArgs($args, $values, $currentUser);
 
-            $this->getPassword($values); // kvůli validaci
+            $checkedPassword = $this->getPassword($values); // kvůli validaci
+            $password = KT::arrayTryGetValue($values, KT_User_Profile_Config::PASSWORD);
+            if (isset($password) && $password != $checkedPassword) {
+                return false;
+            }
 
             if (count($args) > 1) {
                 $result = wp_update_user($args);
@@ -344,7 +348,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
         if (!$form->hasError()) {
             $args = array("ID" => $this->getCurrentUserId(),);
             $password = $this->getPassword($values);
-            if (KT::issetAndNotEmpty($password)) {
+            if (isset($password)) {
                 $args[KT_User_Profile_Config::PASSWORD] = $password;
                 $result = wp_update_user($args);
                 if (is_wp_error($result)) {
@@ -361,23 +365,20 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
     }
 
     protected function getPassword(array $values) {
-        $form = $this->getForm();
         $password = KT::arrayTryGetValue($values, KT_User_Profile_Config::PASSWORD);
-        if (KT::issetAndNotEmpty($password)) {
-            $fieldset = $form->getFieldSetByName(KT_User_Profile_Config::USER_PROFILE_FIELDSET);
+        if (isset($password)) {
+            $fieldset = $this->getFieldset();
             $passwordConfirm = KT::arrayTryGetValue($values, KT_User_Profile_Config::PASSWORD_CONFIRM);
-            if (KT::issetAndNotEmpty($passwordConfirm)) {
+            if (isset($passwordConfirm)) {
                 if ($password === $passwordConfirm) { // OK
                     return $password;
                 } else { // hesla se nerovnají
                     $passwordConfirmField = $fieldset->getFieldByName(KT_User_Profile_Config::PASSWORD_CONFIRM);
-                    $passwordConfirmField->setErrorMsg("Password and confirmation must be the same.");
-                    $form->setError(true);
+                    $passwordConfirmField->setError("Password and confirmation must be the same.", "KT_CORE_DOMAIN");
                 }
             } else { // heslo je zadané, ale potvrzení ne
                 $passwordField = $fieldset->getFieldByName(KT_User_Profile_Config::PASSWORD);
-                $passwordField->setErrorMsg("To change the password must be entered password and confirmation.");
-                $form->setError(true);
+                $passwordField->setError("To change the password must be entered password and confirmation.", "KT_CORE_DOMAIN");
             }
         }
         return null;
