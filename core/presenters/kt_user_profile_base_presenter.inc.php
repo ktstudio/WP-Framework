@@ -154,22 +154,22 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
      */
     public function process() {
         if (KT::arrayIssetAndNotEmpty($_POST)) {
-            $form = $this->getForm();
-            if (!$form->nonceValidate()) {
-                wp_die(__("Error processing resource addresses...", "KT_CORE_DOMAIN"));
-                exit;
-            }
-            $form->validate();
-            if (!$form->hasError()) {
-                $allValues = array();
-                foreach ($_POST as $key => $values) {
-                    if (KT::stringStartsWith($key, KT_User_Profile_Config::FORM_PREFIX)) {
-                        if (KT::arrayIssetAndNotEmpty($values)) {
-                            $allValues = array_merge($allValues, $values);
-                        }
+            $allValues = array();
+            foreach ($_POST as $key => $values) {
+                if (KT::stringStartsWith($key, KT_User_Profile_Config::FORM_PREFIX)) {
+                    if (KT::arrayIssetAndNotEmpty($values)) {
+                        $allValues = array_merge($allValues, $values);
                     }
                 }
-                if (KT::arrayIssetAndNotEmpty($allValues)) {
+            }
+            if (KT::arrayIssetAndNotEmpty($allValues)) {
+                $form = $this->getForm();
+                if (!$form->nonceValidate()) {
+                    wp_die(__("Error processing resource addresses...", "KT_CORE_DOMAIN"));
+                    exit;
+                }
+                $form->validate();
+                if (!$form->hasError()) {
                     $defaultResult = $this->checkPostParams($allValues);
                     $passwordResult = $this->checkPostPassword($allValues);
                     $customResult = $this->checkCustomPostParams($allValues);
@@ -182,8 +182,8 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
                         exit;
                     }
                 }
+                add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderErrorNotice"));
             }
-            add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderErrorNotice"));
         }
     }
 
