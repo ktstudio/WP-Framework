@@ -76,15 +76,9 @@ class KT_WP_Nonce_Field extends KT_Field {
      * @return string
      */
     public function getField() {
-//        $name = $this->getName();
-//        if (KT::issetAndNotEmpty($name)) {
-//            $postPrefix = $this->getPostPrefix();
-//            if (KT::issetAndNotEmpty($postPrefix)) {
-//                $nameAttribute = "{$postPrefix}[{$name}]";
-//            } else {
-//                $nameAttribute = $name;
-//            }
-//        }
+        if (!defined("DONOTCACHEPAGE")) {
+            define("DONOTCACHEPAGE", true);
+        }
         $html = wp_nonce_field($this->getAction(), $this->getName() ? : self::DEFAULT_NONCE_NAME, true, false);
         return $html;
     }
