@@ -428,17 +428,17 @@ function kt_load_template_from_subdir($template) {
     if (is_front_page() || is_embed()) {
         return $template;
     }
-    // --- single ---------------------------
-    if (is_single()) {
-        $ktTemplate = KT::getSingleTemplate($post);
+    // --- attachment ---------------------------
+    if (is_attachment()) {
+        $ktTemplate = KT::getAttachmentTemplate();
         if ($ktTemplate) {
             return $ktTemplate;
         }
         return $template;
     }
-    // --- attachment ---------------------------
-    if (is_attachment()) {
-        $ktTemplate = KT::getAttachmentTemplate();
+    // --- single ---------------------------
+    if (is_single()) {
+        $ktTemplate = KT::getSingleTemplate($post);
         if ($ktTemplate) {
             return $ktTemplate;
         }

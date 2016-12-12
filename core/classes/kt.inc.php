@@ -799,9 +799,9 @@ class KT {
                 $imageUrl = $linkUrl = $source[0];
                 $imageWidth = $source[1];
                 $imageHeight = $source[2];
-                if ($size !== KT_WP_IMAGE_SIZE_ORIGINAL) {
-                    $original = wp_get_attachment_image_src($id, KT_WP_IMAGE_SIZE_ORIGINAL);
-                    $linkUrl = $original[0];
+                if ($size !== KT_WP_IMAGE_SIZE_LARGE) {
+                    $large = wp_get_attachment_image_src($id, KT_WP_IMAGE_SIZE_LARGE);
+                    $linkUrl = $large[0];
                 }
 
                 // Defaultní atributy                
