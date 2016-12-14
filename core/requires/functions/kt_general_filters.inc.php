@@ -21,7 +21,10 @@ add_filter("kt_date_to_fancy_date", "kt_date_to_fancy_date", 10, 1);
  * @return sting
  */
 function kt_date_to_fancy_date($date) {
-    return date("j.n.Y", strtotime($date));
+    if (KT::issetAndNotEmpty($date)) {
+        return date("j.n.Y", strtotime($date));
+    }
+    return KT_EMPTY_SYMBOL;
 }
 
 add_filter("kt_post_id_to_title", "kt_post_id_to_title", 10, 1);
@@ -33,5 +36,8 @@ add_filter("kt_post_id_to_title", "kt_post_id_to_title", 10, 1);
  * @return sting
  */
 function kt_post_id_to_title($postId) {
-    return get_the_title($postId);
+    if (KT::isIdFormat($postId)) {
+        return get_the_title($postId);
+    }
+    return KT_EMPTY_SYMBOL;
 }
