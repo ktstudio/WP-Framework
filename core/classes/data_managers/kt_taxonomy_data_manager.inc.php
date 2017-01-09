@@ -5,7 +5,7 @@ class KT_Taxonomy_Data_Manager extends KT_Data_Manager_Base {
     const FIELD_ID = "id";
     const FIELD_SLUG = "slug";
 
-    private $args = array();
+    private $args = array("hide_empty" => false);
     private $optionValueType = self::FIELD_ID;
     private $withDescriptionSuffix = false;
     private $withParentSuffix = false;
