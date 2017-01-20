@@ -80,7 +80,7 @@ function kt_sql_script_admin_notice() {
     $fileName = path_join(KT_CORE_PATH, "kt_core.sql");
     ?>
     <div class="notice notice-warning is-dismissible">
-        <p><?php _e("POZOR: SQL skripty ze souboru \"$fileName\" se základními tabulkami WP Frameworku nebyly (plně) automaticky provedeny...", "KT_CORE_DOMAIN"); ?></p>
+        <p><?php _e("WARNING: SQL scripts from the file \"$fileName\" with basic tables WP Framework, not (fully) automatically executed...", "KT_CORE_DOMAIN"); ?></p>
     </div>
     <?php
 }

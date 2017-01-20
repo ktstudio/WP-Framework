@@ -176,24 +176,18 @@ class KT_Field_Validator {
     }
 
     /**
-     * Je hodnota float?
+     * Je hodnota float? (validace ekvivalentní v js)
      * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
+     * @author Jan Pokorný
      * 
      * @param string $value - validovaná hodnota
      * @return boolean
      */
     private function float($value) {
-        if ($value == '') {
+        if (empty($value)) {
             return true;
         }
-
-        if (is_numeric($value)) {
-            return true;
-        }
-
-        return false;
+        return preg_match('/^\-?\d+(?:[\.|\,]\d+)?$/', $value);
     }
 
     /**
@@ -254,7 +248,7 @@ class KT_Field_Validator {
         }
 
         if (!is_array($this->param)) {
-            throw new InvalidArgumentException(__("Hodnota pro kontrolu rozsahu musí být typu pole.", "KT_CORE_DOMAIN"));
+            throw new InvalidArgumentException(__("The value for the validate range must be an array type.", "KT_CORE_DOMAIN"));
         }
 
         if (($value >= $this->param[0]) && ($value <= $this->param[1])) {
@@ -288,7 +282,7 @@ class KT_Field_Validator {
             return false;
         }
 
-        throw new InvalidArgumentException(__("Hodnota pro kontrolu délky musí být přiřazena.", "KT_CORE_DOMAIN"));
+        throw new InvalidArgumentException(__("Value for validate the length must be assigned.", "KT_CORE_DOMAIN"));
     }
 
     /**
@@ -316,7 +310,7 @@ class KT_Field_Validator {
             return false;
         }
 
-        throw new KT_Not_Set_Argument_Exception(__("Parametr pro kontrolu maximální délky musí být přiřazen a číselného typu.", "KT_CORE_DOMAIN"));
+        throw new KT_Not_Set_Argument_Exception(__("Parameter to validate the maximum length must be assigned and numeric type.", "KT_CORE_DOMAIN"));
     }
 
     /**
@@ -344,7 +338,7 @@ class KT_Field_Validator {
             return false;
         }
 
-        throw new KT_Not_Set_Argument_Exception(__("Parametr pro kontrolu minimální délky musí být přiřazen a číselného typu.", "KT_CORE_DOMAIN"));
+        throw new KT_Not_Set_Argument_Exception(__("Parameter to validate the minimumm length must be assigned and numeric type.", "KT_CORE_DOMAIN"));
     }
 
     /**
@@ -365,7 +359,7 @@ class KT_Field_Validator {
         $param = $this->getParam();
 
         if (!self::integer($param)) {
-            throw new KT_Not_Set_Argument_Exception(__("Parametr pro kontrolu maximálního čísla musí být číselného typu.", "KT_CORE_DOMAIN"));
+            throw new KT_Not_Set_Argument_Exception(__("Parameter to validate the maximum number must be assigned and integer.", "KT_CORE_DOMAIN"));
         }
 
         if (!self::float($value)) {
@@ -397,7 +391,7 @@ class KT_Field_Validator {
         $param = $this->getParam();
 
         if (!self::integer($param)) {
-            throw new KT_Not_Set_Argument_Exception(__("Parametr pro kontrolu minimálního čísla musí být číselného typu.", "KT_CORE_DOMAIN"));
+            throw new KT_Not_Set_Argument_Exception(__("Parameter to validate the minimum number must be assigned and integer.", "KT_CORE_DOMAIN"));
         }
 
         if (!self::float($value)) {

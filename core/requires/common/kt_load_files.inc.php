@@ -46,7 +46,7 @@ function kt_core_register_scripts_and_styles_handlers_callback() {
     wp_register_script(KT_MAGNIFIC_POPUP_SCRIPT, path_join(KT_CORE_JS_URL, "kt-magnific-popup.min.js"), array(KT_WP_JQUERY_SCRIPT, KT_JQUERY_MAGNIFIC_POPUP_SCRIPT), "", true);
     wp_register_script(KT_GOOGLE_MAP_SCRIPT, path_join(KT_CORE_JS_URL, "googlemap.min.js"));
     wp_register_script(KT_CHOSEN_SCRIPT, path_join(KT_CORE_JS_URL, "chosen.jquery.min.js"), array(KT_WP_JQUERY_SCRIPT), "", true);
-    wp_register_script(KT_CORE_SCRIPT, path_join(KT_CORE_JS_URL, "kt-core.min.js"), array(KT_WP_JQUERY_SCRIPT, KT_WP_JQUERY_UI_DATEPICKER_SCRIPT, KT_WP_JQUERY_UI_TOOLTIP_SCRIPT, KT_FORM_VALIDATION_SCRIPT, KT_CHOSEN_SCRIPT), "", true);
+    wp_register_script(KT_CORE_SCRIPT, path_join(KT_CORE_JS_URL, "kt-core.js"), array(KT_WP_JQUERY_SCRIPT, KT_WP_JQUERY_UI_DATEPICKER_SCRIPT, KT_WP_JQUERY_UI_TOOLTIP_SCRIPT, KT_FORM_VALIDATION_SCRIPT, KT_CHOSEN_SCRIPT), "", true);
     wp_register_script(KT_DYNAMIC_FIELDSET_SCRIPT, path_join(KT_CORE_JS_URL, "kt-dynamic-fields.js"), [], "", true);
     wp_localize_script(KT_DYNAMIC_FIELDSET_SCRIPT, "kt_urls", ["admin" => admin_url(), "ajaxurl" => admin_url('admin-ajax.php')]);
 // styles

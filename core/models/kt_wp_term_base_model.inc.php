@@ -14,6 +14,8 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
     private $term = null;
     private $metas = array();
     private $metaPrefix;
+    private $permalink;
+    private $editTermLink;
 
     /**
      * Základní model pro práci s termem
@@ -76,7 +78,7 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
     // --- gettery -----------------
 
     /**
-     * @return object stdClass
+     * @return WP_Term
      */
     public function getTerm() {
         return $this->term;
@@ -171,13 +173,31 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
     /**
      * Vrátí URL pro zobrazení detailu termu
      * 
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz 
      * 
-     * @return type
+     * @return string
      */
     public function getPermalink() {
-        return $permalink = get_term_link($this->getTerm());
+        if (isset($this->permalink)) {
+            return $this->permalink;
+        }
+        return $this->permalink = get_term_link($this->getTerm());
+    }
+
+    /**
+     * Vrátí URL pro editaci termu v administraci
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getEditTermLink() {
+        if (isset($this->editTermLink)) {
+            return $this->editTermLink;
+        }
+        return $this->editTermLink = get_edit_term_link($this->getId());
     }
 
     /**

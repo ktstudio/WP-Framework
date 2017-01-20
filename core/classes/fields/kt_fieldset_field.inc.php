@@ -163,7 +163,7 @@ class KT_Fieldset_Field extends KT_Field {
             }
             foreach ($fieldset->getFields() as $field) {
                 if (!$field->Validate()) {
-                    $this->setError(__("Chyba v dynamickém formuláři", "KT_CORE_ADMIN_DOMAIN"));
+                    $this->setError(__("Error at dynamic form", "KT_CORE_DOMAIN"));
                     return false;
                 }
             }
@@ -240,7 +240,7 @@ class KT_Fieldset_Field extends KT_Field {
      */
     private function getFieldFooter() {
         $fieldWrapp = $this->getCoutField()->getField();
-        $fieldWrapp .= "<a href = \"javascript:void(0);\" class=\"kt-add-fieldset button\">" . __("Přidat kolekci", "KT_CORE_ADMIN") . "</a>";
+        $fieldWrapp .= "<a href = \"javascript:void(0);\" class=\"kt-add-fieldset button\">" . __("Add new line", "KT_CORE_DOMAIN") . "</a>";
         $fieldWrapp .= "</div>";
         return $fieldWrapp;
     }
@@ -302,7 +302,7 @@ class KT_Fieldset_Field extends KT_Field {
             /* @var $field \KT_Field */
             $fieldWrapp .= "<td>{$field->getField()}</td>";
         }
-        $fieldWrapp .= "<td><a href = \"javascript:void(0);\" class=\"kt-remove-fieldset\">" . __("Odebrat", "KT_CORE_ADMIN") . "</a><td>";
+        $fieldWrapp .= "<td><a href = \"javascript:void(0);\" class=\"kt-remove-fieldset\">" . __("Remove", "KT_CORE_DOMAIN") . "</a><td>";
         $fieldWrapp .= "</tr>";
         return $fieldWrapp;
     }

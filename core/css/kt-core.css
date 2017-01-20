@@ -398,3 +398,17 @@ span.kt-log-trace { color: #5A005A; }
 .postbox .inside:after{
     clear: both;
 }
+
+/* file field image */
+
+.file-load-box img.file {
+    max-width: 75px;
+    max-height: 75px;
+}
+
+/* dynamic fieldset */
+
+.postbox a.kt-add-fieldset.button{
+    float: right;
+    margin-top: 30px;
+}

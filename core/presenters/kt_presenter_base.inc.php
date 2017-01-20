@@ -10,7 +10,9 @@ abstract class KT_Presenter_Base implements KT_Presentable {
 
     private $model = null;
     private static $currentQueryLoopIndex;
+    private static $currentQueryLoopCount;
     private static $currentItemsLoopIndex;
+    private static $currentItemsLoopCount;
     private static $isFrontPageHome;
 
     public function __construct(KT_Modelable $model = null) {
@@ -73,6 +75,42 @@ abstract class KT_Presenter_Base implements KT_Presentable {
     }
 
     /**
+     * Vrátí aktuální počet postů v rámci výpisu šablon pomocí @see theQueryLoops
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return int
+     */
+    public static function getCurrentQueryLoopCount() {
+        return self::$currentQueryLoopCount;
+    }
+
+    /**
+     * Ověření, zda je aktuální Query loopa první @see theQueryLoops
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return int
+     */
+    public static function getIsCurrentQueryLoopFirst() {
+        return self::getCurrentQueryLoopIndex() === 0;
+    }
+
+    /**
+     * Ověření, zda je aktuální Query loopa poslední @see theQueryLoops
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return boolean
+     */
+    public static function getIsCurrentQueryLoopLast() {
+        return self::getCurrentQueryLoopNumber() === self::getCurrentQueryLoopCount();
+    }
+
+    /**
      * Vrátí aktuální index v rámci výpisu šablon pomocí @see theItemsLoops
      * 
      * @author Martin Hlaváč
@@ -94,6 +132,42 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      */
     public static function getCurrentItemsLoopNumber() {
         return self::getCurrentItemsLoopIndex() + 1;
+    }
+
+    /**
+     * Vrátí aktuální počet postů v rámci výpisu šablon pomocí @see theItemsLoops
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return int
+     */
+    public static function getCurrentItemsLoopCount() {
+        return self::$currentItemsLoopCount;
+    }
+
+    /**
+     * věření, zda je aktuální Item(s) loopa první @see theItemsLoops
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return int
+     */
+    public static function getIsCurrentItemsLoopFirst() {
+        return self::getCurrentItemsLoopIndex() === 0;
+    }
+
+    /**
+     * Ověření, zda je aktuální Item(s) loopa poslední @see theItemsLoops
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return int
+     */
+    public static function getIsCurrentItemsLoopLast() {
+        return self::getCurrentItemsLoopNumber() === self::getCurrentItemsLoopCount();
     }
 
     /**
@@ -127,6 +201,7 @@ abstract class KT_Presenter_Base implements KT_Presentable {
         if (KT::issetAndNotEmpty($query) && $query->have_posts()) {
             $isClearfixes = KT::arrayIssetAndNotEmpty($clearfixes);
             self::$currentQueryLoopIndex = 0;
+            self::$currentQueryLoopCount = count($query->get_posts());
             while ($query->have_posts()) : $query->the_post();
                 global $post;
                 include(locate_template("loops/loop-" . $loopName . ".php"));
@@ -136,6 +211,7 @@ abstract class KT_Presenter_Base implements KT_Presentable {
                 }
             endwhile;
             self::$currentQueryLoopIndex = null;
+            self::$currentQueryLoopCount = null;
             wp_reset_postdata();
         }
     }
@@ -156,6 +232,7 @@ abstract class KT_Presenter_Base implements KT_Presentable {
         if (KT::arrayIssetAndNotEmpty($items)) {
             $isClearfixes = KT::arrayIssetAndNotEmpty($clearfixes);
             self::$currentItemsLoopIndex = 0;
+            self::$currentItemsLoopCount = count($items);
             if (KT::tryGetInt($offset) > 0) {
                 $items = array_slice($items, $offset);
             }
@@ -172,6 +249,7 @@ abstract class KT_Presenter_Base implements KT_Presentable {
                 }
             }
             self::$currentItemsLoopIndex = null;
+            self::$currentItemsLoopCount = null;
             wp_reset_postdata();
         }
     }

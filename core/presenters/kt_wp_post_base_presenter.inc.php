@@ -72,7 +72,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         if (KT::issetAndNotEmpty($this->otherPostsQuery)) {
             return $this->otherPostsQuery;
         }
-        return $this->initOtherPostsQuery();
+        return $this->otherPostsQuery = $this->initOtherPostsQuery();
     }
 
     /**
@@ -210,7 +210,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     public function getAuthorBio($withAvatar = false) {
         $description = $this->getModel()->getAuthor()->getDescription();
         if (KT::issetAndNotEmpty($description)) {
-            $title = sprintf(__("O autorovi: %s", "KT_CORE_DOMAIN"), $this->getModel()->getAuthor()->getDisplayName());
+            $title = sprintf(__("About author: %s", "KT_CORE_DOMAIN"), $this->getModel()->getAuthor()->getDisplayName());
             $html = "<h2>$title</h2>";
             if ($withAvatar) {
                 $avatar = $this->getModel()->getAuthor()->getAvatar();
@@ -346,9 +346,9 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * 
      * @return \WP_Query
      */
-    private function initOtherPostsQuery() {
+    protected function initOtherPostsQuery() {
         $args = array(
-            "post_type" => KT_WP_POST_KEY,
+            "post_type" => $this->getModel()->getPostType(),
             "post_status" => "publish",
             "post_parent" => 0,
             "posts_per_page" => $this->getOtherPostsLimit(),
@@ -382,10 +382,10 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             $image = wp_get_attachment_image_src($thumbnailId, $imageSize);
             $imageSrc = $image[0];
             $defaults = array("alt" => $post->post_title);
-            if (!array_key_exists("class", $imageAttr) || !KT::stringContains($imageAttr["class"], "img-responsive")) { // pro responzivní obrázky nechceme pevné rozměry
-                $defaults["width"] = $image[1];
-                $defaults["height"] = $image[2];
-            }
+            //if (!array_key_exists("class", $imageAttr) || !KT::stringContains($imageAttr["class"], "img-responsive")) { // pro responzivní obrázky nechceme pevné rozměry
+            $defaults["width"] = $image[1];
+            $defaults["height"] = $image[2];
+            //}
             $imageAttr = wp_parse_args($imageAttr, $defaults);
         } else {
             $imageSrc = $defaultImageSrc;

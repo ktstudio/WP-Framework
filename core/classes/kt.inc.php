@@ -220,10 +220,10 @@ class KT {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
-     * @param array|type $array
+     * @param array $array
      * @return boolean
      */
-    public static function arrayIssetAndNotEmpty($array) {
+    public static function arrayIssetAndNotEmpty($array = null) {
         return self::issetAndNotEmpty($array) && is_array($array) && count($array) > 0;
     }
 
@@ -546,7 +546,7 @@ class KT {
         if (current_user_can("manage_options")) {
             return true;
         } else {
-            wp_die(__("Nemáte dostatečná oprávnění k přístupu na tuto stránku.", "KT_CORE_DOMAIN"));
+            wp_die(__("You do not have sufficient privileges to access this page.", "KT_CORE_DOMAIN"));
             return false;
         }
     }
@@ -799,9 +799,9 @@ class KT {
                 $imageUrl = $linkUrl = $source[0];
                 $imageWidth = $source[1];
                 $imageHeight = $source[2];
-                if ($size !== KT_WP_IMAGE_SIZE_ORIGINAL) {
-                    $original = wp_get_attachment_image_src($id, KT_WP_IMAGE_SIZE_ORIGINAL);
-                    $linkUrl = $original[0];
+                if ($size !== KT_WP_IMAGE_SIZE_LARGE) {
+                    $large = wp_get_attachment_image_src($id, KT_WP_IMAGE_SIZE_LARGE);
+                    $linkUrl = $large[0];
                 }
 
                 // Defaultní atributy                
@@ -1014,6 +1014,31 @@ class KT {
     }
 
     /**
+     * Vrátí (term) ID menu podle jeho lokace nebo null
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $location
+     *
+     * @return string
+     */
+    public static function getCustomMenuIdByLocation($location) {
+        $locations = get_nav_menu_locations();
+        $menuLocation = $locations[$location];
+        if (self::issetAndNotEmpty($menuLocation)) {
+            $menuObject = wp_get_nav_menu_object($menuLocation);
+            if (self::issetAndNotEmpty($menuObject)) {
+                $menuId = $menuObject->term_id;
+                if (self::isIdFormat($menuId)) {
+                    return $menuId;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * Vypíše požadované menu bez "obalujícího" divu
      * 
      * @author Martin Hlaváč
@@ -1022,9 +1047,10 @@ class KT {
      * @param string $themeLocation
      * @param int $depth
      * @param Walker_Nav_Menu $customWalker
+     * @param array $customArgs
      */
-    public static function theWpNavMenu($themeLocation, $depth = 0, Walker_Nav_Menu $customWalker = null) {
-        $args = array(
+    public static function theWpNavMenu($themeLocation, $depth = 0, Walker_Nav_Menu $customWalker = null, array $customArgs = null) {
+        $defaults = array(
             "theme_location" => $themeLocation,
             "container" => false,
             "depth" => $depth,
@@ -1032,8 +1058,9 @@ class KT {
             "fallback_cb" => false,
         );
         if (KT::issetAndNotEmpty($customWalker)) {
-            $args["walker"] = $customWalker;
+            $defaults["walker"] = $customWalker;
         }
+        $args = wp_parse_args($customArgs, $defaults);
         wp_nav_menu($args);
     }
 
@@ -1246,8 +1273,8 @@ class KT {
             "format" => "page/%#%",
             "current" => max(1, $paged),
             "total" => $wp_query->max_num_pages,
-            "prev_text" => __("&laquo; Předchozí", "KT_CORE_DOMAIN"),
-            "next_text" => __("Další &raquo;", "KT_CORE_DOMAIN")
+            "prev_text" => __("&laquo; Previous", "KT_CORE_DOMAIN"),
+            "next_text" => __("Next &raquo;", "KT_CORE_DOMAIN")
         );
 
         $argsPagination = wp_parse_args($userArgs, $defaultArgs);
@@ -1561,11 +1588,12 @@ class KT {
     }
 
     /**
-     * Provede zvýraznení v text. Syntaxe převzdata z Markdown.
-     * *text* -> kurzíva, **text** -> tučný text, ~~text~~ -> přeškrtnutý text 
-     * 
+     * Provede zvýraznění v textu. Syntaxe převzdata z Markdown.
+     * *text* -> kurzíva, **text** -> tučný text, ~~text~~ -> přeškrtnutý text
+     *
      * @deprecated use KT_String_Markdown
      * @author Jan Pokorný
+     *
      * @param string $text Vstupní text
      * @return string Zvýrazněný výstupní text
      */
@@ -1581,6 +1609,45 @@ class KT {
             "<del>$1</del>"
         ];
         return preg_replace($patterns, $replaces, $text);
+    }
+
+    /**
+     * Na zadaný text provede aplikaci MarkDownu, odřádkování a vložení do HTML containeru (výchozí odstavec - <p>)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $text text k aplikaci formátu
+     * @param string $containerElement obalující HTML element, výchozí odstavec - <p>
+     * @param string $containerClass volitelná CSS class container elementu
+     *
+     * @return string (HTML)
+     */
+    public static function formatText($text, $containerElement = "p", $containerClass = null) {
+        if (KT::issetAndNotEmpty($text)) {
+            $output = KT::stringLineFormat(KT_String_Markdown::doMarkdownEmphasis($text));
+            $classAttribute = KT::issetAndNotEmpty($containerClass) ? " class=\"$containerClass\"" : "";
+            return "<{$containerElement}{$classAttribute}>{$output}</{$containerElement}>";
+        }
+        return null;
+    }
+
+    /**
+     * Fotmát čísla do textové podoby počesku, tj. oddělovače tisíců mezery a případná desetinná čárka
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param int|float $number
+     * @param int $decimals počet desetinných míst, výchozí 0
+     *
+     * @return string
+     */
+    public static function formatNumber($number, $decimals = 0) {
+        if (isset($number) && is_numeric($number)) {
+            return number_format($number, $decimals, ",", " ");
+        }
+        return null;
     }
 
     // --- cURL ---------------------------

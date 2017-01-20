@@ -305,7 +305,7 @@ class KT_CRUD_Admin_List {
             if (array_key_exists("page", $_GET)) {
                 $pageSlug = $_GET["page"];
                 $createUrl = menu_page_url($pageSlug, false) . "&" . self::GET_ACTION . "=" . self::GET_ACTION_CREATE;
-                return "<a href=\"$createUrl\" id=\"addCrudButtonList\" class=\"button\">" . __("Přidat nový záznam", "KT_CORE_DOMAIN") . "</a>";
+                return "<a href=\"$createUrl\" id=\"addCrudButtonList\" class=\"button\">" . __("Add new item", "KT_CORE_DOMAIN") . "</a>";
             }
         }
         return null;
@@ -357,7 +357,7 @@ class KT_CRUD_Admin_List {
         $html .= "<tr>";
 
         if ($this->isSortable()) {
-            $html .= "<th class=\"column-menu-order\">" . __("Pořadí", "KT_CORE_DOMAIN") . "</th>";
+            $html .= "<th class=\"column-menu-order\">" . __("Order", "KT_CORE_DOMAIN") . "</th>";
         }
 
         foreach ($columnList as $column) {

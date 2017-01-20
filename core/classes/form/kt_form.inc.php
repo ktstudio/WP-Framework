@@ -33,8 +33,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         $this->setMethod($method)
                 ->setAction($action)
                 ->setAttrId($id)
-                ->setSuccessMessage(__("Data byla uložena", "KT_CORE_DOMAIN"))
-                ->setErrorMessage(__("Ve formuláři se vyskytla chyba", "KT_CORE_DOMAIN"));
+                ->setSuccessMessage(__("Data were stored", "KT_CORE_DOMAIN"))
+                ->setErrorMessage(__("Error occurred in this form", "KT_CORE_DOMAIN"));
 
         $this->addAttribute("data-validate", "jquery");
 
@@ -564,7 +564,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         }
 
         $html .= self::getSubmitButton($this->getButtonValue(), $this->getButtonClass());
-        $html .= "</form>";
+
+        $html .= $this->getFormFooter();
 
         return $html;
     }
@@ -591,8 +592,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return string (HTML)
      */
     public function getFormFooter() {
-        $html = "</form>\n";
-        return $html;
+        return "</form>\n";
     }
 
     /**
@@ -611,12 +611,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
-     * Vrátí ukončení formuláře </form>
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @return type
+     * @deprecated since 1.10
+     * @see getFormFooter()
      */
     public function getEndForm() {
         return $html = "</form>";
@@ -1051,7 +1047,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         if (KT::issetAndNotEmpty($transientValue)) {
             echo "<div class=\"error\">";
-            echo "<p>" . __("Některé data nebyla uložena. Zkontrolujte prosím vstupní data a proces opakujte", "KT_CORE_DOMAIN") . ".</p>";
+            echo "<p>" . __("Some of the data has not been saved. Please check your input and repeat the process", "KT_CORE_DOMAIN") . ".</p>";
             echo "</div>";
         }
     }

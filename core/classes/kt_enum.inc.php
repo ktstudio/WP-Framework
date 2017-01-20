@@ -60,7 +60,7 @@ abstract class KT_Enum {
                 return $this;
             }
         }
-        throw new KT_Not_Supported_Exception(sprintf(__("Zadána neplatná hodnota výčtu: %s!", "KT_CORE_DOMAIN"), $newValue));
+        throw new KT_Not_Supported_Exception(sprintf(__("Invalid enumeration value: %s!", "KT_CORE_DOMAIN"), $newValue));
     }
 
     /**
@@ -109,7 +109,7 @@ abstract class KT_Enum {
                 return $this;
             }
         }
-        throw new KT_Not_Supported_Exception(sprintf(__("Zadán neplatný klíč výčtu: %s!", "KT_CORE_DOMAIN"), $newKey));
+        throw new KT_Not_Supported_Exception(sprintf(__("Invalid enumeral key : %s!", "KT_CORE_DOMAIN"), $newKey));
     }
 
     /**

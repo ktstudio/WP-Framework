@@ -46,6 +46,7 @@ final class KT_WP_Configurator {
     private $emojiSwitch = false;
     private $autoRemoveShortcodesParagraphs = false;
     private $enableDynamicFieldsets = false;
+    private $disableOembed = false;
 
     // --- gettery ----------------------
 
@@ -218,12 +219,14 @@ final class KT_WP_Configurator {
         return $this->autoRemoveShortcodesParagraphs;
     }
 
-    /**
-     * 
-     * @return boolean
-     */
+    /** @return boolean */
     public function getEnableDynamicFieldsets() {
         return $this->enableDynamicFieldsets;
+    }
+
+    /** @return boolean */
+    public function getDisableJsonOembed() {
+        return $this->disableOembed;
     }
 
     // --- settery ----------------------
@@ -505,12 +508,24 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * 
+     *
      * @param boolean $enableAdmin
      * @return \KT_WP_Configurator
      */
     public function setEnableDynamicFieldsets($enableAdmin = true) {
         $this->enableDynamicFieldsets = $enableAdmin;
+        return $this;
+    }
+
+    /**
+     * Vypne / ponechá funkce WP JSON Oembed
+     *
+     * @author Martin Hlaváč
+     * @param boolean $disable
+     * @return \KT_WP_Configurator
+     */
+    public function setDisableJsonOembed($disable = true) {
+        $this->disableOembed = KT::tryGetBool($disable);
         return $this;
     }
 
@@ -603,7 +618,7 @@ final class KT_WP_Configurator {
 
         // stránka nastavení šablony
         if (KT::issetAndNotEmpty($this->getThemeSettingPage())) {
-            $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", "KT_CORE_DOMAIN"), __("Nastavení šablony", "KT_CORE_DOMAIN"), "update_core", self::THEME_SETTING_PAGE_SLUG);
+            $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Theme setting", "KT_CORE_DOMAIN"), __("Theme setting", "KT_CORE_DOMAIN"), "update_core", self::THEME_SETTING_PAGE_SLUG);
             $themeSettings->setRenderSaveButton()->register();
         }
 
@@ -666,7 +681,7 @@ final class KT_WP_Configurator {
 
         // emoji
         if ($this->getEmojiSwitch() === false) {
-            add_action("init", array($this, "removeEmoji"), 1);
+            add_action("init", array($this, "removeEmoji"), 99);
         }
 
         // Auto Remove Shortcodes Paragraphs
@@ -674,6 +689,11 @@ final class KT_WP_Configurator {
             remove_filter("the_content", "wpautop");
             add_filter("the_content", "wpautop", 99);
             add_filter("the_content", array($this, "autoRemoveShortcodesParagraphs"), 100);
+        }
+
+        // JSON Oembed
+        if ($this->getDisableJsonOembed() === true) {
+            add_action("init", array($this, "disableJsonOembed"), 99);
         }
     }
 
@@ -900,7 +920,7 @@ final class KT_WP_Configurator {
      * @return array
      */
     public function registerUserProfilePhone($profileFields) {
-        $profileFields[KT_User_Profile_Config::PHONE] = __("Telefon", "KT_CORE_DOMAIN");
+        $profileFields[KT_User_Profile_Config::PHONE] = __("Phone", "KT_CORE_DOMAIN");
         return $profileFields;
     }
 
@@ -1085,7 +1105,7 @@ final class KT_WP_Configurator {
             return;
         }
 
-        $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Nastavení šablony", "KT_CORE_DOMAIN"), __("Nastavení šablony", "KT_CORE_DOMAIN"), $capability, self::THEME_SETTING_PAGE_SLUG);
+        $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Theme setting", "KT_CORE_DOMAIN"), __("Theme setting", "KT_CORE_DOMAIN"), $capability, self::THEME_SETTING_PAGE_SLUG);
         $themeSettings->setRenderSaveButton()->register();
 
         return $this;
@@ -1344,7 +1364,7 @@ final class KT_WP_Configurator {
      * @param string $html
      */
     public function addPostArchivesMenuMetaBox() {
-        add_meta_box("kt-post-archive-nav-menu", __("Archivy", "KT_CORE_DOMAIN"), array($this, "postArchivesMenuMetaBoxCallBack"), "nav-menus", "side", "default");
+        add_meta_box("kt-post-archive-nav-menu", __("Archives", "KT_CORE_DOMAIN"), array($this, "postArchivesMenuMetaBoxCallBack"), "nav-menus", "side", "default");
     }
 
     /**
@@ -1385,7 +1405,7 @@ final class KT_WP_Configurator {
             KT::theTabsIndent(1, "</div>", true);
             KT::theTabsIndent(0, "</div>", true, true);
 
-            $addMenuTitle = htmlspecialchars(__("Přidat do menu", "KT_CORE_DOMAIN"));
+            $addMenuTitle = htmlspecialchars(__("Add to menu", "KT_CORE_DOMAIN"));
 
             KT::theTabsIndent(0, "<p class=\"button-controls\">", true);
             KT::theTabsIndent(1, "<span class=\"add-to-menu\">", true);
@@ -1491,10 +1511,10 @@ final class KT_WP_Configurator {
     public static function getCookieStatementHtml() {
         $cookueStatementKey = KT::arrayTryGetValue($_COOKIE, self::COOKIE_STATEMENT_KEY);
         if (KT::notIssetOrEmpty($cookueStatementKey)) {
-            $text = __("Tyto stránky využívají Cookies. Používáním těchto stránek vyjadřujete souhlas s používáním Cookies.", "KT_CORE_DOMAIN");
-            $moreInfoTitle = __("Zjistit více", "KT_CORE_DOMAIN");
+            $text = __("This site uses cookies. By using this site you consent to the use of Cookies.", "KT_CORE_DOMAIN");
+            $moreInfoTitle = __("Find out more", "KT_CORE_DOMAIN");
             $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
-            $confirmTitle = __("OK, rozumím", "KT_CORE_DOMAIN");
+            $confirmTitle = __("OK, i understand", "KT_CORE_DOMAIN");
 
             $html = "<span id=\"ktCookieStatementText\">$text</span>";
             $html .= "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
@@ -1535,24 +1555,27 @@ final class KT_WP_Configurator {
 
     /**
      * Smaže akce spojené s emoji
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
      * @author Jan Pokorný
      */
     public function removeEmoji() {
-        remove_action('admin_print_styles', 'print_emoji_styles');
-        remove_action('wp_head', 'print_emoji_detection_script', 7);
-        remove_action('admin_print_scripts', 'print_emoji_detection_script');
-        remove_action('wp_print_styles', 'print_emoji_styles');
-        remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
-        remove_filter('the_content_feed', 'wp_staticize_emoji');
-        remove_filter('comment_text_rss', 'wp_staticize_emoji');
+        remove_action("admin_print_styles", "print_emoji_styles");
+        remove_action("wp_head", "print_emoji_detection_script", 7);
+        remove_action("admin_print_scripts", "print_emoji_detection_script");
+        remove_action("wp_print_styles", "print_emoji_styles");
+        remove_filter("wp_mail", "wp_staticize_emoji_for_email");
+        remove_filter("the_content_feed", "wp_staticize_emoji");
+        remove_filter("comment_text_rss", "wp_staticize_emoji");
 
         // filter to remove TinyMCE emojis
-        add_filter('tiny_mce_plugins', array($this, "disableEmojiInTinymc"));
+        add_filter("tiny_mce_plugins", array($this, "disableEmojiInTinymc"));
+        add_filter("emoji_svg_url", array($this, "disableEmojiSvgUrl"));
     }
 
     /**
      * Filtr pro odstranění emoji z Tinymc
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
      * @author Jan Pokorný
      * @param array $plugins
@@ -1564,6 +1587,18 @@ final class KT_WP_Configurator {
         } else {
             return array();
         }
+    }
+
+    /**
+     * Filtr pro odstranění emoji SVG URL
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @param string $url
+     * @return array
+     */
+    public function disableEmojiSvgUrl($url) {
+        return null;
     }
 
     /**
@@ -1624,4 +1659,24 @@ final class KT_WP_Configurator {
         wp_enqueue_script(KT_DYNAMIC_FIELDSET_SCRIPT);
     }
 
+    /**
+     * Zruší WP JSON Oembed
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Jentan Bernardus <http://wordpress.stackexchange.com/a/212472>
+     *
+     * @author Martin Hlaváč
+     */
+    public function disableJsonOembed() {
+        if (!is_admin()) {
+            remove_action("wp_head", "rest_output_link_wp_head");
+            remove_action("wp_head", "wp_oembed_add_discovery_links");
+            remove_action("rest_api_init", "wp_oembed_register_route");
+            add_filter("embed_oembed_discover", "__return_false");
+            remove_filter("oembed_dataparse", "wp_filter_oembed_result");
+            remove_action("wp_head", "wp_oembed_add_discovery_links");
+            remove_action("wp_head", "wp_oembed_add_host_js");
+            add_filter("rewrite_rules_array", "disable_embeds_rewrites");
+        }
+    }
 }

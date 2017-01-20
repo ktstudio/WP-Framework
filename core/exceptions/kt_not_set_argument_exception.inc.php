@@ -12,7 +12,7 @@ class KT_Not_Set_Argument_Exception extends Exception {
 
     public function __construct($argumentName, $code = 0, Exception $previous = null) {
         $this->argumentName = $argumentName;
-        $message = __("Zadaný argument je nepřiřazený nebo NULL!", "KT_CORE_DOMAIN");
+        $message = __("The argument is unassigned or NULL!", "KT_CORE_DOMAIN");
         parent::__construct($message, $code, $previous);
     }
 

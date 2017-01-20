@@ -34,7 +34,7 @@ class KT_Slider_Field extends KT_Slider_Field_Base {
      */
     public function setMinValue($minNumber) {
         parent::setMinValue($minNumber);
-        $this->addRule(KT_Field_Validator::MIN_NUMBER, sprintf(__("Minimální hodnota je %d", "KT_CORE_DOMAIN"), $minNumber), $minNumber);
+        $this->addRule(KT_Field_Validator::MIN_NUMBER, sprintf(__("Min value is %d", "KT_CORE_DOMAIN"), $minNumber), $minNumber);
         return $this;
     }
 
@@ -49,7 +49,7 @@ class KT_Slider_Field extends KT_Slider_Field_Base {
      */
     public function setMaxValue($maxNumber) {
         parent::setMaxValue($maxNumber);
-        $this->addRule(KT_Field_Validator::MAX_NUMBER, sprintf(__("Maximální hodnota je %d", "KT_CORE_DOMAIN"), $maxNumber), $maxNumber);
+        $this->addRule(KT_Field_Validator::MAX_NUMBER, sprintf(__("Max value is %d", "KT_CORE_DOMAIN"), $maxNumber), $maxNumber);
         return $this;
     }
 

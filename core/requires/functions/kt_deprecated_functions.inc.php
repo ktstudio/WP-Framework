@@ -270,7 +270,7 @@ function kt_check_current_user_can_manage_options() {
     if (current_user_can("manage_options")) {
         return true;
     } else {
-        wp_die(__("Nemáte dostatečná oprávnění k přístupu na tuto stránku.", "KT_CORE_DOMAIN"));
+        wp_die(__("You do not have sufficient privileges to access this page.", "KT_CORE_DOMAIN"));
         return false;
     }
 }

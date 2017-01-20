@@ -16,9 +16,9 @@ define("KT_PHP_ADMIN_FILE_SUFFIX", ".admin.inc.php");
 define("KT_INIT_MODULE_FILE", "kt_init.inc.php");
 define("KT_BASE_STATIC_CLASS", "KT");
 define("KT_EMPTY_SYMBOL", __("---", "KT_CORE_DOMAIN"));
-define("KT_EMPTY_TEXT", __("Prázdné", "KT_CORE_DOMAIN"));
-define("KT_ALL_TEXT", __("Vše", "KT_CORE_DOMAIN"));
-define("KT_SELECT_TEXT", __("Vybrat", "KT_CORE_DOMAIN"));
+define("KT_EMPTY_TEXT", __("Empty", "KT_CORE_DOMAIN"));
+define("KT_ALL_TEXT", __("All", "KT_CORE_DOMAIN"));
+define("KT_SELECT_TEXT", __("Select", "KT_CORE_DOMAIN"));
 define("KT_SELECT_SYMBOL", __("...", "KT_CORE_DOMAIN"));
 define("KT_BASE_CLASS_SUFFIX", "base");
 define("KT_INTERFACES_FOLDER", "interfaces");
@@ -312,8 +312,26 @@ function kt_include_all($folder) {
             }
         }
     } else {
-        throw new InvalidArgumentException(__("Hodnota \"$folder\" nesmí být prázdná a musí být adresář.", "KT_CORE_DOMAIN"));
+        throw new InvalidArgumentException(__("Value of \"$folder\" can not be empty and must be a folder.", "KT_CORE_DOMAIN"));
     }
+}
+
+/**
+ * Načtení a aplikace jazykového souboru pro doménu zadaného modulu
+ *
+ * @author Tomáš Kocifaj, Martin Hlaváč
+ * @link http://www.ktstudio.cz
+ *
+ * @param string $domain požadováná doména. reps. klíč překladů
+ * @param string $modulePath Cesta k adresáři s modulem
+ * @param string string $lang kód jazyka
+ */
+function kt_load_textdomain($domain, $modulePath, $lang = "cs_CZ") {
+    $moFile = path_join($modulePath, path_join("languages", "{$domain}-{$lang}.mo"));
+    if (file_exists($moFile)) {
+        return load_textdomain("$domain", $moFile);
+    }
+    return null;
 }
 
 /**
@@ -328,7 +346,7 @@ function kt_check_loaded() {
     if (KT_LOADED === true) {
         return;
     }
-    wp_die(__("WP Framework není načten, či povolen!", "KT_CORE_DOMAIN"));
+    wp_die(__("WP Framework is not loaded or enabled!", "KT_CORE_DOMAIN"));
 }
 
 /**
@@ -407,20 +425,20 @@ function kt_load_template_from_subdir($template) {
     global $taxonomy;
     global $cat;
     // --- front-page ---------------------------
-    if (is_front_page()) {
-        return $template;
-    }
-    // --- single ---------------------------
-    if (is_single()) {
-        $ktTemplate = KT::getSingleTemplate($post);
-        if ($ktTemplate) {
-            return $ktTemplate;
-        }
+    if (is_front_page() || is_embed()) {
         return $template;
     }
     // --- attachment ---------------------------
     if (is_attachment()) {
         $ktTemplate = KT::getAttachmentTemplate();
+        if ($ktTemplate) {
+            return $ktTemplate;
+        }
+        return $template;
+    }
+    // --- single ---------------------------
+    if (is_single()) {
+        $ktTemplate = KT::getSingleTemplate($post);
         if ($ktTemplate) {
             return $ktTemplate;
         }

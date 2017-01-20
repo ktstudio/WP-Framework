@@ -76,7 +76,7 @@ jQuery(document).ready(function () {
                 return value % 1 === 0;
             },
             float: function (value, param) {
-                var RE = /^-{0,1}\d*\.{0,1}\d+$/;
+                var RE = /^\-?\d+(?:[\.|\,]\d+)?$/;
                 return (RE.test(value));
             },
             email: function (value, param) {

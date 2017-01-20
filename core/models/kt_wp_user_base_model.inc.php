@@ -10,6 +10,7 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
 
     private $wpUser = null;
     private $permalink;
+    private $editUserLink;
 
     /**
      * Sestavení základního modelu pro práci s uživatelem a jeho daty podle ID
@@ -201,7 +202,7 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @return string
      */
     public function getTitleAttribute() {
-        return $titleAttributeContent = esc_attr(strip_tags(sprintf(__("Autor: %s", "KT_CORE_DOMAIN"), $this->getName())));
+        return $titleAttributeContent = esc_attr(strip_tags(sprintf(__("Author: %s", "KT_CORE_DOMAIN"), $this->getName())));
     }
 
     /**
@@ -213,7 +214,8 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @return type
      */
     public function getPhone() {
-        return $this->getMetaValue(KT_User_Profile_Config::PHONE);
+        $key = KT_User_Profile_Config::PHONE;
+        return $this->getWpUser()->$key;
     }
 
     /**
@@ -249,10 +251,25 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @return string
      */
     public function getPermalink() {
-        if (KT::issetAndNotEmpty($this->permalink)) {
+        if (isset($this->permalink)) {
             return $this->permalink;
         }
         return $this->permalink = get_author_posts_url($this->getId());
+    }
+
+    /**
+     * Vrátí URL pro editaci detailu uživatele v administraci
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getEditUserLink() {
+        if (isset($this->editUserLink)) {
+            return $this->editUserLink;
+        }
+        return $this->editUserLink = get_edit_user_link($this->getId());
     }
 
     // --- veřejné metody ------------------------
@@ -408,7 +425,7 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
             if ($wpUser) {
                 $this->setWpUser($wpUser);
             } else {
-                throw new KT_Not_Supported_Exception(__("ID uživatele neexistuje (ve WP databázi).", "KT_CORE_DOMAIN"));
+                throw new KT_Not_Supported_Exception(__("User`s id is not exist (in WP database).", "KT_CORE_DOMAIN"));
             }
         }
         return $this;

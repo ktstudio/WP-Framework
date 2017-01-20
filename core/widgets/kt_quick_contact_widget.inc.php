@@ -14,7 +14,7 @@ class KT_Quick_Contact_Widget extends KT_Widget_Base {
 
     public function __construct() {
         parent::__construct(
-                "KT_Quick_Contact_Widget", __("Rychlý kontakt", "KT_CORE_DOMAIN"), __("Rychlé kontaktní informace včetně nadpisu s informační ikonou.", "KT_CORE_DOMAIN")
+                "KT_Quick_Contact_Widget", __("Fast contact", "KT_CORE_DOMAIN"), __("Fast contact information, including the title with an information icon.", "KT_CORE_DOMAIN")
         );
     }
 
@@ -29,7 +29,7 @@ class KT_Quick_Contact_Widget extends KT_Widget_Base {
         kt_the_tabs_indent(1, "<ul class=\"list-group\">", true);
         $phone = htmlspecialchars(trim($instance[self::PHONE_KEY]));
         if (isset($phone) && !empty($phone)) {
-            $phoneTitle = __("Tel.", "KT_CORE_DOMAIN");
+            $phoneTitle = __("Phone", "KT_CORE_DOMAIN");
             kt_the_tabs_indent(2, "<li class=\"list-group-item\">$phoneTitle: $phone</li>", true);
         }
         $email = htmlspecialchars(trim($instance[self::EMAIL_KEY]));
@@ -39,7 +39,7 @@ class KT_Quick_Contact_Widget extends KT_Widget_Base {
         }
         $skype = htmlspecialchars(trim($instance[self::SKYPE_KEY]));
         if (isset($skype) && !empty($skype)) {
-            $skypeTitle = __("Zavolat na Skype", "KT_CORE_DOMAIN");
+            $skypeTitle = __("Call by Skype", "KT_CORE_DOMAIN");
             $skypeLink = "<a href=\"skype:echo123?call\" title=\"$skypeTitle\">$skypeTitle</a>";
             kt_the_tabs_indent(2, "<li class=\"list-group-item\">$skypeLink</li>", true);
         }
@@ -58,7 +58,7 @@ class KT_Quick_Contact_Widget extends KT_Widget_Base {
     public function form($instance) {
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id(self::PHONE_KEY); ?>"><?php _e("Tel.", "KT_CORE_DOMAIN"); ?>:</label>
+            <label for="<?php echo $this->get_field_id(self::PHONE_KEY); ?>"><?php _e("Phone", "KT_CORE_DOMAIN"); ?>:</label>
             <input type="text" id="<?php echo $this->get_field_id(self::PHONE_KEY); ?>" name="<?php echo $this->get_field_name(self::PHONE_KEY); ?>" value="<?php echo $instance[self::PHONE_KEY]; ?>">
         </p>
         <p>

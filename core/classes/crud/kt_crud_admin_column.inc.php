@@ -379,7 +379,7 @@ class KT_CRUD_Admin_Column {
         $html .= "<a href=\"$updateUrl\">" . __("Detail", "KT_CORE_DOMAIN") . "</a>";
 
         if ($this->getDeletable()) {
-            $html .= " | <span class=\"delete-row\" title=\"" . __('Trvale smazat tento záznam', "KT_CORE_DOMAIN") . "\" data-id=\"$itemId\" data-type=\"$className\">" . __("Smazat", "KT_CORE_DOMAIN") . "</span>";
+            $html .= " | <span class=\"delete-row\" title=\"" . __('Permanently delete this item', "KT_CORE_DOMAIN") . "\" data-id=\"$itemId\" data-type=\"$className\">" . __("delete", "KT_CORE_DOMAIN") . "</span>";
         }
 
         $html .= "</span>";
@@ -456,7 +456,7 @@ class KT_CRUD_Admin_Column {
         if ($selfCallback === true) {
             $html .= $item->$customCallbackFunction($item);
         } else {
-            $html .= apply_filters($customCallbackFunction, $string, $item);
+            $html .= apply_filters($customCallbackFunction, $item);
         }
 
         $html .= $this->getSuffixContent();

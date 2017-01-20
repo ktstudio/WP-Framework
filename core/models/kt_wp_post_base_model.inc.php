@@ -17,6 +17,7 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     private $files;
     private $data = array();
     private $permalink;
+    private $editPostLink;
     private $categoriesIds;
     private $wpCommentsCount;
     private $postTypeObject;
@@ -317,11 +318,11 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
                 $excerptLength = $customExcerptLength ? : apply_filters("excerpt_length", self::DEFAULT_EXCERPT_LENGTH);
                 $excerpt = wp_trim_words($excerpt, $excerptLength, $excerptMore);
                 if (KT::issetAndNotEmpty($excerpt)) {
-                    $excerptFilterered = apply_filters("get_the_excerpt", $excerpt);
+                    $excerptFiltered = strip_shortcodes(apply_filters("get_the_excerpt", $excerpt));
                     if ($withTheFilter) {
-                        return apply_filters("the_excerpt", $excerptFilterered);
+                        return apply_filters("the_excerpt", $excerptFiltered);
                     }
-                    return strip_shortcodes(strip_tags($excerptFilterered));
+                    return strip_tags($excerptFiltered);
                 }
             }
         }
@@ -336,14 +337,14 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
      * @return string
      */
     public function getFullExcerpt($withTheFilters = true) {
-        if (!$this->hasExcerpt()) {
-            return;
+        if ($this->hasExcerpt()) {
+            $excerpt = strip_shortcodes($this->getPost()->post_excerpt);
+            if ($withTheFilters) {
+                $excerpt = apply_filters("the_excerpt", $excerpt);
+            }
+            return $excerpt;
         }
-        $excerpt = $this->getPost()->post_excerpt;
-        if ($withTheFilters) {
-            $excerpt = strip_shortcodes(apply_filters("the_excerpt", $excerpt));
-        }
-        return $excerpt;
+        return null;
     }
 
     /**
@@ -355,11 +356,25 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
      * @return string
      */
     public function getPermalink() {
-        $permalink = $this->permalink;
-        if (KT::issetAndNotEmpty($permalink)) {
-            return $permalink;
+        if (isset($this->permalink)) {
+            return $this->permalink;
         }
         return $this->permalink = get_the_permalink($this->getPostId());
+    }
+
+    /**
+     * Vrátí URL pro editaci detailu postu v administraci
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getEditPostLink() {
+        if (isset($this->editPostLink)) {
+            return $this->editPostLink;
+        }
+        return $this->editPostLink = get_edit_post_link($this->getPostId());
     }
 
     /**
@@ -432,28 +447,28 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
 
         switch ($diff->d) {
             case 1:
-                $dayString = __("den", "KT_CORE_DOMAIN");
+                $dayString = __("Day", "KT_CORE_DOMAIN");
                 break;
             case 2:
             case 3:
             case 4:
-                $dayString = _("dny", "KT_CORE_DOMAIN");
+                $dayString = _("days", "KT_CORE_DOMAIN");
 
             default:
-                $dayString = _("dní", "KT_CORE_DOMAIN");
+                $dayString = _("days", "KT_CORE_DOMAIN");
         }
 
         if ($diff->m > 0) {
-            $diffTimeFormat = $diff->m . __(' měs', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat = $diff->m . __(' month', "KT_CORE_DOMAIN") . ' ';
             $diffTimeFormat .= $diff->d . $dayString . ' ';
-            $diffTimeFormat .= $diff->h . __(' hod', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat .= $diff->h . __(' hour', "KT_CORE_DOMAIN") . ' ';
             $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         } elseif ($diff->d > 0) {
             $diffTimeFormat = $diff->d . $dayString . ' ';
-            $diffTimeFormat .= $diff->h . __(' hod', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat .= $diff->h . __(' hours', "KT_CORE_DOMAIN") . ' ';
             $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         } elseif ($diff->h > 0) {
-            $diffTimeFormat .= $diff->h . __(' hod', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat .= $diff->h . __(' hours', "KT_CORE_DOMAIN") . ' ';
             $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         } else {
             $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';

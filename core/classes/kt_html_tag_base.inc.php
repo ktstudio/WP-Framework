@@ -56,7 +56,7 @@ abstract class KT_HTML_Tag_Base {
                 continue;
             }
 
-            if (KT::issetAndNotEmpty($value)) {
+            if (isset($value)) {
                 $html .= $key . "=\"" . htmlspecialchars($value) . "\" ";
             } else {
                 $html .= $key . " ";

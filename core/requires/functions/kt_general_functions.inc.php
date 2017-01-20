@@ -91,7 +91,7 @@ function kt_wp_before_admin_bar_render_callback() {
     $wp_admin_bar->add_menu(array(
         "id" => KT_WP_Configurator::THEME_SETTING_PAGE_SLUG,
         "parent" => "site-name",
-        "title" => __("Nastavení šablony", "KT_CORE_DOMAIN"),
+        "title" => __("Theme setting", "KT_CORE_DOMAIN"),
         "href" => admin_url("themes.php") . "?page=" . KT_WP_Configurator::THEME_SETTING_PAGE_SLUG,
     ));
 }

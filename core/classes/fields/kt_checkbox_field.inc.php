@@ -73,9 +73,13 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
             $html .= $this->getBasicHtml($key);
             $html .= " value=\"$key\" ";
 
-            if (KT::issetAndNotEmpty($data) && is_array($data)) {
-                if (in_array($key, array_keys($data))) {
-                    $html .=" checked=\"checked\"";
+            if (KT::issetAndNotEmpty($data)) {
+                if (is_array($data)) {
+                    if (in_array($key, array_keys($data))) {
+                        $html .= " checked=\"checked\"";
+                    }
+                } elseif($key == $data) {
+                    $html .= " checked=\"checked\"";
                 }
             }
 
