@@ -61,7 +61,7 @@ class KT {
      */
     public static function arrayInsertBefore(array $input, $index, $newKey, $newValue) {
         if (!array_key_exists($index, $input)) {
-            throw new KT_Duplicate_Exception($key);
+            throw new KT_Duplicate_Exception($index);
         }
         $output = array();
         foreach ($input as $key => $value) {
@@ -88,7 +88,7 @@ class KT {
      */
     public static function arrayInsertAfter(array $input, $index, $newKey, $newValue) {
         if (!array_key_exists($index, $input)) {
-            throw new KT_Duplicate_Exception($key);
+            throw new KT_Duplicate_Exception($index);
         }
         $output = array();
         foreach ($input as $key => $value) {
@@ -345,6 +345,24 @@ class KT {
             if (array_key_exists($key, $array)) {
                 return $array[$key];
             }
+        }
+        return $defaultValue;
+    }
+
+    /**
+     * Vrátí hodnotu z objektu, který je pole pro zadaný klíč pokud existuje nebo výchozí zadanou hodnotu (NULL)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param array $array
+     * @param string $key
+     * @param string $defaultValue
+     * @return mixed type|null
+     */
+    public static function arrayObjectTryGetValue($array, $key, $defaultValue = null) {
+        if (isset($array) && is_array($array)) {
+            return self::arrayTryGetValue($array, $key, $defaultValue );
         }
         return $defaultValue;
     }
