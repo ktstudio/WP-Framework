@@ -618,7 +618,7 @@ final class KT_WP_Configurator {
 
         // stránka nastavení šablony
         if (KT::issetAndNotEmpty($this->getThemeSettingPage())) {
-            $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Theme setting", "KT_CORE_DOMAIN"), __("Theme setting", "KT_CORE_DOMAIN"), "update_core", self::THEME_SETTING_PAGE_SLUG);
+            $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Theme Settings", "KT_CORE_DOMAIN"), __("Theme Settings", "KT_CORE_DOMAIN"), "update_core", self::THEME_SETTING_PAGE_SLUG);
             $themeSettings->setRenderSaveButton()->register();
         }
 
@@ -1105,7 +1105,7 @@ final class KT_WP_Configurator {
             return;
         }
 
-        $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Theme setting", "KT_CORE_DOMAIN"), __("Theme setting", "KT_CORE_DOMAIN"), $capability, self::THEME_SETTING_PAGE_SLUG);
+        $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Theme Settings", "KT_CORE_DOMAIN"), __("Theme Settings", "KT_CORE_DOMAIN"), $capability, self::THEME_SETTING_PAGE_SLUG);
         $themeSettings->setRenderSaveButton()->register();
 
         return $this;

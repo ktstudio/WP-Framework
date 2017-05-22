@@ -324,9 +324,12 @@ function kt_include_all($folder) {
  *
  * @param string $domain požadováná doména. reps. klíč překladů
  * @param string $modulePath Cesta k adresáři s modulem
- * @param string string $lang kód jazyka
+ * @param string string $lang kód jazyka, pokud není zadán vlastní, aplikuje se aktuální (z WP)
  */
-function kt_load_textdomain($domain, $modulePath, $lang = "cs_CZ") {
+function kt_load_textdomain($domain, $modulePath, $lang = null) {
+    if ($lang === null) {
+        $lang = get_locale();
+    }
     $moFile = path_join($modulePath, path_join("languages", "{$domain}-{$lang}.mo"));
     if (file_exists($moFile)) {
         return load_textdomain("$domain", $moFile);

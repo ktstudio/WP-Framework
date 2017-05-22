@@ -29,7 +29,7 @@ msgstr "Uložit nastavení"
 #: classes/configurator/kt_wp_configurator.inc.php:621
 #: classes/configurator/kt_wp_configurator.inc.php:1108
 #: requires/functions/kt_general_functions.inc.php:94
-msgid "Theme setting"
+msgid "Theme Settings"
 msgstr "Nastavení šablony"
 
 #: classes/configurator/kt_wp_configurator.inc.php:923
