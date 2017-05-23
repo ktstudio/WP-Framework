@@ -23,7 +23,7 @@ msgstr "Data byla uložena"
 #: classes/admin_screen/kt_custom_metaboxes_base.inc.php:490
 #: classes/admin_screen/kt_custom_metaboxes_base.inc.php:509
 #: presenters/kt_user_profile_base_presenter.inc.php:391
-msgid "Save setting"
+msgid "Save Settings"
 msgstr "Uložit nastavení"
 
 #: classes/configurator/kt_wp_configurator.inc.php:621

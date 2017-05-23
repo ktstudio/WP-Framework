@@ -487,7 +487,7 @@ abstract class KT_Custom_Metaboxes_Base {
         }
 
         add_meta_box(
-                "kt-save-custom-page", __("Save setting", "KT_CORE_DOMAIN"), array($this, "saveMetaboxCallback"), $this->getPage(), KT_Metabox::CONTEXT_SIDE, KT_Metabox::PRIORITY_CORE
+                "kt-save-custom-page", __("Save Settings", "KT_CORE_DOMAIN"), array($this, "saveMetaboxCallback"), $this->getPage(), KT_Metabox::CONTEXT_SIDE, KT_Metabox::PRIORITY_CORE
         );
 
         return $this;
