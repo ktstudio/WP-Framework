@@ -283,23 +283,52 @@ div.file-load-box span.span-url > a > span:hover
 
 span.switch-toggle
 {
-    background: url('../images/switch.png') no-repeat;
     display: inline-block !important;
-    height: 35px;
-    width: 86px;
-    padding-left: 26px;
+    height: 25px;
+    width: 70px;
     cursor: pointer;
-    display: none;
-}
-
-span.switch-toggle.on
-{
-    background-position: 0px 0px;
+    background: #FFF;
+    border: solid 1px #eceeef;
+    box-shadow: none;
+    transition: All 0.3s ease;font-size: 10px;
+    border-radius: 10px;
+    position: relative;
 }
 
 span.switch-toggle.off
 {
-    background-position: 0px -35px;
+    background-color: #666;
+}
+
+span.switch-toggle.on
+{
+    background-color: #0085ba;
+    border-color: #006799;
+}
+
+span.switch-toggle.on:before,
+span.switch-toggle.off:after
+{
+    color: #aaa;
+    position: absolute;
+    top: 50%;
+    line-height: 1;
+    font-weight: bold;
+    font-size: 11px;
+    margin-top: -5px;
+}
+
+span.switch-toggle.on:before
+{
+    content: attr(data-on);
+    left: 11px;
+    color: #fff;
+}
+
+span.switch-toggle.off:after
+{
+    content: attr(data-off);
+    right: 11px;
 }
 
 span.switch-toggle.hidden
