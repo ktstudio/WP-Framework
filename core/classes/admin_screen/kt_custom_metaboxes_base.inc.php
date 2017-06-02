@@ -506,7 +506,7 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function saveMetaboxCallback() {
         do_action("kt_theme_setting_box_" . KT_WP_Configurator::getThemeSettingSlug());
-        echo "<button type=\"submit\" class=\"button button-primary button-large\">" . __('Save setting', "KT_CORE_DOMAIN") . "</button>";
+        echo "<button type=\"submit\" class=\"button button-primary button-large\">" . __('Save Settings', "KT_CORE_DOMAIN") . "</button>";
     }
 
     // --- protected functions ------------------

@@ -23,7 +23,7 @@ class KT_Term_Metabox implements KT_Registrable {
          */
         $this->setTaxonomy($taxonomy);
         if (!kt::issetAndNotEmpty($fieldset->getPostPrefix())) {
-            throw new KT_Not_Supported_Exception(__("If you want work with termenta, you must set postPrefix to your fieldset.", "KT_CORE_DOMAIN"));
+            throw new KT_Not_Supported_Exception(__("If you want work with term meta, you must set postPrefix to your fieldset.", "KT_CORE_DOMAIN"));
         }
         $this->fieldset = $fieldset;
     }

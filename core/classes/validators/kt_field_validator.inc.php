@@ -248,7 +248,7 @@ class KT_Field_Validator {
         }
 
         if (!is_array($this->param)) {
-            throw new InvalidArgumentException(__("The value for the validate range must be an array type.", "KT_CORE_DOMAIN"));
+            throw new InvalidArgumentException(__("Parameter to validate the range must be an array type.", "KT_CORE_DOMAIN"));
         }
 
         if (($value >= $this->param[0]) && ($value <= $this->param[1])) {
@@ -282,7 +282,7 @@ class KT_Field_Validator {
             return false;
         }
 
-        throw new InvalidArgumentException(__("Value for validate the length must be assigned.", "KT_CORE_DOMAIN"));
+        throw new InvalidArgumentException(__("Parameter to validate the length must be assigned.", "KT_CORE_DOMAIN"));
     }
 
     /**

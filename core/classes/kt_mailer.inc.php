@@ -203,7 +203,7 @@ class KT_Mailer {
             $this->blindCarbonCopies = self::getHeaderEmail($copyEmail, $copyName);
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("Hidden copy \"%s\" is not a valid email address!", "KT_CORE_DOMAIN"), $recipientEmail));
+        throw new InvalidArgumentException(sprintf(__("Hidden copy \"%s\" is not valid email address!", "KT_CORE_DOMAIN"), $recipientEmail));
     }
 
     /**
@@ -222,7 +222,7 @@ class KT_Mailer {
             $this->senderEmail = $senderEmail;
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("Sender \"%s\" is not a valid email address!", "KT_CORE_DOMAIN"), $senderEmail));
+        throw new InvalidArgumentException(sprintf(__("Sender \"%s\" is not valid email address!", "KT_CORE_DOMAIN"), $senderEmail));
     }
 
     /**
@@ -238,7 +238,7 @@ class KT_Mailer {
             $this->replyToEmail = $email;
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("Reply to \"%s\" is not a valid email address!", "KT_CORE_DOMAIN"), $email));
+        throw new InvalidArgumentException(sprintf(__("Reply to \"%s\" is not valid email address!", "KT_CORE_DOMAIN"), $email));
     }
 
     /**
@@ -337,7 +337,7 @@ class KT_Mailer {
             $this->recipients = $recipients;
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("Reciver \"%s\" is not a valid email address!", "KT_CORE_DOMAIN"), $recipientEmail));
+        throw new InvalidArgumentException(sprintf(__("Reciver \"%s\" is not valid email address!", "KT_CORE_DOMAIN"), $recipientEmail));
     }
 
     /**
@@ -356,7 +356,7 @@ class KT_Mailer {
             $this->carbonCopies = $copies;
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("Copy \"%s\" is not a valid email address!", "KT_CORE_DOMAIN"), $copyEmail));
+        throw new InvalidArgumentException(sprintf(__("Copy \"%s\" is not valid email address!", "KT_CORE_DOMAIN"), $copyEmail));
     }
 
     /**
@@ -375,7 +375,7 @@ class KT_Mailer {
             $this->blindCarbonCopies = $copies;
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("HIdden copy \"%s\" is not a valid email address!", "KT_CORE_DOMAIN"), $copyEmail));
+        throw new InvalidArgumentException(sprintf(__("Hidden copy \"%s\" is not valid email address!", "KT_CORE_DOMAIN"), $copyEmail));
     }
 
     /**
