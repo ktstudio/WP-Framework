@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Překlad pro WP Framework\n"
-"POT-Creation-Date: 2017-06-02 16:20+0200\n"
+"POT-Creation-Date: 2017-06-02 16:31+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: Brilo Team s.r.o. <team@brilo.cz>\n"
@@ -518,11 +518,11 @@ msgid "The message can be up to 1000 characters"
 msgstr "Zpráva může mít maximálně 1000 znaků"
 
 #: configs/kt_contact_form_base_config.inc.php:77
-msgid "Do not fill if your are the human"
+msgid "Do not fill if your are human"
 msgstr "Nevyplňujte pokud jste člověk"
 
 #: configs/kt_dynamic_fieldset_predefined_config.inc.php:20
-msgid "Parametrs"
+msgid "Parameters"
 msgstr "Prametry"
 
 #: configs/kt_dynamic_fieldset_predefined_config.inc.php:21
@@ -672,7 +672,7 @@ msgstr "Operace není implementována!"
 #: exceptions/kt_not_implemented_exception.inc.php:24
 #, php-format
 msgid ""
-"unimplemented operations: %s \n"
+"unimplemented operation: %s \n"
 " %s"
 msgstr ""
 "Neimplementovaná operace : %s \n"
@@ -693,7 +693,7 @@ msgstr ""
 " %s"
 
 #: exceptions/kt_not_supported_exception.inc.php:15
-msgid "Operation not supported!!"
+msgid "Operation is not supported!!"
 msgstr "Operace není podporována!"
 
 #: exceptions/kt_not_supported_exception.inc.php:24
@@ -931,6 +931,9 @@ msgstr "E-mail"
 #: widgets/kt_quick_contact_widget.inc.php:69
 msgid "Skype"
 msgstr "Skype"
+
+#~ msgid "Do not fill if your are the human"
+#~ msgstr "Nevyplňujte pokud jste člověk"
 
 #~ msgid "Reciver \"%s\" is not a valid email address!"
 #~ msgstr "Příjemce \"%s\" není validní emailová adresa!"
