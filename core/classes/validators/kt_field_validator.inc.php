@@ -2,7 +2,7 @@
 
 /**
  * Základní validátor pro validaci dat chodící prostřednictvím KT_Formu
- * 
+ *
  * @author Tomáš Kocifaj
  * @link http://www.ktstudio.cz
  */
@@ -27,10 +27,10 @@ class KT_Field_Validator {
 
     /**
      * Základní validátor pro validaci dat chodící prostřednictvím KT_Formu
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $condition - pouze constanty třídy
      * @param string $message - chybová hlášky
      * @param type $param - v případě potřeby předat validátoru parametry pro validaci
@@ -73,10 +73,10 @@ class KT_Field_Validator {
 
     /**
      * Která podmínká a validace bude na fieldu aplikována
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $condition
      */
     private function setCondition($condition) {
@@ -87,10 +87,10 @@ class KT_Field_Validator {
 
     /**
      * Která zpráva bude uživateli zobrazena při nesplnění podmínky validace
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $message
      */
     private function setMessage($message) {
@@ -101,10 +101,10 @@ class KT_Field_Validator {
 
     /**
      * V případě nutnosti předat validátoru parametr
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param mixed $param int || array
      */
     private function setParam($param = null) {
@@ -117,10 +117,10 @@ class KT_Field_Validator {
 
     /**
      * Dle nastavení podmínky validace zavolá příslušnou funkci a vrátí její výsledek
-     * 
+     *
      * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz 
-     * 
+     * @link http://www.ktstudio.cz
+     *
      * @param string $value - validovaná hodnota
      * @return boolean - zda je validní nebo ne
      */
@@ -133,10 +133,10 @@ class KT_Field_Validator {
 
     /**
      * Musí být hodnota vyplněna
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $value - validovaná hodnota
      * @return boolean
      */
@@ -150,10 +150,10 @@ class KT_Field_Validator {
 
     /**
      * Je hodnota integer?
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $value - validovaná hodnota
      * @return boolean
      */
@@ -177,9 +177,9 @@ class KT_Field_Validator {
 
     /**
      * Je hodnota float? (validace ekvivalentní v js)
-     * 
+     *
      * @author Jan Pokorný
-     * 
+     *
      * @param string $value - validovaná hodnota
      * @return boolean
      */
@@ -192,10 +192,10 @@ class KT_Field_Validator {
 
     /**
      * Je hodnota správný formát emailu?
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $value - validovaná hodnota
      * @return boolean
      */
@@ -213,10 +213,10 @@ class KT_Field_Validator {
 
     /**
      * Je zadaná hodnota sprývný url formát?
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $value - validovaná hodnota
      * @return boolean
      */
@@ -234,10 +234,10 @@ class KT_Field_Validator {
 
     /**
      * Je hodnota v definovaném rozsahu od max do min?
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $value - validovaná hodnota
      * @return boolean
      * @throws InvalidArgumentException
@@ -248,7 +248,7 @@ class KT_Field_Validator {
         }
 
         if (!is_array($this->param)) {
-            throw new InvalidArgumentException(__("Parameter to validate the range must be an array type.", "KT_CORE_DOMAIN"));
+            throw new InvalidArgumentException(__("The value for the validate range must be an array type.", "KT_CORE_DOMAIN"));
         }
 
         if (($value >= $this->param[0]) && ($value <= $this->param[1])) {
@@ -260,10 +260,10 @@ class KT_Field_Validator {
 
     /**
      * Je hodnota přesné délky znaků?
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $value - validovaná hodnota
      * @return boolean
      * @throws InvalidArgumentException
@@ -282,15 +282,15 @@ class KT_Field_Validator {
             return false;
         }
 
-        throw new InvalidArgumentException(__("Parameter to validate the length must be assigned.", "KT_CORE_DOMAIN"));
+        throw new InvalidArgumentException(__("Value for validate the length must be assigned.", "KT_CORE_DOMAIN"));
     }
 
     /**
      * není délka hodnoty vyšší než nastavený parametr?
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $value - validovaná hodnota
      * @return boolean
      * @throws KT_Not_Set_Argument_Exception
@@ -315,10 +315,10 @@ class KT_Field_Validator {
 
     /**
      * Není délka hodnoty menší než nastavený parametr?
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param type $value
      * @return boolean
      * @throws KT_Not_Set_Argument_Exception
@@ -343,10 +343,10 @@ class KT_Field_Validator {
 
     /**
      * Není hodnota vyšší než maximální číslo v parametru?
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param type $value
      * @return boolean
      * @throws KT_Not_Set_Argument_Exception
@@ -375,10 +375,10 @@ class KT_Field_Validator {
 
     /**
      * Je hodnta větší číslo než nastavený parametr?
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param type $value
      * @return boolean
      * @throws KT_Not_Set_Argument_Exception
@@ -407,14 +407,17 @@ class KT_Field_Validator {
 
     /**
      * Odpovídá hodnota zadanému regulárnímu výrazu?
-     * 
+     *
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param type $value
      * @return boolean
      */
     public function regular($value) {
+        if ($value == '') {
+            return true;
+        }
         $param = $this->getParam();
 
         $regResult = preg_match("/" . $param . "/", $value);
