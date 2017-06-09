@@ -659,10 +659,10 @@ class KT {
         $serverPort = $_SERVER["SERVER_PORT"];
         $serverName = $_SERVER["SERVER_NAME"];
         $serverUri = ($fullUrl) ? $_SERVER["REQUEST_URI"] : $_SERVER["REDIRECT_URL"];
-        if ($serverPort != "80") {
-            $requestUrl .= "$serverName:$serverPort$serverUri";
-        } else {
+        if ($serverPort == "80" || $serverPort == "443") {
             $requestUrl .= "$serverName$serverUri";
+        } else {
+            $requestUrl .= "$serverName:$serverPort$serverUri";
         }
         return $requestUrl;
     }

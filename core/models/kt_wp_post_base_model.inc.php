@@ -468,10 +468,10 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
             $diffTimeFormat .= $diff->h . __(' hours', "KT_CORE_DOMAIN") . ' ';
             $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         } elseif ($diff->h > 0) {
-            $diffTimeFormat .= $diff->h . __(' hours', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat = $diff->h . __(' hours', "KT_CORE_DOMAIN") . ' ';
             $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         } else {
-            $diffTimeFormat .= $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
+            $diffTimeFormat = $diff->i . __(' min', "KT_CORE_DOMAIN") . ' ';
         }
 
         return $diffTimeFormat;
