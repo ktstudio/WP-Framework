@@ -658,11 +658,13 @@ class KT {
         $requestUrl .= "://";
         $serverPort = $_SERVER["SERVER_PORT"];
         $serverName = $_SERVER["SERVER_NAME"];
+        $httpHost = $_SERVER["HTTP_HOST"];
+        $serverKey = (self::stringEndsWith($httpHost, $serverName)) ? $httpHost : $serverName;
         $serverUri = ($fullUrl) ? $_SERVER["REQUEST_URI"] : $_SERVER["REDIRECT_URL"];
         if ($serverPort == "80" || $serverPort == "443") {
-            $requestUrl .= "$serverName$serverUri";
+            $requestUrl .= "{$serverKey}{$serverUri}";
         } else {
-            $requestUrl .= "$serverName:$serverPort$serverUri";
+            $requestUrl .= "{$serverKey}:{$serverPort}{$serverUri}";
         }
         return $requestUrl;
     }
@@ -676,7 +678,7 @@ class KT {
      * @return string
      */
     public static function getBacklinkUrl() {
-        $refererUrl = $_SERVER['HTTP_REFERER'];
+        $refererUrl = $_SERVER["HTTP_REFERER"];
         if (filter_var($refererUrl, FILTER_VALIDATE_URL)) {
             return $refererUrl;
         }
