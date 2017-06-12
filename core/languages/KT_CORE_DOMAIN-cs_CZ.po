@@ -746,7 +746,7 @@ msgstr "Autor: %s"
 
 #: models/kt_wp_user_base_model.inc.php:428
 msgid "User`s id is not exist (in WP database)."
-msgstr "Uživatelské s tímto ID neexistuje (ve WP databázi)"
+msgstr "Uživatel s tímto ID neexistuje (ve WP databázi)"
 
 #: presenters/kt_contact_form_base_presenter.inc.php:136
 #: presenters/kt_user_profile_base_presenter.inc.php:168
@@ -858,7 +858,7 @@ msgstr "Pro změnu hesla je třeba zadat heslo a jeho potvrzení."
 #: presenters/kt_wp_post_base_presenter.inc.php:213
 #, php-format
 msgid "About author: %s"
-msgstr "A autorovi: %s"
+msgstr "O autorovi: %s"
 
 #: requires/metaboxes/kt_wp_cron_metabox.admin.inc.php:3
 msgid "(KT) WP CRON"
