@@ -48,6 +48,7 @@ final class KT_WP_Configurator {
     private $autoRemoveShortcodesParagraphs = false;
     private $enableDynamicFieldsets = false;
     private $disableOembed = false;
+    private $disableJson = false;
 
     // --- gettery ----------------------
 
@@ -237,6 +238,11 @@ final class KT_WP_Configurator {
         return $this->disableOembed;
     }
 
+    /** @return boolean */
+    public function getDisableJson() {
+        return $this->disableJson;
+    }
+
     // --- settery ----------------------
 
     /**
@@ -348,7 +354,7 @@ final class KT_WP_Configurator {
     /**
      * Nastaví (vlastní) oprávnění pro stránku s nastavením šablony s metaboxy
      *
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
      * @param boolean $themeSettingsCapability
@@ -551,6 +557,18 @@ final class KT_WP_Configurator {
         return $this;
     }
 
+    /**
+     * Vypne / ponechá funkce WP JSON (API)
+     *
+     * @author Martin Hlaváč
+     * @param boolean $disable
+     * @return \KT_WP_Configurator
+     */
+    public function setDisableJson($disable = true) {
+        $this->disableJson = KT::tryGetBool($disable);
+        return $this;
+    }
+
     // --- veřejné funkce ---------------
 
     /**
@@ -716,6 +734,11 @@ final class KT_WP_Configurator {
         // JSON Oembed
         if ($this->getDisableJsonOembed() === true) {
             add_action("init", array($this, "disableJsonOembed"), 99);
+        }
+
+        // JSON (API)
+        if ($this->getDisableJson() === true) {
+            add_action("init", array($this, "disableJson"), 99);
         }
     }
 
@@ -1699,6 +1722,19 @@ final class KT_WP_Configurator {
             remove_action("wp_head", "wp_oembed_add_discovery_links");
             remove_action("wp_head", "wp_oembed_add_host_js");
             add_filter("rewrite_rules_array", "disable_embeds_rewrites");
+        }
+    }
+
+    /**
+     * Zruší WP JSON Oembed
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     */
+    public function disableJson() {
+        if (!is_admin()) {
+            add_filter("json_enabled", "__return_false");
+            add_filter("json_jsonp_enabled", "__return_false");
         }
     }
 }
