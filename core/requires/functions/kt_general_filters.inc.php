@@ -37,7 +37,9 @@ add_filter("kt_post_id_to_title", "kt_post_id_to_title", 10, 1);
  */
 function kt_post_id_to_title($postId) {
     if (KT::isIdFormat($postId)) {
-        return get_the_title($postId);
+        $postTitle = get_the_title($postId);
+        $link = sprintf('<a href="%s" title="%s">%s</a>', get_edit_post_link($postId), $postTitle, $postTitle);
+        return $link;
     }
     return KT_EMPTY_SYMBOL;
 }
