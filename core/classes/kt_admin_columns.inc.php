@@ -18,6 +18,7 @@ class KT_Admin_Columns {
     const TAXONOMY_PARAM_KEY = "taxonomy";
     const PROPERTY_PARAM_KEY = "property";
     const METAKEY_PARAM_KEY = "meta_key";
+    const METAKEY_TYPE_KEY = "meta_type";
     const METAKEY_VALUE_KEY = "meta_value";
     const METAKEY_VALUE_NUM_KEY = "meta_value_num";
     const FILTER_FUNCTION = "filter_function";
@@ -152,7 +153,7 @@ class KT_Admin_Columns {
         }
     }
 
-    public function orderbyColumn($query) {
+    public function orderbyColumn(WP_Query $query) {
         if (is_admin()) {
             $orderby = $query->get(self::ORDERBY_PARAM_KEY);
             $keys = array_keys((array) $this->sortableColumns);
@@ -160,6 +161,7 @@ class KT_Admin_Columns {
                 if ($this->sortableColumns[$orderby][self::TYPE_PARAM_KEY] == self::POST_META_TYPE_KEY) {
                     $query->set(self::METAKEY_PARAM_KEY, $orderby);
                     $query->set(self::ORDERBY_PARAM_KEY, $this->sortableColumns[$orderby][self::ORDERBY_PARAM_KEY]);
+                    $query->set(self::METAKEY_TYPE_KEY, $this->sortableColumns[$orderby][self::METAKEY_TYPE_KEY]);
                 }
             }
         }
@@ -175,6 +177,7 @@ class KT_Admin_Columns {
             self::TYPE_PARAM_KEY => self::POST_META_TYPE_KEY,
             self::ORDERBY_PARAM_KEY => self::METAKEY_PARAM_KEY,
             self::INDEX_PARAM_KEY => null,
+            self::METAKEY_TYPE_KEY => null,
         );
         $this->columns[$key] = array_merge($defaults, $args);
         if ($this->columns[$key][self::SORTABLE_PARAM_KEY]) {
