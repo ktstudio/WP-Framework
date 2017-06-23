@@ -352,6 +352,15 @@ final class KT_WP_Configurator {
     }
 
     /**
+     * @deprecated since version 1.10
+     * @param boolean $themeSettingsPage
+     * @return \KT_WP_Configurator
+     */
+    public function setThemeSettingPage($themeSettingsPage = true) {
+        return $this->setThemeSettingsPage($themeSettingsPage);
+    }
+
+    /**
      * Nastaví (vlastní) oprávnění pro stránku s nastavením šablony s metaboxy
      *
      * @author Martin Hlaváč
