@@ -230,8 +230,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @param boolean $inSameCategory
      * @return mixed null|string (HTML)
      */
-    public function getPreviousPostLink($inSameCategory = false) {
-        return previous_post("&laquo; %", "", "yes", ($inSameCategory ? "yes" : "no"));
+    public function getPreviousPostLink($inSameCategory = false, $excluded_terms = array(), $taxonomy = KT_WP_CATEGORY_KEY) {
+        return previous_post_link("&laquo; %link", "%title", $inSameCategory, $excluded_terms, $taxonomy);
     }
 
     /**
@@ -243,8 +243,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @param boolean $inSameCategory
      * @return mixed null|string (HTML)
      */
-    public function getNextPostLink($inSameCategory = false) {
-        return next_post("% &raquo;", "", "yes", ($inSameCategory ? "yes" : "no"));
+    public function getNextPostLink($inSameCategory = false, $excluded_terms = array(), $taxonomy = KT_WP_CATEGORY_KEY) {
+        return next_post_link("%link &raquo;", "%title", $inSameCategory, $excluded_terms, $taxonomy);
     }
 
     /**
