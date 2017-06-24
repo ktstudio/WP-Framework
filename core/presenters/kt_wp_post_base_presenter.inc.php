@@ -264,7 +264,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
 
     /**
      * Vrátí odkaz a image tag na náhledový obrázek v Large velikosti.
-     * 
+     *
+     * @deprecated since version 1.11
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
@@ -405,20 +406,9 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return mixed string|null
      */
     public static function getImageHtmlTag($imageSrc, array $imageAttr = array(), $isLazyLoading = true) {
-        $attr = null;
-        if (KT::issetAndNotEmpty($imageSrc)) {
-            $parseAttr = wp_parse_args($imageAttr);
-            if (KT::issetAndNotEmpty($parseAttr)) {
-                foreach ($parseAttr as $attrName => $attrValue) {
-                    $attr .= " $attrName=\"$attrValue\"";
-                }
-            }
-            if ($isLazyLoading) {
-                return apply_filters("post_thumbnail_html", "<img src=\"$imageSrc\"$attr />");
-            }
-            return "<img src=\"$imageSrc\"$attr />";
-        }
-        return null;
+        $image = new KT_Image($imageSrc, "", null, $isLazyLoading);
+        $image->initialize($imageAttr);
+        return $image->buildHtml();
     }
 
 }
