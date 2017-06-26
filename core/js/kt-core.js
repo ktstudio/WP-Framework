@@ -248,7 +248,7 @@ function kt_core_setup_forms_fields(){
     });   
     
     // Počeštění jQuery data pickeru
-    jQuery(".datapicker").datepicker({
+    jQuery(".datepicker").datepicker({
         dateFormat: "dd.mm.yy",
         dayNames: ["Neděle", "Pondělí", "Úterý", "Sřteda", "Čtvrtek", "Pátek", "Sobota"],
         dayNamesMin: ["Ne", "Po", "Út", "St", "Čt", "Pá", "So"],

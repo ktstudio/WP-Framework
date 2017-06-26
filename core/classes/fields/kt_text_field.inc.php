@@ -13,7 +13,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
 
     /**
      * Založení objektu typu input type="text || number || email || password"
-     * V případě date založen type="text" a doplněny classy pro jQuery datapicker
+     * V případě date založen type="text" a doplněny classy pro jQuery datepicker
      * 
      * DEFAULT TEXT
      * 
@@ -46,7 +46,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
         if (KT::issetAndNotEmpty($type)) {
 
             if ($type == self::INPUT_DATE) {
-                $this->addAttrClass("datapicker");
+                $this->addAttrClass("datepicker");
             }
 
             $this->inputType = $type;
