@@ -9,12 +9,14 @@
  */
 class KT_Image
 {
+    private $id;
     private $src;
     private $srcset;
     private $width;
     private $height;
     private $alt;
     private $class;
+    private $data = array();
     private $isLazyLoading;
 
     /**
@@ -29,6 +31,22 @@ class KT_Image
         $this->setAlt($alt);
         $this->setClass($class);
         $this->setIsLazyLoading($isLazyLoading);
+    }
+
+    /** @return string */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
     }
 
     /** @return string */
@@ -128,6 +146,33 @@ class KT_Image
         return $this;
     }
 
+    /** @return array */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     * @return $this
+     */
+    public function addData($key, $value)
+    {
+        $this->data[$key] = $value;
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @return $this
+     */
+    public function removeData($key)
+    {
+        unset($this->data[$key]);
+        return $this;
+    }
+
     /** @return boolean */
     public function getIsLazyLoading()
     {
@@ -150,6 +195,9 @@ class KT_Image
      */
     public function initialize(array $params)
     {
+        if (array_key_exists("id", $params)) {
+            $this->setClass($params["id"]);
+        }
         if (array_key_exists("src", $params)) {
             $this->setClass($params["src"]);
         }
@@ -168,6 +216,14 @@ class KT_Image
         if (array_key_exists("class", $params)) {
             $this->setClass($params["class"]);
         }
+        if (array_key_exists("data", $params)) {
+            $data = $params["data"];
+            if (KT::arrayIssetAndNotEmpty($data)) {
+                foreach ($data as $dataKey => $dataValue) {
+                    $this->addData($dataKey, $dataValue);
+                }
+            }
+        }
         return $this;
     }
 
@@ -175,12 +231,19 @@ class KT_Image
     public function buildHtml()
     {
         $html = "<img ";
+        $html .= $this->tryGetImageParam("id", $this->getId());
         $html .= $this->tryGetImageParam("src", $this->getSrc());
         $html .= $this->tryGetImageParam("srcset", $this->getSrcset());
         $html .= $this->tryGetImageParam("width", $this->getWidth());
         $html .= $this->tryGetImageParam("height", $this->getHeight());
         $html .= $this->tryGetImageParam("alt", $this->getAlt());
         $html .= $this->tryGetImageParam("class", $this->getClass());
+        $data = $this->getData();
+        if (KT::arrayIssetAndNotEmpty($data)) {
+            foreach ($data as $dataKey => $dataValue) {
+                $html .= $this->tryGetImageParam("data-{$dataKey}", $dataValue);
+            }
+        }
         $html .= "/>";
         if ($this->getIsLazyLoading()) {
             $html = KT::imageReplaceLazySrc($html);
@@ -188,16 +251,29 @@ class KT_Image
         return $html;
     }
 
+    /**
+     * @param string $src relativní cesta pro KT::imageGetUrlFromTheme($src)
+     * @param string $alt
+     * @param string $class
+     * @param bool $isLazyLoading
+     */
     public static function render($src, $alt = "", $class = null, $isLazyLoading = true)
     {
-        $image = new KT_Image($src, $alt, $class, $isLazyLoading);
+        $image = new KT_Image(KT::imageGetUrlFromTheme($src), $alt, $class, $isLazyLoading);
         echo $image->buildHtml();
     }
 
+    /**
+     * @param string $src1x relativní cesta pro KT::imageGetUrlFromTheme($src1x)
+     * @param string $src2x relativní cesta pro KT::imageGetUrlFromTheme($src2x)
+     * @param string $alt
+     * @param string $class
+     * @param bool $isLazyLoading
+     */
     public static function renderSet($src1x, $src2x, $alt = "", $class = null, $isLazyLoading = true)
     {
-        $image = new KT_Image($src1x, $alt, $class, $isLazyLoading);
-        $image->setSrcset($src1x, $src2x);
+        $image = new KT_Image(KT::imageGetUrlFromTheme($src1x), $alt, $class, $isLazyLoading);
+        $image->setSrcset(KT::imageGetUrlFromTheme($src1x), KT::imageGetUrlFromTheme($src2x));
         echo $image->buildHtml();
     }
 
