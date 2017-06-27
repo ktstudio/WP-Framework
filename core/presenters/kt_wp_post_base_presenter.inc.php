@@ -406,7 +406,9 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return mixed string|null
      */
     public static function getImageHtmlTag($imageSrc, array $imageAttr = array(), $isLazyLoading = true) {
-        $image = new KT_Image($imageSrc, "", null, $isLazyLoading);
+        $image = new KT_Image($imageSrc);
+	    $image->setSrc($imageSrc);
+	    $image->setIsLazyLoading($isLazyLoading);
         $image->initialize($imageAttr);
         return $image->buildHtml();
     }

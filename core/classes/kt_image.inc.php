@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Třída pro snadnější výpis obrázků - stačí naplnit požadované parametry a zavolat ->render()
- * K diposizici jsou statické helpery ::render() a  ::renderSet()
+ * Třída pro snadnější výpis obrázků <img> - stačí naplnit požadované parametry a zavolat ->render()
+ * K diposizici jsou statické helpery ::render(), ::renderSet() a ::renderArgs()
  *
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
@@ -11,27 +11,13 @@ class KT_Image
 {
     private $id;
     private $src;
-    private $srcset;
+    private $srcsets;
     private $width;
     private $height;
     private $alt;
     private $class;
     private $data = array();
     private $isLazyLoading;
-
-    /**
-     * @param string $src
-     * @param string $alt
-     * @param string $class
-     * @param boolean $isLazyLoading
-     */
-    public function __construct($src, $alt = "", $class = null, $isLazyLoading = true)
-    {
-        $this->setSrc($src);
-        $this->setAlt($alt);
-        $this->setClass($class);
-        $this->setIsLazyLoading($isLazyLoading);
-    }
 
     /** @return string */
     public function getId()
@@ -68,17 +54,16 @@ class KT_Image
     /** @return string */
     public function getSrcset()
     {
-        return $this->srcset;
+        return $this->srcsets;
     }
 
     /**
-     * @param string $srcset
-     * @param string $srcset
+     * @param array $srcset [ZOOM number => image URL]
      * @return $this
      */
-    public function setSrcset($src1x, $src2x)
+    public function setSrcset(array $srcset)
     {
-        $this->srcset = "$src1x 1x, $src2x 2x";
+        $this->srcsets = $srcset;
         return $this;
     }
 
@@ -233,7 +218,7 @@ class KT_Image
         $html = "<img ";
         $html .= $this->tryGetImageParam("id", $this->getId());
         $html .= $this->tryGetImageParam("src", $this->getSrc());
-        $html .= $this->tryGetImageParam("srcset", $this->getSrcset());
+        $html .= $this->tryGetImageParam("srcset", $this->tryGetSrcsetValue($this->getSrcset()));
         $html .= $this->tryGetImageParam("width", $this->getWidth());
         $html .= $this->tryGetImageParam("height", $this->getHeight());
         $html .= $this->tryGetImageParam("alt", $this->getAlt());
@@ -259,21 +244,41 @@ class KT_Image
      */
     public static function render($src, $alt = "", $class = null, $isLazyLoading = true)
     {
-        $image = new KT_Image(KT::imageGetUrlFromTheme($src), $alt, $class, $isLazyLoading);
+        $image = new KT_Image();
+        $image->setSrc(KT::imageGetUrlFromTheme($src));
+        $image->setAlt($alt);
+        $image->setClass($class);
+        $image->setIsLazyLoading($isLazyLoading);
         echo $image->buildHtml();
     }
 
     /**
-     * @param string $src1x relativní cesta pro KT::imageGetUrlFromTheme($src1x)
-     * @param string $src2x relativní cesta pro KT::imageGetUrlFromTheme($src2x)
+     * @param array $srcset [ZOOM number => image URL] relativní cesta pro KT::imageGetUrlFromTheme($imageUrl)
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
      */
-    public static function renderSet($src1x, $src2x, $alt = "", $class = null, $isLazyLoading = true)
+    public static function renderSet(array $srcset, $alt = "", $class = null, $isLazyLoading = true)
     {
-        $image = new KT_Image(KT::imageGetUrlFromTheme($src1x), $alt, $class, $isLazyLoading);
-        $image->setSrcset(KT::imageGetUrlFromTheme($src1x), KT::imageGetUrlFromTheme($src2x));
+        $image = new KT_Image();
+        foreach ($srcset as $zoomNumber => $imageUrl) {
+            $srcset[$zoomNumber] = KT::imageGetUrlFromTheme($imageUrl);
+        }
+        $image->setSrcset($srcset);
+        $image->setAlt($alt);
+        $image->setClass($class);
+        $image->setIsLazyLoading($isLazyLoading);
+        echo $image->buildHtml();
+    }
+
+    /**
+     * @param array $params k inicializaci
+     * @param bool $isLazyLoading
+     */
+    public static function renderArgs(array $params)
+    {
+        $image = new KT_Image();
+        $image->initialize($params);
         echo $image->buildHtml();
     }
 
@@ -286,6 +291,18 @@ class KT_Image
     {
         if (isset($value)) {
             return "$key=\"$value\" ";
+        }
+        return null;
+    }
+
+    protected function tryGetSrcsetValue($srcset)
+    {
+        if (KT::arrayIssetAndNotEmpty($srcset)) {
+            $srcsets = [];
+            foreach ($srcset as $srcsetKey => $srcsetValue) {
+                $srcsets[] = "$srcsetValue {$srcsetKey}x";
+            }
+            return implode(", ", $srcsets);
         }
         return null;
     }
