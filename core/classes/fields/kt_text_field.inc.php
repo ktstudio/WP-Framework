@@ -99,7 +99,8 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
 
         $html = "";
 
-        $fieldType = $this->getInputType() == (self::INPUT_DATE || self::INPUT_DATETIME) ? "text" : $this->getInputType();
+        $inputType = $this->getInputType();
+        $fieldType = ($inputType === self::INPUT_DATE || $inputType === self::INPUT_DATETIME) ? "text" : $inputType;
         $value = KT::stringHtmlDecode($this->getValue());
 
         $html .= "<input type=\"{$fieldType}\" ";
