@@ -1398,6 +1398,8 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         if ($field->getFieldType() == KT_Text_Field::FIELD_TYPE) {
             if ($field->getInputType() == KT_Text_Field::INPUT_DATE) {
                 $value = KT::dateConvert($value, "Y-m-d");
+            } elseif ($field->getInputType() == KT_Text_Field::INPUT_DATETIME) {
+	            $value = KT::dateConvert($value, "Y-m-d H:i");
             }
         }
         return $value;

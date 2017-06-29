@@ -6,6 +6,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
     const INPUT_NUMBER = "number";
     const INPUT_EMAIL = "email";
     const INPUT_DATE = "date";
+    const INPUT_DATETIME = "datetime";
     const INPUT_PASSWORD = "password";
     const INPUT_URL = "url";
 
@@ -47,6 +48,8 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
 
             if ($type == self::INPUT_DATE) {
                 $this->addAttrClass("datepicker");
+            } else if ($type == self::INPUT_DATETIME) {
+	            $this->addAttrClass("datetimepicker");
             }
 
             $this->inputType = $type;
@@ -96,7 +99,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
 
         $html = "";
 
-        $fieldType = $this->getInputType() == self::INPUT_DATE ? "text" : $this->getInputType();
+        $fieldType = $this->getInputType() == (self::INPUT_DATE || self::INPUT_DATETIME) ? "text" : $this->getInputType();
         $value = KT::stringHtmlDecode($this->getValue());
 
         $html .= "<input type=\"{$fieldType}\" ";
@@ -136,8 +139,10 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
         $fieldValue = parent::getConvertedValue();
 
         if ($this->getInputType() == self::INPUT_DATE && KT::issetAndNotEmpty($fieldValue)) {
-            return $newFieldValue = KT::dateConvert($fieldValue);
-        }
+            return $newFieldValue = KT::dateConvert($fieldValue, "d.m.Y");
+        } elseif ($this->getInputType() == self::INPUT_DATETIME && KT::issetAndNotEmpty($fieldValue)) {
+		    return $newFieldValue = KT::dateConvert($fieldValue, "d.m.Y H:i");
+	    }
 
         return $fieldValue;
     }

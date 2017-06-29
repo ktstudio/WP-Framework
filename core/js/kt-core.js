@@ -245,19 +245,23 @@ function kt_core_setup_forms_fields(){
                 jQuery(this).find(".ui-slider-handle").text(value);
             }
         });
-    });   
+    });
+
+    jQuery.datetimepicker.setLocale('cs');
     
     // Počeštění jQuery data pickeru
-    jQuery(".datepicker:not([readonly])").datepicker({
-        dateFormat: "dd.mm.yy",
-        dayNames: ["Neděle", "Pondělí", "Úterý", "Sřteda", "Čtvrtek", "Pátek", "Sobota"],
-        dayNamesMin: ["Ne", "Po", "Út", "St", "Čt", "Pá", "So"],
-        monthNames: ["Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec"],
-        monthNamesShort: ["Led", "Úno", "Bře", "Dub", "Kvě", "Čer", "Červ", "Srp", "Zář", "Říj", "Lis", "Pro"],
-        nextText: "Další",
-        prevText: "Předchozí"
+    jQuery(".datepicker:not([readonly])").datetimepicker({
+        timepicker:false,
+        format:'d.m.Y',
+        lang:'cs'
     });
-    
+
+    // Počeštění jQuery data time pickeru
+    jQuery(".datetimepicker").datetimepicker({
+        format:'d.m.Y H:i',
+        lang:'cs'
+    });
+
     // Inicializace switchFieldu
     jQuery('.switch').each(function () {
         var input = jQuery(this).children('input[type=hidden]');
