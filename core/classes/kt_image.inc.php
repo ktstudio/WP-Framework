@@ -215,10 +215,14 @@ class KT_Image
     /** @return string */
     public function buildHtml()
     {
+        $srcset = $this->getSrcset();
+        if (KT::notIssetOrEmpty($this->getSrc()) && KT::issetAndNotEmpty($srcset)) {
+            $this->setSrc(reset($srcset));
+        }
         $html = "<img ";
         $html .= $this->tryGetImageParam("id", $this->getId());
         $html .= $this->tryGetImageParam("src", $this->getSrc());
-        $html .= $this->tryGetImageParam("srcset", $this->tryGetSrcsetValue($this->getSrcset()));
+        $html .= $this->tryGetImageParam("srcset", $this->tryGetSrcsetValue($srcset));
         $html .= $this->tryGetImageParam("width", $this->getWidth());
         $html .= $this->tryGetImageParam("height", $this->getHeight());
         $html .= $this->tryGetImageParam("alt", $this->getAlt());
@@ -283,6 +287,26 @@ class KT_Image
     }
 
     /**
+     * @param array $src relativní cesta pro KT::imageGetUrlFromTheme($src), zajistí automaticky srcset 1x a 2x (dle formátu @2x)
+     * @param string $alt
+     * @param string $class
+     * @param bool $isLazyLoading
+     */
+    public static function renderRetina($src, $alt = "", $class = null, $isLazyLoading = true)
+    {
+        $image = new KT_Image();
+        $src1x = KT::imageGetUrlFromTheme($src);
+        $srcInfo = pathinfo($src);
+        $srcName = $srcInfo["filename"];
+        $src2x = KT::imageGetUrlFromTheme(str_replace($srcName, "{$srcName}@2x", $src));
+        $image->setSrcset([1 => $src1x, 2 => $src2x]);
+        $image->setAlt($alt);
+        $image->setClass($class);
+        $image->setIsLazyLoading($isLazyLoading);
+        echo $image->buildHtml();
+    }
+
+    /**
      * @param string $key
      * @param string $value
      * @return null|string
@@ -295,7 +319,7 @@ class KT_Image
         return null;
     }
 
-    protected function tryGetSrcsetValue($srcset)
+    protected function tryGetSrcsetValue(array $srcset = null)
     {
         if (KT::arrayIssetAndNotEmpty($srcset)) {
             $srcsets = [];

@@ -44,10 +44,12 @@ class KT_Picture extends KT_Image
     {
         $html = "<picture>";
         foreach ($this->getSizes() as $maxWidth => $source) {
-            if (is_array($source)) {
-                $html .= "<source srcset=\"{$this->tryGetSrcsetValue($source)}\" media=\"(max-width: {$maxWidth}px)\">";
-            } else {
-                $html .= "<source src=\"$source\" media=\"(max-width: {$maxWidth}px)\">";
+            if (KT::isIdFormat($maxWidth)) {
+                if (is_array($source)) {
+                    $html .= "<source srcset=\"{$this->tryGetSrcsetValue($source)}\" media=\"(max-width: {$maxWidth}px)\">";
+                } else {
+                    $html .= "<source src=\"$source\" media=\"(max-width: {$maxWidth}px)\">";
+                }
             }
         }
         $html .= parent::buildHtml();
@@ -56,7 +58,7 @@ class KT_Picture extends KT_Image
     }
 
     /**
-     * @param array $sizes (další) velikosti ["do velikosti [px]" => $src/$srcset]
+     * @param array $sizes (další) velikosti ["do velikosti [px]" => $src]
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
@@ -64,7 +66,10 @@ class KT_Picture extends KT_Image
     public static function render($sizes, $alt = "", $class = null, $isLazyLoading = true)
     {
         $image = new KT_Picture();
-        $image->setSrc(KT::imageGetUrlFromTheme(reset($sizes)));
+        foreach ($sizes as $maxWidth => $fileName) {
+            $sizes[$maxWidth] = KT::imageGetUrlFromTheme($fileName);
+        }
+        $image->setSrc(reset($sizes));
         $image->setSizes($sizes);
         $image->setAlt($alt);
         $image->setClass($class);
@@ -73,7 +78,7 @@ class KT_Picture extends KT_Image
     }
 
     /**
-     * @param array $sizes (další) velikosti ["do velikosti [px]" => $src/$srcset]
+     * @param array $sizes (další) velikosti ["do velikosti [px]" => [zoom number => $srcset]]
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
@@ -81,10 +86,11 @@ class KT_Picture extends KT_Image
     public static function renderSet(array $sizes, $alt = "", $class = null, $isLazyLoading = true)
     {
         $image = new KT_Picture();
-        foreach ($sizes as $srcset) {
-            foreach ($srcset as $zoomNumber => $imageUrl) {
-                $srcset[$zoomNumber] = KT::imageGetUrlFromTheme($imageUrl);
+        foreach ($sizes as $maxWidth => $srcset) {
+            foreach ($srcset as $zoomNumber => $fileName) {
+                $srcset[$zoomNumber] = KT::imageGetUrlFromTheme($fileName);
             }
+            $sizes[$maxWidth] = $srcset;
         }
         $image->setSrcset(reset($sizes));
         $image->setSizes($sizes);

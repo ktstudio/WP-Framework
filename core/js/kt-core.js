@@ -6,13 +6,13 @@ jQuery(document).ready(function () {
 
         var validationResult = jQuery(this).formValidation();
         var formNotice = "<div id=\"jquery-kt-validator\" class=\"error\">" +
-                "<p>Ve formuláři se vyskytla chyba. Zkontrolujte data a proces opakujte.</p>" +
-                "</div>";
+            "<p>Ve formuláři se vyskytla chyba. Zkontrolujte data a proces opakujte.</p>" +
+            "</div>";
 
         if (validationResult === false) {
             jQuery("div.wrap h2.screenTitle").after(formNotice);
             jQuery("div.wrap h1").after(formNotice); // edit.php
-        }               
+        }
 
         return validationResult;
     });
@@ -28,8 +28,6 @@ jQuery(document).ready(function () {
         jQuery(this).parents('form').formValidation();
     });
 
-    
-    
 
     // Přepínání switch fieldu
     jQuery('body').on("click", ".switch-toggle", function () {
@@ -37,7 +35,7 @@ jQuery(document).ready(function () {
         var input = element.next('input[type=hidden]');
         var toggle = element;
         switchToggle(input, toggle);
-    });    
+    });
 
     // Ajax událost pro smazání záznamu z Item tables
     jQuery("table.item-list span.delete-row").click(function () {
@@ -192,8 +190,8 @@ jQuery(document).ready(function () {
     kt_core_setup_forms_fields();
 });
 
-function kt_core_setup_forms_fields(){
-     // chosen - multi select
+function kt_core_setup_forms_fields() {
+    // chosen - multi select
     jQuery(".multiSelect").chosen({
         disable_search_threshold: 10,
         no_results_text: "Žádné výsledky pro",
@@ -214,7 +212,7 @@ function kt_core_setup_forms_fields(){
         placeholder_text_single: "Prázdný výběr",
         width: "90%"
     });
-    
+
     // Slider input - jQuery UI
 
     jQuery(".sliderInputElement").each(function () {
@@ -248,18 +246,18 @@ function kt_core_setup_forms_fields(){
     });
 
     jQuery.datetimepicker.setLocale('cs');
-    
+
     // Počeštění jQuery data pickeru
     jQuery(".datepicker:not([readonly])").datetimepicker({
-        timepicker:false,
-        format:'d.m.Y',
-        lang:'cs'
+        timepicker: false,
+        format: 'd.m.Y',
+        lang: 'cs'
     });
 
     // Počeštění jQuery data time pickeru
-    jQuery(".datetimepicker").datetimepicker({
-        format:'d.m.Y H:i',
-        lang:'cs'
+    jQuery(".datetimepicker:not([readonly])").datetimepicker({
+        format: 'd.m.Y H:i',
+        lang: 'cs'
     });
 
     // Inicializace switchFieldu
@@ -280,7 +278,7 @@ function kt_core_setup_forms_fields(){
             ;
         }
     });
-    
+
     // Aktivace tooltip pro inputy KT_Field
     jQuery('.kt-field').tooltip();
     jQuery('.kt-tooltip').tooltip();
