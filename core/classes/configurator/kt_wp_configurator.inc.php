@@ -806,13 +806,26 @@ final class KT_WP_Configurator {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @return type
+     * @return KT_WP_Asset_Configurator
      */
     public function assetsConfigurator() {
         if (!isset($this->configurators[KT_WP_Asset_Configurator::class])) {
             $this->configurators[KT_WP_Asset_Configurator::class] = new KT_WP_Asset_Configurator();
         }
         return $this->configurators[KT_WP_Asset_Configurator::class];
+    }
+
+    /**
+     * Založí konfigurtátor pro frontendové stránky
+     *
+     * @author Jan Pokorný
+     * @return KT_WP_Fe_Page_Configurator
+     */
+    public function frontendPageRemover() {
+        if (!isset($this->configurators[KT_WP_Fe_Page_Configurator::class])) {
+            $this->configurators[KT_WP_Fe_Page_Configurator::class] = new KT_WP_Fe_Page_Configurator();
+        }
+        return $this->configurators[KT_WP_Fe_Page_Configurator::class];
     }
 
     // --- registrační funkce ---------------------------
