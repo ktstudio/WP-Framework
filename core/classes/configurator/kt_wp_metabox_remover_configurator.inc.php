@@ -6,7 +6,7 @@
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-final class KT_WP_Metabox_Remover_Configurator {
+final class KT_WP_Metabox_Remover_Configurator implements KT_WP_IConfigurator {
 
     private $data = array();
 
@@ -287,6 +287,29 @@ final class KT_WP_Metabox_Remover_Configurator {
         if (!$withoutRightNow) {
             $this->removeDashboardRightNow();
         }
+        return $this;
+    }
+
+    public function initialize() {
+        if (KT::issetAndNotEmpty($this->getMetaboxRemoverData())) {
+            add_action("admin_menu", array($this, "registerMetaboxRemoverAction"));
+        }
+    }
+
+    /**
+     * Provede inicializaci smazání metaboxů dle nastavení configu - není potřeba volat veřejně
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Configurator
+     */
+    public function registerMetaboxRemoverAction() {
+        foreach ($this->getMetaboxRemoverData() as $removingMetaboxData) {
+            remove_meta_box($removingMetaboxData[0], $removingMetaboxData[1], $removingMetaboxData[2]);
+        }
+
         return $this;
     }
 

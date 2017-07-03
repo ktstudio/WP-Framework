@@ -29,26 +29,27 @@ final class KT_WP_Configurator {
     private $excerptLength = null;
     private $excerptText = null;
     private $metaboxRemover = null;
-    private $pageRemover = null;
-    private $widgetRemover = null;
-    private $headRemover = null;
     private $themeSettingsPage = false;
     private $themeSettingsCapability = "update_core";
     private $deleteImagesWithPost = false;
     private $displayLogo = true;
-    private $assetsConfigurator = null;
     private $imagesLazyLoading = null;
     private $imagesLinkClasses = null;
     private $postArchiveMenu = null;
     private $postsArchiveSlug = null;
     private $allowSession = false;
     private $allowCookieStatement = false;
-    private $facebookManager = null;
     private $emojiSwitch = false;
     private $autoRemoveShortcodesParagraphs = false;
     private $enableDynamicFieldsets = false;
     private $disableOembed = false;
     private $disableJson = false;
+
+    /**
+     *
+     * @var array Kolekce konfigurátorů
+     */
+    private $configurators = [];
 
     // --- gettery ----------------------
 
@@ -100,34 +101,6 @@ final class KT_WP_Configurator {
      */
     public function getExcerptText() {
         return $this->excerptText;
-    }
-
-    /**
-     * @return \KT_WP_Metabox_Remover_Configurator
-     */
-    private function getMetaboxRemover() {
-        return $this->metaboxRemover;
-    }
-
-    /**
-     * @return \KT_WP_Page_Remover_Configurator
-     */
-    private function getPageRemover() {
-        return $this->pageRemover;
-    }
-
-    /**
-     * @return \KT_WP_Widget_Remover_Configurator
-     */
-    private function getWidgetRemover() {
-        return $this->widgetRemover;
-    }
-
-    /**
-     * @return \KT_WP_Head_Remover_Configurator
-     */
-    private function getHeadRemover() {
-        return $this->headRemover;
     }
 
     /**
@@ -187,13 +160,6 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * @return \KT_WP_Asset_Configurator
-     */
-    private function getAssetsConfigurator() {
-        return $this->assetsConfigurator;
-    }
-
-    /**
      * @return boolean
      */
     private function getAllowSession() {
@@ -211,11 +177,11 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Facebook_Data_Configurator
      */
     public function getFacebookManager() {
-        if (KT::notIssetOrEmpty($this->facebookManager)) {
-            $this->setFacebookManager(new KT_WP_Facebook_Data_Configurator());
+        if (!isset($this->configurators[KT_WP_Facebook_Data_Configurator::class])) {
+            $this->configurators[KT_WP_Facebook_Data_Configurator::class] = new KT_WP_Facebook_Data_Configurator();
         }
 
-        return $this->facebookManager;
+        return $this->configurators[KT_WP_Facebook_Data_Configurator::class];
     }
 
     /** @return boolean */
@@ -243,65 +209,15 @@ final class KT_WP_Configurator {
         return $this->disableJson;
     }
 
+    /**
+     *
+     * @return array Kolekce konfigurátorů
+     */
+    public function getConfigurators() {
+        return $this->configurators;
+    }
+
     // --- settery ----------------------
-
-    /**
-     * Nastaví KT_WP_Metabox_Remover_Configurátor do objektu
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param KT_WP_Metabox_Remover_Configurator $metaboxRemover
-     * @return \KT_WP_Configurator
-     */
-    private function setMetaboxRemover(KT_WP_Metabox_Remover_Configurator $metaboxRemover) {
-        $this->metaboxRemover = $metaboxRemover;
-
-        return $this;
-    }
-
-    /**
-     * Nastaví KT_WP_Page_Remover_Configurator do objektu
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param KT_WP_Page_Remover_Configurator $pageRemover
-     * @return \KT_WP_Configurator
-     */
-    private function setPageRemover(KT_WP_Page_Remover_Configurator $pageRemover) {
-        $this->pageRemover = $pageRemover;
-
-        return $this;
-    }
-
-    /**
-     * Nastaví KT_WP_Widget_Remover_Configurator do objektu
-     *
-     * @author Martin Hlaváč
-     * @link http://www.ktstudio.cz
-     *
-     * @param KT_WP_Widget_Remover_Configurator $widgetRemover
-     * @return \KT_WP_Configurator
-     */
-    private function setWidgetRemover(KT_WP_Widget_Remover_Configurator $widgetRemover) {
-        $this->widgetRemover = $widgetRemover;
-        return $this;
-    }
-
-    /**
-     * Nastaví KT_WP_Head_Remover_Configurator do objektu
-     *
-     * @author Martin Hlaváč
-     * @link http://www.ktstudio.cz
-     *
-     * @param KT_WP_Head_Remover_Configurator $headRemover
-     * @return \KT_WP_Configurator
-     */
-    private function setHeadRemover(KT_WP_Head_Remover_Configurator $headRemover) {
-        $this->headRemover = $headRemover;
-        return $this;
-    }
 
     /**
      * Nastavení délku excreptu pří výpisu entit.
@@ -404,20 +320,6 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * Nastaví KT_WP_Asset_Configurator do objektu
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param \KT_WP_Asset_Configurator $assetsConfigurator
-     * @return \KT_WP_Configurator
-     */
-    public function setAssetsConfigurator(KT_WP_Asset_Configurator $assetsConfigurator) {
-        $this->assetsConfigurator = $assetsConfigurator;
-        return $this;
-    }
-
-    /**
      * Nastaví, zda se má v rámci šablony zapnout SESSION pro WP
      *
      * @author Tomáš Kocifaj
@@ -507,20 +409,6 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * Nastaví facebook data manager do configurátoru
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @param KT_WP_Facebook_Data_Configurator $facebookManager
-     * @return \KT_WP_Configurator
-     */
-    private function setFacebookManager(KT_WP_Facebook_Data_Configurator $facebookManager) {
-        $this->facebookManager = $facebookManager;
-        return $this;
-    }
-
-    /**
      * Zapne / vypne emoji smajlíky a vše s nimi spojené
      *
      * @author Jan Pokorný
@@ -578,6 +466,14 @@ final class KT_WP_Configurator {
         return $this;
     }
 
+    /**
+     * Přidá nový konfigurátor do kolekce
+     * @param KT_IConfigurator $configurator
+     */
+    public function addConfigurator(KT_IConfigurator $configurator) {
+        $this->configurators[get_class($configurator)] = $configurator;
+    }
+
     // --- veřejné funkce ---------------
 
     /**
@@ -617,29 +513,6 @@ final class KT_WP_Configurator {
             add_filter("excerpt_more", array($this, "getExcerptText"));
         }
 
-        // metabox remover
-        if (KT::issetAndNotEmpty($this->getMetaboxRemover())) {
-            if (KT::issetAndNotEmpty($this->getMetaboxRemover()->getMetaboxRemoverData())) {
-                add_action("admin_menu", array($this, "registerMetaboxRemoverAction"));
-            }
-        }
-
-        // page remover
-        if (KT::issetAndNotEmpty($this->getPageRemover())) {
-            add_action("admin_menu", array($this, "registerPageRemoverAction"));
-            add_action("admin_init", array($this, "registerSubPageRemoverAction"));
-        }
-
-        // widget remover
-        if (KT::issetAndNotEmpty($this->getWidgetRemover())) {
-            add_action("widgets_init", array($this, "registerWidgetRemoverAction"));
-        }
-
-        // head remover
-        if (KT::issetAndNotEmpty($this->getHeadRemover())) {
-            $this->getHeadRemover()->doRemoveHeads();
-        }
-
         // mazání attachmentu se smazáním postu
         if ($this->getDeleteImagesWithPost()) {
             add_action("delete_before_post", array($this, "registerDeleteAttachmentWithPostAction"));
@@ -653,16 +526,6 @@ final class KT_WP_Configurator {
 
         if ($this->getEnableDynamicFieldsets()) {
             add_action("admin_enqueue_scripts", array($this, "registerDynamicFieldsetScript"));
-        }
-
-        // registrace a načítání scriptů zavedené v configurátoru
-        if (KT::issetAndNotEmpty($this->getAssetsConfigurator())) {
-            add_action("init", array($this, "registerScriptsAction"));
-            add_action("init", array($this, "registerStyleAction"));
-            add_action("wp_enqueue_scripts", array($this, "enqueueScriptAction"));
-            add_action("wp_enqueue_scripts", array($this, "enqueueStyleAction"));
-            add_action("admin_enqueue_scripts", array($this, "enqueueScriptActionForAdmin"));
-            add_action("admin_enqueue_scripts", array($this, "enqueueStyleActionForAdmin"));
         }
 
         // stránka nastavení šablony
@@ -723,10 +586,6 @@ final class KT_WP_Configurator {
             add_action("wp_footer", array($this, "renderCookieStatement"), 99);
         }
 
-        // facebookManager
-        if ($this->getFacebookManager()->getModuleEnabled()) {
-            add_action("wp_head", array($this, "facebookTagsInit"), 99);
-        }
 
         // emoji
         if ($this->getEmojiSwitch() === false) {
@@ -748,6 +607,13 @@ final class KT_WP_Configurator {
         // JSON (API)
         if ($this->getDisableJson() === true) {
             add_action("init", array($this, "disableJson"), 99);
+        }
+
+        /**
+         * Inicializace konfigurátorů
+         */
+        foreach ($this->configurators as $configurator) {
+            $configurator->initialize();
         }
     }
 
@@ -870,11 +736,10 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Metabox_Remover_Configurator
      */
     public function metaboxRemover() {
-        if (KT::notIssetOrEmpty($this->getMetaboxRemover())) {
-            $metaboxRemover = new KT_WP_Metabox_Remover_Configurator();
-            $this->setMetaboxRemover($metaboxRemover);
+        if (!isset($this->configurators[KT_WP_Metabox_Remover_Configurator::class])) {
+            $this->configurators[KT_WP_Metabox_Remover_Configurator::class] = new KT_WP_Metabox_Remover_Configurator();
         }
-        return $this->getMetaboxRemover();
+        return $this->configurators[KT_WP_Metabox_Remover_Configurator::class];
     }
 
     /**
@@ -886,12 +751,10 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Page_Remover_Configurator
      */
     public function pageRemover() {
-        $pageRemover = $this->getPageRemover();
-        if (KT::notIssetOrEmpty($pageRemover)) {
-            $pageRemover = new KT_WP_Page_Remover_Configurator();
-            $this->setPageRemover($pageRemover);
+        if (!isset($this->configurators[KT_WP_Page_Remover_Configurator::class])) {
+            $this->configurators[KT_WP_Page_Remover_Configurator::class] = new KT_WP_Page_Remover_Configurator();
         }
-        return $pageRemover;
+        return $this->configurators[KT_WP_Page_Remover_Configurator::class];
     }
 
     /**
@@ -903,12 +766,10 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Widget_Remover_Configurator
      */
     public function widgetRemover() {
-        $widgetRemover = $this->getWidgetRemover();
-        if (KT::notIssetOrEmpty($widgetRemover)) {
-            $widgetRemover = new KT_WP_Widget_Remover_Configurator();
-            $this->setWidgetRemover($widgetRemover);
+        if (!isset($this->configurators[KT_WP_Widget_Remover_Configurator::class])) {
+            $this->configurators[KT_WP_Widget_Remover_Configurator::class] = new KT_WP_Widget_Remover_Configurator();
         }
-        return $widgetRemover;
+        return $this->configurators[KT_WP_Widget_Remover_Configurator::class];
     }
 
     /**
@@ -920,12 +781,10 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Head_Remover_Configurator
      */
     public function headRemover() {
-        $headRemover = $this->getHeadRemover();
-        if (KT::notIssetOrEmpty($headRemover)) {
-            $headRemover = new KT_WP_Head_Remover_Configurator();
-            $this->setHeadRemover($headRemover);
+        if (!isset($this->configurators[KT_WP_Head_Remover_Configurator::class])) {
+            $this->configurators[KT_WP_Head_Remover_Configurator::class] = new KT_WP_Head_Remover_Configurator();
         }
-        return $headRemover;
+        return $this->configurators[KT_WP_Head_Remover_Configurator::class];
     }
 
     /**
@@ -950,15 +809,10 @@ final class KT_WP_Configurator {
      * @return type
      */
     public function assetsConfigurator() {
-
-        if (KT::issetAndNotEmpty($this->getAssetsConfigurator())) {
-            return $this->getAssetsConfigurator();
+        if (!isset($this->configurators[KT_WP_Asset_Configurator::class])) {
+            $this->configurators[KT_WP_Asset_Configurator::class] = new KT_WP_Asset_Configurator();
         }
-
-        $assetsConfigurator = new KT_WP_Asset_Configurator();
-        $this->setAssetsConfigurator($assetsConfigurator);
-
-        return $this->getAssetsConfigurator();
+        return $this->configurators[KT_WP_Asset_Configurator::class];
     }
 
     // --- registrační funkce ---------------------------
@@ -1076,78 +930,6 @@ final class KT_WP_Configurator {
     }
 
     /**
-     * Provede inicializaci smazání metaboxů dle nastavení configu - není potřeba volat veřejně
-     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @return \KT_WP_Configurator
-     */
-    public function registerMetaboxRemoverAction() {
-        foreach ($this->getMetaboxRemover()->getMetaboxRemoverData() as $removingMetaboxData) {
-            remove_meta_box($removingMetaboxData[0], $removingMetaboxData[1], $removingMetaboxData[2]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Provede inicializaci odstranění stránek z Wordpress menu dle nastavení configu
-     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @return \KT_WP_Configurator
-     */
-    public function registerPageRemoverAction() {
-        $collection = $this->getPageRemover()->getMenuCollection();
-        if (KT::issetAndNotEmpty($collection)) {
-            foreach ($collection as $menuSlug) {
-                remove_menu_page($menuSlug);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Provede inicializaci odstranění podstránekstránek z Wordpress menu dle nastavení configu
-     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     *
-     * @return \KT_WP_Configurator
-     */
-    public function registerSubPageRemoverAction() {
-        if (KT::issetAndNotEmpty($this->getPageRemover()->getSubMenuCollectoin())) {
-            foreach ($this->getPageRemover()->getSubMenuCollectoin() as $subMenuPageDef) {
-                remove_submenu_page($subMenuPageDef[KT_WP_Page_Remover_Configurator::PAGE_KEY], $subMenuPageDef[KT_WP_Page_Remover_Configurator::SUBPAGE_KEY]);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Provede inicializaci odstranění widgetů z Wordpress menu dle nastavení configu
-     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     *
-     * @author Martin Hlaváč
-     * @link http://www.ktstudio.cz
-     *
-     * @return \KT_WP_Configurator
-     */
-    public function registerWidgetRemoverAction() {
-        foreach ($this->getWidgetRemover()->getWidgetRemoverData() as $removingWidgetData) {
-            unregister_widget($removingWidgetData);
-        }
-        return $this;
-    }
-
-    /**
      * Provede registraci defaultní stránky pro nastavení šablony
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
@@ -1215,167 +997,6 @@ final class KT_WP_Configurator {
      */
     public function registerLoginLogoImageAction() {
         wp_enqueue_style(KT_WPFW_LOGIN_STYLE);
-    }
-
-    /**
-     * Provede registraci všech scriptů, které byly přidáno do assetConfigurátoru
-     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     */
-    public function registerScriptsAction() {
-
-        if (KT::notIssetOrEmpty($this->getAssetsConfigurator()->getScriptCollection())) {
-            return;
-        }
-
-        foreach ($this->getAssetsConfigurator()->getScriptCollection() as $script) {
-            /* @var $script \KT_WP_Script_Definition */
-            if (KT::notIssetOrEmpty($script->getId()) || KT::notIssetOrEmpty($script->getSource())) {
-                continue;
-            }
-
-            wp_register_script($script->getId(), $script->getSource(), $script->getDeps(), $script->getVersion(), $script->getInFooter());
-            if (KT::issetAndNotEmpty($script->getLocalizationData())) {
-                foreach ($script->getLocalizationData() as $name => $data) {
-                    wp_localize_script($script->getId(), $name, $data);
-                }
-            }
-        }
-    }
-
-    /**
-     * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru
-     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     */
-    public function registerStyleAction() {
-        if (KT::notIssetOrEmpty($this->getAssetsConfigurator()->getStyleCollection())) {
-            return null;
-        }
-
-        foreach ($this->getAssetsConfigurator()->getStyleCollection() as $style) {
-            /* @var $style \KT_WP_Style_Definition */
-
-            if (KT::notIssetOrEmpty($style->getId()) || KT::notIssetOrEmpty($style->getSource())) {
-                continue;
-            }
-
-            wp_register_style($style->getId(), $style->getSource(), $style->getDeps(), $style->getVersion(), $style->getMedia());
-        }
-    }
-
-    /**
-     * Provede vložení scriptů, které mají nastaveno načtení, do frotnendu
-     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     */
-    public function enqueueScriptAction() {
-        if (KT::notIssetOrEmpty($this->getAssetsConfigurator()->getScriptCollection())) {
-            return null;
-        }
-
-        foreach ($this->getAssetsConfigurator()->getScriptCollection() as $script) {
-            /* @var $script \KT_WP_Script_Definition */
-            if (!wp_script_is($script->getId(), "registered")) {
-                continue;
-            }
-
-            if ($script->getBackEndScript()) {
-                continue;
-            }
-
-            if ($script->getEnqueue() === true) {
-                wp_enqueue_script($script->getId());
-            }
-        }
-    }
-
-    /**
-     * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru
-     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     */
-    public function enqueueStyleAction() {
-        if (KT::notIssetOrEmpty($this->getAssetsConfigurator()->getStyleCollection())) {
-            return null;
-        }
-
-        foreach ($this->getAssetsConfigurator()->getStyleCollection() as $style) {
-            /* @var $style \KT_WP_Style_Definition */
-
-            if (!wp_style_is($style->getId(), "registered")) {
-                continue;
-            }
-
-            if ($style->getBackEndScript()) {
-                continue;
-            }
-
-            wp_enqueue_style($style->getId());
-        }
-    }
-
-    /**
-     * Provede vložení scriptů, které mají nastaveno načtení, do admin sekce
-     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     */
-    public function enqueueScriptActionForAdmin() {
-        if (KT::notIssetOrEmpty($this->getAssetsConfigurator()->getScriptCollection())) {
-            return null;
-        }
-
-        foreach ($this->getAssetsConfigurator()->getScriptCollection() as $script) {
-            /* @var $script \KT_WP_Script_Definition */
-            if (!wp_script_is($script->getId(), "registered")) {
-                continue;
-            }
-
-            if (!$script->getBackEndScript()) {
-                continue;
-            }
-
-            if ($script->getEnqueue() === true) {
-                wp_enqueue_script($script->getId());
-            }
-        }
-    }
-
-    /**
-     * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru v rámci admin sekce
-     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     */
-    public function enqueueStyleActionForAdmin() {
-        if (KT::notIssetOrEmpty($this->getAssetsConfigurator()->getStyleCollection())) {
-            return null;
-        }
-
-        foreach ($this->getAssetsConfigurator()->getStyleCollection() as $style) {
-            /* @var $style \KT_WP_Style_Definition */
-
-            if (!wp_style_is($style->getId(), "registered")) {
-                continue;
-            }
-
-            if (!$style->getBackEndScript()) {
-                continue;
-            }
-
-            wp_enqueue_style($style->getId());
-        }
     }
 
     /**
@@ -1509,17 +1130,6 @@ final class KT_WP_Configurator {
         $wp_post_types["post"]->rewrite = array("with_front" => true, "feeds" => false);
 
         add_rewrite_rule("{$this->getPostsArchiveSlug()}/?$", sprintf("index.php?post_type=%s", KT_WP_POST_KEY), "top");
-    }
-
-    /**
-     * Provede inicializaci facebook modulu a výpíše OG tagy do hlavičky webu
-     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
-     *
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     */
-    public function facebookTagsInit() {
-        $this->getFacebookManager()->renderHeaderTags();
     }
 
     /**
@@ -1746,4 +1356,5 @@ final class KT_WP_Configurator {
             add_filter("json_jsonp_enabled", "__return_false");
         }
     }
+
 }

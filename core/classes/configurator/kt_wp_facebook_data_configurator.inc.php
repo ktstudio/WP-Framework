@@ -6,7 +6,7 @@
  * @author Tomáš Kocifaj
  * @link http://www.ktstudio.cz
  */
-class KT_WP_Facebook_Data_Configurator {
+class KT_WP_Facebook_Data_Configurator implements KT_WP_IConfigurator {
 
     const OG_LOCALE = "og:locale";
     const OG_SITE_NAME = "og:site_name";
@@ -183,7 +183,7 @@ class KT_WP_Facebook_Data_Configurator {
      * @link http://www.ktstudio.cz
      */
     public function renderHeaderTags() {
-        $this->initialize();
+        $this->prepare();
 
         $this->renderMetaTag(self::OG_SITE_NAME, $this->getSiteName());
         $this->renderMetaTag(self::OG_TITLE, $this->getTitle());
@@ -191,6 +191,24 @@ class KT_WP_Facebook_Data_Configurator {
         $this->renderMetaTag(self::OG_DESCRIPTION, $this->getDescription());
         $this->renderMetaTag(self::OG_LOCALE, $this->getLocal());
         $this->renderMetaTag(self::OG_URL, $this->getUrl());
+    }
+
+    public function initialize() {
+            // facebookManager
+        if ($this->getModuleEnabled()) {
+            add_action("wp_head", array($this, "facebookTagsInit"), 99);
+        }
+    }
+
+    /**
+     * Provede inicializaci facebook modulu a výpíše OG tagy do hlavičky webu
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     */
+    public function facebookTagsInit() {
+        $this->renderHeaderTags();
     }
 
     // --- privátní funkce ---------------
@@ -203,7 +221,7 @@ class KT_WP_Facebook_Data_Configurator {
      * 
      * @return \KT_WP_Facebook_Data_Configurator
      */
-    private function initialize() {
+    private function prepare() {
         $this->defaultValuesInit();
 
         if (is_single() || is_page()) {

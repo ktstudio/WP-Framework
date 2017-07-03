@@ -6,7 +6,7 @@
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-final class KT_WP_Page_Remover_Configurator {
+final class KT_WP_Page_Remover_Configurator implements KT_WP_IConfigurator {
 
     const PAGE_KEY = "main-page";
     const SUBPAGE_KEY = "sub-page";
@@ -168,6 +168,50 @@ final class KT_WP_Page_Remover_Configurator {
      */
     public function removeSettings() {
         $this->removePage("options-general.php");
+
+        return $this;
+    }
+
+    public function initialize() {
+        add_action("admin_menu", array($this, "registerPageRemoverAction"));
+        add_action("admin_init", array($this, "registerSubPageRemoverAction"));
+    }
+
+    /**
+     * Provede inicializaci odstranění stránek z Wordpress menu dle nastavení configu
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Configurator
+     */
+    public function registerPageRemoverAction() {
+        $collection = $this->getMenuCollection();
+        if (KT::issetAndNotEmpty($collection)) {
+            foreach ($collection as $menuSlug) {
+                remove_menu_page($menuSlug);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Provede inicializaci odstranění podstránekstránek z Wordpress menu dle nastavení configu
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Configurator
+     */
+    public function registerSubPageRemoverAction() {
+        if (KT::issetAndNotEmpty($this->getSubMenuCollectoin())) {
+            foreach ($this->getSubMenuCollectoin() as $subMenuPageDef) {
+                remove_submenu_page($subMenuPageDef[KT_WP_Page_Remover_Configurator::PAGE_KEY], $subMenuPageDef[KT_WP_Page_Remover_Configurator::SUBPAGE_KEY]);
+            }
+        }
 
         return $this;
     }

@@ -6,7 +6,7 @@
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-final class KT_WP_Head_Remover_Configurator {
+final class KT_WP_Head_Remover_Configurator implements KT_WP_IConfigurator {
 
     private $data = array();
 
@@ -252,6 +252,10 @@ final class KT_WP_Head_Remover_Configurator {
                 remove_action("wp_head", "$head");
             }
         }
+    }
+
+    public function initialize() {
+        $this->doRemoveHeads();
     }
 
 }

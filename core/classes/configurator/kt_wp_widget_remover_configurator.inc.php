@@ -6,7 +6,7 @@
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-final class KT_WP_Widget_Remover_Configurator {
+final class KT_WP_Widget_Remover_Configurator implements KT_WP_IConfigurator {
 
     private $data = array();
 
@@ -238,6 +238,26 @@ final class KT_WP_Widget_Remover_Configurator {
         }
         if (!$keepMenu) {
             $this->removeNavMenuWidget();
+        }
+        return $this;
+    }
+
+    public function initialize() {
+        add_action("widgets_init", array($this, "registerWidgetRemoverAction"));
+    }
+
+    /**
+     * Provede inicializaci odstranění widgetů z Wordpress menu dle nastavení configu
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Configurator
+     */
+    public function registerWidgetRemoverAction() {
+        foreach ($this->getWidgetRemoverData() as $removingWidgetData) {
+            unregister_widget($removingWidgetData);
         }
         return $this;
     }

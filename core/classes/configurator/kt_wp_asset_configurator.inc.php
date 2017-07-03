@@ -6,7 +6,7 @@
  * @author Tomáš Kocifaj
  * @link http://www.ktstudio.cz
  */
-final class KT_WP_Asset_Configurator {
+final class KT_WP_Asset_Configurator implements KT_WP_IConfigurator {
 
     private $scriptCollection = array();
     private $styleCollection = array();
@@ -146,6 +146,160 @@ final class KT_WP_Asset_Configurator {
         $newStyleCollection = array_merge($currentStyleCollection, $styleCollection);
         $this->setScriptCollection($newStyleCollection);
         return $this;
+    }
+
+    public function initialize() {
+        add_action("init", array($this, "registerScriptsAction"));
+        add_action("init", array($this, "registerStyleAction"));
+        add_action("wp_enqueue_scripts", array($this, "enqueueScriptAction"));
+        add_action("wp_enqueue_scripts", array($this, "enqueueStyleAction"));
+        add_action("admin_enqueue_scripts", array($this, "enqueueScriptActionForAdmin"));
+        add_action("admin_enqueue_scripts", array($this, "enqueueStyleActionForAdmin"));
+    }
+
+    // Akce a filtry -- NEVOLAT veřejně
+
+    /**
+     * Provede registraci všech scriptů, které byly přidáno do assetConfigurátoru
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     */
+    public function registerScriptsAction() {
+
+        foreach ($this->getScriptCollection() as $script) {
+            /* @var $script \KT_WP_Script_Definition */
+            if (KT::notIssetOrEmpty($script->getId()) || KT::notIssetOrEmpty($script->getSource())) {
+                continue;
+            }
+
+            wp_register_script($script->getId(), $script->getSource(), $script->getDeps(), $script->getVersion(), $script->getInFooter());
+            if (KT::issetAndNotEmpty($script->getLocalizationData())) {
+                foreach ($script->getLocalizationData() as $name => $data) {
+                    wp_localize_script($script->getId(), $name, $data);
+                }
+            }
+        }
+    }
+
+    /**
+     * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     */
+    public function registerStyleAction() {
+
+        foreach ($this->getStyleCollection() as $style) {
+            /* @var $style \KT_WP_Style_Definition */
+
+            if (KT::notIssetOrEmpty($style->getId()) || KT::notIssetOrEmpty($style->getSource())) {
+                continue;
+            }
+
+            wp_register_style($style->getId(), $style->getSource(), $style->getDeps(), $style->getVersion(), $style->getMedia());
+        }
+    }
+
+    /**
+     * Provede vložení scriptů, které mají nastaveno načtení, do frotnendu
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     */
+    public function enqueueScriptAction() {
+
+        foreach ($this->getScriptCollection() as $script) {
+            /* @var $script \KT_WP_Script_Definition */
+            if (!wp_script_is($script->getId(), "registered")) {
+                continue;
+            }
+
+            if ($script->getBackEndScript()) {
+                continue;
+            }
+
+            if ($script->getEnqueue() === true) {
+                wp_enqueue_script($script->getId());
+            }
+        }
+    }
+
+    /**
+     * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     */
+    public function enqueueStyleAction() {
+    
+        foreach ($this->getStyleCollection() as $style) {
+            /* @var $style \KT_WP_Style_Definition */
+
+            if (!wp_style_is($style->getId(), "registered")) {
+                continue;
+            }
+
+            if ($style->getBackEndScript()) {
+                continue;
+            }
+
+            wp_enqueue_style($style->getId());
+        }
+    }
+
+    /**
+     * Provede registraci všechy stylů, které byly přidáno do assetConfigurátoru v rámci admin sekce
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     */
+    public function enqueueStyleActionForAdmin() {
+       
+
+        foreach ($this->getStyleCollection() as $style) {
+            /* @var $style \KT_WP_Style_Definition */
+
+            if (!wp_style_is($style->getId(), "registered")) {
+                continue;
+            }
+
+            if (!$style->getBackEndScript()) {
+                continue;
+            }
+
+            wp_enqueue_style($style->getId());
+        }
+    }
+
+    /**
+     * Provede vložení scriptů, které mají nastaveno načtení, do admin sekce
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     */
+    public function enqueueScriptActionForAdmin() {
+     
+        foreach ($this->getScriptCollection() as $script) {
+            /* @var $script \KT_WP_Script_Definition */
+            if (!wp_script_is($script->getId(), "registered")) {
+                continue;
+            }
+
+            if (!$script->getBackEndScript()) {
+                continue;
+            }
+
+            if ($script->getEnqueue() === true) {
+                wp_enqueue_script($script->getId());
+            }
+        }
     }
 
     // --- neveřejné metody ---------------------------
