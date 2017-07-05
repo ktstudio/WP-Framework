@@ -189,7 +189,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
         echo "<p class=\"error\">";
         echo $this->getErrorMessage();
         $repairLinkTitle = $this->getRepairTitle();
-        echo " <a id=\"contactFormLink\" href=\"#{$this->getFormId()}\" data-kt-target=\"#{$this->getFormId()}\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
+        echo " <a id=\"contact-form-link\" href=\"#{$this->getFormId()}\" data-kt-target=\"#{$this->getFormId()}\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
         echo "</p>";
     }
 

@@ -529,6 +529,19 @@ class KT {
         echo '<pre>' . $name . ' ' . (print_r($objekt, true)) . '</pre>';
     }
 
+	/**
+	 * Die Dump (pr)
+	 *
+	 * @author Martin Hlaváč
+	 * @link http://www.ktstudio.cz
+	 *
+	 * @param mixed $value
+	 */
+	public static function dd($value) {
+		wp_die(var_dump(self::pr($value)));
+		exit;
+	}
+
     /**
      * Funkce vrátí post object na základě předaného parametru post_id = null
      *

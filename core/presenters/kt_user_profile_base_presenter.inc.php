@@ -207,7 +207,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
         echo "<p class=\"error\">";
         echo $this->getErrorMessage();
         $repairLinkTitle = $this->getRepairTitle();
-        echo " <a id=\"contactFormLink\" href=\"#{$this->getFormId()}\" data-kt-target=\"#{$this->getFormId()}\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
+        echo " <a id=\"user-profile-form-link\" href=\"#{$this->getFormId()}\" data-kt-target=\"#{$this->getFormId()}\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
         echo "</p>";
     }
 

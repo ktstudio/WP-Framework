@@ -482,6 +482,18 @@ abstract class KT_Field extends KT_HTML_Tag_Base {
         return $this->filterSanitize;
     }
 
+	/**
+	 * Vypíše chybovou hlášku, pokud je zadána
+	 *
+	 * @author Martin Hlaváč
+	 * @link http://www.ktstudio.cz
+	 */
+	public function renderErrorMsg() {
+    	if ($this->hasErrorMsg()) {
+    		echo $this->getHtmlErrorMsg();
+	    }
+    }
+
     // --- protected funkce -------
 
     /**

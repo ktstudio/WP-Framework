@@ -141,11 +141,10 @@ class KT_Field_Validator {
      * @return boolean
      */
     private function required($value) {
-        if ($value != '') {
-            return true;
+        if (empty($value)) {
+	        return false;
         }
-
-        return false;
+	    return true;
     }
 
     /**

@@ -1174,12 +1174,12 @@ final class KT_WP_Configurator {
      *
      * @return \KT_WP_Configurator
      */
-    public function registerDeleteAttachmentWithPostAction() {
+    public function registerDeleteAttachmentWithPostAction($postId) {
         $args = array(
             "post_type" => "attachment",
             "numberposts" => -1,
             "post_status" => null,
-            "post_parent" => $post_id
+            "post_parent" => $postId
         );
 
         $attachments = get_posts($args);
