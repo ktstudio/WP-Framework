@@ -1058,8 +1058,8 @@ class KT {
      */
     public static function getCustomMenuIdByLocation($location) {
         $locations = get_nav_menu_locations();
-        $menuLocation = $locations[$location];
-        if (self::issetAndNotEmpty($menuLocation)) {
+        if (isset($locations[$location])) {
+            $menuLocation = $locations[$location];
             $menuObject = wp_get_nav_menu_object($menuLocation);
             if (self::issetAndNotEmpty($menuObject)) {
                 $menuId = $menuObject->term_id;
