@@ -382,7 +382,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             $thumbnailId = get_post_thumbnail_id($post->ID);
             $image = wp_get_attachment_image_src($thumbnailId, $imageSize);
             $imageSrc = $image[0];
-            $defaults = array("alt" => $post->post_title);
+            $defaults = array("alt" => esc_attr($post->post_title));
             //if (!array_key_exists("class", $imageAttr) || !KT::stringContains($imageAttr["class"], "img-responsive")) { // pro responzivní obrázky nechceme pevné rozměry
             $defaults["width"] = $image[1];
             $defaults["height"] = $image[2];
