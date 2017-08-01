@@ -181,22 +181,22 @@ class KT_Image
     public function initialize(array $params)
     {
         if (array_key_exists("id", $params)) {
-            $this->setClass($params["id"]);
+            $this->setId($params["id"]);
         }
         if (array_key_exists("src", $params)) {
-            $this->setClass($params["src"]);
+            $this->setSrc($params["src"]);
         }
         if (array_key_exists("srcset", $params)) {
-            $this->setClass($params["srcset"]);
+            $this->setSrcset($params["srcset"]);
         }
         if (array_key_exists("width", $params)) {
-            $this->setClass($params["width"]);
+            $this->setWidth($params["width"]);
         }
         if (array_key_exists("height", $params)) {
-            $this->setClass($params["height"]);
+            $this->setHeight($params["height"]);
         }
         if (array_key_exists("alt", $params)) {
-            $this->setClass($params["alt"]);
+            $this->setAlt($params["alt"]);
         }
         if (array_key_exists("class", $params)) {
             $this->setClass($params["class"]);

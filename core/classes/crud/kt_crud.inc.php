@@ -449,7 +449,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
     public function deleteRow() {
 
         if (!$this->isInDatabase()) {
-            return;
+            return null;
         }
 
         global $wpdb;
