@@ -249,7 +249,11 @@ class KT_Image
     public static function render($src, $alt = "", $class = null, $isLazyLoading = true)
     {
         $image = new KT_Image();
-        $image->setSrc(KT::imageGetUrlFromTheme($src));
+	    if (KT::stringStartsWith($src, "http://")) {
+		    $image->setSrc($src);
+	    } else {
+		    $image->setSrc(KT::imageGetUrlFromTheme($src));
+	    }
         $image->setAlt($alt);
         $image->setClass($class);
         $image->setIsLazyLoading($isLazyLoading);
