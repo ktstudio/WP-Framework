@@ -1127,13 +1127,13 @@ class KT {
      * @return integer|null
      */
     public static function tryGetInt($value) {
-        if (self::issetAndNotEmpty($value) && is_numeric($value)) {
+        if (isset($value) && is_numeric($value)) {
             if (is_int($value)) {
                 return $value;
             }
             return (int) $value;
         }
-        if ($value === "0" || $value === 0) {
+        if ($value === "0") {
             return (int) 0;
         }
         return null;
@@ -1149,13 +1149,13 @@ class KT {
      * @return float|null
      */
     public static function tryGetFloat($value) {
-        if (self::issetAndNotEmpty($value) && is_numeric($value)) {
+        if (isset($value) && is_numeric($value)) {
             if (is_float($value)) {
                 return $value;
             }
             return (float) $value;
         }
-        if ($value === "0" || $value === 0) {
+        if ($value === "0") {
             return (float) 0;
         }
         return null;
@@ -1171,13 +1171,13 @@ class KT {
      * @return double|null
      */
     public static function tryGetDouble($value) {
-        if (self::issetAndNotEmpty($value) && is_numeric($value)) {
+        if (isset($value) && is_numeric($value)) {
             if (is_double($value)) {
                 return $value;
             }
             return (double) $value;
         }
-        if ($value === "0" || $value === 0) {
+        if ($value === "0") {
             return (double) 0;
         }
         return null;
