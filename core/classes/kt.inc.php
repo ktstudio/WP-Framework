@@ -1111,7 +1111,25 @@ class KT {
      */
     public static function isIdFormat($value) {
         $id = self::tryGetInt($value);
-        if (self::issetAndNotEmpty($id) && $id > 0) {
+        if ($id > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Prověří, zda zadaný parametr je ve formátu pro index v poli apod.
+     * Je: Setnutý, není prázdný a je větší nebo roven 0
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param mixed $value
+     * @return boolean
+     */
+    public static function isIndexFormat($value) {
+	    $index = self::tryGetInt($value);
+        if ($index === 0 || $index > 0) {
             return true;
         }
         return false;
