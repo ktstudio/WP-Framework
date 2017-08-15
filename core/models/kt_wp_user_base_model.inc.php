@@ -82,6 +82,18 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
     }
 
     /**
+     * Vrátí login uživatele
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return int
+     */
+    public function getLogin() {
+        return $this->getWpUser()->user_login;
+    }
+
+    /**
      * Vrátí niceName (přezdívku) uživatele vyplněnou v profilu
      *
      * @author Tomáš Kocifaj
