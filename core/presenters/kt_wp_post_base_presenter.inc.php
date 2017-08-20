@@ -84,7 +84,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return int
      */
     public function getOtherPostsLimit() {
-        return $this->otherPostsLimit ? : self::DEFAULT_OTHER_POSTS_LIMIT;
+        return $this->otherPostsLimit ?: self::DEFAULT_OTHER_POSTS_LIMIT;
     }
 
     // --- veřejné metody ---------------------------
@@ -378,19 +378,19 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return mixed string || null
      */
     public static function getThumbnailImageByPost(WP_Post $post, $imageSize, array $imageAttr = array(), $defaultImageSrc = null, $isLazyLoading = true) {
+        $defaults = array("alt" => esc_attr($post->post_title));
         if (has_post_thumbnail($post->ID)) {
             $thumbnailId = get_post_thumbnail_id($post->ID);
             $image = wp_get_attachment_image_src($thumbnailId, $imageSize);
             $imageSrc = $image[0];
-            $defaults = array("alt" => esc_attr($post->post_title));
             //if (!array_key_exists("class", $imageAttr) || !KT::stringContains($imageAttr["class"], "img-responsive")) { // pro responzivní obrázky nechceme pevné rozměry
             $defaults["width"] = $image[1];
             $defaults["height"] = $image[2];
             //}
-            $imageAttr = wp_parse_args($imageAttr, $defaults);
         } else {
             $imageSrc = $defaultImageSrc;
         }
+        $imageAttr = wp_parse_args($imageAttr, $defaults);
         return self::getImageHtmlTag($imageSrc, $imageAttr, $isLazyLoading);
     }
 
@@ -407,8 +407,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      */
     public static function getImageHtmlTag($imageSrc, array $imageAttr = array(), $isLazyLoading = true) {
         $image = new KT_Image($imageSrc);
-	    $image->setSrc($imageSrc);
-	    $image->setIsLazyLoading($isLazyLoading);
+        $image->setSrc($imageSrc);
+        $image->setIsLazyLoading($isLazyLoading);
         $image->initialize($imageAttr);
         return $image->buildHtml();
     }
