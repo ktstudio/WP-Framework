@@ -195,21 +195,21 @@ function kt_core_setup_forms_fields() {
     jQuery(".multiSelect").chosen({
         disable_search_threshold: 10,
         no_results_text: "Žádné výsledky pro",
-        placeholder_text_multiple: "Prázdný výběr",
-        placeholder_text_single: "Prázdný výběr",
+        placeholder_text_multiple: "---",
+        placeholder_text_single: "---",
         width: "90%"
     });
     // chosen - single select
     jQuery(".singleSelect").chosen({
         no_results_text: "Žádné výsledky pro",
-        placeholder_text_single: "Prázdný výběr",
+        placeholder_text_single: "---",
         width: "90%"
     });
     // chosen - single select deselect
     jQuery(".singleSelectDeselect").chosen({
         allow_single_deselect: true,
         no_results_text: "Žádné výsledky pro",
-        placeholder_text_single: "Prázdný výběr",
+        placeholder_text_single: "---",
         width: "90%"
     });
 
