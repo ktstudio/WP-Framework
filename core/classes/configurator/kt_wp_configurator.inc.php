@@ -1730,7 +1730,6 @@ final class KT_WP_Configurator {
             remove_filter("oembed_dataparse", "wp_filter_oembed_result");
             remove_action("wp_head", "wp_oembed_add_discovery_links");
             remove_action("wp_head", "wp_oembed_add_host_js");
-            add_filter("rewrite_rules_array", "disable_embeds_rewrites");
         }
     }
 
