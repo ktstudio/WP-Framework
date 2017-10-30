@@ -67,10 +67,12 @@ class KT_Picture extends KT_Image
     {
         $image = new KT_Picture();
         foreach ($sizes as $maxWidth => $fileName) {
-            $sizes[$maxWidth] = KT::imageGetUrlFromTheme($fileName);
+            if (!KT::stringStartsWith($fileName, "http://")) {
+                $sizes[$maxWidth] = KT::imageGetUrlFromTheme($fileName);
+            }
         }
         $image->setSrc(reset($sizes));
-        $image->setSizes($sizes);
+        $image->setSizes(KT::arrayRemoveByKey($sizes, ""));
         $image->setAlt($alt);
         $image->setClass($class);
         $image->setIsLazyLoading($isLazyLoading);
