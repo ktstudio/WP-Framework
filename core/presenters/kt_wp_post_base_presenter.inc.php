@@ -13,6 +13,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     private $thumbnailImagePermalink;
     private $otherPostsQuery;
     private $otherPostsLimit;
+    private $isRenderingOtherPosts = false;
 
     /**
      * Základní presenter pro práci s daty postu
@@ -87,6 +88,19 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         return $this->otherPostsLimit ?: self::DEFAULT_OTHER_POSTS_LIMIT;
     }
 
+    /**
+     * Indikátor, zda právě probíhá vykreslování ostatních příspěvků
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return bool
+     */
+    public function getIsRenderingOtherPosts()
+    {
+        return $this->isRenderingOtherPosts;
+    }
+
     // --- veřejné metody ---------------------------
 
     /**
@@ -126,7 +140,9 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      */
     public function theOtherPosts($loopName = KT_WP_POST_KEY) {
         if ($this->hasOtherPosts()) {
+            $this->isRenderingOtherPosts = true;
             self::theQueryLoops($this->getOtherPostsQuery(), $loopName);
+            $this->isRenderingOtherPosts = false;
         }
     }
 
