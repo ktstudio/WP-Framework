@@ -74,7 +74,7 @@ class KT_Contact_Form_Base_Config {
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("The message can be up to 1000 characters", "KT_CORE_DOMAIN"), 1000);
 
         $fieldset->addText(self::FAVOURITE, __("Checker:", "KT_CORE_DOMAIN"))
-                ->setPlaceholder(__("Do not fill if your are the human", "KT_CORE_DOMAIN"))
+                ->setPlaceholder(__("Do not fill if your are human", "KT_CORE_DOMAIN"))
                 ->addAttrClass("hidden")
                 ->addAttribute("maxlength", 30);
 

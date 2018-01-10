@@ -207,7 +207,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
         echo "<p class=\"error\">";
         echo $this->getErrorMessage();
         $repairLinkTitle = $this->getRepairTitle();
-        echo " <a id=\"contactFormLink\" href=\"#{$this->getFormId()}\" data-kt-target=\"#{$this->getFormId()}\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
+        echo " <a id=\"user-profile-form-link\" href=\"#{$this->getFormId()}\" data-kt-target=\"#{$this->getFormId()}\" title=\"$repairLinkTitle\">$repairLinkTitle</a>";
         echo "</p>";
     }
 
@@ -388,7 +388,7 @@ class KT_User_Profile_Base_Presenter extends KT_Current_User_Presenter_Base
     protected function initForm() {
         $form = new KT_Form();
         $form->setAttrId($this->getFormId());
-        $form->setButtonValue(__("Save setting", "KT_CORE_DOMAIN"));
+        $form->setButtonValue(__("Save Settings", "KT_CORE_DOMAIN"));
         $form->setButtonClass("kt-form-submit button button-primary");
         $form->addFieldSetByObject($this->getFieldset());
         return $this->form = $form;

@@ -38,10 +38,10 @@ class KT_Comment_Config
             $currentUser = wp_get_current_user();
         }
 
-        $fieldset->addTextarea(self::COMMENT, __("Comments*:", "KT_CORE_DOMAIN"))
+        $fieldset->addTextarea(self::COMMENT, __("Comment*:", "KT_CORE_DOMAIN"))
             ->setAttrMaxlength(1000)
-            ->addRule(KT_Field_Validator::REQUIRED, __("Comments is required.", "KT_CORE_DOMAIN"))
-            ->addRule(KT_Field_Validator::MAX_LENGTH, __("Comments can be up to 1000 characters.", "KT_CORE_DOMAIN"), 1000);
+            ->addRule(KT_Field_Validator::REQUIRED, __("Comment is required.", "KT_CORE_DOMAIN"))
+            ->addRule(KT_Field_Validator::MAX_LENGTH, __("Comment can be up to 1000 characters.", "KT_CORE_DOMAIN"), 1000);
 
         $fieldset->addText(self::AUTHOR, __("Name*:", "KT_CORE_DOMAIN"))
             ->setDefaultValue($currentUser->display_name)

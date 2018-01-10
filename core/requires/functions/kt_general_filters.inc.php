@@ -37,7 +37,29 @@ add_filter("kt_post_id_to_title", "kt_post_id_to_title", 10, 1);
  */
 function kt_post_id_to_title($postId) {
     if (KT::isIdFormat($postId)) {
-        return get_the_title($postId);
+        $postTitle = get_the_title($postId);
+        $link = sprintf('<a href="%s" title="%s">%s</a>', get_edit_post_link($postId), $postTitle, $postTitle);
+        return $link;
+    }
+    return KT_EMPTY_SYMBOL;
+}
+
+add_filter("kt_get_page_template_name", "kt_get_page_template_name", 10, 1);
+
+/**
+ * Filtrační funkce převede dle "klíče" (relativní cesta, či název souboru v post meta) page templaty na její název
+ * @author Martin Hlaváč
+ * @param string $key
+ * @return string
+ */
+function kt_get_page_template_name($key)
+{
+    if (KT::issetAndNotEmpty($key)) {
+        $pageTemplates = wp_get_theme()->get_page_templates();
+        $pageTemplateName = KT::arrayObjectTryGetValue($pageTemplates, $key);
+        if (KT::issetAndNotEmpty($pageTemplateName)) {
+            return $pageTemplateName;
+        }
     }
     return KT_EMPTY_SYMBOL;
 }

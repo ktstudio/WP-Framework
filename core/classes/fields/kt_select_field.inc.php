@@ -89,9 +89,9 @@ class KT_Select_Field extends KT_Options_Field_Base {
     public function getOptionsContent() {
         $html = "";
 
-        $emptyOption = "<option value=\"\">" . $this->getFirstEmpty() . "</option>";
-        if (KT::issetAndNotEmpty($this->getFirstEmpty())) {
-            $html .= $emptyOption;
+        $firstEmpty = $this->getFirstEmpty();
+        if (isset($firstEmpty)) {
+            $html .= "<option value=\"\">$firstEmpty</option>";
         }
 
         foreach ($this->getOptionsData() as $optionKey => $optionValue) {

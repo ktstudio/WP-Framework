@@ -143,11 +143,11 @@ class KT_Media_Field extends KT_Field {
                         $removeFileTag = "<a class=\"remove-file\" data-id=\"{$attachment->ID}\"><span class=\"dashicons dashicons-no\"></span></a>";
                         $html .= "$fileTag $removeFileTag";
                     } else {
-                        $html .= "<span class=\"file\">" . __("Soubor byl smazán", "KT_CORE_DOMAIN") . "</span>";
+                        $html .= "<span class=\"file\">" . __("File was removed", "KT_CORE_DOMAIN") . "</span>";
                     }
                 }
             } else {
-                $html = "<span class=\"file\">" . __("Soubor(y) byl(y) smazán(y)", "KT_CORE_DOMAIN") . "</span>";
+                $html = "<span class=\"file\">" . __("Files were removed", "KT_CORE_DOMAIN") . "</span>";
             }
             $html .= "</span>";
         } else {

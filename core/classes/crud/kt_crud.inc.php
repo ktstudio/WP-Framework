@@ -51,8 +51,8 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
     // --- magic functions ------------
 
     public function __set($name, $value) {
-        $key = $this->getColumnNameWithTablePrefix($name);
-        $this->addNewColumnValue($name, $value);
+        $this->setColumnValue($name, $value);
+        return $this;
     }
 
     public function __get($name) {
@@ -60,9 +60,9 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
         if (array_key_exists($key, $this->columns)) {
             return $this->getColumnByName($key)->getValue();
         }
-
-        trigger_error("Undefined CRUD property via __get(): \"$name\" for table \"{$this->getTable()}\"", E_USER_NOTICE);
-
+	    if (!method_exists($this,"get" . ucfirst($name))) {
+		    trigger_error("Undefined CRUD property via __get(): \"$name\" for table \"{$this->getTable()}\"", E_USER_NOTICE);
+	    }
         return null;
     }
 
@@ -449,7 +449,7 @@ abstract class KT_Crud implements KT_Identifiable, KT_Modelable, ArrayAccess {
     public function deleteRow() {
 
         if (!$this->isInDatabase()) {
-            return;
+            return null;
         }
 
         global $wpdb;

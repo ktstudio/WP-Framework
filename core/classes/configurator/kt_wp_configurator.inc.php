@@ -32,7 +32,8 @@ final class KT_WP_Configurator {
     private $pageRemover = null;
     private $widgetRemover = null;
     private $headRemover = null;
-    private $themeSettingPage = false;
+    private $themeSettingsPage = false;
+    private $themeSettingsCapability = "update_core";
     private $deleteImagesWithPost = false;
     private $displayLogo = true;
     private $assetsConfigurator = null;
@@ -47,6 +48,7 @@ final class KT_WP_Configurator {
     private $autoRemoveShortcodesParagraphs = false;
     private $enableDynamicFieldsets = false;
     private $disableOembed = false;
+    private $disableJson = false;
 
     // --- gettery ----------------------
 
@@ -131,8 +133,15 @@ final class KT_WP_Configurator {
     /**
      * @return boolean
      */
-    private function getThemeSettingPage() {
-        return $this->themeSettingPage;
+    private function getThemeSettingsPage() {
+        return $this->themeSettingsPage;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function getThemeSettingsCapability() {
+        return $this->themeSettingsCapability;
     }
 
     /**
@@ -227,6 +236,11 @@ final class KT_WP_Configurator {
     /** @return boolean */
     public function getDisableJsonOembed() {
         return $this->disableOembed;
+    }
+
+    /** @return boolean */
+    public function getDisableJson() {
+        return $this->disableJson;
     }
 
     // --- settery ----------------------
@@ -329,11 +343,34 @@ final class KT_WP_Configurator {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      *
-     * @param boolean $themeSettingPage
+     * @param boolean $themeSettingsPage
      * @return \KT_WP_Configurator
      */
-    public function setThemeSettingPage($themeSettingPage = true) {
-        $this->themeSettingPage = $themeSettingPage;
+    public function setThemeSettingsPage($themeSettingsPage = true) {
+        $this->themeSettingsPage = $themeSettingsPage;
+        return $this;
+    }
+
+    /**
+     * @deprecated since version 1.10
+     * @param boolean $themeSettingsPage
+     * @return \KT_WP_Configurator
+     */
+    public function setThemeSettingPage($themeSettingsPage = true) {
+        return $this->setThemeSettingsPage($themeSettingsPage);
+    }
+
+    /**
+     * Nastaví (vlastní) oprávnění pro stránku s nastavením šablony s metaboxy
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param boolean $themeSettingsCapability
+     * @return \KT_WP_Configurator
+     */
+    public function setThemeSettingsCapability($themeSettingsCapability = "update_core") {
+        $this->themeSettingsCapability = $themeSettingsCapability;
         return $this;
     }
 
@@ -529,6 +566,18 @@ final class KT_WP_Configurator {
         return $this;
     }
 
+    /**
+     * Vypne / ponechá funkce WP JSON (API)
+     *
+     * @author Martin Hlaváč
+     * @param boolean $disable
+     * @return \KT_WP_Configurator
+     */
+    public function setDisableJson($disable = true) {
+        $this->disableJson = KT::tryGetBool($disable);
+        return $this;
+    }
+
     // --- veřejné funkce ---------------
 
     /**
@@ -617,8 +666,8 @@ final class KT_WP_Configurator {
         }
 
         // stránka nastavení šablony
-        if (KT::issetAndNotEmpty($this->getThemeSettingPage())) {
-            $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Theme setting", "KT_CORE_DOMAIN"), __("Theme setting", "KT_CORE_DOMAIN"), "update_core", self::THEME_SETTING_PAGE_SLUG);
+        if (KT::issetAndNotEmpty($this->getThemeSettingsPage())) {
+            $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Theme Settings", "KT_CORE_DOMAIN"), __("Theme Settings", "KT_CORE_DOMAIN"), $this->getThemeSettingsCapability(), self::THEME_SETTING_PAGE_SLUG);
             $themeSettings->setRenderSaveButton()->register();
         }
 
@@ -694,6 +743,11 @@ final class KT_WP_Configurator {
         // JSON Oembed
         if ($this->getDisableJsonOembed() === true) {
             add_action("init", array($this, "disableJsonOembed"), 99);
+        }
+
+        // JSON (API)
+        if ($this->getDisableJson() === true) {
+            add_action("init", array($this, "disableJson"), 99);
         }
     }
 
@@ -1101,11 +1155,11 @@ final class KT_WP_Configurator {
      * @return \KT_WP_Configurator
      */
     public function registerThemeSettingPageAction($capability = "update_core") {
-        if (KT::notIssetOrEmpty($this->getThemeSettingPage())) {
+        if (KT::notIssetOrEmpty($this->getThemeSettingsPage())) {
             return;
         }
 
-        $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Theme setting", "KT_CORE_DOMAIN"), __("Theme setting", "KT_CORE_DOMAIN"), $capability, self::THEME_SETTING_PAGE_SLUG);
+        $themeSettings = new KT_Custom_Metaboxes_Subpage("themes.php", __("Theme Settings", "KT_CORE_DOMAIN"), __("Theme Settings", "KT_CORE_DOMAIN"), $capability, self::THEME_SETTING_PAGE_SLUG);
         $themeSettings->setRenderSaveButton()->register();
 
         return $this;
@@ -1120,12 +1174,12 @@ final class KT_WP_Configurator {
      *
      * @return \KT_WP_Configurator
      */
-    public function registerDeleteAttachmentWithPostAction() {
+    public function registerDeleteAttachmentWithPostAction($postId) {
         $args = array(
             "post_type" => "attachment",
             "numberposts" => -1,
             "post_status" => null,
-            "post_parent" => $post_id
+            "post_parent" => $postId
         );
 
         $attachments = get_posts($args);
@@ -1676,7 +1730,19 @@ final class KT_WP_Configurator {
             remove_filter("oembed_dataparse", "wp_filter_oembed_result");
             remove_action("wp_head", "wp_oembed_add_discovery_links");
             remove_action("wp_head", "wp_oembed_add_host_js");
-            add_filter("rewrite_rules_array", "disable_embeds_rewrites");
+        }
+    }
+
+    /**
+     * Zruší WP JSON Oembed
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     */
+    public function disableJson() {
+        if (!is_admin()) {
+            add_filter("json_enabled", "__return_false");
+            add_filter("json_jsonp_enabled", "__return_false");
         }
     }
 }

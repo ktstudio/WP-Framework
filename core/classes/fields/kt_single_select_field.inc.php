@@ -71,6 +71,9 @@ class KT_Single_Select_Field extends KT_Select_Field {
         if ($allowDeselect) {
             parent::removeAttrClass(self::PRIMARY_CLASS_IDENTIFICATOR);
             $this->addAttrClass(self::SECONDARY_CLASS_IDENTIFICATOR);
+            if ($this->getFirstEmpty() !== "") {
+                $this->setFirstEmpty("");
+            }
         } else {
             parent::removeAttrClass(self::SECONDARY_CLASS_IDENTIFICATOR);
             $this->addAttrClass(self::PRIMARY_CLASS_IDENTIFICATOR);

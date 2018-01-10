@@ -61,7 +61,7 @@ class KT {
      */
     public static function arrayInsertBefore(array $input, $index, $newKey, $newValue) {
         if (!array_key_exists($index, $input)) {
-            throw new KT_Duplicate_Exception($key);
+            throw new KT_Duplicate_Exception($index);
         }
         $output = array();
         foreach ($input as $key => $value) {
@@ -88,7 +88,7 @@ class KT {
      */
     public static function arrayInsertAfter(array $input, $index, $newKey, $newValue) {
         if (!array_key_exists($index, $input)) {
-            throw new KT_Duplicate_Exception($key);
+            throw new KT_Duplicate_Exception($index);
         }
         $output = array();
         foreach ($input as $key => $value) {
@@ -350,6 +350,24 @@ class KT {
     }
 
     /**
+     * Vrátí hodnotu z objektu, který je pole pro zadaný klíč pokud existuje nebo výchozí zadanou hodnotu (NULL)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param array $array
+     * @param string $key
+     * @param string $defaultValue
+     * @return mixed type|null
+     */
+    public static function arrayObjectTryGetValue($array, $key, $defaultValue = null) {
+        if (isset($array) && is_array($array)) {
+            return self::arrayTryGetValue($array, $key, $defaultValue );
+        }
+        return $defaultValue;
+    }
+
+    /**
      * Očistí pole od hodnot "." a ".." při scandiru
      *
      * @author Tomáš Kocifaj
@@ -511,6 +529,19 @@ class KT {
         echo '<pre>' . $name . ' ' . (print_r($objekt, true)) . '</pre>';
     }
 
+	/**
+	 * Die Dump (pr)
+	 *
+	 * @author Martin Hlaváč
+	 * @link http://www.ktstudio.cz
+	 *
+	 * @param mixed $value
+	 */
+	public static function dd($value) {
+		wp_die(var_dump(self::pr($value)));
+		exit;
+	}
+
     /**
      * Funkce vrátí post object na základě předaného parametru post_id = null
      *
@@ -640,11 +671,13 @@ class KT {
         $requestUrl .= "://";
         $serverPort = $_SERVER["SERVER_PORT"];
         $serverName = $_SERVER["SERVER_NAME"];
+        $httpHost = $_SERVER["HTTP_HOST"];
+        $serverKey = (self::stringEndsWith($httpHost, $serverName)) ? $httpHost : $serverName;
         $serverUri = ($fullUrl) ? $_SERVER["REQUEST_URI"] : $_SERVER["REDIRECT_URL"];
-        if ($serverPort != "80") {
-            $requestUrl .= "$serverName:$serverPort$serverUri";
+        if ($serverPort == "80" || $serverPort == "443") {
+            $requestUrl .= "{$serverKey}{$serverUri}";
         } else {
-            $requestUrl .= "$serverName$serverUri";
+            $requestUrl .= "{$serverKey}:{$serverPort}{$serverUri}";
         }
         return $requestUrl;
     }
@@ -658,7 +691,7 @@ class KT {
      * @return string
      */
     public static function getBacklinkUrl() {
-        $refererUrl = $_SERVER['HTTP_REFERER'];
+        $refererUrl = $_SERVER["HTTP_REFERER"];
         if (filter_var($refererUrl, FILTER_VALIDATE_URL)) {
             return $refererUrl;
         }
@@ -1078,7 +1111,25 @@ class KT {
      */
     public static function isIdFormat($value) {
         $id = self::tryGetInt($value);
-        if (self::issetAndNotEmpty($id) && $id > 0) {
+        if ($id > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Prověří, zda zadaný parametr je ve formátu pro index v poli apod.
+     * Je: Setnutý, není prázdný a je větší nebo roven 0
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param mixed $value
+     * @return boolean
+     */
+    public static function isIndexFormat($value) {
+	    $index = self::tryGetInt($value);
+        if ($index === 0 || $index > 0) {
             return true;
         }
         return false;
@@ -1094,13 +1145,13 @@ class KT {
      * @return integer|null
      */
     public static function tryGetInt($value) {
-        if (self::issetAndNotEmpty($value) && is_numeric($value)) {
+        if (isset($value) && is_numeric($value)) {
             if (is_int($value)) {
                 return $value;
             }
             return (int) $value;
         }
-        if ($value === "0" || $value === 0) {
+        if ($value === "0") {
             return (int) 0;
         }
         return null;
@@ -1116,13 +1167,13 @@ class KT {
      * @return float|null
      */
     public static function tryGetFloat($value) {
-        if (self::issetAndNotEmpty($value) && is_numeric($value)) {
+        if (isset($value) && is_numeric($value)) {
             if (is_float($value)) {
                 return $value;
             }
             return (float) $value;
         }
-        if ($value === "0" || $value === 0) {
+        if ($value === "0") {
             return (float) 0;
         }
         return null;
@@ -1138,13 +1189,13 @@ class KT {
      * @return double|null
      */
     public static function tryGetDouble($value) {
-        if (self::issetAndNotEmpty($value) && is_numeric($value)) {
+        if (isset($value) && is_numeric($value)) {
             if (is_double($value)) {
                 return $value;
             }
             return (double) $value;
         }
-        if ($value === "0" || $value === 0) {
+        if ($value === "0") {
             return (double) 0;
         }
         return null;

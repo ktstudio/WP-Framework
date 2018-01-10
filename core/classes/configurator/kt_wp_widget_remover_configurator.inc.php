@@ -212,6 +212,58 @@ final class KT_WP_Widget_Remover_Configurator {
     }
 
     /**
+     * Odstraní widget audia
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Widget_Remover_Configurator
+     */
+    public function removeMediaAudioWidget() {
+        $this->removeWidget("WP_Widget_Media_Audio");
+        return $this;
+    }
+
+    /**
+     * Odstraní widget obrázku
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Widget_Remover_Configurator
+     */
+    public function removeMediaImageWidget() {
+        $this->removeWidget("WP_Widget_Media_Image");
+        return $this;
+    }
+
+    /**
+     * Odstraní widget videa
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Widget_Remover_Configurator
+     */
+    public function removeMediaVideoWidget() {
+        $this->removeWidget("WP_Widget_Media_Video");
+        return $this;
+    }
+
+    /**
+     * Odstraní widget vlastního HTML
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Widget_Remover_Configurator
+     */
+    public function removeCustomHtmlWidget() {
+        $this->removeWidget("WP_Widget_Custom_HTML");
+        return $this;
+    }
+
+    /**
      * Odstraní všechny systémové widgety
      *
      * @author Martin Hlaváč
@@ -221,7 +273,7 @@ final class KT_WP_Widget_Remover_Configurator {
      * @param boolean $keepMenu - nechat menu
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeAllSystemWidgets($keepText = false, $keepMenu = false) {
+    public function removeAllSystemWidgets($keepText = false, $keepMenu = false, $keepCustomHtml = false) {
         $this->removePagesWidget()
                 ->removeCalendarWidget()
                 ->removeArchivesWidget()
@@ -232,12 +284,18 @@ final class KT_WP_Widget_Remover_Configurator {
                 ->removeRecentPostsWidget()
                 ->removeRecentCommentsWidget()
                 ->removeRssWidget()
-                ->removeTagCloudWidget();
+                ->removeTagCloudWidget()
+                ->removeMediaAudioWidget()
+                ->removeMediaImageWidget()
+                ->removeMediaVideoWidget();
         if (!$keepText) {
             $this->removeTextWidget();
         }
         if (!$keepMenu) {
             $this->removeNavMenuWidget();
+        }
+        if (!$keepCustomHtml) {
+            $this->removeCustomHtmlWidget();
         }
         return $this;
     }

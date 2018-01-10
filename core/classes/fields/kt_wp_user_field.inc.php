@@ -5,6 +5,7 @@ class KT_WP_User_Field extends KT_Select_Field {
     const FIELD_TYPE = "users";
 
     private $userRole = null;
+    private $userRoles = null;
     private $allUserRoles = array();
     private $userMetaQuery = array();
 
@@ -28,6 +29,10 @@ class KT_WP_User_Field extends KT_Select_Field {
         return $this->userRole;
     }
 
+    private function getUserRoles() {
+        return $this->userRoles;
+    }
+
     private function getAllUserRoles() {
         if (KT::notIssetOrEmpty($this->allUserRoles)) {
             $this->allUserRolesInit();
@@ -48,12 +53,25 @@ class KT_WP_User_Field extends KT_Select_Field {
      * @author Tomáš Kocifaj
      * @link http://www.ktstudio.cz
      * 
-     * @param type $userRole
+     * @param string $userRole
      * @return \KT_WP_User_Field
      */
     public function setUserRole($userRole) {
         $this->userRole = $userRole;
+        return $this;
+    }
 
+    /**
+     * Nastaví fieldu, zda chcete vybrat uživatele pouze s příslušnou rolí a ostatní bude ignorovat
+     *
+     * @author Tomáš Kocifaj
+     * @link http://www.ktstudio.cz
+     *
+     * @param array $userRoles
+     * @return \KT_WP_User_Field
+     */
+    public function setUserRoles(array $userRoles = null) {
+        $this->userRoles = $userRoles;
         return $this;
     }
 
@@ -69,7 +87,6 @@ class KT_WP_User_Field extends KT_Select_Field {
      */
     private function setAllUserRoles(array $allUserRoles) {
         $this->allUserRoles = $allUserRoles;
-
         return $this;
     }
 
@@ -87,7 +104,6 @@ class KT_WP_User_Field extends KT_Select_Field {
         if (KT::issetAndNotEmpty($userMetaQuery)) {
             $this->userMetaQuery = $userMetaQuery;
         }
-
         return $this;
     }
 
@@ -102,10 +118,16 @@ class KT_WP_User_Field extends KT_Select_Field {
      * @return type
      */
     public function getOptionsContent() {
+        if (KT::arrayIssetAndNotEmpty($this->getUserRoles())) {
+	        $html = null;
+	        foreach ($this->getUserRoles() as $roleSlug => $roleName) {
+		        $html .= $this->getSelectOptionByUserRole($roleSlug, $roleName);
+	        }
+			return $html;
+        }
         if (KT::issetAndNotEmpty($this->getUserRole())) {
             return $html = $this->getSelectOptionByUserRole($this->getUserRole());
         }
-
         return $html = $this->getSelectOptionOfAllUser();
     }
 
@@ -147,10 +169,10 @@ class KT_WP_User_Field extends KT_Select_Field {
     /**
      * Vrátí kolekci všech uživatelů včetně hlaviček skupiny
      * S použítím <optgroup> = název skupiny uživatelů
-     * 
+     *
      * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz 
-     * 
+     * @link http://www.ktstudio.cz
+     *
      * @return string
      */
     private function getSelectOptionOfAllUser() {

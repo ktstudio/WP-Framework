@@ -18,6 +18,7 @@ class KT_Mailer {
     private $subject = null;
     private $header = null;
     private $contentReplacer = null;
+    private $isWpMail = false;
     private $attachments = array();
 
     /**
@@ -43,7 +44,7 @@ class KT_Mailer {
     }
 
     /** @return string */
-    private function getSenderEmail() {
+    public function getSenderEmail() {
         if (!$this->senderEmail) {
             $siteUrl = get_option("siteurl", $_SERVER['SERVER_NAME']);
             $regex = "/^(?:https?\\:\\/\\/)?(?:www\\.)?([^\\/|?|#]+).*$/i";
@@ -61,38 +62,37 @@ class KT_Mailer {
     }
 
     /** @return string */
-    private function getSenderName() {
+    public function getSenderName() {
         return $this->senderName;
     }
 
     /** @return string */
-    private function getContent() {
+    public function getContent() {
         return $this->content;
     }
 
     /** @return string */
-    private function getRecipients() {
+    public function getRecipients() {
         return $this->recipients;
     }
 
     /** @return string */
-    private function getCarbonCopies() {
+    public function getCarbonCopies() {
         return $this->carbonCopies;
     }
 
     /** @return string */
-    private function getBlindCarbonCopies() {
+    public function getBlindCarbonCopies() {
         return $this->blindCarbonCopies;
     }
 
     /** @return string */
-    private function getSubject() {
+    public function getSubject() {
         return $this->subject;
     }
 
-    /** @return string
-     */
-    private function getHeader() {
+    /** @return string */
+    public function getHeader() {
         if (KT::notIssetOrEmpty($this->header)) {
             $this->setupHeader();
         }
@@ -100,11 +100,16 @@ class KT_Mailer {
         return $this->header;
     }
 
+    /** @return boolean */
+    public function getIsWpMail() {
+        return $this->isWpMail;
+    }
+
     /**
      * @deprecated since version 1.6
      * @return array
      */
-    private function getAttachments() {
+    public function getAttachments() {
         return $this->attachments;
     }
 
@@ -203,7 +208,7 @@ class KT_Mailer {
             $this->blindCarbonCopies = self::getHeaderEmail($copyEmail, $copyName);
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("Hidden copy \"%s\" is not a valid email address!", "KT_CORE_DOMAIN"), $recipientEmail));
+        throw new InvalidArgumentException(sprintf(__("Hidden copy \"%s\" is not valid email address!", "KT_CORE_DOMAIN"), $recipientEmail));
     }
 
     /**
@@ -222,7 +227,7 @@ class KT_Mailer {
             $this->senderEmail = $senderEmail;
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("Sender \"%s\" is not a valid email address!", "KT_CORE_DOMAIN"), $senderEmail));
+        throw new InvalidArgumentException(sprintf(__("Sender \"%s\" is not valid email address!", "KT_CORE_DOMAIN"), $senderEmail));
     }
 
     /**
@@ -238,7 +243,7 @@ class KT_Mailer {
             $this->replyToEmail = $email;
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("Reply to \"%s\" is not a valid email address!", "KT_CORE_DOMAIN"), $email));
+        throw new InvalidArgumentException(sprintf(__("Reply to \"%s\" is not valid email address!", "KT_CORE_DOMAIN"), $email));
     }
 
     /**
@@ -305,6 +310,20 @@ class KT_Mailer {
     }
 
     /**
+     * Nastaví zda se pro odesílání použije funkce wp_mail() z WP (true), či mail() přímo z PHP (false)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstduio.cz
+     *
+     * @param boolean $isWpMail
+     * @return \KT_Mailer
+     */
+    public function setIsWpMail($isWpMail) {
+        $this->isWpMail = KT::tryGetBool($isWpMail);
+        return $this;
+    }
+    
+    /**
      * Nastaví kolekci všech příloh, které budou odeslány společně s emailem
      * 
      * @deprecated since version 1.6
@@ -337,7 +356,7 @@ class KT_Mailer {
             $this->recipients = $recipients;
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("Reciver \"%s\" is not a valid email address!", "KT_CORE_DOMAIN"), $recipientEmail));
+        throw new InvalidArgumentException(sprintf(__("Reciver \"%s\" is not valid email address!", "KT_CORE_DOMAIN"), $recipientEmail));
     }
 
     /**
@@ -356,7 +375,7 @@ class KT_Mailer {
             $this->carbonCopies = $copies;
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("Copy \"%s\" is not a valid email address!", "KT_CORE_DOMAIN"), $copyEmail));
+        throw new InvalidArgumentException(sprintf(__("Copy \"%s\" is not valid email address!", "KT_CORE_DOMAIN"), $copyEmail));
     }
 
     /**
@@ -375,7 +394,7 @@ class KT_Mailer {
             $this->blindCarbonCopies = $copies;
             return $this;
         }
-        throw new InvalidArgumentException(sprintf(__("HIdden copy \"%s\" is not a valid email address!", "KT_CORE_DOMAIN"), $copyEmail));
+        throw new InvalidArgumentException(sprintf(__("Hidden copy \"%s\" is not valid email address!", "KT_CORE_DOMAIN"), $copyEmail));
     }
 
     /**
@@ -476,7 +495,11 @@ class KT_Mailer {
                 $content = $contentReplacer->update($content); // tak nahradit tagy
             }
         }
-        $email = mail($this->getRecipients(), self::getMimeHeaderEncode($this->getSubject()), $content, $this->getHeader());
+        if ($this->getIsWpMail()) {
+            $email = wp_mail($this->getRecipients(), self::getMimeHeaderEncode($this->getSubject()), $content, $this->getHeader());
+        } else {
+            $email = mail($this->getRecipients(), self::getMimeHeaderEncode($this->getSubject()), $content, $this->getHeader());
+        }
         if ($email) {
             return true;
         }

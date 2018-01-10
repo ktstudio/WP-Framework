@@ -13,6 +13,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     private $thumbnailImagePermalink;
     private $otherPostsQuery;
     private $otherPostsLimit;
+    private $isRenderingOtherPosts = false;
 
     /**
      * Základní presenter pro práci s daty postu
@@ -84,7 +85,20 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return int
      */
     public function getOtherPostsLimit() {
-        return $this->otherPostsLimit ? : self::DEFAULT_OTHER_POSTS_LIMIT;
+        return $this->otherPostsLimit ?: self::DEFAULT_OTHER_POSTS_LIMIT;
+    }
+
+    /**
+     * Indikátor, zda právě probíhá vykreslování ostatních příspěvků
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return bool
+     */
+    public function getIsRenderingOtherPosts()
+    {
+        return $this->isRenderingOtherPosts;
     }
 
     // --- veřejné metody ---------------------------
@@ -126,7 +140,9 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      */
     public function theOtherPosts($loopName = KT_WP_POST_KEY) {
         if ($this->hasOtherPosts()) {
+            $this->isRenderingOtherPosts = true;
             self::theQueryLoops($this->getOtherPostsQuery(), $loopName);
+            $this->isRenderingOtherPosts = false;
         }
     }
 
@@ -230,8 +246,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @param boolean $inSameCategory
      * @return mixed null|string (HTML)
      */
-    public function getPreviousPostLink($inSameCategory = false) {
-        return previous_post("&laquo; %", "", "yes", ($inSameCategory ? "yes" : "no"));
+    public function getPreviousPostLink($inSameCategory = false, $excluded_terms = array(), $taxonomy = KT_WP_CATEGORY_KEY) {
+        return previous_post_link("&laquo; %link", "%title", $inSameCategory, $excluded_terms, $taxonomy);
     }
 
     /**
@@ -243,8 +259,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @param boolean $inSameCategory
      * @return mixed null|string (HTML)
      */
-    public function getNextPostLink($inSameCategory = false) {
-        return next_post("% &raquo;", "", "yes", ($inSameCategory ? "yes" : "no"));
+    public function getNextPostLink($inSameCategory = false, $excluded_terms = array(), $taxonomy = KT_WP_CATEGORY_KEY) {
+        return next_post_link("%link &raquo;", "%title", $inSameCategory, $excluded_terms, $taxonomy);
     }
 
     /**
@@ -264,7 +280,8 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
 
     /**
      * Vrátí odkaz a image tag na náhledový obrázek v Large velikosti.
-     * 
+     *
+     * @deprecated since version 1.11
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      * 
@@ -377,19 +394,19 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return mixed string || null
      */
     public static function getThumbnailImageByPost(WP_Post $post, $imageSize, array $imageAttr = array(), $defaultImageSrc = null, $isLazyLoading = true) {
+        $defaults = array("alt" => esc_attr($post->post_title));
         if (has_post_thumbnail($post->ID)) {
             $thumbnailId = get_post_thumbnail_id($post->ID);
             $image = wp_get_attachment_image_src($thumbnailId, $imageSize);
             $imageSrc = $image[0];
-            $defaults = array("alt" => $post->post_title);
             //if (!array_key_exists("class", $imageAttr) || !KT::stringContains($imageAttr["class"], "img-responsive")) { // pro responzivní obrázky nechceme pevné rozměry
             $defaults["width"] = $image[1];
             $defaults["height"] = $image[2];
             //}
-            $imageAttr = wp_parse_args($imageAttr, $defaults);
         } else {
             $imageSrc = $defaultImageSrc;
         }
+        $imageAttr = wp_parse_args($imageAttr, $defaults);
         return self::getImageHtmlTag($imageSrc, $imageAttr, $isLazyLoading);
     }
 
@@ -405,20 +422,11 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @return mixed string|null
      */
     public static function getImageHtmlTag($imageSrc, array $imageAttr = array(), $isLazyLoading = true) {
-        $attr = null;
-        if (KT::issetAndNotEmpty($imageSrc)) {
-            $parseAttr = wp_parse_args($imageAttr);
-            if (KT::issetAndNotEmpty($parseAttr)) {
-                foreach ($parseAttr as $attrName => $attrValue) {
-                    $attr .= " $attrName=\"$attrValue\"";
-                }
-            }
-            if ($isLazyLoading) {
-                return apply_filters("post_thumbnail_html", "<img src=\"$imageSrc\"$attr />");
-            }
-            return "<img src=\"$imageSrc\"$attr />";
-        }
-        return null;
+        $image = new KT_Image($imageSrc);
+        $image->setSrc($imageSrc);
+        $image->setIsLazyLoading($isLazyLoading);
+        $image->initialize($imageAttr);
+        return $image->buildHtml();
     }
 
 }

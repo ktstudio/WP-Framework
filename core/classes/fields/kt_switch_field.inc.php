@@ -81,8 +81,11 @@ class KT_Switch_Field extends KT_Field {
      * @return string
      */
     public function getField() {
+        $dataOn = __("Yes", "KT_CORE_DOMAIN");
+        $dataOff = __("No", "KT_CORE_DOMAIN");
+        
         $html = "<div {$this->getAttrClassString()}>";
-        $html .= "<span for=\"{$this->getAttrValueByName("id")}\" {$this->getAttrClassString()} title=\"{$this->getToolTip()}\"></span>";
+        $html .= "<span for=\"{$this->getAttrValueByName("id")}\" {$this->getAttrClassString()} title=\"{$this->getToolTip()}\" data-on=\"$dataOn\" data-off=\"$dataOff\"></span>";
         $html .= "<input type=\"hidden\" ";
         $html .= $this->getBasicHtml();
         $html .= " value=\"{$this->getValue()}\" />";
