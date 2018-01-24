@@ -27,6 +27,21 @@ function kt_date_to_fancy_date($date) {
     return KT_EMPTY_SYMBOL;
 }
 
+add_filter("kt_datetime_to_fancy_datetime", "kt_datetime_to_fancy_datetime", 10, 1);
+
+/**
+ * Filtrační funkce převede libovolné datum a čas na hezké datum a čas
+ * @author Martin Hlaváč
+ * @param string $datetime
+ * @return sting
+ */
+function kt_datetime_to_fancy_datetime($datetime) {
+    if (KT::issetAndNotEmpty($datetime)) {
+        return date("j.n.Y H:s", strtotime($datetime));
+    }
+    return KT_EMPTY_SYMBOL;
+}
+
 add_filter("kt_post_id_to_title", "kt_post_id_to_title", 10, 1);
 
 /**
