@@ -430,9 +430,10 @@ class KT {
      * 
      * @param string $value (datum)
      * @param string $format
+     * @param boolean $withGmt
      * @return string (datum)
      */
-    public static function dateConvert($value, $format = "d.m.Y", $withGmt = true) {
+    public static function dateConvert($value, $format = "d.m.Y", $withGmt = false) {
         if (KT::issetAndNotEmpty($value)) {
             $timeStamp = strtotime($value);
             if ($withGmt) {
