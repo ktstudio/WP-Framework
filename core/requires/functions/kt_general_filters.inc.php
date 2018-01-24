@@ -37,7 +37,7 @@ add_filter("kt_datetime_to_fancy_datetime", "kt_datetime_to_fancy_datetime", 10,
  */
 function kt_datetime_to_fancy_datetime($datetime) {
     if (KT::issetAndNotEmpty($datetime)) {
-        return date("j.n.Y H:s", strtotime($datetime));
+        return date("j.n.Y H:i", strtotime($datetime));
     }
     return KT_EMPTY_SYMBOL;
 }
