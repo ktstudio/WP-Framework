@@ -85,6 +85,7 @@ define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_VIDEO", "video");
 define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_AUDIO", "audio");
 define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_CHAT", "chat");
 // --- taxonomies ------------------------
+define("KT_WP_POST_FORMAT_KEY", "post_format");
 define("KT_WP_TAG_KEY", "post_tag");
 define("KT_WP_CATEGORY_KEY", "category");
 // --- images size ------------------------
