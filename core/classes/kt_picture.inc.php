@@ -67,7 +67,9 @@ class KT_Picture extends KT_Image
     {
         $image = new KT_Picture();
         foreach ($sizes as $maxWidth => $fileName) {
-            if (!KT::stringStartsWith($fileName, "http://")) {
+            if (KT::stringStartsWith($fileName, "http://") || KT::stringStartsWith($fileName, "https://")) {
+                $sizes[$maxWidth] = $fileName;
+            } else {
                 $sizes[$maxWidth] = KT::imageGetUrlFromTheme($fileName);
             }
         }
