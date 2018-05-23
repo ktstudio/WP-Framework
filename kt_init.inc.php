@@ -475,6 +475,14 @@ function kt_load_template_from_subdir($template) {
         }
         return $template;
     }
+    // --- tag ---------------------------
+    if (is_tag()) {
+        $ktTemplate = KT::getTagTemplate($taxonomy);
+        if ($ktTemplate) {
+            return $ktTemplate;
+        }
+        return $template;
+    }
     // --- author -----------------------------
     if (is_author()) {
         return $template;

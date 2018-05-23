@@ -1890,6 +1890,39 @@ class KT {
         return false;
     }
 
+    // --- TAXONOMY ---------------------
+
+    /**
+     * Funkce vrátí tag templatu ze subdir - taxonomies
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $tagName - slug zobrazeného tagu
+     * @return string - template path
+     */
+    public static function getTagTemplate($tagName) {
+        $term = get_queried_object();
+        $file = TEMPLATEPATH . "/tags/tag-{$tagName}-{$term->slug}.php";
+        if (file_exists($file)) {
+            return $file;
+        }
+        $file = TEMPLATEPATH . "/tags/tag-{$tagName}-{$term->term_id}.php";
+        if (file_exists($file)) {
+            return $file;
+        }
+        $file = TEMPLATEPATH . "/tags/tag-{$tagName}.php";
+        if (file_exists($file)) {
+            return $file;
+        }
+        if (file_exists(TEMPLATEPATH . "/tags/tag.php")) {
+            return TEMPLATEPATH . "/tags/tag.php";
+        }
+        return false;
+    }
+
+    // --- TEMPLATE PART ---------------------
+
     /**
      * @author Jan Pokorný
      * @param string $partName
