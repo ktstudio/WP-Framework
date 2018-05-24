@@ -73,18 +73,21 @@ class KT_Checkbox_Field extends KT_Options_Field_Base {
             $html .= $this->getBasicHtml($key);
             $html .= " value=\"$key\" ";
 
+            $checkClassAttribute = null;
             if (KT::issetAndNotEmpty($data)) {
                 if (is_array($data)) {
                     if (in_array($key, array_keys($data))) {
                         $html .= " checked=\"checked\"";
+                        $checkClassAttribute = " class=\"checked\"";
                     }
                 } elseif($key == $data) {
                     $html .= " checked=\"checked\"";
+                    $checkClassAttribute = " class=\"checked\"";
                 }
             }
 
             $filteredValue = filter_var($value, $this->getFilterSanitize());
-            $html .= "> <span class=\"desc-checkbox-{$this->getAttrValueByName("id")}\"><label for=\"{$this->getName()}-{$key}\">$filteredValue</label></span> ";
+            $html .= "> <span class=\"desc-checkbox-{$this->getAttrValueByName("id")}\"><label for=\"{$this->getName()}-{$key}\"$checkClassAttribute>$filteredValue</label></span> ";
 
             if ($this->hasErrorMsg()) {
                 $html .= parent::getHtmlErrorMsg();

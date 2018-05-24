@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Překlad pro WP Framework\n"
-"POT-Creation-Date: 2017-06-02 16:31+0200\n"
+"POT-Creation-Date: 2018-05-24 17:28+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: Brilo Team s.r.o. <team@brilo.cz>\n"
@@ -9,169 +9,170 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Poedit-Basepath: ..\n"
+"X-Poedit-Basepath: ../..\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-0: core\n"
+"X-Poedit-SearchPath-1: kt_init.inc.php\n"
 
-#: classes/admin_screen/kt_custom_metaboxes_base.inc.php:372
+#: core/classes/admin_screen/kt_custom_metaboxes_base.inc.php:372
 msgid "Data were stored."
 msgstr "Data byla uložena."
 
-#: classes/admin_screen/kt_custom_metaboxes_base.inc.php:490
-#: classes/admin_screen/kt_custom_metaboxes_base.inc.php:509
-#: presenters/kt_user_profile_base_presenter.inc.php:391
+#: core/classes/admin_screen/kt_custom_metaboxes_base.inc.php:490
+#: core/classes/admin_screen/kt_custom_metaboxes_base.inc.php:509
+#: core/presenters/kt_user_profile_base_presenter.inc.php:391
 msgid "Save Settings"
 msgstr "Uložit nastavení"
 
-#: classes/configurator/kt_wp_configurator.inc.php:621
-#: classes/configurator/kt_wp_configurator.inc.php:1108
-#: requires/functions/kt_general_functions.inc.php:94
+#: core/classes/configurator/kt_wp_configurator.inc.php:670
+#: core/classes/configurator/kt_wp_configurator.inc.php:1162
+#: core/requires/functions/kt_general_functions.inc.php:94
 msgid "Theme Settings"
 msgstr "Nastavení šablony"
 
-#: classes/configurator/kt_wp_configurator.inc.php:923
-#: widgets/kt_quick_contact_widget.inc.php:32
-#: widgets/kt_quick_contact_widget.inc.php:61
+#: core/classes/configurator/kt_wp_configurator.inc.php:977
+#: core/widgets/kt_quick_contact_widget.inc.php:32
+#: core/widgets/kt_quick_contact_widget.inc.php:61
 msgid "Phone"
 msgstr "Telefon"
 
-#: classes/configurator/kt_wp_configurator.inc.php:1367
+#: core/classes/configurator/kt_wp_configurator.inc.php:1421
 msgid "Archives"
 msgstr "Archivy"
 
-#: classes/configurator/kt_wp_configurator.inc.php:1408
+#: core/classes/configurator/kt_wp_configurator.inc.php:1462
 msgid "Add to menu"
 msgstr "Přidat do menu"
 
-#: classes/configurator/kt_wp_configurator.inc.php:1514
+#: core/classes/configurator/kt_wp_configurator.inc.php:1568
 msgid ""
 "This site uses cookies. By using this site you consent to the use of Cookies."
 msgstr ""
 "Tyto stránky využívají Cookies. Používáním těchto stránek vyjadřujete "
 "souhlas s používáním Cookies."
 
-#: classes/configurator/kt_wp_configurator.inc.php:1515
+#: core/classes/configurator/kt_wp_configurator.inc.php:1569
 msgid "Find out more"
 msgstr "Zjistit více"
 
-#: classes/configurator/kt_wp_configurator.inc.php:1517
+#: core/classes/configurator/kt_wp_configurator.inc.php:1571
 msgid "OK, i understand"
 msgstr "Ok, rozumím"
 
-#: classes/configurator/kt_wp_facebook_data_configurator.inc.php:215
+#: core/classes/configurator/kt_wp_facebook_data_configurator.inc.php:215
 #, php-format
 msgid "Search for: %s"
 msgstr "Vyhledávání pro: %s"
 
-#: classes/configurator/kt_wp_facebook_data_configurator.inc.php:235
+#: core/classes/configurator/kt_wp_facebook_data_configurator.inc.php:235
 #, php-format
 msgid "Error 404 - %s"
 msgstr "Chyba 404 - %s"
 
-#: classes/crud/kt_crud_admin_column.inc.php:379
+#: core/classes/crud/kt_crud_admin_column.inc.php:379
 msgid "Detail"
 msgstr "Detail"
 
-#: classes/crud/kt_crud_admin_column.inc.php:382
+#: core/classes/crud/kt_crud_admin_column.inc.php:382
 msgid "Permanently delete this item"
 msgstr "Trvale odstranit tento záznam"
 
-#: classes/crud/kt_crud_admin_column.inc.php:382
+#: core/classes/crud/kt_crud_admin_column.inc.php:382
 msgid "delete"
 msgstr "smazat"
 
-#: classes/crud/kt_crud_admin_list.inc.php:308
+#: core/classes/crud/kt_crud_admin_list.inc.php:308
 msgid "Add new item"
 msgstr "Přidat nový řádek"
 
-#: classes/crud/kt_crud_admin_list.inc.php:360
+#: core/classes/crud/kt_crud_admin_list.inc.php:360
 msgid "Order"
 msgstr "Pořadí"
 
-#: classes/custom_url/kt_custom_template.inc.php:111
+#: core/classes/custom_url/kt_custom_template.inc.php:111
 #, php-format
 msgid "This file %s doesn`t exist!"
 msgstr "Tento soubor \"%s\" nexistuje."
 
-#: classes/custom_url/kt_custom_template.inc.php:141
+#: core/classes/custom_url/kt_custom_template.inc.php:141
 #, php-format
 msgid "This path %s doesn`t exist!"
 msgstr "Tato cesta \"%s\" neexistuje!"
 
-#: classes/fields/kt_fieldset_field.inc.php:166
+#: core/classes/fields/kt_fieldset_field.inc.php:166
 msgid "Error at dynamic form"
 msgstr "Chyba v dynamickém formuláři"
 
-#: classes/fields/kt_fieldset_field.inc.php:243
+#: core/classes/fields/kt_fieldset_field.inc.php:243
 msgid "Add new line"
 msgstr "Přidat nový záznam"
 
-#: classes/fields/kt_fieldset_field.inc.php:305
+#: core/classes/fields/kt_fieldset_field.inc.php:305
 msgid "Remove"
 msgstr "Odstranit"
 
-#: classes/fields/kt_media_field.inc.php:108
+#: core/classes/fields/kt_media_field.inc.php:108
 msgid "Select file"
 msgstr "Vybrat soubor"
 
-#: classes/fields/kt_media_field.inc.php:146
+#: core/classes/fields/kt_media_field.inc.php:146
 msgid "File was removed"
 msgstr "Soubor byl smazán"
 
-#: classes/fields/kt_media_field.inc.php:150
+#: core/classes/fields/kt_media_field.inc.php:150
 msgid "Files were removed"
 msgstr "Soubor(y) byl(y) smazán(y)."
 
-#: classes/fields/kt_options_field_base.inc.php:70
-#: classes/fields/kt_switch_field.inc.php:84
-#: classes/fields/kt_switch_field.inc.php:156
+#: core/classes/fields/kt_options_field_base.inc.php:70
+#: core/classes/fields/kt_switch_field.inc.php:84
+#: core/classes/fields/kt_switch_field.inc.php:156
 msgid "Yes"
 msgstr "Ano"
 
-#: classes/fields/kt_options_field_base.inc.php:71
-#: classes/fields/kt_switch_field.inc.php:85
-#: classes/fields/kt_switch_field.inc.php:158
+#: core/classes/fields/kt_options_field_base.inc.php:71
+#: core/classes/fields/kt_switch_field.inc.php:85
+#: core/classes/fields/kt_switch_field.inc.php:158
 msgid "No"
 msgstr "Ne"
 
-#: classes/fields/kt_slider_field.inc.php:37
-#: classes/fields/kt_slider_field_base.inc.php:43
+#: core/classes/fields/kt_slider_field.inc.php:37
+#: core/classes/fields/kt_slider_field_base.inc.php:43
 #, php-format
 msgid "Min value is %d"
 msgstr "Minimální hodnota je %d"
 
-#: classes/fields/kt_slider_field.inc.php:52
-#: classes/fields/kt_slider_field_base.inc.php:65
+#: core/classes/fields/kt_slider_field.inc.php:52
+#: core/classes/fields/kt_slider_field_base.inc.php:65
 #, php-format
 msgid "Max value is %d"
 msgstr "Maximální hodnota je %d"
 
-#: classes/fields/kt_switch_field.inc.php:118
+#: core/classes/fields/kt_switch_field.inc.php:118
 #, php-format
 msgid "Value \"%s\" is not a logical type"
 msgstr "Hodnota \"%s\" není logického typu"
 
-#: classes/fields/kt_switch_field.inc.php:140
+#: core/classes/fields/kt_switch_field.inc.php:140
 #, php-format
 msgid "Value \"%s\" is not type of KT Switch array"
 msgstr "Hodnota \"%s\" není typu KT Switch - hodnot"
 
-#: classes/fields/kt_wp_nonce_field.inc.php:113
+#: core/classes/fields/kt_wp_nonce_field.inc.php:113
 msgid "Error processing - call"
 msgstr "Chyba zpracování - volání"
 
-#: classes/form/kt_form.inc.php:36
+#: core/classes/form/kt_form.inc.php:36
 msgid "Data were stored"
 msgstr "Data byla uložena"
 
-#: classes/form/kt_form.inc.php:37
+#: core/classes/form/kt_form.inc.php:37
 msgid "Error occurred in this form"
 msgstr "Ve formuláři nastala chyba"
 
-#: classes/form/kt_form.inc.php:1050
+#: core/classes/form/kt_form.inc.php:1050
 msgid ""
 "Some of the data has not been saved. Please check your input and repeat the "
 "process"
@@ -179,463 +180,472 @@ msgstr ""
 "Některé data nebyly správně uložena. Prosím, zkontrolujte vstupní hodnoty a "
 "proces opakujte."
 
-#: classes/form/kt_form_fieldset.inc.php:982
+#: core/classes/form/kt_form_fieldset.inc.php:984
 msgid "Set a valid email address"
 msgstr "Nastavte validní emailovou adresu"
 
-#: classes/form/kt_form_fieldset.inc.php:997
+#: core/classes/form/kt_form_fieldset.inc.php:999
 msgid "Set a valid URL address"
 msgstr "Nastavte validní URL adresu"
 
-#: classes/form/kt_form_fieldset.inc.php:1011
+#: core/classes/form/kt_form_fieldset.inc.php:1013
 msgid "Set a valid integer"
 msgstr "Nastavte validní celé číslo"
 
-#: classes/form/kt_form_fieldset.inc.php:1025
+#: core/classes/form/kt_form_fieldset.inc.php:1027
 msgid "Set a valid decimal number"
 msgstr "Nastavte validní desetinné číslo"
 
-#: classes/kt.inc.php:567
-#: requires/functions/kt_deprecated_functions.inc.php:273
+#: core/classes/kt.inc.php:581
+#: core/requires/functions/kt_deprecated_functions.inc.php:273
 msgid "You do not have sufficient privileges to access this page."
 msgstr "Nemáte dostatečné oprávnění pro vstup na tuto stránku."
 
-#: classes/kt.inc.php:1294
+#: core/classes/kt.inc.php:1328
 msgid "&laquo; Previous"
 msgstr "&laquo; Předchozí"
 
-#: classes/kt.inc.php:1295
+#: core/classes/kt.inc.php:1329
 msgid "Next &raquo;"
 msgstr "Další &raquo;"
 
-#: classes/kt_admin_columns.inc.php:151
+#: core/classes/kt_admin_columns.inc.php:152
 #, php-format
 msgid "Column type: %s"
 msgstr "Typ sloupce: %s"
 
-#: classes/kt_enum.inc.php:63
+#: core/classes/kt_enum.inc.php:63
 #, php-format
 msgid "Invalid enumeration value: %s!"
 msgstr "Chybná enumerická hodnota: %s!"
 
-#: classes/kt_enum.inc.php:112
+#: core/classes/kt_enum.inc.php:112
 #, php-format
 msgid "Invalid enumeral key : %s!"
 msgstr "Chybná enumerický klíč: %s!"
 
-#: classes/kt_mailer.inc.php:159
+#: core/classes/kt_mailer.inc.php:164
 #, php-format
 msgid "Reciver \"%s\" is not valid e-mail address!"
 msgstr "Příjemce “%s” není platná emailová adresa!"
 
-#: classes/kt_mailer.inc.php:187 classes/kt_mailer.inc.php:359
+#: core/classes/kt_mailer.inc.php:192 core/classes/kt_mailer.inc.php:378
 #, php-format
 msgid "Copy \"%s\" is not valid email address!"
 msgstr "Kopie \"%s\" není validní emailová adresa!"
 
-#: classes/kt_mailer.inc.php:206 classes/kt_mailer.inc.php:378
+#: core/classes/kt_mailer.inc.php:211 core/classes/kt_mailer.inc.php:397
 #, php-format
 msgid "Hidden copy \"%s\" is not valid email address!"
 msgstr "Skrytá kopie \"%s\" není validní emailová adresa!"
 
-#: classes/kt_mailer.inc.php:225
+#: core/classes/kt_mailer.inc.php:230
 #, php-format
 msgid "Sender \"%s\" is not valid email address!"
 msgstr "Odesílatel \"%s\" není validní emailová adresa."
 
-#: classes/kt_mailer.inc.php:241
+#: core/classes/kt_mailer.inc.php:246
 #, php-format
 msgid "Reply to \"%s\" is not valid email address!"
 msgstr "Přeposlat \"%s\" není validní emailová adresa."
 
-#: classes/kt_mailer.inc.php:340
+#: core/classes/kt_mailer.inc.php:359
 #, php-format
 msgid "Reciver \"%s\" is not valid email address!"
 msgstr "Příjemce “%s” není platná emailová adresa!"
 
-#: classes/kt_metabox.inc.php:750
+#: core/classes/kt_metabox.inc.php:750
 msgid "Only form with set postPrefix are supported"
 msgstr "Zatím jsou podporovány pouze formulář s nastaveným postPrefix."
 
-#: classes/kt_metabox.inc.php:760
+#: core/classes/kt_metabox.inc.php:760
 #, php-format
 msgid "Date type of metabox: %s"
 msgstr "Datový typ metaboxu: %s"
 
-#: classes/kt_term_metabox.inc.php:26
+#: core/classes/kt_term_metabox.inc.php:26
 msgid ""
 "If you want work with term meta, you must set postPrefix to your fieldset."
 msgstr "Pro práci s term meta musí mít fieldset nastavený postPrefix."
 
-#: classes/validators/kt_field_validator.inc.php:251
-msgid "Parameter to validate the range must be an array type."
+#: core/classes/validators/kt_field_validator.inc.php:250
+msgid "The value for the validate range must be an array type."
 msgstr "Hodnota pro kontrolu rozsahu musí být typu pole."
 
-#: classes/validators/kt_field_validator.inc.php:285
-msgid "Parameter to validate the length must be assigned."
-msgstr "Hodnota pro kontrolu délky musi být zadána."
+#: core/classes/validators/kt_field_validator.inc.php:284
+msgid "Value for validate the length must be assigned."
+msgstr "Hodnota pro kontrolu délky musí být zadána."
 
-#: classes/validators/kt_field_validator.inc.php:313
+#: core/classes/validators/kt_field_validator.inc.php:312
 msgid ""
 "Parameter to validate the maximum length must be assigned and numeric type."
 msgstr "Hodnota pro kontrolu maximální délky musi být zadáná a čísleného typu."
 
-#: classes/validators/kt_field_validator.inc.php:341
+#: core/classes/validators/kt_field_validator.inc.php:340
 msgid ""
 "Parameter to validate the minimumm length must be assigned and numeric type."
 msgstr "Hodnota pro kontrolu minimální délky musi být zadáná a čísleného typu."
 
-#: classes/validators/kt_field_validator.inc.php:362
+#: core/classes/validators/kt_field_validator.inc.php:361
 msgid "Parameter to validate the maximum number must be assigned and integer."
 msgstr ""
 "Hodnota pro kontrolu maximálního čísla musí být zadána a číselného typu."
 
-#: classes/validators/kt_field_validator.inc.php:394
+#: core/classes/validators/kt_field_validator.inc.php:393
 msgid "Parameter to validate the minimum number must be assigned and integer."
 msgstr ""
 "Hodnota pro kontrolu minimálního čísla musí být zadána a číselného typu."
 
-#: configs/kt_catalog_base_config.inc.php:27
+#: core/configs/kt_catalog_base_config.inc.php:27
 msgid "Name*: "
 msgstr "Jméno*:"
 
-#: configs/kt_catalog_base_config.inc.php:29
+#: core/configs/kt_catalog_base_config.inc.php:29
 msgid "The name must have at least 3 characters"
 msgstr "Jméno musí mít minimálně 3 znaky"
 
-#: configs/kt_catalog_base_config.inc.php:30
+#: core/configs/kt_catalog_base_config.inc.php:30
 msgid "The name can have a maximum of 50 characters"
 msgstr "Jméno může mít maximálně 50 znaků"
 
-#: configs/kt_catalog_base_config.inc.php:32
+#: core/configs/kt_catalog_base_config.inc.php:32
 msgid "Description: "
 msgstr "Popisek:"
 
-#: configs/kt_catalog_base_config.inc.php:34
+#: core/configs/kt_catalog_base_config.inc.php:34
 msgid "Additional detail - information character..."
 msgstr "Doplňující údaj informačního charakteru..."
 
-#: configs/kt_catalog_base_config.inc.php:36
+#: core/configs/kt_catalog_base_config.inc.php:36
 msgid "Code: "
 msgstr "Kód:"
 
-#: configs/kt_catalog_base_config.inc.php:38
+#: core/configs/kt_catalog_base_config.inc.php:38
 msgid "The code can have a maximum of 30 characters"
 msgstr "Kód může mít maximálně 30 znaků"
 
-#: configs/kt_catalog_base_config.inc.php:40
+#: core/configs/kt_catalog_base_config.inc.php:40
 msgid "Visibility*: "
 msgstr "Viditelnost*:"
 
-#: configs/kt_catalog_base_config.inc.php:42
+#: core/configs/kt_catalog_base_config.inc.php:42
 msgid "Visibility is required"
 msgstr "Viditelnost je povinná položka"
 
-#: configs/kt_catalog_base_config.inc.php:75
+#: core/configs/kt_catalog_base_config.inc.php:75
 msgid "Title"
 msgstr "Titulek"
 
-#: configs/kt_catalog_base_config.inc.php:79
+#: core/configs/kt_catalog_base_config.inc.php:79
 msgid "Code"
 msgstr "Kód"
 
-#: configs/kt_catalog_base_config.inc.php:85
+#: core/configs/kt_catalog_base_config.inc.php:85
 msgid "Visibility"
 msgstr "Viditelnost"
 
-#: configs/kt_comment_config.inc.php:41
+#: core/configs/kt_comment_config.inc.php:41
 msgid "Comment*:"
 msgstr "Komentář*:"
 
-#: configs/kt_comment_config.inc.php:43
+#: core/configs/kt_comment_config.inc.php:43
 msgid "Comment is required."
 msgstr "Komentář je povinná položka."
 
-#: configs/kt_comment_config.inc.php:44
+#: core/configs/kt_comment_config.inc.php:44
 msgid "Comment can be up to 1000 characters."
 msgstr "Komentář může mít maximálně 1000 znaků."
 
-#: configs/kt_comment_config.inc.php:46
-#: configs/kt_contact_form_base_config.inc.php:45
+#: core/configs/kt_comment_config.inc.php:46
+#: core/configs/kt_contact_form_base_config.inc.php:46
 msgid "Name*:"
 msgstr "Jméno*:"
 
-#: configs/kt_comment_config.inc.php:49
+#: core/configs/kt_comment_config.inc.php:49
 msgid "Name is required."
 msgstr "Jméno je povinná položka."
 
-#: configs/kt_comment_config.inc.php:50
+#: core/configs/kt_comment_config.inc.php:50
 msgid "Name can be up to 50 characters."
 msgstr "Jméno může mít maximálně 50 znaků."
 
-#: configs/kt_comment_config.inc.php:52
-#: configs/kt_contact_form_base_config.inc.php:52
-#: configs/kt_user_profile_config.inc.php:40
+#: core/configs/kt_comment_config.inc.php:52
+#: core/configs/kt_contact_form_base_config.inc.php:53
+#: core/configs/kt_user_profile_config.inc.php:40
 msgid "E-mail*:"
 msgstr "E-mail*:"
 
-#: configs/kt_comment_config.inc.php:56
-#: configs/kt_user_profile_config.inc.php:43
+#: core/configs/kt_comment_config.inc.php:56
+#: core/configs/kt_user_profile_config.inc.php:43
 msgid "E-mail is required."
 msgstr "E-mail je povinná položka."
 
-#: configs/kt_comment_config.inc.php:57
-#: configs/kt_user_profile_config.inc.php:44
+#: core/configs/kt_comment_config.inc.php:57
+#: core/configs/kt_user_profile_config.inc.php:44
 msgid "Invalid e-mail address."
 msgstr "Neplatná e-mailová adresa."
 
-#: configs/kt_comment_config.inc.php:58
+#: core/configs/kt_comment_config.inc.php:58
 msgid "E-mail can be up to 10 characters."
 msgstr "E-mail může mít maximálně 10 znaků."
 
-#: configs/kt_comment_config.inc.php:60
+#: core/configs/kt_comment_config.inc.php:60
 msgid "Website:"
 msgstr "Webové stránky:"
 
-#: configs/kt_comment_config.inc.php:62
+#: core/configs/kt_comment_config.inc.php:62
 msgid "Website can be up to 50 characters."
 msgstr "Webové stránky mohou mít maximálně 50 znaků."
 
-#: configs/kt_comment_config.inc.php:64 configs/kt_comment_config.inc.php:66
-#: configs/kt_contact_form_base_config.inc.php:76
-#: configs/kt_contact_form_base_config.inc.php:81
+#: core/configs/kt_comment_config.inc.php:64
+#: core/configs/kt_comment_config.inc.php:66
+#: core/configs/kt_contact_form_base_config.inc.php:80
+#: core/configs/kt_contact_form_base_config.inc.php:85
 msgid "Checker:"
 msgstr "Kontrola:"
 
-#: configs/kt_comment_config.inc.php:87
+#: core/configs/kt_comment_config.inc.php:87
 msgid "Comments are required."
 msgstr "Komentář je povinná položka."
 
-#: configs/kt_comment_config.inc.php:88
+#: core/configs/kt_comment_config.inc.php:88
 msgid "Comments can be up to 1000 characters."
 msgstr "Komentář může mít maximálně 1000 znaků."
 
-#: configs/kt_comment_config.inc.php:107
+#: core/configs/kt_comment_config.inc.php:107
 msgid "Do not fill if you are human"
 msgstr "Nevyplňujte pokud jste člověk"
 
-#: configs/kt_contact_form_base_config.inc.php:30
+#: core/configs/kt_contact_form_base_config.inc.php:31
 msgid "Contact"
 msgstr "Kontakt"
 
-#: configs/kt_contact_form_base_config.inc.php:34
-#: configs/kt_user_profile_config.inc.php:30
+#: core/configs/kt_contact_form_base_config.inc.php:35
+#: core/configs/kt_user_profile_config.inc.php:30
 msgid "First name*:"
 msgstr "Jméno*:"
 
-#: configs/kt_contact_form_base_config.inc.php:35
+#: core/configs/kt_contact_form_base_config.inc.php:36
 msgid "First name*"
 msgstr "Jméno*"
 
-#: configs/kt_contact_form_base_config.inc.php:37
+#: core/configs/kt_contact_form_base_config.inc.php:38
 msgid "First name is required"
 msgstr "Jméno je povinná položka"
 
-#: configs/kt_contact_form_base_config.inc.php:38
+#: core/configs/kt_contact_form_base_config.inc.php:39
 msgid "The first can be up to 30 characters"
 msgstr "Jméno může mít maximálně 30 znaků"
 
-#: configs/kt_contact_form_base_config.inc.php:39
-#: configs/kt_user_profile_config.inc.php:35
+#: core/configs/kt_contact_form_base_config.inc.php:40
+#: core/configs/kt_user_profile_config.inc.php:35
 msgid "Last name*:"
 msgstr "Příjmení*:"
 
-#: configs/kt_contact_form_base_config.inc.php:40
+#: core/configs/kt_contact_form_base_config.inc.php:41
 msgid "Last name*"
 msgstr "Příjmení*"
 
-#: configs/kt_contact_form_base_config.inc.php:42
+#: core/configs/kt_contact_form_base_config.inc.php:43
 msgid "Last name is required"
 msgstr "Příjmení je povinná položka"
 
-#: configs/kt_contact_form_base_config.inc.php:43
+#: core/configs/kt_contact_form_base_config.inc.php:44
 msgid "The last name can be up to 30 characters"
 msgstr "Příjmení může mít maximálně 30 znaků"
 
-#: configs/kt_contact_form_base_config.inc.php:46
+#: core/configs/kt_contact_form_base_config.inc.php:47
 msgid "Name*"
 msgstr "Jméno*"
 
-#: configs/kt_contact_form_base_config.inc.php:48
+#: core/configs/kt_contact_form_base_config.inc.php:49
 msgid "Name is required"
 msgstr "Jméno je povinná položka"
 
-#: configs/kt_contact_form_base_config.inc.php:49
+#: core/configs/kt_contact_form_base_config.inc.php:50
 msgid "The name can be up to 30 characters"
 msgstr "Jméno může mít maximálně 30 znaků"
 
-#: configs/kt_contact_form_base_config.inc.php:53
+#: core/configs/kt_contact_form_base_config.inc.php:54
 msgid "E-mail*"
 msgstr "E-mail*"
 
-#: configs/kt_contact_form_base_config.inc.php:55
+#: core/configs/kt_contact_form_base_config.inc.php:56
 msgid "E-mail is required"
 msgstr "E-mail je povinná položka"
 
-#: configs/kt_contact_form_base_config.inc.php:56
+#: core/configs/kt_contact_form_base_config.inc.php:57
 msgid "Invalid e-mail address"
 msgstr "Chybný tvar e-mailové adresy"
 
-#: configs/kt_contact_form_base_config.inc.php:57
+#: core/configs/kt_contact_form_base_config.inc.php:58
 msgid "The e-mail can be up to 100 characters"
 msgstr "E-mail může mít maximálně 100 znaků"
 
-#: configs/kt_contact_form_base_config.inc.php:59
-#: configs/kt_user_profile_config.inc.php:48
+#: core/configs/kt_contact_form_base_config.inc.php:60
+#: core/configs/kt_user_profile_config.inc.php:48
 msgid "Phone*:"
 msgstr "Telefon*:"
 
-#: configs/kt_contact_form_base_config.inc.php:60
+#: core/configs/kt_contact_form_base_config.inc.php:61
 msgid "Phone*"
 msgstr "Telefon*"
 
-#: configs/kt_contact_form_base_config.inc.php:62
+#: core/configs/kt_contact_form_base_config.inc.php:63
 msgid "The phone number can be up to 30 characters"
 msgstr "Telefonní číslo může mít maximálně 30 znaků"
 
-#: configs/kt_contact_form_base_config.inc.php:64
+#: core/configs/kt_contact_form_base_config.inc.php:65
 msgid "Phone is required"
 msgstr "Telefon je povinná položka"
 
-#: configs/kt_contact_form_base_config.inc.php:67
+#: core/configs/kt_contact_form_base_config.inc.php:68
 msgid "Invalid phone number"
 msgstr "Neplatné telefonní číslo"
 
-#: configs/kt_contact_form_base_config.inc.php:70
+#: core/configs/kt_contact_form_base_config.inc.php:71
 msgid "Message*:"
 msgstr "Zpráva*:"
 
-#: configs/kt_contact_form_base_config.inc.php:71
+#: core/configs/kt_contact_form_base_config.inc.php:72
 msgid "Message*"
 msgstr "Zpráva*"
 
-#: configs/kt_contact_form_base_config.inc.php:73
+#: core/configs/kt_contact_form_base_config.inc.php:74
 msgid "Message is required"
 msgstr "Zpráva je povinná položka"
 
-#: configs/kt_contact_form_base_config.inc.php:74
+#: core/configs/kt_contact_form_base_config.inc.php:75
 msgid "The message can be up to 1000 characters"
 msgstr "Zpráva může mít maximálně 1000 znaků"
 
-#: configs/kt_contact_form_base_config.inc.php:77
+#: core/configs/kt_contact_form_base_config.inc.php:77
+msgid "Agreement:"
+msgstr "Souhlas:"
+
+#: core/configs/kt_contact_form_base_config.inc.php:78
+msgid "I agree with the processing of personal data"
+msgstr "Souhlasím se zpracováním osobních údajů"
+
+#: core/configs/kt_contact_form_base_config.inc.php:81
 msgid "Do not fill if your are human"
 msgstr "Nevyplňujte pokud jste člověk"
 
-#: configs/kt_dynamic_fieldset_predefined_config.inc.php:20
+#: core/configs/kt_dynamic_fieldset_predefined_config.inc.php:20
 msgid "Parameters"
 msgstr "Prametry"
 
-#: configs/kt_dynamic_fieldset_predefined_config.inc.php:21
+#: core/configs/kt_dynamic_fieldset_predefined_config.inc.php:21
 msgid "Key:"
 msgstr "Klíč:"
 
-#: configs/kt_dynamic_fieldset_predefined_config.inc.php:22
+#: core/configs/kt_dynamic_fieldset_predefined_config.inc.php:22
 msgid "Value:"
 msgstr "Hodnota:"
 
-#: configs/kt_user_profile_config.inc.php:33
+#: core/configs/kt_user_profile_config.inc.php:33
 msgid "First name is required."
 msgstr "Jméno je povinná položka."
 
-#: configs/kt_user_profile_config.inc.php:34
+#: core/configs/kt_user_profile_config.inc.php:34
 msgid "The first name can be up to 30 characters."
 msgstr "Jméno může mít maximálně 30 znaků."
 
-#: configs/kt_user_profile_config.inc.php:38
+#: core/configs/kt_user_profile_config.inc.php:38
 msgid "Last name is required."
 msgstr "Příjmení je povinná položka."
 
-#: configs/kt_user_profile_config.inc.php:39
+#: core/configs/kt_user_profile_config.inc.php:39
 msgid "The last name can be up to 30 characters."
 msgstr "Příjmení může mít maximálně 30 znaků."
 
-#: configs/kt_user_profile_config.inc.php:45
+#: core/configs/kt_user_profile_config.inc.php:45
 msgid "The e-mail address can be up to 50 characters."
 msgstr "E-mailová adresa může mít maximálně 50 znaků."
 
-#: configs/kt_user_profile_config.inc.php:48
+#: core/configs/kt_user_profile_config.inc.php:48
 msgid "Phone:"
 msgstr "Telefon:"
 
-#: configs/kt_user_profile_config.inc.php:52
+#: core/configs/kt_user_profile_config.inc.php:52
 msgid "+420 606 707 808"
 msgstr "+420 606 707 808"
 
-#: configs/kt_user_profile_config.inc.php:53
+#: core/configs/kt_user_profile_config.inc.php:53
 msgid ""
 "The phone should be in international form, for example: \"+420 606 707 "
 "808\"..."
 msgstr "Telefon by měl být v mezinároním formátu, např.: “+420 606 707 808”…"
 
-#: configs/kt_user_profile_config.inc.php:54
+#: core/configs/kt_user_profile_config.inc.php:54
 msgid "The phone can have a maximum of 16 characters."
 msgstr "Telefon může mít maximálně 16 znaků."
 
-#: configs/kt_user_profile_config.inc.php:56
+#: core/configs/kt_user_profile_config.inc.php:56
 msgid "Phone is required."
 msgstr "Telefon je povinná položka."
 
-#: configs/kt_user_profile_config.inc.php:67
+#: core/configs/kt_user_profile_config.inc.php:67
 msgid "Password*:"
 msgstr "Heslo*:"
 
-#: configs/kt_user_profile_config.inc.php:70
+#: core/configs/kt_user_profile_config.inc.php:70
 msgid "The password can have a minimum of 7 characters."
 msgstr "Heslo musí mít minimálně 7 znaků."
 
-#: configs/kt_user_profile_config.inc.php:71
+#: core/configs/kt_user_profile_config.inc.php:71
 msgid "The password can have a maximum of 30 characters."
 msgstr "Heslo může mít maximálně 30 znaků."
 
-#: configs/kt_user_profile_config.inc.php:72
-#: configs/kt_user_profile_config.inc.php:102
+#: core/configs/kt_user_profile_config.inc.php:72
+#: core/configs/kt_user_profile_config.inc.php:102
 msgid "Password confirmation*:"
 msgstr "Potvrzení hesla*:"
 
-#: configs/kt_user_profile_config.inc.php:75
-#: configs/kt_user_profile_config.inc.php:105
+#: core/configs/kt_user_profile_config.inc.php:75
+#: core/configs/kt_user_profile_config.inc.php:105
 msgid "The password confirmation can have a minimum of 7 characters."
 msgstr "Potvrzení hesla musí mít minimálně 7 znaků."
 
-#: configs/kt_user_profile_config.inc.php:76
-#: configs/kt_user_profile_config.inc.php:106
+#: core/configs/kt_user_profile_config.inc.php:76
+#: core/configs/kt_user_profile_config.inc.php:106
 msgid "The password confirmation can have a maximum of 30 characters."
 msgstr "Potvrzení hesla může mít maximálně 30 znaků."
 
-#: configs/kt_user_profile_config.inc.php:77
-#: configs/kt_user_profile_config.inc.php:107
+#: core/configs/kt_user_profile_config.inc.php:77
+#: core/configs/kt_user_profile_config.inc.php:107
 msgid "Type again your new password."
 msgstr "Znovu napište své nové heslo."
 
-#: configs/kt_user_profile_config.inc.php:88
+#: core/configs/kt_user_profile_config.inc.php:88
 msgid "Password change"
 msgstr "Změna hesla"
 
-#: configs/kt_user_profile_config.inc.php:91
+#: core/configs/kt_user_profile_config.inc.php:91
 msgid "Current password*:"
 msgstr "Aktuální heslo*:"
 
-#: configs/kt_user_profile_config.inc.php:94
+#: core/configs/kt_user_profile_config.inc.php:94
 msgid "The current password can have a minimum of 7 characters."
 msgstr "Aktuální heslo musí mít minimálně 7 znaků."
 
-#: configs/kt_user_profile_config.inc.php:95
+#: core/configs/kt_user_profile_config.inc.php:95
 msgid "The current password can have a maximum of 30 characters."
 msgstr "Aktuální heslo může mít maximálně 30 znaků."
 
-#: configs/kt_user_profile_config.inc.php:97
+#: core/configs/kt_user_profile_config.inc.php:97
 msgid "New password*:"
 msgstr "Nové heslo*:"
 
-#: configs/kt_user_profile_config.inc.php:100
+#: core/configs/kt_user_profile_config.inc.php:100
 msgid "The new password can have a minimum of 7 characters."
 msgstr "Heslo musí mít minimálně 7 znaků."
 
-#: configs/kt_user_profile_config.inc.php:101
+#: core/configs/kt_user_profile_config.inc.php:101
 msgid "The new password can have a maximum of 30 characters."
 msgstr "Heslo může mít maximálně 30 znaků."
 
-#: exceptions/kt_bad_file_name_exception.inc.php:15
+#: core/exceptions/kt_bad_file_name_exception.inc.php:15
 msgid ""
 "The file name does not match the established conventions, viz. KT prefix and "
 "suffix INC ..."
@@ -643,7 +653,7 @@ msgstr ""
 "Název souboru neodpovídá stanoveným konvencím, viz. KT předpona a INC "
 "přípona..."
 
-#: exceptions/kt_bad_file_name_exception.inc.php:24
+#: core/exceptions/kt_bad_file_name_exception.inc.php:24
 #, php-format
 msgid ""
 "File name: %s \n"
@@ -652,11 +662,11 @@ msgstr ""
 "Název soubor: %s \n"
 " %s"
 
-#: exceptions/kt_duplicate_exception.inc.php:24
+#: core/exceptions/kt_duplicate_exception.inc.php:24
 msgid "Duplicate entry: "
 msgstr "Duplicitní položka:"
 
-#: exceptions/kt_not_exist_config_constant_exception.inc.php:12
+#: core/exceptions/kt_not_exist_config_constant_exception.inc.php:12
 #, php-format
 msgid ""
 "Nonexistent constant in the config \"% s \" based on the function call: "
@@ -665,11 +675,11 @@ msgstr ""
 "Neexistující konstanta na configu: \\\"%s\\\" na základě volání funkce: \\"
 "\"%s->%s\\\""
 
-#: exceptions/kt_not_implemented_exception.inc.php:15
+#: core/exceptions/kt_not_implemented_exception.inc.php:15
 msgid "Operation is not implemented!"
 msgstr "Operace není implementována!"
 
-#: exceptions/kt_not_implemented_exception.inc.php:24
+#: core/exceptions/kt_not_implemented_exception.inc.php:24
 #, php-format
 msgid ""
 "unimplemented operation: %s \n"
@@ -678,12 +688,12 @@ msgstr ""
 "Neimplementovaná operace : %s \n"
 " %s"
 
-#: exceptions/kt_not_set_argument_exception.inc.php:15
-#: exceptions/kt_null_reference_exception.php:15
+#: core/exceptions/kt_not_set_argument_exception.inc.php:15
+#: core/exceptions/kt_null_reference_exception.php:15
 msgid "The argument is unassigned or NULL!"
 msgstr "Zadaný argument je nepřiřazený nebo NULL!"
 
-#: exceptions/kt_not_set_argument_exception.inc.php:24
+#: core/exceptions/kt_not_set_argument_exception.inc.php:24
 #, php-format
 msgid ""
 "Argument: %s \n"
@@ -692,11 +702,11 @@ msgstr ""
 "Argument: %s \n"
 " %s"
 
-#: exceptions/kt_not_supported_exception.inc.php:15
+#: core/exceptions/kt_not_supported_exception.inc.php:15
 msgid "Operation is not supported!!"
 msgstr "Operace není podporována!"
 
-#: exceptions/kt_not_supported_exception.inc.php:24
+#: core/exceptions/kt_not_supported_exception.inc.php:24
 #, php-format
 msgid ""
 "Unsupported operation %s \n"
@@ -705,65 +715,65 @@ msgstr ""
 "Nepodporovaná operace: %s \n"
 " %s"
 
-#: exceptions/kt_null_reference_exception.php:24
+#: core/exceptions/kt_null_reference_exception.php:24
 #, php-format
 msgid "Empty value for: %s n %s"
 msgstr "Prázdná hodnota pro: %s n %s"
 
-#: models/kt_wp_post_base_model.inc.php:450
+#: core/models/kt_wp_post_base_model.inc.php:450
 msgid "Day"
 msgstr "Den"
 
-#: models/kt_wp_post_base_model.inc.php:455
-#: models/kt_wp_post_base_model.inc.php:458
+#: core/models/kt_wp_post_base_model.inc.php:455
+#: core/models/kt_wp_post_base_model.inc.php:458
 msgid "days"
 msgstr "dny"
 
-#: models/kt_wp_post_base_model.inc.php:462
+#: core/models/kt_wp_post_base_model.inc.php:462
 msgid " month"
 msgstr "měsíc"
 
-#: models/kt_wp_post_base_model.inc.php:464
+#: core/models/kt_wp_post_base_model.inc.php:464
 msgid " hour"
 msgstr "hodina"
 
-#: models/kt_wp_post_base_model.inc.php:465
-#: models/kt_wp_post_base_model.inc.php:469
-#: models/kt_wp_post_base_model.inc.php:472
-#: models/kt_wp_post_base_model.inc.php:474
+#: core/models/kt_wp_post_base_model.inc.php:465
+#: core/models/kt_wp_post_base_model.inc.php:469
+#: core/models/kt_wp_post_base_model.inc.php:472
+#: core/models/kt_wp_post_base_model.inc.php:474
 msgid " min"
 msgstr "min"
 
-#: models/kt_wp_post_base_model.inc.php:468
-#: models/kt_wp_post_base_model.inc.php:471
+#: core/models/kt_wp_post_base_model.inc.php:468
+#: core/models/kt_wp_post_base_model.inc.php:471
 msgid " hours"
 msgstr "hodin"
 
-#: models/kt_wp_user_base_model.inc.php:205
+#: core/models/kt_wp_user_base_model.inc.php:217
 #, php-format
 msgid "Author: %s"
 msgstr "Autor: %s"
 
-#: models/kt_wp_user_base_model.inc.php:428
+#: core/models/kt_wp_user_base_model.inc.php:440
 msgid "User`s id is not exist (in WP database)."
 msgstr "Uživatel s tímto ID neexistuje (ve WP databázi)"
 
-#: presenters/kt_contact_form_base_presenter.inc.php:136
-#: presenters/kt_user_profile_base_presenter.inc.php:168
+#: core/presenters/kt_contact_form_base_presenter.inc.php:136
+#: core/presenters/kt_user_profile_base_presenter.inc.php:168
 msgid "Error processing resource addresses..."
 msgstr "Chyba zpracování zdrojové adresy"
 
-#: presenters/kt_contact_form_base_presenter.inc.php:145
+#: core/presenters/kt_contact_form_base_presenter.inc.php:145
 msgid "You filled out unauthorized control element..."
 msgstr "Vyplnili jste nepovolený kontrolní prvek..."
 
-#: presenters/kt_contact_form_base_presenter.inc.php:207
+#: core/presenters/kt_contact_form_base_presenter.inc.php:207
 msgid ""
 "Your question was sent successfully and will be discharged as soon as "
 "possible, thank you."
 msgstr "Váš dotaz byl úspěšně odeslán a bude co nejdříve vyřízen, děkujeme."
 
-#: presenters/kt_contact_form_base_presenter.inc.php:219
+#: core/presenters/kt_contact_form_base_presenter.inc.php:219
 msgid ""
 "When preparing and sending the contact form error. You need to enter all "
 "your information correctly..."
@@ -771,71 +781,75 @@ msgstr ""
 "Při zpracování a odesílání kontaktního formuláře došlo k chybě. Je třeba "
 "zadat správně všechny údaje..."
 
-#: presenters/kt_contact_form_base_presenter.inc.php:232
+#: core/presenters/kt_contact_form_base_presenter.inc.php:232
 #, php-format
 msgid "%s - contact"
 msgstr "%s - kontakt"
 
-#: presenters/kt_contact_form_base_presenter.inc.php:245
+#: core/presenters/kt_contact_form_base_presenter.inc.php:245
 #, php-format
 msgid "The e-mail was generated by using the contact form on the Website: %s"
 msgstr "Email byl vygenerován pomocí kontaktního formuláře na stránce: %s"
 
-#: presenters/kt_contact_form_base_presenter.inc.php:257
-#: presenters/kt_user_profile_base_presenter.inc.php:259
+#: core/presenters/kt_contact_form_base_presenter.inc.php:257
+#: core/presenters/kt_user_profile_base_presenter.inc.php:259
 msgid "Repair"
 msgstr "Opravit"
 
-#: presenters/kt_contact_form_base_presenter.inc.php:285
+#: core/presenters/kt_contact_form_base_presenter.inc.php:287
 #, php-format
 msgid "Name: %s"
 msgstr "Jméno: %s"
 
-#: presenters/kt_contact_form_base_presenter.inc.php:286
+#: core/presenters/kt_contact_form_base_presenter.inc.php:288
 #, php-format
 msgid "E-mail: %s"
 msgstr "E-mail: %s"
 
-#: presenters/kt_contact_form_base_presenter.inc.php:287
+#: core/presenters/kt_contact_form_base_presenter.inc.php:289
 #, php-format
 msgid "Phone: %s"
 msgstr "Telefon: %s"
 
-#: presenters/kt_contact_form_base_presenter.inc.php:288
+#: core/presenters/kt_contact_form_base_presenter.inc.php:290
 msgid "Message:"
 msgstr "Zpráva:"
 
-#: presenters/kt_contact_form_base_presenter.inc.php:289
+#: core/presenters/kt_contact_form_base_presenter.inc.php:291
+msgid "Agreement with the processing of personal data:"
+msgstr "Souhlas se zpracováním osobních údajů:"
+
+#: core/presenters/kt_contact_form_base_presenter.inc.php:292
 #, php-format
 msgid "Done by URL: %s"
 msgstr "Provedeno z URL adresy: %s"
 
-#: presenters/kt_contact_form_base_presenter.inc.php:298
+#: core/presenters/kt_contact_form_base_presenter.inc.php:301
 #, php-format
 msgid "E-mail for %s <%s> from URL %s done by: %s."
 msgstr "E-mail pro %s <%s> z URL %s zpracován: %s."
 
-#: presenters/kt_contact_form_base_presenter.inc.php:334
+#: core/presenters/kt_contact_form_base_presenter.inc.php:337
 msgid "Send request"
 msgstr "Odeslat dotaz"
 
-#: presenters/kt_user_profile_base_presenter.inc.php:144
+#: core/presenters/kt_user_profile_base_presenter.inc.php:144
 msgid "*) It changes only those values that are filled and altered."
 msgstr "*) Změní se pouze ty hodnoty, které jsou vyplněné a změněné."
 
-#: presenters/kt_user_profile_base_presenter.inc.php:145
+#: core/presenters/kt_user_profile_base_presenter.inc.php:145
 msgid "**) Passwords must be identical in the case of changes."
 msgstr "**) Hesla musejí být v případě změny shodná."
 
-#: presenters/kt_user_profile_base_presenter.inc.php:178
+#: core/presenters/kt_user_profile_base_presenter.inc.php:178
 msgid "Error at saving user profile..."
 msgstr "Chyba při ukládání uživatelského profilu..."
 
-#: presenters/kt_user_profile_base_presenter.inc.php:235
+#: core/presenters/kt_user_profile_base_presenter.inc.php:235
 msgid "Your profile has been successfully edited and saved changes."
 msgstr "Vaše profilové údaje byly uspěšně změněny a uloženy"
 
-#: presenters/kt_user_profile_base_presenter.inc.php:247
+#: core/presenters/kt_user_profile_base_presenter.inc.php:247
 msgid ""
 "When processing a profile error. You need to enter all your information "
 "correctly..."
@@ -843,94 +857,118 @@ msgstr ""
 "Při ukládání profilu došlo k chybě. Je třeba zadat všechny informace "
 "správně..."
 
-#: presenters/kt_user_profile_base_presenter.inc.php:355
+#: core/presenters/kt_user_profile_base_presenter.inc.php:355
 msgid "Error on password change"
 msgstr "Chyba při změně hesla"
 
-#: presenters/kt_user_profile_base_presenter.inc.php:377
+#: core/presenters/kt_user_profile_base_presenter.inc.php:377
 msgid "Password and confirmation must be the same."
 msgstr "Heslo a jeho potvrzení musí být stejné."
 
-#: presenters/kt_user_profile_base_presenter.inc.php:381
+#: core/presenters/kt_user_profile_base_presenter.inc.php:381
 msgid "To change the password must be entered password and confirmation."
 msgstr "Pro změnu hesla je třeba zadat heslo a jeho potvrzení."
 
-#: presenters/kt_wp_post_base_presenter.inc.php:213
+#: core/presenters/kt_wp_post_base_presenter.inc.php:229
 #, php-format
 msgid "About author: %s"
 msgstr "O autorovi: %s"
 
-#: requires/metaboxes/kt_wp_cron_metabox.admin.inc.php:3
+#: core/requires/metaboxes/kt_wp_cron_metabox.admin.inc.php:3
 msgid "(KT) WP CRON"
 msgstr "(KT) WP CRON"
 
-#: requires/metaboxes/kt_wp_cron_metabox.admin.inc.php:6
+#: core/requires/metaboxes/kt_wp_cron_metabox.admin.inc.php:6
 msgid "scheduled events"
 msgstr "Naplánované události"
 
-#: requires/metaboxes/kt_wp_cron_metabox.admin.inc.php:32
+#: core/requires/metaboxes/kt_wp_cron_metabox.admin.inc.php:32
 msgid "established intervals"
 msgstr "stanovené intervaly"
 
-#: requires/template_pages/kt_log_admin_page.admin.inc.php:8
+#: core/requires/template_pages/kt_log_admin_page.admin.inc.php:8
 msgid "List of KT logs"
 msgstr "Přehled KT Logů"
 
-#: requires/template_pages/kt_log_admin_page.admin.inc.php:8
+#: core/requires/template_pages/kt_log_admin_page.admin.inc.php:8
 msgid "(KT) Logs"
 msgstr "(KT) Logy"
 
-#: requires/template_pages/kt_log_admin_page.admin.inc.php:12
+#: core/requires/template_pages/kt_log_admin_page.admin.inc.php:12
 msgid "List of recorded (KT) logs"
 msgstr "Přehld záznamů (KT) logs"
 
-#: requires/template_pages/kt_log_admin_page.admin.inc.php:16
+#: core/requires/template_pages/kt_log_admin_page.admin.inc.php:16
 msgid "Level"
 msgstr "Level"
 
-#: requires/template_pages/kt_log_admin_page.admin.inc.php:20
+#: core/requires/template_pages/kt_log_admin_page.admin.inc.php:20
 msgid "Scope"
 msgstr "Scope"
 
-#: requires/template_pages/kt_log_admin_page.admin.inc.php:22
+#: core/requires/template_pages/kt_log_admin_page.admin.inc.php:22
 msgid "Message"
 msgstr "Zpráva"
 
-#: requires/template_pages/kt_log_admin_page.admin.inc.php:26
+#: core/requires/template_pages/kt_log_admin_page.admin.inc.php:26
 msgid "Date"
 msgstr "Datum"
 
-#: requires/template_pages/kt_log_admin_page.admin.inc.php:28
+#: core/requires/template_pages/kt_log_admin_page.admin.inc.php:28
 msgid "User"
 msgstr "Uživatel"
 
-#: requires/template_pages/kt_log_admin_page.admin.inc.php:30
+#: core/requires/template_pages/kt_log_admin_page.admin.inc.php:30
 msgid "File"
 msgstr "Soubor"
 
-#: requires/template_pages/kt_log_admin_page.admin.inc.php:34
+#: core/requires/template_pages/kt_log_admin_page.admin.inc.php:34
 msgid "Row"
 msgstr "Řádek"
 
-#: widgets/kt_quick_contact_widget.inc.php:17
+#: core/widgets/kt_quick_contact_widget.inc.php:17
 msgid "Fast contact"
 msgstr "Rychlý kontakt"
 
-#: widgets/kt_quick_contact_widget.inc.php:17
+#: core/widgets/kt_quick_contact_widget.inc.php:17
 msgid "Fast contact information, including the title with an information icon."
 msgstr "Widget rychlého kontaktu. Obsahuje titulek a ikonu."
 
-#: widgets/kt_quick_contact_widget.inc.php:42
+#: core/widgets/kt_quick_contact_widget.inc.php:42
 msgid "Call by Skype"
 msgstr "Volat na Skype"
 
-#: widgets/kt_quick_contact_widget.inc.php:65
+#: core/widgets/kt_quick_contact_widget.inc.php:65
 msgid "E-mail"
 msgstr "E-mail"
 
-#: widgets/kt_quick_contact_widget.inc.php:69
+#: core/widgets/kt_quick_contact_widget.inc.php:69
 msgid "Skype"
 msgstr "Skype"
+
+#: kt_init.inc.php:18
+msgid "---"
+msgstr "---"
+
+#: kt_init.inc.php:19
+msgid "Empty"
+msgstr "Prázdný"
+
+#: kt_init.inc.php:20
+msgid "All"
+msgstr "Všechny"
+
+#: kt_init.inc.php:21
+msgid "Select"
+msgstr "Vybrat"
+
+#: kt_init.inc.php:22
+msgid "..."
+msgstr "…"
+
+#: kt_init.inc.php:352
+msgid "WP Framework is not loaded or enabled!"
+msgstr "WP Framework není nahrán nebo povolen!"
 
 #~ msgid "Do not fill if your are the human"
 #~ msgstr "Nevyplňujte pokud jste člověk"
@@ -957,24 +995,6 @@ msgstr "Skype"
 #~| msgid "Save Settings"
 #~ msgid "Save settings"
 #~ msgstr "Uložit nastavení"
-
-#~ msgid "---"
-#~ msgstr "---"
-
-#~ msgid "Empty"
-#~ msgstr "Prázdný"
-
-#~ msgid "All"
-#~ msgstr "Všechny"
-
-#~ msgid "Select"
-#~ msgstr "Vybrat"
-
-#~ msgid "..."
-#~ msgstr "…"
-
-#~ msgid "WP Framework is not loaded or enabled!"
-#~ msgstr "WP Framework není nahrán nebo povolen!"
 
 #~ msgid ""
 #~ "Unsupported operation %s \n"

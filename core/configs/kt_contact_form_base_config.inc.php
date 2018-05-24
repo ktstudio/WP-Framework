@@ -15,6 +15,7 @@ class KT_Contact_Form_Base_Config {
     const EMAIL = "kt-contact-form-email";
     const PHONE = "kt-contact-form-phone";
     const MESSAGE = "kt-contact-form-message";
+    const AGREEMENT = "kt-contact-form-agreement";
     const FAVOURITE = "kt-contact-form-favourite";
     const NONCE = "kt-contact-form-nonce";
 
@@ -72,6 +73,9 @@ class KT_Contact_Form_Base_Config {
                 ->addAttribute("maxlength", 1000)
                 ->addRule(KT_Field_Validator::REQUIRED, __("Message is required", "KT_CORE_DOMAIN"))
                 ->addRule(KT_Field_Validator::MAX_LENGTH, __("The message can be up to 1000 characters", "KT_CORE_DOMAIN"), 1000);
+
+        $fieldset->addCheckbox(self::AGREEMENT, __("Agreement:", "KT_CORE_DOMAIN"))
+                ->setOptionsData([KT_Switch_Field::YES => __("I agree with the processing of personal data", "KT_CORE_DOMAIN")]);
 
         $fieldset->addText(self::FAVOURITE, __("Checker:", "KT_CORE_DOMAIN"))
                 ->setPlaceholder(__("Do not fill if your are human", "KT_CORE_DOMAIN"))
