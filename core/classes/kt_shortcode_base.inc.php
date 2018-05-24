@@ -11,6 +11,7 @@ abstract class KT_Shortcode_Base implements KT_Registrable {
     private $tag;
     private $buttonKey;
     private $buttonScriptPath;
+    private $checkedCapabilities = ["edit_posts", "edit_pages"];
 
     /**
      * Vytvoření nového shortcodu s (povinnými) parametry
@@ -71,6 +72,34 @@ abstract class KT_Shortcode_Base implements KT_Registrable {
         return $this->buttonScriptPath;
     }
 
+    /**
+     * Vrátí pole kontrolovaných oprávnění pro zadávání shortcodu (pomocí current_user_can)
+     * Pozn. v případě více záznamů je logické spojení typu AND
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return array
+     */
+    public function getCheckedCapabilities() {
+        return $this->checkedCapabilities;
+    }
+
+    /**
+     * Nastaví pole kontrolovaných oprávnění pro zadávání shortcodu (pomocí current_user_can)
+     * Pozn. v případě více záznamů je logické spojení typu AND
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param array $capabilities
+     * @return $this
+     */
+    protected function setCheckedCapabilities(array $capabilities) {
+        $this->checkedCapabilities = $capabilities;
+        return $this;
+    }
+
     // --- veřejné metody ---------------------------
 
     /**
@@ -108,10 +137,16 @@ abstract class KT_Shortcode_Base implements KT_Registrable {
      * @link http://www.ktstudio.cz
      */
     public function adminInitAction() {
-        if (current_user_can("edit_posts") && current_user_can("edit_pages")) {
-            add_filter("mce_external_plugins", array(&$this, "editorButtonPlugin"));
-            add_filter("mce_buttons", array(&$this, "editorButtonFilter"));
+        $capabilities = $this->getCheckedCapabilities();
+        if (count($capabilities) > 0) {
+            foreach ($capabilities as $capability) {
+                if (!current_user_can($capability)) {
+                    return;
+                }
+            }
         }
+        add_filter("mce_external_plugins", array(&$this, "editorButtonPlugin"));
+        add_filter("mce_buttons", array(&$this, "editorButtonFilter"));
     }
 
     /**
