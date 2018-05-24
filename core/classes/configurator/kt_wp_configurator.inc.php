@@ -1567,7 +1567,7 @@ final class KT_WP_Configurator {
         if (KT::notIssetOrEmpty($cookueStatementKey)) {
             $text = __("This site uses cookies. By using this site you consent to the use of Cookies.", "KT_CORE_DOMAIN");
             $moreInfoTitle = __("Find out more", "KT_CORE_DOMAIN");
-            $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
+            $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://policies.google.com/technologies/cookies");
             $confirmTitle = __("OK, i understand", "KT_CORE_DOMAIN");
 
             $html = "<span id=\"ktCookieStatementText\">$text</span>";
