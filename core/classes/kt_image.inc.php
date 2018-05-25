@@ -18,6 +18,7 @@ class KT_Image
     private $class;
     private $data = array();
     private $isLazyLoading;
+    private $isNoScript;
 
     /** @return string */
     public function getId()
@@ -174,6 +175,22 @@ class KT_Image
         return $this;
     }
 
+    /** @return boolean */
+    public function getIsNoScript()
+    {
+        return $this->isNoScript;
+    }
+
+    /**
+     * @param boolean $isNoScript
+     * @return $this
+     */
+    public function setIsNoScript($isNoScript)
+    {
+        $this->isNoScript = KT::tryGetBool($isNoScript);
+        return $this;
+    }
+
     /**
      * @param array $params
      * @return $this
@@ -219,23 +236,29 @@ class KT_Image
         if (KT::notIssetOrEmpty($this->getSrc()) && KT::issetAndNotEmpty($srcset)) {
             $this->setSrc(reset($srcset));
         }
-        $html = "<img ";
-        $html .= $this->tryGetImageParam("id", $this->getId());
-        $html .= $this->tryGetImageParam("src", $this->getSrc());
-        $html .= $this->tryGetImageParam("srcset", $this->tryGetSrcsetValue($srcset));
-        $html .= $this->tryGetImageParam("width", $this->getWidth());
-        $html .= $this->tryGetImageParam("height", $this->getHeight());
-        $html .= $this->tryGetImageParam("alt", $this->getAlt());
-        $html .= $this->tryGetImageParam("class", $this->getClass());
+
+        $imageTag = "<img ";
+        $imageTag .= $this->tryGetImageParam("id", $this->getId());
+        $imageTag .= $this->tryGetImageParam("src", $this->getSrc());
+        $imageTag .= $this->tryGetImageParam("srcset", $this->tryGetSrcsetValue($this->getSrcset()));
+        $imageTag .= $this->tryGetImageParam("width", $this->getWidth());
+        $imageTag .= $this->tryGetImageParam("height", $this->getHeight());
+        $imageTag .= $this->tryGetImageParam("alt", $this->getAlt());
+        $imageTag .= $this->tryGetImageParam("class", $this->getClass());
         $data = $this->getData();
         if (KT::arrayIssetAndNotEmpty($data)) {
             foreach ($data as $dataKey => $dataValue) {
-                $html .= $this->tryGetImageParam("data-{$dataKey}", $dataValue);
+                $imageTag .= $this->tryGetImageParam("data-{$dataKey}", $dataValue);
             }
         }
-        $html .= "/>";
+        $imageTag .= "/>";
+
+        $html = $imageTag;
         if ($this->getIsLazyLoading()) {
             $html = KT::imageReplaceLazySrc($html);
+        }
+        if ($this->getIsNoScript()) {
+            $html .= "<noscript>$imageTag</noscript>";
         }
         return $html;
     }
@@ -245,18 +268,20 @@ class KT_Image
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
+     * @param bool $isNoScript
      */
-    public static function render($src, $alt = "", $class = null, $isLazyLoading = true)
+    public static function render($src, $alt = "", $class = null, $isLazyLoading = true, $isNoScript = true)
     {
         $image = new KT_Image();
-	    if (KT::stringStartsWith($src, "http://") || KT::stringStartsWith($src, "https://")) {
-		    $image->setSrc($src);
-	    } else {
-		    $image->setSrc(KT::imageGetUrlFromTheme($src));
-	    }
+        if (KT::stringStartsWith($src, "http://") || KT::stringStartsWith($src, "https://")) {
+            $image->setSrc($src);
+        } else {
+            $image->setSrc(KT::imageGetUrlFromTheme($src));
+        }
         $image->setAlt($alt);
         $image->setClass($class);
         $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
         echo $image->buildHtml();
     }
 
@@ -265,8 +290,9 @@ class KT_Image
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
+     * @param bool $isNoScript
      */
-    public static function renderSet(array $srcset, $alt = "", $class = null, $isLazyLoading = true)
+    public static function renderSet(array $srcset, $alt = "", $class = null, $isLazyLoading = true, $isNoScript = true)
     {
         $image = new KT_Image();
         foreach ($srcset as $zoomNumber => $imageUrl) {
@@ -276,12 +302,12 @@ class KT_Image
         $image->setAlt($alt);
         $image->setClass($class);
         $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
         echo $image->buildHtml();
     }
 
     /**
      * @param array $params k inicializaci
-     * @param bool $isLazyLoading
      */
     public static function renderArgs(array $params)
     {
@@ -295,8 +321,9 @@ class KT_Image
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
+     * @param bool $isNoScript
      */
-    public static function renderRetina($src, $alt = "", $class = null, $isLazyLoading = true)
+    public static function renderRetina($src, $alt = "", $class = null, $isLazyLoading = true, $isNoScript = true)
     {
         $image = new KT_Image();
         $src1x = KT::imageGetUrlFromTheme($src);
@@ -307,6 +334,7 @@ class KT_Image
         $image->setAlt($alt);
         $image->setClass($class);
         $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
         echo $image->buildHtml();
     }
 

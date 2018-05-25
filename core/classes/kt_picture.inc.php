@@ -62,8 +62,9 @@ class KT_Picture extends KT_Image
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
+     * @param bool $isNoScript
      */
-    public static function render($sizes, $alt = "", $class = null, $isLazyLoading = true)
+    public static function render($sizes, $alt = "", $class = null, $isLazyLoading = true, $isNoScript = true)
     {
         $image = new KT_Picture();
         foreach ($sizes as $maxWidth => $fileName) {
@@ -78,6 +79,7 @@ class KT_Picture extends KT_Image
         $image->setAlt($alt);
         $image->setClass($class);
         $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
         echo $image->buildHtml();
     }
 
@@ -86,8 +88,9 @@ class KT_Picture extends KT_Image
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
+     * @param bool $isNoScript
      */
-    public static function renderSet(array $sizes, $alt = "", $class = null, $isLazyLoading = true)
+    public static function renderSet(array $sizes, $alt = "", $class = null, $isLazyLoading = true, $isNoScript = true)
     {
         $image = new KT_Picture();
         foreach ($sizes as $maxWidth => $srcset) {
@@ -101,12 +104,12 @@ class KT_Picture extends KT_Image
         $image->setAlt($alt);
         $image->setClass($class);
         $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
         echo $image->buildHtml();
     }
 
     /**
      * @param array $params k inicializaci
-     * @param bool $isLazyLoading
      */
     public static function printArgs(array $params)
     {
