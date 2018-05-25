@@ -915,7 +915,7 @@ class KT {
      * @return string
      */
     public static function imageGetTransparent() {
-        return KT_CORE_IMAGES_URL . "/transparent.png";
+        return "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"; // return KT_CORE_IMAGES_URL . "/transparent.png";
     }
 
     /**
