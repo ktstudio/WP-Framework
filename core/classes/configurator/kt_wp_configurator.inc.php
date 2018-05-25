@@ -49,6 +49,7 @@ final class KT_WP_Configurator {
     private $enableDynamicFieldsets = false;
     private $disableOembed = false;
     private $disableJson = false;
+    private $disableRelNext = false;
 
     // --- gettery ----------------------
 
@@ -241,6 +242,11 @@ final class KT_WP_Configurator {
     /** @return boolean */
     public function getDisableJson() {
         return $this->disableJson;
+    }
+
+    /** @return boolean */
+    public function getDisableRelNext() {
+        return $this->disableRelNext;
     }
 
     // --- settery ----------------------
@@ -578,6 +584,18 @@ final class KT_WP_Configurator {
         return $this;
     }
 
+    /**
+     * Vypne / ponechá funkce rel="next" atribut v hlavičce
+     *
+     * @author Martin Hlaváč
+     * @param boolean $disable
+     * @return \KT_WP_Configurator
+     */
+    public function setDisableRelNext($disable = true) {
+        $this->disableRelNext = KT::tryGetBool($disable);
+        return $this;
+    }
+
     // --- veřejné funkce ---------------
 
     /**
@@ -748,6 +766,11 @@ final class KT_WP_Configurator {
         // JSON (API)
         if ($this->getDisableJson() === true) {
             add_action("init", array($this, "disableJson"), 99);
+        }
+
+        // JSON (API)
+        if ($this->getDisableRelNext() === true) {
+            add_action("init", array($this, "disableRelNext"), 99);
         }
     }
 
@@ -1743,6 +1766,20 @@ final class KT_WP_Configurator {
         if (!is_admin()) {
             add_filter("json_enabled", "__return_false");
             add_filter("json_jsonp_enabled", "__return_false");
+        }
+    }
+
+    /**
+     * Zruší rel next v head
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     */
+    public function disableRelNext() {
+        if (!is_admin()) {
+            remove_action("wp_head", "wp_shortlink_wp_head", 10);
+            remove_action("wp_head", "adjacent_posts_rel_link_wp_head", 10);
+            add_filter("wpseo_next_rel_link", "__return_false");
         }
     }
 }
