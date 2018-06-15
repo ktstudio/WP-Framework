@@ -251,9 +251,13 @@ abstract class KT_Enum {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
+     * @param $exceptKey
      * @return array
      */
-    public function getTranslates() {
+    public function getTranslates($exceptKey = null) {
+        if (isset($exceptKey)) {
+            return KT::arrayRemoveByKey($this->translates, $exceptKey);
+        }
         return $this->translates;
     }
 

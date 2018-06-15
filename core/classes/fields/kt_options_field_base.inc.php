@@ -16,16 +16,22 @@ abstract class KT_Options_Field_Base extends KT_Field {
         parent::__construct($name, $label);
     }
 
-    // --- gettery -----------------
+    // --- gettery ---------------------------
 
-    /**
-     * @return \KT_Data_Manager_Base
-     */
+    /** @return \KT_Data_Manager_Base */
     public function getDataManager() {
         return $this->dataManager;
     }
 
-    // --- settery -----------------
+    /** @return array */
+    public function getOptionsData() {
+        if (KT::issetAndNotEmpty($this->dataManager)) {
+            return $this->getDataManager()->getData();
+        }
+        return [];
+    }
+
+    // --- settery ---------------------------
 
     public function setDataManager(KT_Data_Manager_Base $dataManager) {
         $this->dataManager = $dataManager;
@@ -33,26 +39,19 @@ abstract class KT_Options_Field_Base extends KT_Field {
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getOptionsData() {
-        if (KT::issetAndNotEmpty($this->dataManager)) {
-            return $this->getDataManager()->getData();
-        }
-
-        return array();
-    }
-
-    public function setOptionsData(array $options = array()) {
+    public function setOptionsData(array $options = []) {
         $dataManager = new KT_Simple_Data_Manager($options);
-
         $this->setDataManager($dataManager);
-
         return $this;
     }
 
-    // --- statické metody --------------
+    public function setOptionsEnum(KT_Enum $enum, $exceptKey = null) {
+        $dataManager = new KT_Simple_Data_Manager($enum->getTranslates($exceptKey));
+        $this->setDataManager($dataManager);
+        return $this;
+    }
+
+    // --- statické metody ---------------------------
 
     /**
      * Vrátí pole po select, nebo radio které obsahuje (3) možnosti výběru: (prázdnou), ano, ne
