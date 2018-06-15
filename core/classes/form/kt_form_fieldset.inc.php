@@ -971,61 +971,138 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     }
 
     /**
-     * Přidá text field s rulem na e-mail
-     * 
+     * Přidá email text field
+     *
      * @author Jan Pokorný
      * @param string $name
      * @param string $label
+     * @param bool $withValidationRule
      * @return KT_Text_Field
+     * @throws KT_Not_Set_Argument_Exception
      */
-    public function addEmail($name, $label) {
+    public function addEmail($name, $label, $withValidationRule = true) {
         $field = $this->addText($name, $label);
         $field->setInputType(KT_Text_Field::INPUT_EMAIL);
-        $field->addRule(KT_Field_Validator::EMAIL, __("Set a valid email address", "KT_CORE_DOMAIN"));
+        if ($withValidationRule) {
+            $field->addRule(KT_Field_Validator::EMAIL, __("Set a valid email address", "KT_CORE_DOMAIN"));
+        }
         return $field;
     }
 
     /**
-     * Přidá text field s rulem na url
-     * 
+     * Přidá url text field
+     *
      * @author Jan Pokorný
      * @param string $name
      * @param string $label
+     * @param bool $withValidationRule
      * @return KT_Text_Field
+     * @throws KT_Not_Set_Argument_Exception
      */
-    public function addUrl($name, $label) {
+    public function addUrl($name, $label, $withValidationRule = true) {
         $field = $this->addText($name, $label);
         $field->setInputType(KT_Text_Field::INPUT_URL);
-        $field->addRule(KT_Field_Validator::URL, __("Set a valid URL address", "KT_CORE_DOMAIN"));
+        if ($withValidationRule) {
+            $field->addRule(KT_Field_Validator::URL, __("Set a valid URL address", "KT_CORE_DOMAIN"));
+        }
         return $field;
     }
 
     /**
-     * Přidá text field s rulem na int
-     * 
-     * @author Jan Pokorný
+     * Přidá number text field
+     *
+     * @author Martin Hlaváč
      * @param string $name
      * @param string $label
+     * @param bool $withValidationRule
      * @return KT_Text_Field
+     * @throws KT_Not_Set_Argument_Exception
      */
-    public function addInt($name, $label) {
+    public function addNumber($name, $label, $withValidationRule = true) {
         $field = $this->addText($name, $label);
-        $field->addRule(KT_Field_Validator::INTEGER, __("Set a valid integer", "KT_CORE_DOMAIN"));
+        $field->setInputType(KT_Text_Field::INPUT_NUMBER);
+        if ($withValidationRule) {
+            $field->addRule(KT_Field_Validator::INTEGER, __("Set a valid integer", "KT_CORE_DOMAIN"));
+        }
         return $field;
     }
 
     /**
-     * Přidá text field s rulem na float
-     * 
-     * @author Jan Pokorný
+     * Přidá numreic text field
+     *
+     * @author Martin Hlaváč
+     * @param string $name
+     * @param string $label
+     * @param bool $withValidationRule
+     * @return KT_Text_Field
+     * @throws KT_Not_Set_Argument_Exception
+     */
+    public function addNumeric($name, $label, $withValidationRule = true) {
+        $field = $this->addText($name, $label);
+        $field->setInputType(KT_Text_Field::INPUT_NUMBER);
+        $field->addAttribute("step", "any");
+        if ($withValidationRule) {
+            $field->addRule(KT_Field_Validator::FLOAT, __("Set a valid decimal number", "KT_CORE_DOMAIN"));
+        }
+        return $field;
+    }
+
+    /**
+     * Přidá date text field
+     *
+     * @author Martin Hlaváč
      * @param string $name
      * @param string $label
      * @return KT_Text_Field
      */
-    public function addFloat($name, $label) {
+    public function addDate($name, $label) {
         $field = $this->addText($name, $label);
-        $field->addRule(KT_Field_Validator::FLOAT, __("Set a valid decimal number", "KT_CORE_DOMAIN"));
+        $field->setInputType(KT_Text_Field::INPUT_DATE);
         return $field;
+    }
+
+    /**
+     * Přidá datetime text field
+     *
+     * @author Martin Hlaváč
+     * @param string $name
+     * @param string $label
+     * @return KT_Text_Field
+     */
+    public function addDatetime($name, $label) {
+        $field = $this->addText($name, $label);
+        $field->setInputType(KT_Text_Field::INPUT_DATETIME);
+        return $field;
+    }
+
+    /**
+     * Přidá password text field
+     *
+     * @author Martin Hlaváč
+     * @param string $name
+     * @param string $label
+     * @return KT_Text_Field
+     */
+    public function addPassword($name, $label) {
+        $field = $this->addText($name, $label);
+        $field->setInputType(KT_Text_Field::INPUT_PASSWORD);
+        return $field;
+    }
+
+    /**
+     * @deprecated deprecated since version 1.12
+     * @see addNumber
+     */
+    public function addInt($name, $label, $withValidationRule = true) {
+        return $this->addNumber($name, $label, $withValidationRule);
+    }
+
+    /**
+     * @deprecated deprecated since version 1.12
+     * @see addNumeric
+     */
+    public function addFloat($name, $label, $withValidationRule = true) {
+        return $this->addNumeric($name, $label, $withValidationRule);
     }
 
     // --- privátní metody ----------------------
@@ -1046,19 +1123,6 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         }
 
         return $this;
-    }
-
-    /**
-     * Vrátí všechny definované classy filedstu a zhotoví z nich prostý string pro zápis
-     * do class atributu elementu.
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     * 
-     * @return string
-     */
-    private function getClassesString() {
-        return $classString = implode(" ", $this->getClasses());
     }
 
     /**

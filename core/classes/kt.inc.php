@@ -224,7 +224,7 @@ class KT {
      * @return boolean
      */
     public static function arrayIssetAndNotEmpty($array = null) {
-        return self::issetAndNotEmpty($array) && is_array($array) && count($array) > 0;
+        return isset($array) && is_array($array) && count($array) > 0;
     }
 
     /**
