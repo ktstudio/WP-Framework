@@ -11,12 +11,12 @@ class KT_Image
 {
     private $id;
     private $src;
-    private $srcsets;
+    private $srcset;
     private $width;
     private $height;
     private $alt;
     private $class;
-    private $data = array();
+    private $data = [];
     private $isLazyLoading;
     private $isNoScript;
 
@@ -52,19 +52,19 @@ class KT_Image
         return $this;
     }
 
-    /** @return string */
+    /** @return array|string */
     public function getSrcset()
     {
-        return $this->srcsets;
+        return $this->srcset;
     }
 
     /**
-     * @param array $srcset [ZOOM number => image URL]
+     * @param array $srcset [ZOOM number => image URL] or "ready" string
      * @return $this
      */
-    public function setSrcset(array $srcset)
+    public function setSrcset($srcset)
     {
-        $this->srcsets = $srcset;
+        $this->srcset = $srcset;
         return $this;
     }
 
@@ -233,7 +233,7 @@ class KT_Image
     public function buildHtml()
     {
         $srcset = $this->getSrcset();
-        if (KT::notIssetOrEmpty($this->getSrc()) && KT::issetAndNotEmpty($srcset)) {
+        if (KT::notIssetOrEmpty($this->getSrc()) && KT::arrayIssetAndNotEmpty($srcset)) {
             $this->setSrc(reset($srcset));
         }
 
@@ -351,14 +351,18 @@ class KT_Image
         return null;
     }
 
-    protected function tryGetSrcsetValue(array $srcset = null)
+    protected function tryGetSrcsetValue($srcset = null)
     {
-        if (KT::arrayIssetAndNotEmpty($srcset)) {
-            $srcsets = [];
-            foreach ($srcset as $srcsetKey => $srcsetValue) {
-                $srcsets[] = "$srcsetValue {$srcsetKey}x";
+        if (KT::issetAndNotEmpty($srcset)) {
+            if (is_array($srcset)) {
+                $srcsets = [];
+                foreach ($srcset as $srcsetKey => $srcsetValue) {
+                    $srcsets[] = "$srcsetValue {$srcsetKey}x";
+                }
+                return implode(", ", $srcsets);
+            } else {
+                return $srcset;
             }
-            return implode(", ", $srcsets);
         }
         return null;
     }
