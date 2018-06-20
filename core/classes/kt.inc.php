@@ -716,6 +716,26 @@ class KT {
     }
 
     /**
+     * Vrátí hodnotu pro zadanou URL dle wp_remote_get pokud existuje nebo výchozí zadanou hodnotu (NULL)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $url
+     * @param string $defaultValue
+     * @return mixed type|null
+     */
+    public static function tryGetWpRemote($url, $defaultValue = null) {
+        $response = wp_remote_get( "$url/" );
+        if (KT::arrayIssetAndNotEmpty($response)) {
+            if ($response["response"]["message"] === "OK") {
+                return json_decode($response["body"]);
+            }
+        }
+        return $defaultValue;
+    }
+
+    /**
      * Kontrola, zda je právě aktivní localhost (na základě SERVER - REMOTE_ADDR)
      * 
      * @author Martin Hlaváč
@@ -798,7 +818,7 @@ class KT {
     }
 
     /**
-     * VYčistí zadané souřadnice o nevhodné znaky, tj. nechá jen číslice, tečky a čárky
+     * Vyčistí zadané souřadnice o nevhodné znaky, tj. nechá jen číslice, tečky a čárky
      * 
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -811,6 +831,25 @@ class KT {
             return preg_replace("/[^0-9,.\/-\/+]/", "", trim($coordinates));
         }
         return null;
+    }
+
+    // --- MULTI SITE(S) ---------------------------
+
+    /**
+     * Přepne multi situ dle zadaného (blog) ID a vyvolá callback funkci, jejíž výsledek následně vrátí
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param int $blogId
+     * @param callable $callback
+     * @return mixed
+     */
+    public static function tryGetWpSiteData($blogId, callable $callback) {
+        switch_to_blog($blogId);
+        $result = call_user_func($callback);
+        restore_current_blog();
+        return $result;
     }
 
     // --- OBRÁZKY - IMAGE ---------------------------
@@ -1034,7 +1073,7 @@ class KT {
      */
     public static function getCustomMenuNameByLocation($location, $defaultTitle = null) {
         $locations = get_nav_menu_locations();
-        $menuLocation = $locations[$location];
+        $menuLocation = KT::arrayTryGetValue($locations, $location);
         if (self::issetAndNotEmpty($menuLocation)) {
             $menuObject = wp_get_nav_menu_object($menuLocation);
             if (self::issetAndNotEmpty($menuObject)) {
