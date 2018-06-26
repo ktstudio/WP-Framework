@@ -185,14 +185,14 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @param type $after
      * @return string
      */
-    public function getListOfLinksToTerms($taxonomy, array $args = array(), $before = "", $after = " ") {
+    public function getListOfLinksToTerms($taxonomy, array $args = array(), $before = "", $after = " ", $class = "kt-term-link") {
         $html = "";
         $terms = $this->getModel()->getTerms($taxonomy, $args);
 
         if (KT::issetAndNotEmpty($terms)) {
             foreach ($terms as $term) {
                 $termUrl = get_term_link($term);
-                $html .= $before . "<a href=\"$termUrl\" class=\"kt-term-link $term->slug $taxonomy term-id-{$term->term_id}\" title=\"$term->name\">" . $term->name . "</a>" . $after;
+                $html .=  "$before<a href=\"$termUrl\" class=\"$class {$term->slug} $taxonomy term-id-{$term->term_id}\" title=\"{$term->name}\">{$term->name}</a>$after";
             }
         }
 
