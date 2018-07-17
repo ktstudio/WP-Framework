@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Překlad pro WP Framework\n"
-"POT-Creation-Date: 2018-05-24 17:28+0200\n"
+"POT-Creation-Date: 2018-07-17 07:56+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: Brilo Team s.r.o. <team@brilo.cz>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.0.9\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-Basepath: ../..\n"
 "X-Poedit-KeywordsList: __;_e\n"
@@ -27,39 +27,39 @@ msgstr "Data byla uložena."
 msgid "Save Settings"
 msgstr "Uložit nastavení"
 
-#: core/classes/configurator/kt_wp_configurator.inc.php:670
-#: core/classes/configurator/kt_wp_configurator.inc.php:1162
+#: core/classes/configurator/kt_wp_configurator.inc.php:688
+#: core/classes/configurator/kt_wp_configurator.inc.php:1185
 #: core/requires/functions/kt_general_functions.inc.php:94
 msgid "Theme Settings"
 msgstr "Nastavení šablony"
 
-#: core/classes/configurator/kt_wp_configurator.inc.php:977
+#: core/classes/configurator/kt_wp_configurator.inc.php:1000
 #: core/widgets/kt_quick_contact_widget.inc.php:32
 #: core/widgets/kt_quick_contact_widget.inc.php:61
 msgid "Phone"
 msgstr "Telefon"
 
-#: core/classes/configurator/kt_wp_configurator.inc.php:1421
+#: core/classes/configurator/kt_wp_configurator.inc.php:1444
 msgid "Archives"
 msgstr "Archivy"
 
-#: core/classes/configurator/kt_wp_configurator.inc.php:1462
+#: core/classes/configurator/kt_wp_configurator.inc.php:1485
 msgid "Add to menu"
 msgstr "Přidat do menu"
 
-#: core/classes/configurator/kt_wp_configurator.inc.php:1568
+#: core/classes/configurator/kt_wp_configurator.inc.php:1591
 msgid ""
 "This site uses cookies. By using this site you consent to the use of Cookies."
 msgstr ""
 "Tyto stránky využívají Cookies. Používáním těchto stránek vyjadřujete "
 "souhlas s používáním Cookies."
 
-#: core/classes/configurator/kt_wp_configurator.inc.php:1569
+#: core/classes/configurator/kt_wp_configurator.inc.php:1592
 msgid "Find out more"
 msgstr "Zjistit více"
 
-#: core/classes/configurator/kt_wp_configurator.inc.php:1571
-msgid "OK, i understand"
+#: core/classes/configurator/kt_wp_configurator.inc.php:1594
+msgid "OK, I understand"
 msgstr "Ok, rozumím"
 
 #: core/classes/configurator/kt_wp_facebook_data_configurator.inc.php:215
@@ -126,13 +126,13 @@ msgstr "Soubor byl smazán"
 msgid "Files were removed"
 msgstr "Soubor(y) byl(y) smazán(y)."
 
-#: core/classes/fields/kt_options_field_base.inc.php:70
+#: core/classes/fields/kt_options_field_base.inc.php:69
 #: core/classes/fields/kt_switch_field.inc.php:84
 #: core/classes/fields/kt_switch_field.inc.php:156
 msgid "Yes"
 msgstr "Ano"
 
-#: core/classes/fields/kt_options_field_base.inc.php:71
+#: core/classes/fields/kt_options_field_base.inc.php:70
 #: core/classes/fields/kt_switch_field.inc.php:85
 #: core/classes/fields/kt_switch_field.inc.php:158
 msgid "No"
@@ -180,19 +180,19 @@ msgstr ""
 "Některé data nebyly správně uložena. Prosím, zkontrolujte vstupní hodnoty a "
 "proces opakujte."
 
-#: core/classes/form/kt_form_fieldset.inc.php:984
+#: core/classes/form/kt_form_fieldset.inc.php:987
 msgid "Set a valid email address"
 msgstr "Nastavte validní emailovou adresu"
 
-#: core/classes/form/kt_form_fieldset.inc.php:999
+#: core/classes/form/kt_form_fieldset.inc.php:1006
 msgid "Set a valid URL address"
 msgstr "Nastavte validní URL adresu"
 
-#: core/classes/form/kt_form_fieldset.inc.php:1013
+#: core/classes/form/kt_form_fieldset.inc.php:1025
 msgid "Set a valid integer"
 msgstr "Nastavte validní celé číslo"
 
-#: core/classes/form/kt_form_fieldset.inc.php:1027
+#: core/classes/form/kt_form_fieldset.inc.php:1045
 msgid "Set a valid decimal number"
 msgstr "Nastavte validní desetinné číslo"
 
@@ -201,11 +201,11 @@ msgstr "Nastavte validní desetinné číslo"
 msgid "You do not have sufficient privileges to access this page."
 msgstr "Nemáte dostatečné oprávnění pro vstup na tuto stránku."
 
-#: core/classes/kt.inc.php:1328
+#: core/classes/kt.inc.php:1367
 msgid "&laquo; Previous"
 msgstr "&laquo; Předchozí"
 
-#: core/classes/kt.inc.php:1329
+#: core/classes/kt.inc.php:1368
 msgid "Next &raquo;"
 msgstr "Další &raquo;"
 
@@ -399,8 +399,8 @@ msgstr "Webové stránky mohou mít maximálně 50 znaků."
 
 #: core/configs/kt_comment_config.inc.php:64
 #: core/configs/kt_comment_config.inc.php:66
-#: core/configs/kt_contact_form_base_config.inc.php:80
-#: core/configs/kt_contact_form_base_config.inc.php:85
+#: core/configs/kt_contact_form_base_config.inc.php:92
+#: core/configs/kt_contact_form_base_config.inc.php:97
 msgid "Checker:"
 msgstr "Kontrola:"
 
@@ -519,15 +519,15 @@ msgstr "Zpráva je povinná položka"
 msgid "The message can be up to 1000 characters"
 msgstr "Zpráva může mít maximálně 1000 znaků"
 
-#: core/configs/kt_contact_form_base_config.inc.php:77
+#: core/configs/kt_contact_form_base_config.inc.php:86
 msgid "Agreement:"
 msgstr "Souhlas:"
 
-#: core/configs/kt_contact_form_base_config.inc.php:78
+#: core/configs/kt_contact_form_base_config.inc.php:87
 msgid "I agree with the processing of personal data"
 msgstr "Souhlasím se zpracováním osobních údajů"
 
-#: core/configs/kt_contact_form_base_config.inc.php:81
+#: core/configs/kt_contact_form_base_config.inc.php:93
 msgid "Do not fill if your are human"
 msgstr "Nevyplňujte pokud jste člověk"
 

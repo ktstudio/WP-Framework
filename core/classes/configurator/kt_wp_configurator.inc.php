@@ -1591,7 +1591,7 @@ final class KT_WP_Configurator {
             $text = __("This site uses cookies. By using this site you consent to the use of Cookies.", "KT_CORE_DOMAIN");
             $moreInfoTitle = __("Find out more", "KT_CORE_DOMAIN");
             $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://policies.google.com/technologies/cookies");
-            $confirmTitle = __("OK, i understand", "KT_CORE_DOMAIN");
+            $confirmTitle = __("OK, I understand", "KT_CORE_DOMAIN");
 
             $html = "<span id=\"ktCookieStatementText\">$text</span>";
             $html .= "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
