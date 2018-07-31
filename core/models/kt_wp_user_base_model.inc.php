@@ -163,7 +163,8 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @return string
      */
     public function getFirstName() {
-        return $this->getMetaValue(KT_User_Profile_Config::FIRST_NAME);
+        $key = KT_User_Profile_Config::FIRST_NAME;
+        return $this->getWpUser()->$key;
     }
 
     /**
@@ -175,7 +176,8 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @return string
      */
     public function getLastName() {
-        return $this->getMetaValue(KT_User_Profile_Config::LAST_NAME);
+        $key = KT_User_Profile_Config::LAST_NAME;
+        return $this->getWpUser()->$key;
     }
 
     /**
