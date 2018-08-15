@@ -43,6 +43,7 @@ final class KT_WP_Configurator {
     private $postsArchiveSlug = null;
     private $allowSession = false;
     private $allowCookieStatement = false;
+    private $allowSanitizeFileNames = false;
     private $facebookManager = null;
     private $emojiSwitch = false;
     private $autoRemoveShortcodesParagraphs = false;
@@ -206,6 +207,13 @@ final class KT_WP_Configurator {
      */
     private function getAllowCookieStatement() {
         return $this->allowCookieStatement;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function getAllowSanitizeFileNames() {
+        return $this->allowSanitizeFileNames;
     }
 
     /**
@@ -459,6 +467,20 @@ final class KT_WP_Configurator {
      */
     public function setAllowCookieStatement($allowCookieStatement = true) {
         $this->allowCookieStatement = $allowCookieStatement;
+        return $this;
+    }
+
+    /**
+     * Nastaví, zda se má v rámci šablony zapnout sanitizace názvů nahrávaných souborů
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param boolean $allowSanitizeFileNames
+     * @return \KT_WP_Configurator
+     */
+    public function setAllowSanitizeFileNames($allowSanitizeFileNames = true) {
+        $this->allowSanitizeFileNames = $allowSanitizeFileNames;
         return $this;
     }
 
@@ -739,6 +761,11 @@ final class KT_WP_Configurator {
         // cookie statement
         if ($this->getAllowCookieStatement() === true) {
             add_action("wp_footer", array($this, "renderCookieStatement"), 99);
+        }
+
+        // sanitize file names
+        if ($this->getAllowSanitizeFileNames() === true) {
+            add_action("sanitize_file_name", array($this, "sanitizeFileName"), 99);
         }
 
         // facebookManager
@@ -1576,6 +1603,17 @@ final class KT_WP_Configurator {
      */
     public function renderCookieStatement() {
         echo "<div id=\"ktCookieStatementContainer\"></div>";
+    }
+
+    /**
+     * Provede sanitizaci názvu souboru, resp. odstraní accent
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public function sanitizeFileName($fileName) {
+        return remove_accents($fileName);
     }
 
     /**
