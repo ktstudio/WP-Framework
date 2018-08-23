@@ -127,7 +127,11 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
 
         if (KT::issetAndNotEmpty($usersByRole)) {
             foreach ($usersByRole as $user) {
-                $data[$user->ID] = $user->display_name . " [$user->user_login]";
+                if ($user->user_login != $user->display_name) {
+                    $data[$user->ID] = $user->display_name . " [$user->user_login]";
+                } else {
+                    $data[$user->ID] = $user->display_name;
+                }
             }
         }
 

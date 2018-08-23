@@ -394,7 +394,10 @@ class KT_CRUD_Admin_List {
 
         $html .= "<tbody>";
 
+        $lastItem = null;
         while ($repository->haveItems()) : $item = $repository->theItem();
+            $pageName = $_GET["page"];
+            $html = apply_filters("kt_crud_admin_list_before_table_row_" . $pageName, $html, $item, $lastItem);
 
             $updatedClass = $item->getId() == $updatedRowId ? " class=\"updated\"" : "";
 
@@ -413,6 +416,7 @@ class KT_CRUD_Admin_List {
                 $html .= "</td>";
             }
             $html .= "</tr>";
+            $lastItem = $item;
         endwhile;
 
         $html .= "</tbody>";
