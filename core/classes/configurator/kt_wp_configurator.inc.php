@@ -51,6 +51,7 @@ final class KT_WP_Configurator {
     private $disableOembed = false;
     private $disableJson = false;
     private $disableRelNext = false;
+    private $disableDefaultGalleryInlineStyle = false;
 
     // --- gettery ----------------------
 
@@ -255,6 +256,11 @@ final class KT_WP_Configurator {
     /** @return boolean */
     public function getDisableRelNext() {
         return $this->disableRelNext;
+    }
+
+    /** @return boolean */
+    public function getDisableDefaultGalleryInlineStyle() {
+        return $this->disableDefaultGalleryInlineStyle;
     }
 
     // --- settery ----------------------
@@ -618,6 +624,18 @@ final class KT_WP_Configurator {
         return $this;
     }
 
+    /**
+     * Zruší výpis a tím pádem i aplikaci výchozího inline stylu u WP gallerií na FE
+     *
+     * @author Martin Hlaváč
+     * @param boolean $disable
+     * @return \KT_WP_Configurator
+     */
+    public function setDisableDefaultGalleryInlineStyle($disable = true) {
+        $this->disableDefaultGalleryInlineStyle = KT::tryGetBool($disable);
+        return $this;
+    }
+
     // --- veřejné funkce ---------------
 
     /**
@@ -795,9 +813,14 @@ final class KT_WP_Configurator {
             add_action("init", array($this, "disableJson"), 99);
         }
 
-        // JSON (API)
+        // rel next
         if ($this->getDisableRelNext() === true) {
             add_action("init", array($this, "disableRelNext"), 99);
+        }
+
+        // default gallery inline style
+        if ($this->getDisableDefaultGalleryInlineStyle() === true) {
+            add_action("init", array($this, "disableDefaultGalleryInlineStyle"), 99);
         }
     }
 
@@ -1818,6 +1841,18 @@ final class KT_WP_Configurator {
             remove_action("wp_head", "wp_shortlink_wp_head", 10);
             remove_action("wp_head", "adjacent_posts_rel_link_wp_head", 10);
             add_filter("wpseo_next_rel_link", "__return_false");
+        }
+    }
+
+    /**
+     * Zruší výchozí inline style WP galerií
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     */
+    public function disableDefaultGalleryInlineStyle() {
+        if (!is_admin()) {
+            add_filter("use_default_gallery_style", "__return_false");
         }
     }
 }
