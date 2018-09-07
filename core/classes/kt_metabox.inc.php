@@ -25,7 +25,8 @@ class KT_MetaBox implements KT_Registrable {
     private $dataType;
     private $fieldset;
     private $isDefaultAutoSave = true;
-    private $isOnlyForFrontPage = null;
+    private $isOnlyForFrontPage;
+    private $isOnlyForPostsPage;
     private $pageTemplates = array();
     private $postFormat;
     private $customCallback;
@@ -311,6 +312,33 @@ class KT_MetaBox implements KT_Registrable {
      */
     public function setIsOnlyForFrontPage($isOnlyForFrontPage = true) {
         $this->isOnlyForFrontPage = KT::tryGetBool($isOnlyForFrontPage);
+        return $this;
+    }
+
+    /**
+     * Vrátí označení, zda se má MetaBox aplikovat pouze stránku s příspěvky
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return boolean
+     */
+    public function getIsOnlyForPostsPage() {
+        return $this->isOnlyForPostsPage;
+    }
+
+    /**
+     * Nastaví označení, zda se má MetaBox aplikovat pouze stránku s příspěvky
+     * Pozn.: tuto funkci je vhodné používat pouze pro metaboxy registrované stránkám s příspěvky
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param boolean $isOnlyForPostsPage
+     * @return \KT_MetaBox
+     */
+    public function setIsOnlyForPostsPage($isOnlyForPostsPage = true) {
+        $this->isOnlyForPostsPage = KT::tryGetBool($isOnlyForPostsPage);
         return $this;
     }
 
@@ -920,6 +948,17 @@ class KT_MetaBox implements KT_Registrable {
             if ($isPage) {
                 $frontPageId = get_option(KT_WP_OPTION_KEY_FRONT_PAGE);
                 if (($isOnlyForFrontPage && $postId != $frontPageId) || (!$isOnlyForFrontPage && $postId == $frontPageId)) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        $isOnlyForPostsPage = $this->getIsOnlyForPostsPage();
+        if (isset($isOnlyForPostsPage)) {
+            if ($isPage) {
+                $postsPageId = get_option(KT_WP_OPTION_KEY_POSTS_PAGE);
+                if (($isOnlyForPostsPage && $postId != $postsPageId) || (!$isOnlyForPostsPage && $postId == $postsPageId)) {
                     return false;
                 }
             } else {
