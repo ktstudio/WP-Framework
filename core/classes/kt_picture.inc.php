@@ -45,10 +45,12 @@ class KT_Picture extends KT_Image
         $html = "<picture>";
         foreach ($this->getSizes() as $maxWidth => $source) {
             if (KT::isIdFormat($maxWidth)) {
-                if (is_array($source)) {
-                    $html .= "<source srcset=\"{$this->tryGetSrcsetValue($source)}\" media=\"(max-width: {$maxWidth}px)\">";
+                $srcset = is_array($source) ? $this->tryGetSrcsetValue($source) : $source;
+                if ($this->getIsLazyLoading()) {
+                    $transparent = KT::imageGetTransparent();
+                    $html .= "<source srcset=\"$transparent\" data-srcset=\"$srcset\" media=\"(max-width: {$maxWidth}px)\">";
                 } else {
-                    $html .= "<source src=\"$source\" media=\"(max-width: {$maxWidth}px)\">";
+                    $html .= "<source srcset=\"$srcset\" media=\"(max-width: {$maxWidth}px)\">";
                 }
             }
         }
