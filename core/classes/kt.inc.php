@@ -918,25 +918,33 @@ class KT {
      * @link http://www.ktstudio.cz
      * 
      * @param string $html
+     * @param bool $withSrcset
      * @return string
      */
-    public static function imageReplaceLazySrc($html) {
-        if (self::issetAndNotEmpty($html) && !KT::isAjax()) { // @todo Možno prováděd i při ajaxu, avšak je třeba dodělat javascript trigger
+    public static function imageReplaceLazySrc($html, $withSrcset = false) {
+        if (self::issetAndNotEmpty($html) && !KT::isAjax()) { // @todo možnost provádět i při ajaxu, avšak je třeba dodělat javascript trigger
             $libxmlInternalErrorsState = libxml_use_internal_errors(true);
             $dom = new DOMDocument();
             $dom->preserveWhiteSpace = false;
             $dom->loadHTML($html);
             $imageTags = $dom->getElementsByTagName("img");
-            $processedImages = array();
+            $keys = ["src" => "data-src"];
+            $processedImages = ["src" => []];
+            if ($withSrcset) {
+                $keys["srcset"] = "data-srcset";
+                $processedImages["srcset"] = [];
+            }
+            $newSource = self::imageGetTransparent();
             foreach ($imageTags as $imageTag) {
-                $oldSrc = $imageTag->getAttribute("src");
-                if (in_array($oldSrc, $processedImages)) {
-                    continue; // tento obrázek byl již zpracován
-                }
-                array_push($processedImages, $oldSrc);
-                $newSrc = self::imageGetTransparent();
-                if ($oldSrc !== $newSrc) {
-                    $html = str_replace("src=\"$oldSrc\"", "src=\"$newSrc\" data-src=\"$oldSrc\"", $html);
+                foreach ($keys as $key => $lazyKey) {
+                    $oldSource = $imageTag->getAttribute($key);
+                    if (empty($oldSource) || in_array($oldSource, $processedImages[$key])) {
+                        continue; // tento obrázek byl již zpracován anebo je prázdný
+                    }
+                    array_push($processedImages[$key], $oldSource);
+                    if ($oldSource !== $newSource) {
+                        $html = str_replace("$key=\"$oldSource\"", "$key=\"$newSource\" $lazyKey=\"$oldSource\"", $html);
+                    }
                 }
             }
             libxml_clear_errors();

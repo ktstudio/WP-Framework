@@ -255,7 +255,7 @@ class KT_Image
 
         $html = $imageTag;
         if ($this->getIsLazyLoading()) {
-            $html = KT::imageReplaceLazySrc($html);
+            $html = KT::imageReplaceLazySrc($html, true);
         }
         if ($this->getIsNoScript()) {
             $html .= "<noscript>$imageTag</noscript>";
