@@ -251,6 +251,19 @@ final class KT_WP_Widget_Remover_Configurator {
     }
 
     /**
+     * Odstraní widget galerie
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return \KT_WP_Widget_Remover_Configurator
+     */
+    public function removeMediaGalleryWidget() {
+        $this->removeWidget("WP_Widget_Media_Gallery");
+        return $this;
+    }
+
+    /**
      * Odstraní widget vlastního HTML
      *
      * @author Martin Hlaváč
@@ -287,7 +300,8 @@ final class KT_WP_Widget_Remover_Configurator {
                 ->removeTagCloudWidget()
                 ->removeMediaAudioWidget()
                 ->removeMediaImageWidget()
-                ->removeMediaVideoWidget();
+                ->removeMediaVideoWidget()
+                ->removeMediaGalleryWidget();
         if (!$keepText) {
             $this->removeTextWidget();
         }

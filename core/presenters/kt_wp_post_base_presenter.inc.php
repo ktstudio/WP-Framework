@@ -192,7 +192,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
         if (KT::issetAndNotEmpty($terms)) {
             foreach ($terms as $term) {
                 $termUrl = get_term_link($term);
-                $html .=  "$before<a href=\"$termUrl\" class=\"$class {$term->slug} $taxonomy term-id-{$term->term_id}\" title=\"{$term->name}\">{$term->name}</a>$after";
+                $html .=  "$before<a href=\"$termUrl\" class=\"$class {$term->slug} $taxonomy data-term-id-{$term->term_id}\" title=\"{$term->name}\">{$term->name}</a>$after";
             }
         }
 
