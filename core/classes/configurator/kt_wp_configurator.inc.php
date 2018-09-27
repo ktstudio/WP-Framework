@@ -1649,9 +1649,18 @@ final class KT_WP_Configurator {
     public static function getCookieStatementHtml() {
         $cookueStatementKey = KT::arrayTryGetValue($_COOKIE, self::COOKIE_STATEMENT_KEY);
         if (KT::notIssetOrEmpty($cookueStatementKey)) {
+            $moreInfoUrl = "https://policies.google.com/technologies/cookies";
+            $privacyPolicyPageId = get_option(KT_WP_OPTION_KEY_PRIVACY_POLICY_PAGE);
+            if (KT::isIdFormat($privacyPolicyPageId)) {
+                $privacyPolicyPermalink = get_permalink($privacyPolicyPageId);
+                if (KT::issetAndNotEmpty($privacyPolicyPermalink)) {
+                    $moreInfoUrl = $privacyPolicyPermalink;
+                }
+            }
+
             $text = __("This site uses cookies. By using this site you consent to the use of Cookies.", "KT_CORE_DOMAIN");
             $moreInfoTitle = __("Find out more", "KT_CORE_DOMAIN");
-            $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://policies.google.com/technologies/cookies");
+            $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", $moreInfoUrl);
             $confirmTitle = __("OK, I understand", "KT_CORE_DOMAIN");
 
             $html = "<span id=\"ktCookieStatementText\">$text</span>";

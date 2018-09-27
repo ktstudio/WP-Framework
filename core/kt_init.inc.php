@@ -54,6 +54,7 @@ define("KT_WP_META_KEY_THUMBNAIL_ID", "_thumbnail_id");
 // --- options ------------------------
 define("KT_WP_OPTION_KEY_FRONT_PAGE", "page_on_front");
 define("KT_WP_OPTION_KEY_POSTS_PAGE", "page_for_posts");
+define("KT_WP_OPTION_KEY_PRIVACY_POLICY_PAGE", "wp_page_for_privacy_policy");
 // --- theme support ------------------------
 define("KT_WP_THEME_SUPPORT_POST_FORMATS_KEY", "post-formats");
 define("KT_WP_THEME_SUPPORT_POST_THUMBNAILS_KEY", "post-thumbnails");
