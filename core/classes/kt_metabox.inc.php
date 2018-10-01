@@ -775,7 +775,7 @@ class KT_MetaBox implements KT_Registrable {
                         if (KT::issetAndNotEmpty($postPrefix)) {
                             $fieldset->setFieldsData($crudInstance->getData());
                         } else {
-                            throw new KT_Not_Implemented_Exception(__("Only form with set postPrefix are supported", "KT_CORE_DOMAIN"));
+                            throw new KT_Not_Implemented_Exception(__("Only form with set postPrefix are supported.", "KT_CORE_DOMAIN"));
                         }
                     }
                 }

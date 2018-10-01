@@ -1047,7 +1047,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
 
         if (KT::issetAndNotEmpty($transientValue)) {
             echo "<div class=\"error\">";
-            echo "<p>" . __("Some of the data has not been saved. Please check your input and repeat the process", "KT_CORE_DOMAIN") . ".</p>";
+            echo "<p>" . __("Some of the data has not been saved. Please check your input and repeat the process.", "KT_CORE_DOMAIN") . ".</p>";
             echo "</div>";
         }
     }

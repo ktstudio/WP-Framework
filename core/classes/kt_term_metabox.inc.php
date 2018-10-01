@@ -17,10 +17,9 @@ class KT_Term_Metabox implements KT_Registrable {
      * @throws Exception
      */
     public function __construct(KT_Form_Fieldset $fieldset, $taxonomy = KT_WP_CATEGORY_KEY) {
-        /*  if (KT_Termmeta::getIsActive() == false) {
-          throw new KT_Not_Supported_Exception("KT Termmeta nejsou aktivní...", "KT_CORE_DOMAIN");
-          }
-         */
+        if (KT_Termmeta::getIsActive() == false) {
+            trigger_error(__("KT Termmeta are not active...", "KT_CORE_DOMAIN"), E_USER_NOTICE);
+        }
         $this->setTaxonomy($taxonomy);
         if (!kt::issetAndNotEmpty($fieldset->getPostPrefix())) {
             throw new KT_Not_Supported_Exception(__("If you want work with term meta, you must set postPrefix to your fieldset.", "KT_CORE_DOMAIN"));
@@ -63,7 +62,7 @@ class KT_Term_Metabox implements KT_Registrable {
         }
         foreach ($taxonomies as $taxonomy) {
             if (!taxonomy_exists($taxonomy)) {
-                //throw new KT_Not_Supported_Exception(sprintf(__("Tato taxonomie \"%s\" neexistuje", "KT_CORE_DOMAIN"), $taxonomy));
+                trigger_error(sprintf(__("This taxonomy \"%s\" is not exists!", "KT_CORE_DOMAIN"), $taxonomy), E_USER_NOTICE);
             }
         }
         $this->taxonomies = $taxonomies;
@@ -81,27 +80,6 @@ class KT_Term_Metabox implements KT_Registrable {
     private function setTaxonomies(array $taxonomies) {
         $this->taxonomies = $taxonomies;
         return $this;
-    }
-
-    /**
-     * Přidání novou taxonomii do kolekce zadaných, pokud již není obsažena
-     * 
-     * @author Martin Hlaváč
-     * @link http://www.ktstudio.cz 
-     * 
-     * @param string $taxonomy
-     * @return boolean
-     */
-    private function addTaxonomy($taxonomy) {
-        if (KT::issetAndNotEmpty($taxonomy) && is_string($taxonomy)) {
-            $taxonomies = $this->getTaxonomies();
-            if (!in_array($taxonomy, $taxonomies)) {
-                array_push($taxonomies, $taxonomy);
-                $this->setTaxonomies($taxonomies);
-                return true;
-            }
-        }
-        return false;
     }
 
     // --- veřejné metody ---------------------
@@ -143,8 +121,8 @@ class KT_Term_Metabox implements KT_Registrable {
      * @author Jan Pokorný
      */
     public function saveFieldset($termId) {
-        $fieldset = $this->getFieldset();
-        if (isset($_POST[$fieldset->getPostPrefix()])) {
+        if (KT::arrayIssetAndNotEmpty($_POST)) {
+            $fieldset = $this->getFieldset();
             $form = new KT_form();
             $form->addFieldSetByObject($fieldset);
             $form->validate();
@@ -218,6 +196,4 @@ class KT_Term_Metabox implements KT_Registrable {
         }
         return $metaboxes;
     }
-
-    // --- neveřejné metody ---------------------
 }

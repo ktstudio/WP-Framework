@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Překlad pro WP Framework\n"
-"POT-Creation-Date: 2018-09-27 07:45+0200\n"
+"POT-Creation-Date: 2018-10-01 16:31+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: Brilo Team s.r.o. <team@brilo.cz>\n"
@@ -95,7 +95,7 @@ msgstr "Pořadí"
 #: core/classes/custom_url/kt_custom_template.inc.php:111
 #, php-format
 msgid "This file %s doesn`t exist!"
-msgstr "Tento soubor \"%s\" nexistuje."
+msgstr "Tento soubor \"%s\" nexistuje!"
 
 #: core/classes/custom_url/kt_custom_template.inc.php:141
 #, php-format
@@ -124,7 +124,7 @@ msgstr "Soubor byl smazán"
 
 #: core/classes/fields/kt_media_field.inc.php:150
 msgid "Files were removed"
-msgstr "Soubor(y) byl(y) smazán(y)."
+msgstr "Soubor(y) byl(y) smazán(y)"
 
 #: core/classes/fields/kt_options_field_base.inc.php:69
 #: core/classes/fields/kt_switch_field.inc.php:84
@@ -175,7 +175,7 @@ msgstr "Ve formuláři nastala chyba"
 #: core/classes/form/kt_form.inc.php:1050
 msgid ""
 "Some of the data has not been saved. Please check your input and repeat the "
-"process"
+"process."
 msgstr ""
 "Některé data nebyly správně uložena. Prosím, zkontrolujte vstupní hodnoty a "
 "proces opakujte."
@@ -242,12 +242,12 @@ msgstr "Skrytá kopie \"%s\" není validní emailová adresa!"
 #: core/classes/kt_mailer.inc.php:230
 #, php-format
 msgid "Sender \"%s\" is not valid email address!"
-msgstr "Odesílatel \"%s\" není validní emailová adresa."
+msgstr "Odesílatel \"%s\" není validní emailová adresa!"
 
 #: core/classes/kt_mailer.inc.php:246
 #, php-format
 msgid "Reply to \"%s\" is not valid email address!"
-msgstr "Přeposlat \"%s\" není validní emailová adresa."
+msgstr "Přeposlat \"%s\" není validní emailová adresa!"
 
 #: core/classes/kt_mailer.inc.php:359
 #, php-format
@@ -255,7 +255,7 @@ msgid "Reciver \"%s\" is not valid email address!"
 msgstr "Příjemce “%s” není platná emailová adresa!"
 
 #: core/classes/kt_metabox.inc.php:778
-msgid "Only form with set postPrefix are supported"
+msgid "Only form with set postPrefix are supported."
 msgstr "Zatím jsou podporovány pouze formulář s nastaveným postPrefix."
 
 #: core/classes/kt_metabox.inc.php:788
@@ -263,10 +263,19 @@ msgstr "Zatím jsou podporovány pouze formulář s nastaveným postPrefix."
 msgid "Date type of metabox: %s"
 msgstr "Datový typ metaboxu: %s"
 
-#: core/classes/kt_term_metabox.inc.php:26
+#: core/classes/kt_term_metabox.inc.php:21
+msgid "KT Termmeta are not active..."
+msgstr "KT Termmeta nejsou aktivní…"
+
+#: core/classes/kt_term_metabox.inc.php:25
 msgid ""
 "If you want work with term meta, you must set postPrefix to your fieldset."
 msgstr "Pro práci s term meta musí mít fieldset nastavený postPrefix."
+
+#: core/classes/kt_term_metabox.inc.php:65
+#, php-format
+msgid "This taxonomy \"%s\" is not exists!"
+msgstr "Tato taxonomie \"%s\" neexistuje!"
 
 #: core/classes/validators/kt_field_validator.inc.php:250
 msgid "The value for the validate range must be an array type."
@@ -682,7 +691,7 @@ msgstr "Operace není implementována!"
 #: core/exceptions/kt_not_implemented_exception.inc.php:24
 #, php-format
 msgid ""
-"unimplemented operation: %s \n"
+"Unimplemented operation: %s \n"
 " %s"
 msgstr ""
 "Neimplementovaná operace : %s \n"
@@ -761,7 +770,7 @@ msgstr "Uživatel s tímto ID neexistuje (ve WP databázi)"
 #: core/presenters/kt_contact_form_base_presenter.inc.php:136
 #: core/presenters/kt_user_profile_base_presenter.inc.php:168
 msgid "Error processing resource addresses..."
-msgstr "Chyba zpracování zdrojové adresy"
+msgstr "Chyba zpracování zdrojové adresy…"
 
 #: core/presenters/kt_contact_form_base_presenter.inc.php:145
 msgid "You filled out unauthorized control element..."
@@ -847,7 +856,7 @@ msgstr "Chyba při ukládání uživatelského profilu..."
 
 #: core/presenters/kt_user_profile_base_presenter.inc.php:235
 msgid "Your profile has been successfully edited and saved changes."
-msgstr "Vaše profilové údaje byly uspěšně změněny a uloženy"
+msgstr "Vaše profilové údaje byly uspěšně změněny a uloženy."
 
 #: core/presenters/kt_user_profile_base_presenter.inc.php:247
 msgid ""
@@ -879,12 +888,12 @@ msgid "(KT) WP CRON"
 msgstr "(KT) WP CRON"
 
 #: core/requires/metaboxes/kt_wp_cron_metabox.admin.inc.php:6
-msgid "scheduled events"
+msgid "Scheduled events"
 msgstr "Naplánované události"
 
 #: core/requires/metaboxes/kt_wp_cron_metabox.admin.inc.php:32
-msgid "established intervals"
-msgstr "stanovené intervaly"
+msgid "Established intervals"
+msgstr "Stanovené intervaly"
 
 #: core/requires/template_pages/kt_log_admin_page.admin.inc.php:8
 msgid "List of KT logs"
