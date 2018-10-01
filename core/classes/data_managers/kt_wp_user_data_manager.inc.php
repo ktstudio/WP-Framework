@@ -4,6 +4,15 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
 
     private $allUserRoles = array();
     private $userMetaQuery = array();
+    private $excludedIds;
+
+
+    public function __construct(array $excludedIds = [])
+    {
+        if (count($excludedIds) > 0) {
+            $this->setExcludedIds($excludedIds);
+        }
+    }
 
     // --- gettery -------------
 
@@ -31,6 +40,24 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
 
     private function getUserMetaQuery() {
         return $this->userMetaQuery;
+    }
+
+    /** @return bool */
+    public function getExcludedIds()
+    {
+        return $this->excludedIds;
+    }
+
+    /**
+     * @param array $values
+     * @return KT_WP_User_Data_Manager
+     */
+    public function setExcludedIds(array $values)
+    {
+        $this->excludedIds = array_filter($values, function($value) {
+            return KT::isIdFormat($value);
+        });
+        return $this;
     }
 
     // --- settery --------------
@@ -82,7 +109,6 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
      * @return \KT_WP_User_Data_Manager
      */
     private function dataInit() {
-        $userData = array();
         $userData = $this->getAllUsersData();
         $this->setData($userData);
         return $this;
@@ -157,19 +183,22 @@ class KT_WP_User_Data_Manager extends KT_Data_Manager_Base {
             return array();
         }
 
-        $userQueryParams = array(
+        $args = [
             "role" => $role,
-            "fields" => array("ID", "display_name", "user_login")
-        );
+            "fields" => ["ID", "display_name", "user_login"]
+        ];
         $userMetaQuery = $this->getUserMetaQuery();
 
         if (KT::issetAndNotEmpty($userMetaQuery) && is_array($userMetaQuery) && count($userMetaQuery) > 0) {
-            $userQueryParams["meta_query"] = $userMetaQuery;
+            $args["meta_query"] = $userMetaQuery;
+        }
+        $excludedIds = $this->getExcludedIds();
+        if (KT::arrayIssetAndNotEmpty($excludedIds)) {
+            $args["exclude"] = $excludedIds;
         }
 
-        $userQuery = new WP_User_Query($userQueryParams);
-
-        return $userQuery->results;
+        $query = new WP_User_Query($args);
+        return $query->results;
     }
 
     /**
