@@ -19,7 +19,7 @@ class KT_Picture extends KT_Image
 
     /**
      * @param array $sizes další velikosti ["do velikosti [px]" => $src/$srcset]
-     * @return $this
+     * @return KT_Picture
      */
     public function setSizes(array $sizes)
     {
@@ -44,18 +44,28 @@ class KT_Picture extends KT_Image
     {
         $html = "<picture>";
         $transparent = KT::imageGetTransparent();
-        foreach ($this->getSizes() as $maxWidth => $source) {
-            if (KT::isIdFormat($maxWidth)) {
-                $srcset = is_array($source) ? $this->tryGetSrcsetValue($source) : $source;
-                if ($this->getIsLazyLoading()) {
-                    $html .= "<source srcset=\"$transparent\" data-srcset=\"$srcset\" media=\"(max-width: {$maxWidth}px)\">";
-                } else {
-                    $html .= "<source srcset=\"$srcset\" media=\"(max-width: {$maxWidth}px)\">";
-                }
+        foreach ($this->getSizes() as $width => $source) {
+            $srcset = is_array($source) ? $this->tryGetSrcsetValue($source) : $source;
+            if (KT::isIdFormat($width)) {
+                $media = "(max-width: {$width}px)";
+            } else {
+                $media = "($width)";
+            }
+            if ($this->getIsLazyLoading()) {
+                $html .= "<source srcset=\"$transparent\" data-srcset=\"$srcset\" media=\"$media\">";
+            } else {
+                $html .= "<source srcset=\"$srcset\" media=\"$media\">";
             }
         }
+        $isNoScript = $this->getIsNoScript();
+        $this->setIsNoScript(false);
         $html .= parent::buildHtml();
         $html .= "</picture>";
+        if ($isNoScript) {
+            $this->setIsLazyLoading(false);
+            $imageTag = parent::buildHtml();
+            $html .= "<noscript>$imageTag</noscript>";
+        }
         return $html;
     }
 
@@ -69,11 +79,11 @@ class KT_Picture extends KT_Image
     public static function render($sizes, $alt = "", $class = null, $isLazyLoading = true, $isNoScript = true)
     {
         $image = new KT_Picture();
-        foreach ($sizes as $maxWidth => $fileName) {
+        foreach ($sizes as $width => $fileName) {
             if (KT::stringStartsWith($fileName, "http://") || KT::stringStartsWith($fileName, "https://")) {
-                $sizes[$maxWidth] = $fileName;
+                $sizes[$width] = $fileName;
             } else {
-                $sizes[$maxWidth] = KT::imageGetUrlFromTheme($fileName);
+                $sizes[$width] = KT::imageGetUrlFromTheme($fileName);
             }
         }
         $image->setSrc(reset($sizes));
@@ -95,11 +105,11 @@ class KT_Picture extends KT_Image
     public static function renderSet(array $sizes, $alt = "", $class = null, $isLazyLoading = true, $isNoScript = true)
     {
         $image = new KT_Picture();
-        foreach ($sizes as $maxWidth => $srcset) {
+        foreach ($sizes as $width => $srcset) {
             foreach ($srcset as $zoomNumber => $fileName) {
                 $srcset[$zoomNumber] = KT::imageGetUrlFromTheme($fileName);
             }
-            $sizes[$maxWidth] = $srcset;
+            $sizes[$width] = $srcset;
         }
         $image->setSrcset(reset($sizes));
         $image->setSizes($sizes);
