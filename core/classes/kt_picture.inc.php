@@ -29,7 +29,7 @@ class KT_Picture extends KT_Image
 
     /**
      * @param array $params
-     * @return $this
+     * @return KT_Picture
      */
     public function initialize(array $params)
     {

@@ -15,6 +15,7 @@ class KT_Image
     private $width;
     private $height;
     private $alt;
+    private $title;
     private $class;
     private $data = [];
     private $isLazyLoading;
@@ -28,7 +29,7 @@ class KT_Image
 
     /**
      * @param string $id
-     * @return $this
+     * @return KT_Image
      */
     public function setId($id)
     {
@@ -44,7 +45,7 @@ class KT_Image
 
     /**
      * @param string $src
-     * @return $this
+     * @return KT_Image
      */
     public function setSrc($src)
     {
@@ -60,7 +61,7 @@ class KT_Image
 
     /**
      * @param array $srcset [ZOOM number => image URL] or "ready" string
-     * @return $this
+     * @return KT_Image
      */
     public function setSrcset($srcset)
     {
@@ -76,7 +77,7 @@ class KT_Image
 
     /**
      * @param int $width
-     * @return $this
+     * @return KT_Image
      */
     public function setWidth($width)
     {
@@ -92,7 +93,7 @@ class KT_Image
 
     /**
      * @param int $height
-     * @return $this
+     * @return KT_Image
      */
     public function setHeight($height)
     {
@@ -108,11 +109,27 @@ class KT_Image
 
     /**
      * @param string $alt
-     * @return $this
+     * @return KT_Image
      */
     public function setAlt($alt)
     {
         $this->alt = $alt;
+        return $this;
+    }
+
+    /** @return string */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     * @return KT_Image
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
         return $this;
     }
 
@@ -124,7 +141,7 @@ class KT_Image
 
     /**
      * @param string $class
-     * @return $this
+     * @return KT_Image
      */
     public function setClass($class)
     {
@@ -141,7 +158,7 @@ class KT_Image
     /**
      * @param string $key
      * @param string $value
-     * @return $this
+     * @return KT_Image
      */
     public function addData($key, $value)
     {
@@ -151,7 +168,7 @@ class KT_Image
 
     /**
      * @param string $key
-     * @return $this
+     * @return KT_Image
      */
     public function removeData($key)
     {
@@ -167,7 +184,7 @@ class KT_Image
 
     /**
      * @param boolean $isLazyLoading
-     * @return $this
+     * @return KT_Image
      */
     public function setIsLazyLoading($isLazyLoading)
     {
@@ -183,7 +200,7 @@ class KT_Image
 
     /**
      * @param boolean $isNoScript
-     * @return $this
+     * @return KT_Image
      */
     public function setIsNoScript($isNoScript)
     {
@@ -193,7 +210,7 @@ class KT_Image
 
     /**
      * @param array $params
-     * @return $this
+     * @return KT_Image
      */
     public function initialize(array $params)
     {
@@ -214,6 +231,9 @@ class KT_Image
         }
         if (array_key_exists("alt", $params)) {
             $this->setAlt($params["alt"]);
+        }
+        if (array_key_exists("title", $params)) {
+            $this->setTitle($params["title"]);
         }
         if (array_key_exists("class", $params)) {
             $this->setClass($params["class"]);
@@ -244,6 +264,7 @@ class KT_Image
         $imageTag .= $this->tryGetImageParam("width", $this->getWidth());
         $imageTag .= $this->tryGetImageParam("height", $this->getHeight());
         $imageTag .= $this->tryGetImageParam("alt", $this->getAlt());
+        $imageTag .= $this->tryGetImageParam("title", $this->getTitle());
         $imageTag .= $this->tryGetImageParam("class", $this->getClass());
         $data = $this->getData();
         if (KT::arrayIssetAndNotEmpty($data)) {
