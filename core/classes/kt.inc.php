@@ -1650,7 +1650,7 @@ class KT {
      * @link http://www.ktstudio.cz
      * 
      * @param string $text
-     * @return string
+     * @return array
      */
     public static function textLinesToArray($text) {
         if (KT::issetAndNotEmpty($text)) {
@@ -1681,7 +1681,7 @@ class KT {
             foreach ($lines as $line) {
                 $output .= "<{$tag}{$classPart}>{$line}</{$tag}>";
             }
-            return $output;
+            return str_replace("&#13;&#10;", "<br>", $output);
         }
         return null;
     }
