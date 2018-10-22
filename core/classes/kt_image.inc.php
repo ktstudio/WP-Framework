@@ -360,6 +360,30 @@ class KT_Image
     }
 
     /**
+     * @param string $src relativní cesta pro KT::imageGetUrlFromTheme($src)
+     * @param string $alt
+     * @param int $width
+     * @param string $class
+     * @param bool $isLazyLoading
+     * @param bool $isNoScript
+     */
+    public static function renderIcon($src, $alt = "", $width = null, $class = null, $isLazyLoading = true, $isNoScript = true)
+    {
+        $image = new KT_Image();
+        if (KT::stringStartsWith($src, "http://") || KT::stringStartsWith($src, "https://")) {
+            $image->setSrc($src);
+        } else {
+            $image->setSrc(KT::imageGetUrlFromTheme($src));
+        }
+        $image->setAlt($alt);
+        $image->setWidth($width);
+        $image->setClass($class);
+        $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
+        echo $image->buildHtml();
+    }
+
+    /**
      * @param string $key
      * @param string $value
      * @return null|string
