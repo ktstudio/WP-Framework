@@ -27,16 +27,16 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
     public function __construct($withProcessing = true) {
         if ($withProcessing) {
             $this->process();
-            $processedParam = filter_input(INPUT_GET, $this->getProcessdParam(), FILTER_SANITIZE_ENCODED);
-            if (isset($processedParam)) {
-                $processed = substr($processedParam, 0, 1);
-                if ($processed === "1") {
-                    $this->wasProcessed = true;
-                    add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderSuccessNotice"));
-                } elseif ($processed === "0") {
-                    $this->wasProcessed = false;
-                    add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderErrorNotice"));
-                }
+        }
+        $processedParam = filter_input(INPUT_GET, $this->getProcessdParam(), FILTER_SANITIZE_ENCODED);
+        if (isset($processedParam)) {
+            $processed = substr($processedParam, 0, 1);
+            if ($processed === "1") {
+                $this->wasProcessed = true;
+                add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderSuccessNotice"));
+            } elseif ($processed === "0") {
+                $this->wasProcessed = false;
+                add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderErrorNotice"));
             }
         }
     }
