@@ -302,7 +302,7 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @param string $postStatus - nazev statusu příspěvků - DEFAULTNĚ : publish
      * @return mixed
      */
-    public function getUserPostCount($postType = KT_WP_POST_KEY, $postStatus = "publish") {
+    public function getUserPostCount($postType = KT_WP_POST_KEY, $postStatus = KT_WP_POST_STATUS_PUBLISH) {
         global $wpdb;
         $preparData = array();
 
@@ -340,7 +340,7 @@ class KT_WP_User_Base_Model extends KT_Meta_Model_Base {
      * @param array $args - další argumenty pro WP_Query
      * @return \WP_Query
      */
-    public function getQueryWithUserPosts($postType = KT_WP_POST_KEY, $postStatus = "publish", array $args = array()) {
+    public function getQueryWithUserPosts($postType = KT_WP_POST_KEY, $postStatus = KT_WP_POST_STATUS_PUBLISH, array $args = []) {
         $basicArgs = array(
             "author" => $this->getId(),
             "posts_per_page" => -1,

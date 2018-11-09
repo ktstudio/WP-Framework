@@ -85,6 +85,15 @@ define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_STATUS", "status");
 define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_VIDEO", "video");
 define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_AUDIO", "audio");
 define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_CHAT", "chat");
+// --- post statuses ------------------------
+define("KT_WP_POST_STATUS_PUBLISH", "publish");
+define("KT_WP_POST_STATUS_FUTURE", "future");
+define("KT_WP_POST_STATUS_DRAFT", "draft");
+define("KT_WP_POST_STATUS_PENDING", "pending");
+define("KT_WP_POST_STATUS_PRIVATE", "private");
+define("KT_WP_POST_STATUS_TRASH", "trash");
+define("KT_WP_POST_STATUS_AUTO_DRAFT", "auto-draft");
+define("KT_WP_POST_STATUS_INHERIT", "inherit");
 // --- taxonomies ------------------------
 define("KT_WP_POST_FORMAT_KEY", "post_format");
 define("KT_WP_TAG_KEY", "post_tag");

@@ -366,7 +366,7 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
     protected function initOtherPostsQuery() {
         $args = array(
             "post_type" => $this->getModel()->getPostType(),
-            "post_status" => "publish",
+            "post_status" => KT_WP_POST_STATUS_PUBLISH,
             "post_parent" => 0,
             "posts_per_page" => $this->getOtherPostsLimit(),
             "orderby" => "date",

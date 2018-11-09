@@ -490,6 +490,18 @@ class KT_WP_Post_Base_Model extends KT_Meta_Model_Base implements KT_Postable {
     }
 
     /**
+     * Vrátí post status
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @return string
+     */
+    public function getPostStatus() {
+        return $this->getPost()->post_status;
+    }
+
+    /**
      * Vrátí (za/daný) post slug, resp. name
      * 
      * @author Martin Hlaváč
