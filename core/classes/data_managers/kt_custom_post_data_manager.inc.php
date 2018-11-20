@@ -2,11 +2,9 @@
 
 class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
 
-    private $queryArgs = array();
+    private $queryArgs = [];
     private $prefixMetaKey = null;
     private $suffixMetaKey = null;
-    private $prefixMetaValue = null;
-    private $suffixMetaValue = null;
 
     function __construct(array $queryArgs = null) {
         if (KT::arrayIssetAndNotEmpty($queryArgs)) {
@@ -22,54 +20,30 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      * @return array
      */
     public function getData() {
-
         if (KT::notIssetOrEmpty(parent::getData())) {
             $this->dataInit();
         }
-
         return parent::getData();
     }
 
-    /**
-     * @return array
-     */
+    /** @return string */
     private function getQueryArgs() {
         return $this->queryArgs;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getFieldType() {
         return self::FIELD_TYPE;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     private function getPrefixMetaKey() {
         return $this->prefixMetaKey;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     private function getSuffixMetaKey() {
         return $this->suffixMetaKey;
-    }
-
-    /**
-     * @return string
-     */
-    private function getPrefixMetaValue() {
-        return $this->prefixMetaValue;
-    }
-
-    /**
-     * @return string
-     */
-    private function getSuffixMetaValue() {
-        return $this->suffixMetaValue;
     }
 
     // --- settery -----------
@@ -85,7 +59,6 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      */
     public function setQueryArgs(array $queryArgs) {
         $this->queryArgs = $queryArgs;
-
         return $this;
     }
 
@@ -100,7 +73,6 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      */
     public function setPrefixMetaKey($prefixMetaKey) {
         $this->prefixMetaKey = $prefixMetaKey;
-
         return $this;
     }
 
@@ -114,36 +86,21 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
      * @return \KT_Post_Type_Select_Field
      */
     public function setSuffixMetaKey($suffixMetaKey) {
-        $this->suffixMetaKey($suffixMetaKey);
-
+        $this->suffixMetaKey = $suffixMetaKey;
         return $this;
     }
 
-    /**
-     * Nastaví vyčtenou hodnotu z postMetas pro další použití
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     * 
-     * @param string $prefixMetaValue
-     */
-    private function setPrefixMetaValue($prefixMetaValue) {
-        $this->prefixMetaValue = $prefixMetaValue;
+    // --- veřejné metody ------------------------
+
+    /** @return boolean */
+    private function isPrefixMetaKey() {
+        return KT::issetAndNotEmpty($this->getPrefixMetaKey());
     }
 
-    /**
-     * Nastaví vyčtenou hodnotu z postMetas pro další použití
-     * 
-     * @author Tomáš Kocifaj
-     * @link http://www.ktstudio.cz
-     * 
-     * @param string $suffixMetaValue
-     */
-    private function setSuffixMetaValue($suffixMetaValue) {
-        $this->suffixMetaValue = $suffixMetaValue;
+    /** @return boolean */
+    private function isSuffixMetaKey() {
+        return KT::issetAndNotEmpty($this->getSuffixMetaKey());
     }
-
-    // --- veřejné funkce -----
 
     /**
      * Dojde k inicilizaci dat manageru dle nastavení argumentů pro WP_Query
@@ -161,68 +118,56 @@ class KT_Custom_Post_Data_Manager extends KT_Data_Manager_Base {
         }
 
         $postCollection = get_posts($this->getQueryArgs());
-        $options = null;
+        $options = [];
         if (KT::issetAndNotEmpty($postCollection)) {
             foreach ($postCollection as $postItem) {
-                $options[$postItem->ID] = $this->getPrefixValue($postItem->ID) . " " . $postItem->post_title . " " . $this->getSuffixValue($postItem->ID);
+                $postId = $postItem->ID;
+                $options[$postId] = $this->getPrefixValue($postId) . $postItem->post_title . $this->getSuffixValue($postId);
             }
         }
-
-        if (KT::issetAndNotEmpty($options)) {
-            $this->setData($options);
-        }
+        $this->setData($options);
 
         return $this;
     }
 
-    // --- privátní funkce -----
+    // --- neveřejné metody ------------------------
 
     /**
      * Vrátí hodnotu meta_value na základě nastaveného meta klíče
      * 
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz 
      * 
      * @param int $postId
      * @return string
      */
-    private function getPrefixValue($postId) {
-        if (KT::issetAndNotEmpty($this->getPrefixMetaKey())) {
-            if (KT::issetAndNotEmpty($this->getPrefixMetaValue())) {
-                return $this->getPrefixMetaValue();
+    protected function getPrefixValue($postId) {
+        if ($this->isPrefixMetaKey()) {
+            $metaValue = get_post_meta($postId, $this->getPrefixMetaKey(), true);
+            if (KT::issetAndNotEmpty($metaValue)) {
+                return "$metaValue - ";
             }
-
-            $prefixMetaValue = get_post_meta($postId, $this->getPrefixMetaKey(), true);
-            $this->setPrefixMetaValue($prefixMetaValue);
-
-            return $this->getPrefixMetaValue();
         }
-
-        return "";
+        return null;
     }
 
     /**
      * Vrátí hodnotu meta_value na základě nastaveného meta klíče
      * 
-     * @author Tomáš Kocifaj
+     * @author Martin Hlaváč
      * @link http://www.ktstudio.cz 
      * 
      * @param int $postId
      * @return string
      */
-    private function getSuffixValue($postId) {
-        if (KT::issetAndNotEmpty($this->getSuffixMetaKey())) {
-            if (KT::issetAndNotEmpty($this->getSuffixMetaValue())) {
-                return $this->getSuffixMetaValue();
+    protected function getSuffixValue($postId) {
+        if ($this->isSuffixMetaKey()) {
+            $metaValue = get_post_meta($postId, $this->getSuffixMetaKey(), true);
+            if (KT::issetAndNotEmpty($metaValue)) {
+                return " - $metaValue";
             }
-
-            $suffixMetaValue = get_post_meta($postId, $this->getSuffixMetaKey(), true);
-            $this->setSuffixMetaValue($suffixMetaValue);
-
-            return $this->getSuffixMetaValue();
         }
-
-        return "";
+        return null;
     }
 
 }

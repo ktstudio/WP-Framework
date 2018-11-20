@@ -54,6 +54,7 @@ define("KT_WP_META_KEY_THUMBNAIL_ID", "_thumbnail_id");
 // --- options ------------------------
 define("KT_WP_OPTION_KEY_FRONT_PAGE", "page_on_front");
 define("KT_WP_OPTION_KEY_POSTS_PAGE", "page_for_posts");
+define("KT_WP_OPTION_KEY_PRIVACY_POLICY_PAGE", "wp_page_for_privacy_policy");
 // --- theme support ------------------------
 define("KT_WP_THEME_SUPPORT_POST_FORMATS_KEY", "post-formats");
 define("KT_WP_THEME_SUPPORT_POST_THUMBNAILS_KEY", "post-thumbnails");
@@ -84,7 +85,17 @@ define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_STATUS", "status");
 define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_VIDEO", "video");
 define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_AUDIO", "audio");
 define("KT_WP_POST_TYPE_SUPPORTED_FORMAT_CHAT", "chat");
+// --- post statuses ------------------------
+define("KT_WP_POST_STATUS_PUBLISH", "publish");
+define("KT_WP_POST_STATUS_FUTURE", "future");
+define("KT_WP_POST_STATUS_DRAFT", "draft");
+define("KT_WP_POST_STATUS_PENDING", "pending");
+define("KT_WP_POST_STATUS_PRIVATE", "private");
+define("KT_WP_POST_STATUS_TRASH", "trash");
+define("KT_WP_POST_STATUS_AUTO_DRAFT", "auto-draft");
+define("KT_WP_POST_STATUS_INHERIT", "inherit");
 // --- taxonomies ------------------------
+define("KT_WP_POST_FORMAT_KEY", "post_format");
 define("KT_WP_TAG_KEY", "post_tag");
 define("KT_WP_CATEGORY_KEY", "category");
 // --- images size ------------------------

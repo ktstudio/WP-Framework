@@ -19,7 +19,7 @@ class KT_Picture extends KT_Image
 
     /**
      * @param array $sizes další velikosti ["do velikosti [px]" => $src/$srcset]
-     * @return $this
+     * @return KT_Picture
      */
     public function setSizes(array $sizes)
     {
@@ -29,7 +29,7 @@ class KT_Picture extends KT_Image
 
     /**
      * @param array $params
-     * @return $this
+     * @return KT_Picture
      */
     public function initialize(array $params)
     {
@@ -43,17 +43,29 @@ class KT_Picture extends KT_Image
     public function buildHtml()
     {
         $html = "<picture>";
-        foreach ($this->getSizes() as $maxWidth => $source) {
-            if (KT::isIdFormat($maxWidth)) {
-                if (is_array($source)) {
-                    $html .= "<source srcset=\"{$this->tryGetSrcsetValue($source)}\" media=\"(max-width: {$maxWidth}px)\">";
-                } else {
-                    $html .= "<source src=\"$source\" media=\"(max-width: {$maxWidth}px)\">";
-                }
+        $transparent = KT::imageGetTransparent();
+        foreach ($this->getSizes() as $width => $source) {
+            $srcset = is_array($source) ? $this->tryGetSrcsetValue($source) : $source;
+            if (KT::isIdFormat($width)) {
+                $media = "(max-width: {$width}px)";
+            } else {
+                $media = "($width)";
+            }
+            if ($this->getIsLazyLoading()) {
+                $html .= "<source srcset=\"$transparent\" data-srcset=\"$srcset\" media=\"$media\">";
+            } else {
+                $html .= "<source srcset=\"$srcset\" media=\"$media\">";
             }
         }
+        $isNoScript = $this->getIsNoScript();
+        $this->setIsNoScript(false);
         $html .= parent::buildHtml();
         $html .= "</picture>";
+        if ($isNoScript) {
+            $this->setIsLazyLoading(false);
+            $imageTag = parent::buildHtml();
+            $html .= "<noscript>$imageTag</noscript>";
+        }
         return $html;
     }
 
@@ -62,13 +74,16 @@ class KT_Picture extends KT_Image
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
+     * @param bool $isNoScript
      */
-    public static function render($sizes, $alt = "", $class = null, $isLazyLoading = true)
+    public static function render($sizes, $alt = "", $class = null, $isLazyLoading = true, $isNoScript = true)
     {
         $image = new KT_Picture();
-        foreach ($sizes as $maxWidth => $fileName) {
-            if (!KT::stringStartsWith($fileName, "http://")) {
-                $sizes[$maxWidth] = KT::imageGetUrlFromTheme($fileName);
+        foreach ($sizes as $width => $fileName) {
+            if (KT::stringStartsWith($fileName, "http://") || KT::stringStartsWith($fileName, "https://")) {
+                $sizes[$width] = $fileName;
+            } else {
+                $sizes[$width] = KT::imageGetUrlFromTheme($fileName);
             }
         }
         $image->setSrc(reset($sizes));
@@ -76,6 +91,7 @@ class KT_Picture extends KT_Image
         $image->setAlt($alt);
         $image->setClass($class);
         $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
         echo $image->buildHtml();
     }
 
@@ -84,27 +100,28 @@ class KT_Picture extends KT_Image
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
+     * @param bool $isNoScript
      */
-    public static function renderSet(array $sizes, $alt = "", $class = null, $isLazyLoading = true)
+    public static function renderSet(array $sizes, $alt = "", $class = null, $isLazyLoading = true, $isNoScript = true)
     {
         $image = new KT_Picture();
-        foreach ($sizes as $maxWidth => $srcset) {
+        foreach ($sizes as $width => $srcset) {
             foreach ($srcset as $zoomNumber => $fileName) {
                 $srcset[$zoomNumber] = KT::imageGetUrlFromTheme($fileName);
             }
-            $sizes[$maxWidth] = $srcset;
+            $sizes[$width] = $srcset;
         }
         $image->setSrcset(reset($sizes));
         $image->setSizes($sizes);
         $image->setAlt($alt);
         $image->setClass($class);
         $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
         echo $image->buildHtml();
     }
 
     /**
      * @param array $params k inicializaci
-     * @param bool $isLazyLoading
      */
     public static function printArgs(array $params)
     {

@@ -224,7 +224,7 @@ class KT {
      * @return boolean
      */
     public static function arrayIssetAndNotEmpty($array = null) {
-        return self::issetAndNotEmpty($array) && is_array($array) && count($array) > 0;
+        return isset($array) && is_array($array) && count($array) > 0;
     }
 
     /**
@@ -430,9 +430,10 @@ class KT {
      * 
      * @param string $value (datum)
      * @param string $format
+     * @param boolean $withGmt
      * @return string (datum)
      */
-    public static function dateConvert($value, $format = "d.m.Y", $withGmt = true) {
+    public static function dateConvert($value, $format = "d.m.Y", $withGmt = false) {
         if (KT::issetAndNotEmpty($value)) {
             $timeStamp = strtotime($value);
             if ($withGmt) {
@@ -715,6 +716,26 @@ class KT {
     }
 
     /**
+     * Vrátí hodnotu pro zadanou URL dle wp_remote_get pokud existuje nebo výchozí zadanou hodnotu (NULL)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $url
+     * @param string $defaultValue
+     * @return mixed type|null
+     */
+    public static function tryGetWpRemote($url, $defaultValue = null) {
+        $response = wp_remote_get( "$url/" );
+        if (KT::arrayIssetAndNotEmpty($response)) {
+            if ($response["response"]["message"] === "OK") {
+                return json_decode($response["body"]);
+            }
+        }
+        return $defaultValue;
+    }
+
+    /**
      * Kontrola, zda je právě aktivní localhost (na základě SERVER - REMOTE_ADDR)
      * 
      * @author Martin Hlaváč
@@ -797,7 +818,7 @@ class KT {
     }
 
     /**
-     * VYčistí zadané souřadnice o nevhodné znaky, tj. nechá jen číslice, tečky a čárky
+     * Vyčistí zadané souřadnice o nevhodné znaky, tj. nechá jen číslice, tečky a čárky
      * 
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -810,6 +831,25 @@ class KT {
             return preg_replace("/[^0-9,.\/-\/+]/", "", trim($coordinates));
         }
         return null;
+    }
+
+    // --- MULTI SITE(S) ---------------------------
+
+    /**
+     * Přepne multi situ dle zadaného (blog) ID a vyvolá callback funkci, jejíž výsledek následně vrátí
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param int $blogId
+     * @param callable $callback
+     * @return mixed
+     */
+    public static function tryGetWpSiteData($blogId, callable $callback) {
+        switch_to_blog($blogId);
+        $result = call_user_func($callback);
+        restore_current_blog();
+        return $result;
     }
 
     // --- OBRÁZKY - IMAGE ---------------------------
@@ -878,25 +918,33 @@ class KT {
      * @link http://www.ktstudio.cz
      * 
      * @param string $html
+     * @param bool $withSrcset
      * @return string
      */
-    public static function imageReplaceLazySrc($html) {
-        if (self::issetAndNotEmpty($html) && !KT::isAjax()) { // @todo Možno prováděd i při ajaxu, avšak je třeba dodělat javascript trigger
+    public static function imageReplaceLazySrc($html, $withSrcset = false) {
+        if (self::issetAndNotEmpty($html) && !KT::isAjax()) { // @todo možnost provádět i při ajaxu, avšak je třeba dodělat javascript trigger
             $libxmlInternalErrorsState = libxml_use_internal_errors(true);
             $dom = new DOMDocument();
             $dom->preserveWhiteSpace = false;
             $dom->loadHTML($html);
             $imageTags = $dom->getElementsByTagName("img");
-            $processedImages = array();
+            $keys = ["src" => "data-src"];
+            $processedImages = ["src" => []];
+            if ($withSrcset) {
+                $keys["srcset"] = "data-srcset";
+                $processedImages["srcset"] = [];
+            }
+            $newSource = self::imageGetTransparent();
             foreach ($imageTags as $imageTag) {
-                $oldSrc = $imageTag->getAttribute("src");
-                if (in_array($oldSrc, $processedImages)) {
-                    continue; // tento obrázek byl již zpracován
-                }
-                array_push($processedImages, $oldSrc);
-                $newSrc = self::imageGetTransparent();
-                if ($oldSrc !== $newSrc) {
-                    $html = str_replace("src=\"$oldSrc\"", "src=\"$newSrc\" data-src=\"$oldSrc\"", $html);
+                foreach ($keys as $key => $lazyKey) {
+                    $oldSource = $imageTag->getAttribute($key);
+                    if (empty($oldSource) || in_array($oldSource, $processedImages[$key])) {
+                        continue; // tento obrázek byl již zpracován anebo je prázdný
+                    }
+                    array_push($processedImages[$key], $oldSource);
+                    if ($oldSource !== $newSource) {
+                        $html = str_replace("$key=\"$oldSource\"", "$key=\"$newSource\" $lazyKey=\"$oldSource\"", $html);
+                    }
                 }
             }
             libxml_clear_errors();
@@ -914,7 +962,7 @@ class KT {
      * @return string
      */
     public static function imageGetTransparent() {
-        return KT_CORE_IMAGES_URL . "/transparent.png";
+        return "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"; // return KT_CORE_IMAGES_URL . "/transparent.png";
     }
 
     /**
@@ -1033,7 +1081,7 @@ class KT {
      */
     public static function getCustomMenuNameByLocation($location, $defaultTitle = null) {
         $locations = get_nav_menu_locations();
-        $menuLocation = $locations[$location];
+        $menuLocation = KT::arrayTryGetValue($locations, $location);
         if (self::issetAndNotEmpty($menuLocation)) {
             $menuObject = wp_get_nav_menu_object($menuLocation);
             if (self::issetAndNotEmpty($menuObject)) {
@@ -1602,7 +1650,7 @@ class KT {
      * @link http://www.ktstudio.cz
      * 
      * @param string $text
-     * @return string
+     * @return array
      */
     public static function textLinesToArray($text) {
         if (KT::issetAndNotEmpty($text)) {
@@ -1633,7 +1681,7 @@ class KT {
             foreach ($lines as $line) {
                 $output .= "<{$tag}{$classPart}>{$line}</{$tag}>";
             }
-            return $output;
+            return str_replace("&#13;&#10;", "<br>", $output);
         }
         return null;
     }
@@ -1888,6 +1936,39 @@ class KT {
         }
         return false;
     }
+
+    // --- TAXONOMY ---------------------
+
+    /**
+     * Funkce vrátí tag templatu ze subdir - taxonomies
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $tagName - slug zobrazeného tagu
+     * @return string - template path
+     */
+    public static function getTagTemplate($tagName) {
+        $term = get_queried_object();
+        $file = TEMPLATEPATH . "/tags/tag-{$tagName}-{$term->slug}.php";
+        if (file_exists($file)) {
+            return $file;
+        }
+        $file = TEMPLATEPATH . "/tags/tag-{$tagName}-{$term->term_id}.php";
+        if (file_exists($file)) {
+            return $file;
+        }
+        $file = TEMPLATEPATH . "/tags/tag-{$tagName}.php";
+        if (file_exists($file)) {
+            return $file;
+        }
+        if (file_exists(TEMPLATEPATH . "/tags/tag.php")) {
+            return TEMPLATEPATH . "/tags/tag.php";
+        }
+        return false;
+    }
+
+    // --- TEMPLATE PART ---------------------
 
     /**
      * @author Jan Pokorný

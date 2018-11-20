@@ -2,7 +2,7 @@
 
 define("KT_LOADED", true);
 
-define("KT_VERSION", "1.11");
+define("KT_VERSION", "1.12");
 
 define("KT_BASE_PATH", path_join(TEMPLATEPATH, "kt"));
 define("KT_BASE_URL", get_template_directory_uri() . "/kt");
@@ -470,6 +470,14 @@ function kt_load_template_from_subdir($template) {
     // --- taxonomy ---------------------------
     if (is_tax()) {
         $ktTemplate = KT::getTaxonomyTemplate($taxonomy);
+        if ($ktTemplate) {
+            return $ktTemplate;
+        }
+        return $template;
+    }
+    // --- tag ---------------------------
+    if (is_tag()) {
+        $ktTemplate = KT::getTagTemplate($taxonomy);
         if ($ktTemplate) {
             return $ktTemplate;
         }

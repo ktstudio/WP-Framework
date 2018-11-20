@@ -227,6 +227,7 @@ class KT_WP_Term_Base_Model extends KT_Model_Base implements KT_Termable {
         if (array_key_exists($key, $metas)) {
             $value = $metas[$key];
             if (isset($value)) {
+                $value = (is_serialized($value)) ? unserialize($value) : $value;
                 return $value;
             }
         }

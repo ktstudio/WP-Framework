@@ -251,13 +251,15 @@ function kt_core_setup_forms_fields() {
     jQuery(".datepicker:not([readonly])").datetimepicker({
         timepicker: false,
         format: 'd.m.Y',
-        lang: 'cs'
+        lang: 'cs',
+        dayOfWeekStart: 1
     });
 
     // Počeštění jQuery data time pickeru
     jQuery(".datetimepicker:not([readonly])").datetimepicker({
         format: 'd.m.Y H:i',
-        lang: 'cs'
+        lang: 'cs',
+        dayOfWeekStart: 1
     });
 
     // Inicializace switchFieldu

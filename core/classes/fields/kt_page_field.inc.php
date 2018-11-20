@@ -85,7 +85,7 @@ class KT_Page_Field extends KT_Select_Field {
         $args = array(
             "post_type" => KT_WP_PAGE_KEY,
             "posts_per_page" => self::DEFAUL_PAGE_COUNT,
-            "post_status" => "publish",
+            "post_status" => KT_WP_POST_STATUS_PUBLISH,
             "orderby" => "parent title",
             "order" => KT_Repository::ORDER_ASC,
         );

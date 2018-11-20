@@ -11,13 +11,15 @@ class KT_Image
 {
     private $id;
     private $src;
-    private $srcsets;
+    private $srcset;
     private $width;
     private $height;
     private $alt;
+    private $title;
     private $class;
-    private $data = array();
+    private $data = [];
     private $isLazyLoading;
+    private $isNoScript;
 
     /** @return string */
     public function getId()
@@ -27,7 +29,7 @@ class KT_Image
 
     /**
      * @param string $id
-     * @return $this
+     * @return KT_Image
      */
     public function setId($id)
     {
@@ -43,7 +45,7 @@ class KT_Image
 
     /**
      * @param string $src
-     * @return $this
+     * @return KT_Image
      */
     public function setSrc($src)
     {
@@ -51,19 +53,19 @@ class KT_Image
         return $this;
     }
 
-    /** @return string */
+    /** @return array|string */
     public function getSrcset()
     {
-        return $this->srcsets;
+        return $this->srcset;
     }
 
     /**
-     * @param array $srcset [ZOOM number => image URL]
-     * @return $this
+     * @param array $srcset [ZOOM number => image URL] or "ready" string
+     * @return KT_Image
      */
-    public function setSrcset(array $srcset)
+    public function setSrcset($srcset)
     {
-        $this->srcsets = $srcset;
+        $this->srcset = $srcset;
         return $this;
     }
 
@@ -75,7 +77,7 @@ class KT_Image
 
     /**
      * @param int $width
-     * @return $this
+     * @return KT_Image
      */
     public function setWidth($width)
     {
@@ -91,7 +93,7 @@ class KT_Image
 
     /**
      * @param int $height
-     * @return $this
+     * @return KT_Image
      */
     public function setHeight($height)
     {
@@ -107,11 +109,27 @@ class KT_Image
 
     /**
      * @param string $alt
-     * @return $this
+     * @return KT_Image
      */
     public function setAlt($alt)
     {
         $this->alt = $alt;
+        return $this;
+    }
+
+    /** @return string */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     * @return KT_Image
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
         return $this;
     }
 
@@ -123,7 +141,7 @@ class KT_Image
 
     /**
      * @param string $class
-     * @return $this
+     * @return KT_Image
      */
     public function setClass($class)
     {
@@ -140,7 +158,7 @@ class KT_Image
     /**
      * @param string $key
      * @param string $value
-     * @return $this
+     * @return KT_Image
      */
     public function addData($key, $value)
     {
@@ -150,7 +168,7 @@ class KT_Image
 
     /**
      * @param string $key
-     * @return $this
+     * @return KT_Image
      */
     public function removeData($key)
     {
@@ -166,7 +184,7 @@ class KT_Image
 
     /**
      * @param boolean $isLazyLoading
-     * @return $this
+     * @return KT_Image
      */
     public function setIsLazyLoading($isLazyLoading)
     {
@@ -174,9 +192,25 @@ class KT_Image
         return $this;
     }
 
+    /** @return boolean */
+    public function getIsNoScript()
+    {
+        return $this->isNoScript;
+    }
+
+    /**
+     * @param boolean $isNoScript
+     * @return KT_Image
+     */
+    public function setIsNoScript($isNoScript)
+    {
+        $this->isNoScript = KT::tryGetBool($isNoScript);
+        return $this;
+    }
+
     /**
      * @param array $params
-     * @return $this
+     * @return KT_Image
      */
     public function initialize(array $params)
     {
@@ -198,6 +232,9 @@ class KT_Image
         if (array_key_exists("alt", $params)) {
             $this->setAlt($params["alt"]);
         }
+        if (array_key_exists("title", $params)) {
+            $this->setTitle($params["title"]);
+        }
         if (array_key_exists("class", $params)) {
             $this->setClass($params["class"]);
         }
@@ -216,26 +253,33 @@ class KT_Image
     public function buildHtml()
     {
         $srcset = $this->getSrcset();
-        if (KT::notIssetOrEmpty($this->getSrc()) && KT::issetAndNotEmpty($srcset)) {
+        if (KT::notIssetOrEmpty($this->getSrc()) && KT::arrayIssetAndNotEmpty($srcset)) {
             $this->setSrc(reset($srcset));
         }
-        $html = "<img ";
-        $html .= $this->tryGetImageParam("id", $this->getId());
-        $html .= $this->tryGetImageParam("src", $this->getSrc());
-        $html .= $this->tryGetImageParam("srcset", $this->tryGetSrcsetValue($srcset));
-        $html .= $this->tryGetImageParam("width", $this->getWidth());
-        $html .= $this->tryGetImageParam("height", $this->getHeight());
-        $html .= $this->tryGetImageParam("alt", $this->getAlt());
-        $html .= $this->tryGetImageParam("class", $this->getClass());
+
+        $imageTag = "<img ";
+        $imageTag .= $this->tryGetImageParam("id", $this->getId());
+        $imageTag .= $this->tryGetImageParam("src", $this->getSrc());
+        $imageTag .= $this->tryGetImageParam("srcset", $this->tryGetSrcsetValue($this->getSrcset()));
+        $imageTag .= $this->tryGetImageParam("width", $this->getWidth());
+        $imageTag .= $this->tryGetImageParam("height", $this->getHeight());
+        $imageTag .= $this->tryGetImageParam("alt", $this->getAlt());
+        $imageTag .= $this->tryGetImageParam("title", $this->getTitle());
+        $imageTag .= $this->tryGetImageParam("class", $this->getClass());
         $data = $this->getData();
         if (KT::arrayIssetAndNotEmpty($data)) {
             foreach ($data as $dataKey => $dataValue) {
-                $html .= $this->tryGetImageParam("data-{$dataKey}", $dataValue);
+                $imageTag .= $this->tryGetImageParam("data-{$dataKey}", $dataValue);
             }
         }
-        $html .= "/>";
+        $imageTag .= "/>";
+
+        $html = $imageTag;
         if ($this->getIsLazyLoading()) {
-            $html = KT::imageReplaceLazySrc($html);
+            $html = KT::imageReplaceLazySrc($html, true);
+        }
+        if ($this->getIsNoScript()) {
+            $html .= "<noscript>$imageTag</noscript>";
         }
         return $html;
     }
@@ -245,18 +289,20 @@ class KT_Image
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
+     * @param bool $isNoScript
      */
-    public static function render($src, $alt = "", $class = null, $isLazyLoading = true)
+    public static function render($src, $alt = "", $class = null, $isLazyLoading = true, $isNoScript = true)
     {
         $image = new KT_Image();
-	    if (KT::stringStartsWith($src, "http://") || KT::stringStartsWith($src, "https://")) {
-		    $image->setSrc($src);
-	    } else {
-		    $image->setSrc(KT::imageGetUrlFromTheme($src));
-	    }
+        if (KT::stringStartsWith($src, "http://") || KT::stringStartsWith($src, "https://")) {
+            $image->setSrc($src);
+        } else {
+            $image->setSrc(KT::imageGetUrlFromTheme($src));
+        }
         $image->setAlt($alt);
         $image->setClass($class);
         $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
         echo $image->buildHtml();
     }
 
@@ -265,8 +311,9 @@ class KT_Image
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
+     * @param bool $isNoScript
      */
-    public static function renderSet(array $srcset, $alt = "", $class = null, $isLazyLoading = true)
+    public static function renderSet(array $srcset, $alt = "", $class = null, $isLazyLoading = true, $isNoScript = true)
     {
         $image = new KT_Image();
         foreach ($srcset as $zoomNumber => $imageUrl) {
@@ -276,12 +323,12 @@ class KT_Image
         $image->setAlt($alt);
         $image->setClass($class);
         $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
         echo $image->buildHtml();
     }
 
     /**
      * @param array $params k inicializaci
-     * @param bool $isLazyLoading
      */
     public static function renderArgs(array $params)
     {
@@ -295,8 +342,9 @@ class KT_Image
      * @param string $alt
      * @param string $class
      * @param bool $isLazyLoading
+     * @param bool $isNoScript
      */
-    public static function renderRetina($src, $alt = "", $class = null, $isLazyLoading = true)
+    public static function renderRetina($src, $alt = "", $class = null, $isLazyLoading = true, $isNoScript = true)
     {
         $image = new KT_Image();
         $src1x = KT::imageGetUrlFromTheme($src);
@@ -307,6 +355,31 @@ class KT_Image
         $image->setAlt($alt);
         $image->setClass($class);
         $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
+        echo $image->buildHtml();
+    }
+
+    /**
+     * @param string $src relativní cesta pro KT::imageGetUrlFromTheme($src)
+     * @param string $alt
+     * @param int $width
+     * @param string $class
+     * @param bool $isLazyLoading
+     * @param bool $isNoScript
+     */
+    public static function renderIcon($src, $alt = "", $width = null, $class = null, $isLazyLoading = true, $isNoScript = true)
+    {
+        $image = new KT_Image();
+        if (KT::stringStartsWith($src, "http://") || KT::stringStartsWith($src, "https://")) {
+            $image->setSrc($src);
+        } else {
+            $image->setSrc(KT::imageGetUrlFromTheme($src));
+        }
+        $image->setAlt($alt);
+        $image->setWidth($width);
+        $image->setClass($class);
+        $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
         echo $image->buildHtml();
     }
 
@@ -323,14 +396,18 @@ class KT_Image
         return null;
     }
 
-    protected function tryGetSrcsetValue(array $srcset = null)
+    protected function tryGetSrcsetValue($srcset = null)
     {
-        if (KT::arrayIssetAndNotEmpty($srcset)) {
-            $srcsets = [];
-            foreach ($srcset as $srcsetKey => $srcsetValue) {
-                $srcsets[] = "$srcsetValue {$srcsetKey}x";
+        if (KT::issetAndNotEmpty($srcset)) {
+            if (is_array($srcset)) {
+                $srcsets = [];
+                foreach ($srcset as $srcsetKey => $srcsetValue) {
+                    $srcsets[] = "$srcsetValue {$srcsetKey}x";
+                }
+                return implode(", ", $srcsets);
+            } else {
+                return $srcset;
             }
-            return implode(", ", $srcsets);
         }
         return null;
     }

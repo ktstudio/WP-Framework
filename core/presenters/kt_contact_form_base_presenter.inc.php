@@ -27,16 +27,16 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
     public function __construct($withProcessing = true) {
         if ($withProcessing) {
             $this->process();
-            $processedParam = filter_input(INPUT_GET, $this->getProcessdParam(), FILTER_SANITIZE_ENCODED);
-            if (isset($processedParam)) {
-                $processed = substr($processedParam, 0, 1);
-                if ($processed === "1") {
-                    $this->wasProcessed = true;
-                    add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderSuccessNotice"));
-                } elseif ($processed === "0") {
-                    $this->wasProcessed = false;
-                    add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderErrorNotice"));
-                }
+        }
+        $processedParam = filter_input(INPUT_GET, $this->getProcessdParam(), FILTER_SANITIZE_ENCODED);
+        if (isset($processedParam)) {
+            $processed = substr($processedParam, 0, 1);
+            if ($processed === "1") {
+                $this->wasProcessed = true;
+                add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderSuccessNotice"));
+            } elseif ($processed === "0") {
+                $this->wasProcessed = false;
+                add_action(KT_PROJECT_NOTICES_ACTION, array(&$this, "renderErrorNotice"));
             }
         }
     }
@@ -274,6 +274,8 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
             $email = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::EMAIL));
             $phone = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::PHONE));
             $message = htmlspecialchars(KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::MESSAGE));
+            $agreementValue = KT::arrayTryGetValue($values, KT_Contact_Form_Base_Config::AGREEMENT);
+            $agreement = KT_Switch_Field::getSwitchConvertedValue(KT::arrayIssetAndNotEmpty($agreementValue) ? KT_Switch_Field::YES : KT_Switch_Field::NO);
 
             $fullName = $name ? : "$firstName $lastName";
 
@@ -286,6 +288,7 @@ class KT_Contact_Form_Base_Presenter extends KT_Presenter_Base {
                 $content .= sprintf(__("E-mail: %s", "KT_CORE_DOMAIN"), $email) . "<br>";
                 $content .= sprintf(__("Phone: %s", "KT_CORE_DOMAIN"), $phone) . "<br><br>";
                 $content .= __("Message:", "KT_CORE_DOMAIN") . "<br><br>$message<br><br>";
+                $content .= __("Agreement with the processing of personal data:", "KT_CORE_DOMAIN") . " $agreement<br><br>";
                 $content .= sprintf(__("Done by URL: %s", "KT_CORE_DOMAIN"), $requestLink) . "<br><br>---<br>";
                 $content .= sprintf($this->getEmailSignature(), $ktWpInfo->getUrl());
 

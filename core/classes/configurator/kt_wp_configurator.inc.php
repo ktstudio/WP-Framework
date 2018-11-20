@@ -43,12 +43,15 @@ final class KT_WP_Configurator {
     private $postsArchiveSlug = null;
     private $allowSession = false;
     private $allowCookieStatement = false;
+    private $allowSanitizeFileNames = false;
     private $facebookManager = null;
     private $emojiSwitch = false;
     private $autoRemoveShortcodesParagraphs = false;
     private $enableDynamicFieldsets = false;
     private $disableOembed = false;
     private $disableJson = false;
+    private $disableRelNext = false;
+    private $disableDefaultGalleryInlineStyle = false;
 
     // --- gettery ----------------------
 
@@ -208,6 +211,13 @@ final class KT_WP_Configurator {
     }
 
     /**
+     * @return boolean
+     */
+    private function getAllowSanitizeFileNames() {
+        return $this->allowSanitizeFileNames;
+    }
+
+    /**
      * @return \KT_WP_Facebook_Data_Configurator
      */
     public function getFacebookManager() {
@@ -241,6 +251,16 @@ final class KT_WP_Configurator {
     /** @return boolean */
     public function getDisableJson() {
         return $this->disableJson;
+    }
+
+    /** @return boolean */
+    public function getDisableRelNext() {
+        return $this->disableRelNext;
+    }
+
+    /** @return boolean */
+    public function getDisableDefaultGalleryInlineStyle() {
+        return $this->disableDefaultGalleryInlineStyle;
     }
 
     // --- settery ----------------------
@@ -457,6 +477,20 @@ final class KT_WP_Configurator {
     }
 
     /**
+     * Nastaví, zda se má v rámci šablony zapnout sanitizace názvů nahrávaných souborů
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param boolean $allowSanitizeFileNames
+     * @return \KT_WP_Configurator
+     */
+    public function setAllowSanitizeFileNames($allowSanitizeFileNames = true) {
+        $this->allowSanitizeFileNames = $allowSanitizeFileNames;
+        return $this;
+    }
+
+    /**
      * Aktivace MetaBoxu s archivy post (typů) v/do menu
      *
      * @author Martin Hlaváč
@@ -575,6 +609,30 @@ final class KT_WP_Configurator {
      */
     public function setDisableJson($disable = true) {
         $this->disableJson = KT::tryGetBool($disable);
+        return $this;
+    }
+
+    /**
+     * Vypne / ponechá funkce rel="next" atribut v hlavičce
+     *
+     * @author Martin Hlaváč
+     * @param boolean $disable
+     * @return \KT_WP_Configurator
+     */
+    public function setDisableRelNext($disable = true) {
+        $this->disableRelNext = KT::tryGetBool($disable);
+        return $this;
+    }
+
+    /**
+     * Zruší výpis a tím pádem i aplikaci výchozího inline stylu u WP gallerií na FE
+     *
+     * @author Martin Hlaváč
+     * @param boolean $disable
+     * @return \KT_WP_Configurator
+     */
+    public function setDisableDefaultGalleryInlineStyle($disable = true) {
+        $this->disableDefaultGalleryInlineStyle = KT::tryGetBool($disable);
         return $this;
     }
 
@@ -723,6 +781,11 @@ final class KT_WP_Configurator {
             add_action("wp_footer", array($this, "renderCookieStatement"), 99);
         }
 
+        // sanitize file names
+        if ($this->getAllowSanitizeFileNames() === true) {
+            add_action("sanitize_file_name", array($this, "sanitizeFileName"), 99);
+        }
+
         // facebookManager
         if ($this->getFacebookManager()->getModuleEnabled()) {
             add_action("wp_head", array($this, "facebookTagsInit"), 99);
@@ -748,6 +811,16 @@ final class KT_WP_Configurator {
         // JSON (API)
         if ($this->getDisableJson() === true) {
             add_action("init", array($this, "disableJson"), 99);
+        }
+
+        // rel next
+        if ($this->getDisableRelNext() === true) {
+            add_action("init", array($this, "disableRelNext"), 99);
+        }
+
+        // default gallery inline style
+        if ($this->getDisableDefaultGalleryInlineStyle() === true) {
+            add_action("init", array($this, "disableDefaultGalleryInlineStyle"), 99);
         }
     }
 
@@ -1556,6 +1629,17 @@ final class KT_WP_Configurator {
     }
 
     /**
+     * Provede sanitizaci názvu souboru, resp. odstraní accent
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     */
+    public function sanitizeFileName($fileName) {
+        return remove_accents($fileName);
+    }
+
+    /**
      * Vrátí obsah proužku s potvrzením cookie (v patičce)
      * NENÍ POTŘEBA VOLAT VEŘEJNĚ
      *
@@ -1565,10 +1649,19 @@ final class KT_WP_Configurator {
     public static function getCookieStatementHtml() {
         $cookueStatementKey = KT::arrayTryGetValue($_COOKIE, self::COOKIE_STATEMENT_KEY);
         if (KT::notIssetOrEmpty($cookueStatementKey)) {
+            $moreInfoUrl = "https://policies.google.com/technologies/cookies";
+            $privacyPolicyPageId = get_option(KT_WP_OPTION_KEY_PRIVACY_POLICY_PAGE);
+            if (KT::isIdFormat($privacyPolicyPageId)) {
+                $privacyPolicyPermalink = get_permalink($privacyPolicyPageId);
+                if (KT::issetAndNotEmpty($privacyPolicyPermalink)) {
+                    $moreInfoUrl = $privacyPolicyPermalink;
+                }
+            }
+
             $text = __("This site uses cookies. By using this site you consent to the use of Cookies.", "KT_CORE_DOMAIN");
             $moreInfoTitle = __("Find out more", "KT_CORE_DOMAIN");
-            $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", "https://www.google.com/policies/technologies/cookies/");
-            $confirmTitle = __("OK, i understand", "KT_CORE_DOMAIN");
+            $moreInfoUrl = apply_filters("kt_cookie_statement_more_info_url_filter", $moreInfoUrl);
+            $confirmTitle = __("OK, I understand", "KT_CORE_DOMAIN");
 
             $html = "<span id=\"ktCookieStatementText\">$text</span>";
             $html .= "<span id=\"ktCookieStatementMoreInfo\"><a href=\"$moreInfoUrl\" title=\"$moreInfoTitle\" target=\"_blank\">$moreInfoTitle</a></span>";
@@ -1743,6 +1836,32 @@ final class KT_WP_Configurator {
         if (!is_admin()) {
             add_filter("json_enabled", "__return_false");
             add_filter("json_jsonp_enabled", "__return_false");
+        }
+    }
+
+    /**
+     * Zruší rel next v head
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     */
+    public function disableRelNext() {
+        if (!is_admin()) {
+            remove_action("wp_head", "wp_shortlink_wp_head", 10);
+            remove_action("wp_head", "adjacent_posts_rel_link_wp_head", 10);
+            add_filter("wpseo_next_rel_link", "__return_false");
+        }
+    }
+
+    /**
+     * Zruší výchozí inline style WP galerií
+     * NENÍ POTŘEBA VOLAT VEŘEJNĚ
+     *
+     * @author Martin Hlaváč
+     */
+    public function disableDefaultGalleryInlineStyle() {
+        if (!is_admin()) {
+            add_filter("use_default_gallery_style", "__return_false");
         }
     }
 }

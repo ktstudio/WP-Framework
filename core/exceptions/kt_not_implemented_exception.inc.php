@@ -21,7 +21,7 @@ class KT_Not_Implemented_Exception extends Exception {
     }
 
     public function __toString() {
-        return sprintf(__("unimplemented operation: %s \n %s", "KT_CORE_DOMAIN"), $this->getNote(), parent::__toString());
+        return sprintf(__("Unimplemented operation: %s \n %s", "KT_CORE_DOMAIN"), $this->getNote(), parent::__toString());
     }
 
 }
