@@ -1385,55 +1385,49 @@ class KT {
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @global integer $paged
      * @global WP_Query $wp_query
      * @param boolean $previousNext
      * @param string $customClass
+     * @param WP_Query $query
+     * @param string $urlSuffix
      */
-    public static function bootstrapPagination($previousNext = true, $customClass = "pagination-centered") {
+    public static function bootstrapPagination($previousNext = true, $customClass = null, WP_Query $query = null, $urlSuffix = null) {
+        global $wp_query;
         global $paged;
-        $paged = self::tryGetInt($paged) ? : 1;
-        if (self::issetAndNotEmpty($paged) && $paged > 0) {
-            global $wp_query;
-            $pages = self::tryGetInt($wp_query->max_num_pages);
-            if (self::issetAndNotEmpty($pages) && $pages > 1 && $paged >= $paged) {
-                self::theTabsIndent(0, "<ul class=\"pagination $customClass\">", true);
+        $paged = self::tryGetInt($paged) ?: 1;
+        $pages = self::tryGetInt(($query ?? $wp_query)->max_num_pages);
+        if (self::issetAndNotEmpty($pages) && $pages > 1 && $paged >= $paged) {
+            self::theTabsIndent(0, "<ul class=\"pagination $customClass\">", true);
 
-                if ($previousNext) {
-                    if ($paged > 2) {
-                        self::theTabsIndent(1, "<li><a href='" . get_pagenum_link(1) . "'>&laquo;</a></li>", true);
-                    } else {
-                        self::theTabsIndent(1, "<li class=\"disabled\"><span>&laquo;</span></li>", true);
-                    }
-                    if ($paged > 1) {
-                        self::theTabsIndent(1, "<li><a href='" . get_pagenum_link($paged - 1) . "'>&lsaquo;</a></li>", true);
-                    } else {
-                        self::theTabsIndent(1, "<li class=\"disabled\"><span>&lsaquo;</span></li>", true);
-                    }
+            if ($previousNext) {
+                if ($paged > 1) {
+                    self::theTabsIndent(1, "<li class=\"first\"><a href='" . get_pagenum_link(1) . $urlSuffix . "'>&laquo;</a></li>", true);
+                    self::theTabsIndent(1, "<li class=\"previous\"><a href='" . get_pagenum_link($paged - 1) . $urlSuffix . "'>&lsaquo;</a></li>", true);
+                } else {
+                    self::theTabsIndent(1, "<li class=\"first disabled\"><span>&laquo;</span></li>", true);
+                    self::theTabsIndent(1, "<li class=\"previous disabled\"><span>&lsaquo;</span></li>", true);
                 }
-
-                for ($i = 1; $i <= $pages; $i ++) {
-                    $pagenumlink = get_pagenum_link($i);
-                    $activeClass = ($i == $paged) ? 'class="active"' : "";
-                    self::theTabsIndent(1, "<li $activeClass><a href=\"$pagenumlink\">$i</a></li>", true);
-                }
-
-                if ($previousNext) {
-                    if ($paged < $pages) {
-                        self::theTabsIndent(1, "<li><a href='" . get_pagenum_link($paged + 1) . "'>&rsaquo;</a></li>", true);
-                    } else {
-                        self::theTabsIndent(1, "<li class=\"disabled\"><span>&rsaquo;</span></li>", true);
-                    }
-                    if ($paged < ($pages - 1)) {
-                        self::theTabsIndent(1, "<li><a href='" . get_pagenum_link($pages) . "'>&raquo;</a></li>", true);
-                    } else {
-                        self::theTabsIndent(1, "<li class=\"disabled\"><span>&raquo;</span></li>", true);
-                    }
-                }
-
-                self::theTabsIndent(0, "</ul>", true, true);
             }
+
+            for ($i = 1; $i <= $pages; $i ++) {
+                $pagenumLink = get_pagenum_link($i) . $urlSuffix;
+                $activeClass = ($i == $paged) ? 'class="active"' : "";
+                self::theTabsIndent(1, "<li $activeClass><a href=\"$pagenumLink\">$i</a></li>", true);
+            }
+
+            if ($previousNext) {
+                if ($paged < $pages) {
+                    self::theTabsIndent(1, "<li class=\"next\"><a href='" . get_pagenum_link($paged + 1) . $urlSuffix . "'>&rsaquo;</a></li>", true);
+                    self::theTabsIndent(1, "<li class=\"last\"><a href='" . get_pagenum_link($pages) . $urlSuffix . "'>&raquo;</a></li>", true);
+                } else {
+                    self::theTabsIndent(1, "<li class=\"next disabled\"><span>&rsaquo;</span></li>", true);
+                    self::theTabsIndent(1, "<li class=\"last disabled\"><span>&raquo;</span></li>", true);
+                }
+            }
+
+            self::theTabsIndent(0, "</ul>", true, true);
         }
     }
 
