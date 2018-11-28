@@ -1386,20 +1386,21 @@ class KT {
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
      *
-     * @global integer $paged
-     * @global WP_Query $wp_query
      * @param boolean $previousNext
      * @param string $customClass
      * @param WP_Query $query
+     * @param string $customStyle
      * @param string $urlSuffix
+     * @global integer $paged
+     * @global WP_Query $wp_query
      */
-    public static function bootstrapPagination($previousNext = true, $customClass = null, WP_Query $query = null, $urlSuffix = null) {
+    public static function bootstrapPagination($previousNext = true, $customClass = null, WP_Query $query = null, $customStyle = null, $urlSuffix = null) {
         global $wp_query;
         global $paged;
         $paged = self::tryGetInt($paged) ?: 1;
         $pages = self::tryGetInt(($query ?? $wp_query)->max_num_pages);
         if (self::issetAndNotEmpty($pages) && $pages > 1 && $paged >= $paged) {
-            self::theTabsIndent(0, "<ul class=\"pagination $customClass\">", true);
+            self::theTabsIndent(0, "<ul class=\"pagination $customClass\"$customStyle>", true);
 
             if ($previousNext) {
                 if ($paged > 1) {
