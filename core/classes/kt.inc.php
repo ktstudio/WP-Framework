@@ -12,6 +12,7 @@ class KT {
     const CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     private static $dateGmtOffset;
+    private static $imageTransparent = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
     // --- POLE - ARRAY ---------------------------
 
@@ -954,7 +955,7 @@ class KT {
     }
 
     /**
-     * Vrátí průhledný ("systémový") obrázek (včetně URL)
+     * Vrátí průhledný ("systémový") obrázek
      * 
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -962,7 +963,20 @@ class KT {
      * @return string
      */
     public static function imageGetTransparent() {
-        return "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"; // return KT_CORE_IMAGES_URL . "/transparent.png";
+        return self::$imageTransparent;
+    }
+
+    /**
+     * Nastaví nebo zruší vlastní průhledný ("systémový") obrázek
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $transparentImage
+     */
+    public static function imageSetTransparent(string $transparentImage)
+    {
+        self::$imageTransparent = $transparentImage;
     }
 
     /**
