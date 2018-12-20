@@ -1447,6 +1447,45 @@ class KT {
     }
 
     /**
+     * Vypíše stránkování určené pro WP loopu v bootstrap stylu dle WordPressu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param boolean $previousNext
+     * @param string $customClass
+     * @param WP_Query $query
+     * @param string $customStyle
+     * @global integer $paged
+     * @global WP_Query $wp_query
+     */
+    public static function bootstrapPaginateLinks($previousNext = true, $customClass = null, WP_Query $query = null, $customStyle = null) {
+        global $wp_query;
+        global $paged;
+        $current = self::tryGetInt($paged) ?: 1;
+        $pages = self::tryGetInt(($query ?? $wp_query)->max_num_pages);
+        $paginateLinks = paginate_links([
+            "base" => str_replace(PHP_INT_MAX, "%#%", esc_url(get_pagenum_link(PHP_INT_MAX))),
+            "format" => "?paged=%#%",
+            "current" => $current,
+            "total" => $pages,
+            "type" => "array",
+            "show_all" => false,
+            "prev_next" => $previousNext,
+            "prev_text" => "&laquo;",
+            "next_text" => "&raquo;",
+        ]);
+        if (KT::arrayIssetAndNotEmpty($paginateLinks)) {
+            echo "<ul class=\"pagination $customClass\"$customStyle>";
+            foreach ($paginateLinks as $index => $link) {
+                $activeClass = self::stringContains($link, "current") ? " class=\"active\"" : "";
+                echo "<li$activeClass>$link</li>";
+            }
+            echo "</ul>";
+        }
+    }
+
+    /**
      * Vrátí odkazy předchozího a následujícího článku, pokud jsou k dispozici
      * 
      * @author Martin Hlaváč
