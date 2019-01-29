@@ -6,7 +6,8 @@
  * @author Tomáš Kocifaj
  * @link http://www.ktstudio.cz
  */
-abstract class KT_Presenter_Base implements KT_Presentable {
+abstract class KT_Presenter_Base implements KT_Presentable
+{
 
     private $model = null;
     private static $currentQueryLoopIndex;
@@ -15,7 +16,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
     private static $currentItemsLoopCount;
     private static $isFrontPageHome;
 
-    public function __construct(KT_Modelable $model = null) {
+    public function __construct(KT_Modelable $model = null)
+    {
         kt_check_loaded(); // kontrola KT Frameworku
         if (KT::issetAndNotEmpty($model)) {
             $this->setModel($model);
@@ -32,7 +34,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      * 
      * @return KT_Modelable
      */
-    public function getModel() {
+    public function getModel()
+    {
         return $this->model;
     }
 
@@ -45,7 +48,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      * @param KT_Modelable $model
      * @return \KT_Presenter_Base
      */
-    public function setModel(KT_Modelable $model) {
+    public function setModel(KT_Modelable $model)
+    {
         $this->model = $model;
         return $this;
     }
@@ -58,7 +62,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      * 
      * @return int
      */
-    public static function getCurrentQueryLoopIndex() {
+    public static function getCurrentQueryLoopIndex()
+    {
         return self::$currentQueryLoopIndex;
     }
 
@@ -70,7 +75,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      * 
      * @return int
      */
-    public static function getCurrentQueryLoopNumber() {
+    public static function getCurrentQueryLoopNumber()
+    {
         return self::getCurrentQueryLoopIndex() + 1;
     }
 
@@ -82,7 +88,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      *
      * @return int
      */
-    public static function getCurrentQueryLoopCount() {
+    public static function getCurrentQueryLoopCount()
+    {
         return self::$currentQueryLoopCount;
     }
 
@@ -94,7 +101,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      *
      * @return int
      */
-    public static function getIsCurrentQueryLoopFirst() {
+    public static function getIsCurrentQueryLoopFirst()
+    {
         return self::getCurrentQueryLoopIndex() === 0;
     }
 
@@ -106,7 +114,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      *
      * @return boolean
      */
-    public static function getIsCurrentQueryLoopLast() {
+    public static function getIsCurrentQueryLoopLast()
+    {
         return self::getCurrentQueryLoopNumber() === self::getCurrentQueryLoopCount();
     }
 
@@ -118,7 +127,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      * 
      * @return int
      */
-    public static function getCurrentItemsLoopIndex() {
+    public static function getCurrentItemsLoopIndex()
+    {
         return self::$currentItemsLoopIndex;
     }
 
@@ -130,7 +140,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      * 
      * @return int
      */
-    public static function getCurrentItemsLoopNumber() {
+    public static function getCurrentItemsLoopNumber()
+    {
         return self::getCurrentItemsLoopIndex() + 1;
     }
 
@@ -142,7 +153,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      *
      * @return int
      */
-    public static function getCurrentItemsLoopCount() {
+    public static function getCurrentItemsLoopCount()
+    {
         return self::$currentItemsLoopCount;
     }
 
@@ -154,7 +166,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      *
      * @return int
      */
-    public static function getIsCurrentItemsLoopFirst() {
+    public static function getIsCurrentItemsLoopFirst()
+    {
         return self::getCurrentItemsLoopIndex() === 0;
     }
 
@@ -166,7 +179,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      *
      * @return int
      */
-    public static function getIsCurrentItemsLoopLast() {
+    public static function getIsCurrentItemsLoopLast()
+    {
         return self::getCurrentItemsLoopNumber() === self::getCurrentItemsLoopCount();
     }
 
@@ -178,7 +192,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      * 
      * @return boolean
      */
-    public static function getIsFrontPageHome() {
+    public static function getIsFrontPageHome()
+    {
         if (isset(self::$isFrontPageHome)) {
             return self::$isFrontPageHome;
         }
@@ -197,18 +212,19 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      * @param string $loopName
      * @param array $clearfixes pole clearfixů k printu podle klíče (modulo)
      */
-    public static function theQueryLoops(WP_Query $query, $loopName, array $clearfixes = null) {
+    public static function theQueryLoops(WP_Query $query, $loopName, array $clearfixes = null)
+    {
         if (KT::issetAndNotEmpty($query) && $query->have_posts()) {
             $isClearfixes = KT::arrayIssetAndNotEmpty($clearfixes);
             self::$currentQueryLoopIndex = 0;
             self::$currentQueryLoopCount = count($query->get_posts());
             while ($query->have_posts()) : $query->the_post();
-                global $post;
-                include(locate_template("loops/loop-" . $loopName . ".php"));
-                self::$currentQueryLoopIndex++;
-                if ($isClearfixes) {
-                    self::theClearfixes($clearfixes, self::$currentQueryLoopIndex);
-                }
+            global $post;
+            include(locate_template("loops/loop-" . $loopName . ".php"));
+            self::$currentQueryLoopIndex++;
+            if ($isClearfixes) {
+                self::theClearfixes($clearfixes, self::$currentQueryLoopIndex);
+            }
             endwhile;
             self::$currentQueryLoopIndex = null;
             self::$currentQueryLoopCount = null;
@@ -228,7 +244,14 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      * @param mixed int|null $offset
      * @param array $clearfixes pole clearfixů k printu podle klíče (modulo)
      */
-    public static function theItemsLoops(array $items, $loopName, $count = null, $offset = null, array $clearfixes = null) {
+    public static function theItemsLoops(array $items, $loopName, $count = null, $offset = null, array $clearfixes = null)
+    {
+        $componentPath = locate_template(COMPONENTS_PATH . "$loopName/$loopName.php");
+        if (file_exists($componentPath)) {
+            $isComponentFile = true;
+        } else {
+            $isComponentFile = false;
+        }
         if (KT::arrayIssetAndNotEmpty($items)) {
             $isClearfixes = KT::arrayIssetAndNotEmpty($clearfixes);
             self::$currentItemsLoopIndex = 0;
@@ -242,7 +265,11 @@ abstract class KT_Presenter_Base implements KT_Presentable {
             foreach ($items as $item) {
                 global $post;
                 $post = $item;
-                include(locate_template("loops/loop-$loopName.php"));
+                if ($isComponentFile) {
+                    include(locate_template(COMPONENTS_PATH . "$loopName/$loopName.php"));
+                } else {
+                    include(locate_template("loops/loop-$loopName.php"));
+                }
                 self::$currentItemsLoopIndex++;
                 if ($isClearfixes) {
                     self::theClearfixes($clearfixes, self::$currentItemsLoopIndex);
@@ -254,6 +281,7 @@ abstract class KT_Presenter_Base implements KT_Presentable {
         }
     }
 
+
     /**
      * Vypíše clearfixy podle (zadaného) indexu
      * 
@@ -263,7 +291,8 @@ abstract class KT_Presenter_Base implements KT_Presentable {
      * @param array $clearfixes
      * @param int $index
      */
-    public static function theClearfixes(array $clearfixes, $index) {
+    public static function theClearfixes(array $clearfixes, $index)
+    {
         if (isset($index)) {
             foreach ($clearfixes as $clearfixModulo => $clearfixOutput) {
                 if ($index % $clearfixModulo === 0) {

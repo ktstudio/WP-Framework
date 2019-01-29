@@ -30,6 +30,7 @@ define("KT_MODELS_FOLDER", "models");
 define("KT_ENUMS_FOLDER", "enums");
 define("KT_WIDGETS_FOLDER", "widgets");
 define("KT_SHORTCODES_FOLDER", "shortcodes");
+define("KT_COMPONENTS_FOLDER", "components");
 
 /**
  * Kolekce všech (systémových) modulů (adresářů)
@@ -72,14 +73,15 @@ kt_load_all_modules();
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-function kt_load_all_modules() {
+function kt_load_all_modules()
+{
     $submodules = kt_get_subdirs_names(KT_BASE_PATH);
     foreach ($submodules as $module) {
         $modulePath = path_join(KT_BASE_PATH, $module);
         // chceme inicializační soubor modulu
         $initModuleFile = path_join($modulePath, KT_INIT_MODULE_FILE);
         if (file_exists($initModuleFile)) {
-            require_once ($initModuleFile);
+            require_once($initModuleFile);
         }
     }
 }
@@ -92,7 +94,8 @@ function kt_load_all_modules() {
  * 
  * @return array
  */
-function kt_get_subdirs_names($dirPath, $checkForDirExists = true) {
+function kt_get_subdirs_names($dirPath, $checkForDirExists = true)
+{
     if (isset($dirPath) && is_dir($dirPath)) {
         $subdirsNames = array();
         $names = array_diff(scandir($dirPath), array(".", "..", ".git", ".gitignore", "LICENSE", "README.md", "composer.json", "kt_init.inc.php"));
@@ -118,7 +121,8 @@ function kt_get_subdirs_names($dirPath, $checkForDirExists = true) {
  * 
  * @param string $name třída nebo interface k auto načtení
  */
-function kt_class_autoloader_init($name) {
+function kt_class_autoloader_init($name)
+{
     if (kt_is_prefixed($name) || $name === KT_BASE_STATIC_CLASS) {
         /**
          * @return array
@@ -175,15 +179,17 @@ function kt_class_autoloader_init($name) {
  * @param array $moduleNames
  * @return boolean
  */
-function kt_special_class_autoloader_init($name, $fileName, $moduleNames) {
+function kt_special_class_autoloader_init($name, $fileName, $moduleNames)
+{
     global $ktSpecialFolders;
     $nameParts = explode("_", $name);
-    $lastNamePart = strtolower((string) array_pop($nameParts));
+    $lastNamePart = strtolower((string)array_pop($nameParts));
     if (strtolower("$lastNamePart") === KT_BASE_CLASS_SUFFIX) {
-        $lastNamePart = strtolower((string) array_pop($nameParts));
+        $lastNamePart = strtolower((string)array_pop($nameParts));
     }
     $suffix = "{$lastNamePart}s";
     if (in_array($suffix, $ktSpecialFolders)) {
+
         foreach ($moduleNames as $moduleName) {
             $modulePath = path_join(KT_BASE_PATH, $moduleName);
             $specialClassesPath = path_join($modulePath, $suffix);
@@ -192,9 +198,27 @@ function kt_special_class_autoloader_init($name, $fileName, $moduleNames) {
                 require_once($specialClassPath);
                 return true;
             }
+
+            $componentPath = path_join($modulePath, KT_COMPONENTS_FOLDER);
+            $componentsName = kt_get_subdirs_names($componentPath);
+
+            if (isset($componentsName) && !empty($componentsName)) {
+                foreach ($componentsName as $componentName) {
+                    $specialComponentPath = path_join($componentPath, $componentName);
+
+                    $specialComponentPart = path_join($specialComponentPath, $fileName);
+                    if (file_exists($specialComponentPart)) {
+                        require_once($specialComponentPart);
+                        return true;
+                    }
+                }
+            }
+
         }
+
     }
     return false;
+
 }
 
 /**
@@ -207,7 +231,8 @@ function kt_special_class_autoloader_init($name, $fileName, $moduleNames) {
  * 
  * @return string zformátovaný název pro include nebo require
  */
-function kt_get_include_file_name($name) {
+function kt_get_include_file_name($name)
+{
     $fileName = strtolower($name) . KT_PHP_FILE_SUFFIX;
     return $fileName;
 }
@@ -221,7 +246,8 @@ function kt_get_include_file_name($name) {
  * @global array $ktModules
  * @param string $key
  */
-function kt_register_module($key) {
+function kt_register_module($key)
+{
     /**
      * @return array
      */
@@ -245,7 +271,8 @@ function kt_register_module($key) {
  * @param boolean $withIncludeAll (auto load requires)
  * @param boolean $withRegistration (auto registrace modulu)
  */
-function kt_initialize_module($modulePrefix, $folder = "yours", $withIncludeAll = true, $withRegistration = true) {
+function kt_initialize_module($modulePrefix, $folder = "yours", $withIncludeAll = true, $withRegistration = true)
+{
     if ($withRegistration) {
         kt_register_module($folder);
     }
@@ -289,7 +316,8 @@ function kt_initialize_module($modulePrefix, $folder = "yours", $withIncludeAll 
  * 
  * @param string $folder - uri (cesta) ke složce
  */
-function kt_include_all($folder) {
+function kt_include_all($folder)
+{
     if (isset($folder) && is_dir($folder)) {
         $isAdmin = is_admin();
         $subdirsNames = kt_get_subdirs_names($folder, false);
@@ -326,7 +354,8 @@ function kt_include_all($folder) {
  * @param string $modulePath Cesta k adresáři s modulem
  * @param string string $lang kód jazyka, pokud není zadán vlastní, aplikuje se aktuální (z WP)
  */
-function kt_load_textdomain($domain, $modulePath, $lang = null) {
+function kt_load_textdomain($domain, $modulePath, $lang = null)
+{
     if ($lang === null) {
         $lang = get_locale();
     }
@@ -345,7 +374,8 @@ function kt_load_textdomain($domain, $modulePath, $lang = null) {
  * 
  * @return empty|exit
  */
-function kt_check_loaded() {
+function kt_check_loaded()
+{
     if (KT_LOADED === true) {
         return;
     }
@@ -362,7 +392,8 @@ function kt_check_loaded() {
  * 
  * @return string|null
  */
-function kt_get_prefixed($text) {
+function kt_get_prefixed($text)
+{
     if (isset($text) && !empty($text)) {
         return KT_PREFIX . $text;
     }
@@ -379,7 +410,8 @@ function kt_get_prefixed($text) {
  * 
  * @return string|null
  */
-function kt_get_form_prefixed($text) {
+function kt_get_form_prefixed($text)
+{
     if (isset($text) && !empty($text)) {
         return KT_FORM_PREFIX . $text;
     }
@@ -396,7 +428,8 @@ function kt_get_form_prefixed($text) {
  * 
  * @return boolean
  */
-function kt_is_prefixed($text) {
+function kt_is_prefixed($text)
+{
     if (isset($text) && !empty($text)) {
         $result = strtolower(substr($text, 0, 3)) === KT_PREFIX;
         if ($result === true) {
@@ -423,7 +456,8 @@ add_filter("template_include", "kt_load_template_from_subdir");
  * @global string $cat
  * @param string $template
  */
-function kt_load_template_from_subdir($template) {
+function kt_load_template_from_subdir($template)
+{
     global $post;
     global $taxonomy;
     global $cat;
