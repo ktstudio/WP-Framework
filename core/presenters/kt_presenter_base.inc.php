@@ -247,11 +247,19 @@ abstract class KT_Presenter_Base implements KT_Presentable
     public static function theItemsLoops(array $items, $loopName, $count = null, $offset = null, array $clearfixes = null)
     {
         $componentPath = locate_template(COMPONENTS_PATH . "$loopName/$loopName.php");
-        if (file_exists($componentPath)) {
+        $componentPathPostfixed = locate_template(COMPONENTS_PATH . "$loopName/$loopName-item.php");
+
+        if (file_exists($componentPathPostfixed)) {
+            $isPostfix = true;
             $isComponentFile = true;
+        } else if (file_exists($componentPath)) {
+            $isComponentFile = true;
+            $isPostfix = false;
         } else {
             $isComponentFile = false;
+            $isPostfix = false;
         }
+
         if (KT::arrayIssetAndNotEmpty($items)) {
             $isClearfixes = KT::arrayIssetAndNotEmpty($clearfixes);
             self::$currentItemsLoopIndex = 0;
@@ -265,8 +273,13 @@ abstract class KT_Presenter_Base implements KT_Presentable
             foreach ($items as $item) {
                 global $post;
                 $post = $item;
+
                 if ($isComponentFile) {
-                    include(locate_template(COMPONENTS_PATH . "$loopName/$loopName.php"));
+                    if ($isPostfix) {
+                        include($componentPathPostfixed);
+                    } else {
+                        include($componentPath);
+                    }
                 } else {
                     include(locate_template("loops/loop-$loopName.php"));
                 }

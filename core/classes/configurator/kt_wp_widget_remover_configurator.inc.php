@@ -6,7 +6,8 @@
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-final class KT_WP_Widget_Remover_Configurator {
+final class KT_WP_Widget_Remover_Configurator
+{
 
     private $data = array();
 
@@ -20,7 +21,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return array
      */
-    public function getWidgetRemoverData() {
+    public function getWidgetRemoverData()
+    {
         return $this->data;
     }
 
@@ -35,7 +37,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * @param string $widgetName
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeWidget($widgetName) {
+    public function removeWidget($widgetName)
+    {
         if (KT::issetAndNotEmpty($widgetName)) {
             array_push($this->data, $widgetName);
         }
@@ -50,7 +53,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removePagesWidget() {
+    public function removePagesWidget()
+    {
         $this->removeWidget("WP_Widget_Pages");
         return $this;
     }
@@ -63,7 +67,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeCalendarWidget() {
+    public function removeCalendarWidget()
+    {
         $this->removeWidget("WP_Widget_Calendar");
         return $this;
     }
@@ -76,7 +81,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeArchivesWidget() {
+    public function removeArchivesWidget()
+    {
         $this->removeWidget("WP_Widget_Archives");
         return $this;
     }
@@ -89,7 +95,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeLinksWidget() {
+    public function removeLinksWidget()
+    {
         $this->removeWidget("WP_Widget_Links");
         return $this;
     }
@@ -102,7 +109,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeMetaWidget() {
+    public function removeMetaWidget()
+    {
         $this->removeWidget("WP_Widget_Meta");
         return $this;
     }
@@ -115,7 +123,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeSearchWidget() {
+    public function removeSearchWidget()
+    {
         $this->removeWidget("WP_Widget_Search");
         return $this;
     }
@@ -128,7 +137,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeTextWidget() {
+    public function removeTextWidget()
+    {
         $this->removeWidget("WP_Widget_Text");
         return $this;
     }
@@ -141,7 +151,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeCategoriesWidget() {
+    public function removeCategoriesWidget()
+    {
         $this->removeWidget("WP_Widget_Categories");
         return $this;
     }
@@ -154,7 +165,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeRecentPostsWidget() {
+    public function removeRecentPostsWidget()
+    {
         $this->removeWidget("WP_Widget_Recent_Posts");
         return $this;
     }
@@ -167,7 +179,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeRecentCommentsWidget() {
+    public function removeRecentCommentsWidget()
+    {
         $this->removeWidget("WP_Widget_Recent_Comments");
         return $this;
     }
@@ -180,7 +193,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeRssWidget() {
+    public function removeRssWidget()
+    {
         $this->removeWidget("WP_Widget_RSS");
         return $this;
     }
@@ -193,7 +207,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeTagCloudWidget() {
+    public function removeTagCloudWidget()
+    {
         $this->removeWidget("WP_Widget_Tag_Cloud");
         return $this;
     }
@@ -206,7 +221,8 @@ final class KT_WP_Widget_Remover_Configurator {
      * 
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeNavMenuWidget() {
+    public function removeNavMenuWidget()
+    {
         $this->removeWidget("WP_Nav_Menu_Widget");
         return $this;
     }
@@ -219,7 +235,8 @@ final class KT_WP_Widget_Remover_Configurator {
      *
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeMediaAudioWidget() {
+    public function removeMediaAudioWidget()
+    {
         $this->removeWidget("WP_Widget_Media_Audio");
         return $this;
     }
@@ -232,7 +249,8 @@ final class KT_WP_Widget_Remover_Configurator {
      *
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeMediaImageWidget() {
+    public function removeMediaImageWidget()
+    {
         $this->removeWidget("WP_Widget_Media_Image");
         return $this;
     }
@@ -245,7 +263,8 @@ final class KT_WP_Widget_Remover_Configurator {
      *
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeMediaVideoWidget() {
+    public function removeMediaVideoWidget()
+    {
         $this->removeWidget("WP_Widget_Media_Video");
         return $this;
     }
@@ -258,7 +277,8 @@ final class KT_WP_Widget_Remover_Configurator {
      *
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeMediaGalleryWidget() {
+    public function removeMediaGalleryWidget()
+    {
         $this->removeWidget("WP_Widget_Media_Gallery");
         return $this;
     }
@@ -271,7 +291,8 @@ final class KT_WP_Widget_Remover_Configurator {
      *
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeCustomHtmlWidget() {
+    public function removeCustomHtmlWidget()
+    {
         $this->removeWidget("WP_Widget_Custom_HTML");
         return $this;
     }
@@ -286,22 +307,23 @@ final class KT_WP_Widget_Remover_Configurator {
      * @param boolean $keepMenu - nechat menu
      * @return \KT_WP_Widget_Remover_Configurator
      */
-    public function removeAllSystemWidgets($keepText = false, $keepMenu = false, $keepCustomHtml = false) {
+    public function removeAllSystemWidgets($keepText = false, $keepMenu = false, $keepCustomHtml = false)
+    {
         $this->removePagesWidget()
-                ->removeCalendarWidget()
-                ->removeArchivesWidget()
-                ->removeLinksWidget()
-                ->removeMetaWidget()
-                ->removeSearchWidget()
-                ->removeCategoriesWidget()
-                ->removeRecentPostsWidget()
-                ->removeRecentCommentsWidget()
-                ->removeRssWidget()
-                ->removeTagCloudWidget()
-                ->removeMediaAudioWidget()
-                ->removeMediaImageWidget()
-                ->removeMediaVideoWidget()
-                ->removeMediaGalleryWidget();
+            ->removeCalendarWidget()
+            ->removeArchivesWidget()
+            ->removeLinksWidget()
+            ->removeMetaWidget()
+                //->removeSearchWidget()
+                //->removeCategoriesWidget()
+            ->removeRecentPostsWidget()
+            ->removeRecentCommentsWidget()
+            ->removeRssWidget()
+            ->removeTagCloudWidget()
+            ->removeMediaAudioWidget()
+                //->removeMediaImageWidget()
+            ->removeMediaVideoWidget()
+            ->removeMediaGalleryWidget();
         if (!$keepText) {
             $this->removeTextWidget();
         }
