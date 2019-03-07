@@ -1,6 +1,7 @@
 <?php
 
-class KT_Switch_Field extends KT_Field {
+class KT_Switch_Field extends KT_Field
+{
 
     const FIELD_TYPE = "switch switch-toggle";
     const YES = "1";
@@ -13,7 +14,8 @@ class KT_Switch_Field extends KT_Field {
      * @param string $label - popisek v html
      * @return self
      */
-    public function __construct($name, $label) {
+    public function __construct($name, $label)
+    {
         parent::__construct($name, $label);
 
         $this->addAttrClass(self::FIELD_TYPE);
@@ -33,11 +35,13 @@ class KT_Switch_Field extends KT_Field {
      *
      * @return string
      */
-    public function getFieldType() {
+    public function getFieldType()
+    {
         return self::FIELD_TYPE;
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         $value = parent::getValue();
         if (self::isSwitchValue($value)) {
             return $value;
@@ -54,7 +58,8 @@ class KT_Switch_Field extends KT_Field {
      * @param bolean $original - má vrátít originální hodnotu v DB nebo hodnotou pro zobrazení
      * @return null
      */
-    public function getConvertedValue() {
+    public function getConvertedValue()
+    {
         $value = parent::getValue();
         return self::getSwitchConvertedValue($value);
     }
@@ -68,7 +73,8 @@ class KT_Switch_Field extends KT_Field {
      * @link http://www.ktstudio.cz
      *
      */
-    public function renderField() {
+    public function renderField()
+    {
         echo $this->getField();
     }
 
@@ -80,10 +86,10 @@ class KT_Switch_Field extends KT_Field {
      *
      * @return string
      */
-    public function getField() {
+    public function getField()
+    {
         $dataOn = __("Yes", "KT_CORE_DOMAIN");
         $dataOff = __("No", "KT_CORE_DOMAIN");
-        
         $html = "<div {$this->getAttrClassString()}>";
         $html .= "<span for=\"{$this->getAttrValueByName("id")}\" {$this->getAttrClassString()} title=\"{$this->getToolTip()}\" data-on=\"$dataOn\" data-off=\"$dataOff\"></span>";
         $html .= "<input type=\"hidden\" ";
@@ -108,7 +114,8 @@ class KT_Switch_Field extends KT_Field {
      * @return string
      * @throws InvalidArgumentException
      */
-    public static function convertBooleanToSwitch($value) {
+    public static function convertBooleanToSwitch($value)
+    {
         if (KT::issetAndNotEmpty($value)) {
             if ($value == true) {
                 return KT_Switch_Field::YES;
@@ -130,7 +137,8 @@ class KT_Switch_Field extends KT_Field {
      * @return boolean
      * @throws InvalidArgumentException
      */
-    public static function convertSwitchToBoolean($value) {
+    public static function convertSwitchToBoolean($value)
+    {
         if (KT::issetAndNotEmpty($value)) {
             if ($value == KT_Switch_Field::YES) {
                 return true;
@@ -151,7 +159,8 @@ class KT_Switch_Field extends KT_Field {
      * @param string|boolean $value
      * @throws InvalidArgumentException
      */
-    public static function getSwitchConvertedValue($value) {
+    public static function getSwitchConvertedValue($value)
+    {
         if ($value == KT_Switch_Field::YES || $value === true || $value === 1) {
             return __("Yes", "KT_CORE_DOMAIN");
         } elseif ($value == KT_Switch_Field::NO || $value === false || $value === 0) {
@@ -170,7 +179,8 @@ class KT_Switch_Field extends KT_Field {
      * @param string|int $value
      * @return boolean
      */
-    public static function isSwitchValue($value) {
+    public static function isSwitchValue($value)
+    {
         if ($value == KT_Switch_Field::YES || $value === 1 || $value == KT_Switch_Field::NO || $value === 0) {
             return true;
         }

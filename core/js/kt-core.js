@@ -1,6 +1,9 @@
 jQuery(document).ready(function () {
 
-	signPostSettingsToggle();
+	metaboxesToggle("span.signpost-custom-setting-switch");
+	metaboxesToggle("span.js-settings-aside-visible", false, true);
+	pageSettingsHideOnSpecialPages();
+	disableMetabox("div.js-post-settings-disable");
 
 	// Validování metaboxu v editaci postu (custom post_type)
 	jQuery("form#post, form#kt-custom-page-screen, #edittag, #your-profile").submit(function () {
@@ -303,15 +306,26 @@ function kt_core_setup_forms_fields() {
 
 	 TODO: Make it more universal 🤔
 */
-function signPostSettingsToggle() {
+function metaboxesToggle(selector, allBellow = true, invert = false) {
 
-	button = $("span.signpost-custom-setting-switch");
+	button = jQuery(selector);
 	inputVal = button.next("input").val();
-	tableItems = button.closest("tr").nextAll().children("td:nth-child(2)");
+
+	if (allBellow) {
+		tableItems = button.closest("tr").nextAll().children("td:nth-child(2)");
+	} else {
+		tableItems = button.closest("tr").next().children("td:nth-child(2)");
+	}
 
 	tableItems.addClass("js-metabox-transition");
 
-	if (inputVal == 1) {
+	if (invert) {
+		number = 0;
+	} else {
+		number = 1;
+	}
+
+	if (inputVal == number) {
 		//console.log("Its On");
 		tableItems.removeClass("js-metabox-disable");
 	} else {
@@ -322,20 +336,46 @@ function signPostSettingsToggle() {
 
 	button.click(function (e) {
 
-		button = $(this);
+		button = jQuery(this);
 		inputVal = button.next("input").val();
-		tableItems = button.closest("tr").nextAll().children("td:nth-child(2)");
 
+		if (allBellow) {
+			tableItems = button.closest("tr").nextAll().children("td:nth-child(2)");
+		} else {
+			tableItems = button.closest("tr").next().children("td:nth-child(2)");
+		}
 
-		if (inputVal == 1) {
-			//console.log("Its off");
+		if (invert) {
+			number = 0;
+		} else {
+			number = 1;
+		}
+
+		if (inputVal == number) {
 			tableItems.addClass("js-metabox-disable");
 
 		} else {
-			//console.log("Its On");
 			tableItems.removeClass("js-metabox-disable");
 
 		}
 
 	});
+
+}
+
+function pageSettingsHideOnSpecialPages() {
+	isSpecialPage = false;
+	if ($("#kt-bt-page-front-signpost").length || $("#kt-bt-page-signpost-signpost").length || $("#kt-bt-page-contact-settings").length) {
+		isSpecialPage = true;
+	}
+
+	if ($("#kt-bt-page-settings").length && isSpecialPage) {
+		$("#kt-bt-page-settings").hide();
+	}
+}
+
+
+function disableMetabox(selector) {
+	selector = jQuery(selector);
+	selector.addClass("js-metabox-disable");
 }

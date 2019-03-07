@@ -6,7 +6,8 @@
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-class KT {
+class KT
+{
 
     const CRAWLERS = "Bloglines subscriber|Dumbot|Sosoimagespider|QihooBot|FAST-WebCrawler|Superdownloads Spiderman|LinkWalker|msnbot|ASPSeek|WebAlta Crawler|Lycos|FeedFetcher-Google|Yahoo|YoudaoBot|AdsBot-Google|Googlebot|Scooter|Gigabot|Charlotte|eStyle|AcioRobot|GeonaBot|msnbot-media|Baidu|CocoCrawler|Google|Charlotte t|Yahoo! Slurp China|Sogou web spider|YodaoBot|MSRBOT|AbachoBOT|Sogou head spider|AltaVista|IDBot|Sosospider|Yahoo! Slurp|Java VM|DotBot|LiteFinder|Yeti|Rambler|Scrubby|Baiduspider|accoona";
     const CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -29,7 +30,8 @@ class KT {
      * @return array
      * @throws KT_Not_Supported_Exception
      */
-    public static function arrayInsert(array $input, $index, $newKey, $newValue) {
+    public static function arrayInsert(array $input, $index, $newKey, $newValue)
+    {
         $index = self::tryGetInt($index);
         $count = count($input);
         if ($index < 0 || $index >= $count) {
@@ -42,7 +44,7 @@ class KT {
                 $output[$newKey] = $newValue;
             }
             $output[$key] = $value;
-            $currentIndex ++;
+            $currentIndex++;
         }
         return $output;
     }
@@ -60,7 +62,8 @@ class KT {
      * @return array
      * @throws KT_Duplicate_Exception
      */
-    public static function arrayInsertBefore(array $input, $index, $newKey, $newValue) {
+    public static function arrayInsertBefore(array $input, $index, $newKey, $newValue)
+    {
         if (!array_key_exists($index, $input)) {
             throw new KT_Duplicate_Exception($index);
         }
@@ -87,7 +90,8 @@ class KT {
      * @return array
      * @throws KT_Duplicate_Exception
      */
-    public static function arrayInsertAfter(array $input, $index, $newKey, $newValue) {
+    public static function arrayInsertAfter(array $input, $index, $newKey, $newValue)
+    {
         if (!array_key_exists($index, $input)) {
             throw new KT_Duplicate_Exception($index);
         }
@@ -111,7 +115,8 @@ class KT {
      * @param mixed $value
      * @return array
      */
-    public static function arrayAdd(array &$haystack, $value) {
+    public static function arrayAdd(array &$haystack, $value)
+    {
         if (isset($value) && !in_array($value, $haystack)) {
             array_push($haystack, $value);
         }
@@ -128,7 +133,8 @@ class KT {
      * @param int|string $needle
      * @return array
      */
-    public static function arrayRemove(array $haystack, $needle) {
+    public static function arrayRemove(array $haystack, $needle)
+    {
         foreach ($haystack as $key => $value) {
             if ($value == $needle) {
                 unset($haystack[$key]);
@@ -147,7 +153,8 @@ class KT {
      * @param array $deleteKeys - které klíče se mají smazat z $input
      * @return array
      */
-    public static function arrayKeysRemove($input, array $deleteKeys = null) {
+    public static function arrayKeysRemove($input, array $deleteKeys = null)
+    {
         if (!self::arrayIssetAndNotEmpty($deleteKeys)) {
             return $input;
         }
@@ -169,7 +176,8 @@ class KT {
      * @param mixed $needle
      * @return array
      */
-    public static function arrayRemoveByValue(array $haystack = null, $needle) {
+    public static function arrayRemoveByValue(array $haystack = null, $needle)
+    {
         if (!self::arrayIssetAndNotEmpty($haystack)) {
             return $haystack;
         }
@@ -192,7 +200,8 @@ class KT {
      * @param int|string $needle
      * @return array
      */
-    public static function arrayRemoveByKey(array $haystack, $needle) {
+    public static function arrayRemoveByKey(array $haystack, $needle)
+    {
         if (array_key_exists($needle, $haystack)) {
             unset($haystack[$needle]);
         }
@@ -208,7 +217,8 @@ class KT {
      * @param array $array
      * @return boolean
      */
-    public static function arrayIsMulti(array $array) {
+    public static function arrayIsMulti(array $array)
+    {
         if (count($array) == count($array, COUNT_RECURSIVE)) {
             return true;
         }
@@ -224,7 +234,8 @@ class KT {
      * @param array $array
      * @return boolean
      */
-    public static function arrayIssetAndNotEmpty($array = null) {
+    public static function arrayIssetAndNotEmpty($array = null)
+    {
         return isset($array) && is_array($array) && count($array) > 0;
     }
 
@@ -237,7 +248,8 @@ class KT {
      * @param string $string
      * @return boolean
      */
-    public static function arrayIsSerialized($string) {
+    public static function arrayIsSerialized($string)
+    {
         if (KT::issetAndNotEmpty($string) && is_string($string)) {
             return (@unserialize($string) !== false || $string == "b:0;");
         }
@@ -254,7 +266,8 @@ class KT {
      * @param char $delimiter
      * @return array
      */
-    public static function arrayFromUrlParam($paramName, $delimiter = ",") {
+    public static function arrayFromUrlParam($paramName, $delimiter = ",")
+    {
         $paramValue = filter_input(INPUT_GET, $paramName, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (KT::issetAndNotEmpty($paramValue)) {
             if (is_serialized($paramValue)) {
@@ -275,7 +288,8 @@ class KT {
      * @param char $delimiter
      * @return array
      */
-    public static function arrayIdsFromUrlParam($idsParamName, $delimiter = ",") {
+    public static function arrayIdsFromUrlParam($idsParamName, $delimiter = ",")
+    {
         $ids = array();
         $values = self::arrayFromUrlParam($idsParamName, $delimiter);
         if (KT::arrayIssetAndNotEmpty($values)) {
@@ -297,7 +311,8 @@ class KT {
      * @param array
      * @return string|int
      */
-    public static function arrayGetFirstKey(array $array) {
+    public static function arrayGetFirstKey(array $array)
+    {
         foreach ($array as $key => $value) {
             return $key;
         }
@@ -312,21 +327,22 @@ class KT {
      * @param array
      * @return type
      */
-    public static function arrayGetFirstValue(array $array) {
+    public static function arrayGetFirstValue(array $array)
+    {
         foreach ($array as $key => $value) {
             return $value;
         }
     }
 
-    public static function arrayGetLastValue(array $array) {
-        foreach ($array as $key => $value)
-            ;
+    public static function arrayGetLastValue(array $array)
+    {
+        foreach ($array as $key => $value);
         return $value;
     }
 
-    public static function arrayGetLastKey(array $array) {
-        foreach ($array as $key => $value)
-            ;
+    public static function arrayGetLastKey(array $array)
+    {
+        foreach ($array as $key => $value);
         return $key;
     }
 
@@ -341,7 +357,8 @@ class KT {
      * @param string $defaultValue
      * @return mixed type|null
      */
-    public static function arrayTryGetValue(array $array, $key, $defaultValue = null) {
+    public static function arrayTryGetValue(array $array, $key, $defaultValue = null)
+    {
         if (isset($key)) {
             if (array_key_exists($key, $array)) {
                 return $array[$key];
@@ -361,9 +378,10 @@ class KT {
      * @param string $defaultValue
      * @return mixed type|null
      */
-    public static function arrayObjectTryGetValue($array, $key, $defaultValue = null) {
+    public static function arrayObjectTryGetValue($array, $key, $defaultValue = null)
+    {
         if (isset($array) && is_array($array)) {
-            return self::arrayTryGetValue($array, $key, $defaultValue );
+            return self::arrayTryGetValue($array, $key, $defaultValue);
         }
         return $defaultValue;
     }
@@ -377,7 +395,8 @@ class KT {
      * @param array $input
      * @return array
      */
-    public static function arrayClearDir($input) {
+    public static function arrayClearDir($input)
+    {
         foreach ($input as $key => $value) {
             if ($value == '.' || $value == '..') {
                 unset($input[$key]);
@@ -398,7 +417,8 @@ class KT {
      * @param boolean $preserveKeys
      * @return array
      */
-    public static function arrayDivide(array $items, $segmentsCount, $preserveKeys = true) {
+    public static function arrayDivide(array $items, $segmentsCount, $preserveKeys = true)
+    {
         $itemsCount = count($items);
         if (($itemsCount === 0) || ($segmentsCount < 1)) {
             return null;
@@ -419,7 +439,8 @@ class KT {
      * @param string $format
      * @return date
      */
-    public static function dateNow($format = "Y-m-d H:i:s") {
+    public static function dateNow($format = "Y-m-d H:i:s")
+    {
         return date($format, current_time("timestamp"));
     }
 
@@ -434,7 +455,8 @@ class KT {
      * @param boolean $withGmt
      * @return string (datum)
      */
-    public static function dateConvert($value, $format = "d.m.Y", $withGmt = false) {
+    public static function dateConvert($value, $format = "d.m.Y", $withGmt = false)
+    {
         if (KT::issetAndNotEmpty($value)) {
             $timeStamp = strtotime($value);
             if ($withGmt) {
@@ -453,7 +475,8 @@ class KT {
      * 
      * @return int
      */
-    public static function dateGmtOffset() {
+    public static function dateGmtOffset()
+    {
         $dateGmtOffset = self::$dateGmtOffset;
         if (isset($dateGmtOffset)) {
             return $dateGmtOffset;
@@ -472,7 +495,8 @@ class KT {
      * @param mixed $value
      * @return boolean
      */
-    public static function issetAndNotEmpty($value) {
+    public static function issetAndNotEmpty($value)
+    {
         return isset($value) && !empty($value);
     }
 
@@ -485,7 +509,8 @@ class KT {
      * @param mixed $value
      * @return boolean
      */
-    public static function notIssetOrEmpty($value) {
+    public static function notIssetOrEmpty($value)
+    {
         return !isset($value) || empty($value);
     }
 
@@ -497,7 +522,8 @@ class KT {
      * 
      * @return boolean
      */
-    public static function isWpAjax() {
+    public static function isWpAjax()
+    {
         return defined("DOING_AJAX") && DOING_AJAX;
     }
 
@@ -507,7 +533,8 @@ class KT {
      * @author Jan Pokorný
      * @return bool
      */
-    public static function isAjax() {
+    public static function isAjax()
+    {
         return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
     }
 
@@ -523,7 +550,8 @@ class KT {
      * @param booelan $return
      * @return string
      */
-    public static function pr($objekt, $name = '', $return = false) {
+    public static function pr($objekt, $name = '', $return = false)
+    {
         if (is_string($objekt))
             $objekt .= "\n";
         if ($return)
@@ -531,18 +559,19 @@ class KT {
         echo '<pre>' . $name . ' ' . (print_r($objekt, true)) . '</pre>';
     }
 
-	/**
-	 * Die Dump (pr)
-	 *
-	 * @author Martin Hlaváč
-	 * @link http://www.ktstudio.cz
-	 *
-	 * @param mixed $value
-	 */
-	public static function dd($value) {
-		wp_die(var_dump(self::pr($value)));
-		exit;
-	}
+    /**
+     * Die Dump (pr)
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param mixed $value
+     */
+    public static function dd($value)
+    {
+        wp_die(var_dump(self::pr($value)));
+        exit;
+    }
 
     /**
      * Funkce vrátí post object na základě předaného parametru post_id = null
@@ -554,7 +583,8 @@ class KT {
      * @param int $post_id - Id postu, který se nastaveí
      * @return ojbect WP_post
      */
-    public static function setupPostObject($post_id = null) {
+    public static function setupPostObject($post_id = null)
+    {
         if (self::isIdFormat($post_id)) {
             if (!$post_id instanceof WP_Post) {
                 return get_post($post_id);
@@ -575,7 +605,8 @@ class KT {
      * 
      * @return boolean
      */
-    public static function checkCurrentUserCanManageOptions() {
+    public static function checkCurrentUserCanManageOptions()
+    {
         if (current_user_can("manage_options")) {
             return true;
         } else {
@@ -593,7 +624,8 @@ class KT {
      * @param string $userAgent
      * @return boolean
      */
-    public static function checkIsCrawler($userAgent) {
+    public static function checkIsCrawler($userAgent)
+    {
         $crawlers = self::CRAWLERS;
         $isCrawler = (preg_match("/$crawlers/i", $userAgent) > 0); // i - case-insensitive
         return $isCrawler;
@@ -609,7 +641,8 @@ class KT {
      * @param int $length
      * @return string
      */
-    public static function getRandomString($length = 6) {
+    public static function getRandomString($length = 6)
+    {
         return substr(str_shuffle(self::CHARS), 0, $length);
     }
 
@@ -625,7 +658,8 @@ class KT {
      * @param boolean $newLineAfter
      * @return string
      */
-    public static function getTabsIndent($tabsCount, $content = null, $newLineBefore = false, $newLineAfter = false) {
+    public static function getTabsIndent($tabsCount, $content = null, $newLineBefore = false, $newLineAfter = false)
+    {
         $result = "";
         if ($newLineBefore == true) {
             $result .= "\n";
@@ -652,7 +686,8 @@ class KT {
      * @param boolean $newLineAfter
      * @return string
      */
-    public static function theTabsIndent($tabsCount, $content = null, $newLineBefore = false, $newLineAfter = false) {
+    public static function theTabsIndent($tabsCount, $content = null, $newLineBefore = false, $newLineAfter = false)
+    {
         echo self::getTabsIndent($tabsCount, $content, $newLineBefore, $newLineAfter);
     }
 
@@ -665,7 +700,8 @@ class KT {
      * @param boolean $fullUrl - true i s pametry, false bez
      * @return string
      */
-    public static function getRequestUrl($fullUrl = true) {
+    public static function getRequestUrl($fullUrl = true)
+    {
         $requestUrl = "http";
         if (self::arrayTryGetValue($_SERVER, "HTTPS") == "on") {
             $requestUrl .= "s";
@@ -692,7 +728,8 @@ class KT {
      * 
      * @return string
      */
-    public static function getBacklinkUrl() {
+    public static function getBacklinkUrl()
+    {
         $refererUrl = $_SERVER["HTTP_REFERER"];
         if (filter_var($refererUrl, FILTER_VALIDATE_URL)) {
             return $refererUrl;
@@ -709,7 +746,8 @@ class KT {
      * @param string $key
      * @return mixed string|null
      */
-    public static function getUrlParamValue($key) {
+    public static function getUrlParamValue($key)
+    {
         if (KT::arrayIssetAndNotEmpty($_GET) && array_key_exists($key, $_GET)) {
             return $_GET[$key];
         }
@@ -726,8 +764,9 @@ class KT {
      * @param string $defaultValue
      * @return mixed type|null
      */
-    public static function tryGetWpRemote($url, $defaultValue = null) {
-        $response = wp_remote_get( "$url/" );
+    public static function tryGetWpRemote($url, $defaultValue = null)
+    {
+        $response = wp_remote_get("$url/");
         if (KT::arrayIssetAndNotEmpty($response)) {
             if ($response["response"]["message"] === "OK") {
                 return json_decode($response["body"]);
@@ -745,7 +784,8 @@ class KT {
      * @param array $customWhitelist
      * @return boolean
      */
-    public static function isLocalhost($customWhitelist = null) {
+    public static function isLocalhost($customWhitelist = null)
+    {
         $whitelist = array("127.0.0.1", "::1");
         if (KT::arrayIssetAndNotEmpty($customWhitelist)) {
             $whitelist = array_merge($whitelist, $customWhitelist);
@@ -765,10 +805,11 @@ class KT {
      * 
      * @return string
      */
-    public static function getIpAddress() {
+    public static function getIpAddress()
+    {
         $ip = self::arrayTryGetValue($_SERVER, "HTTP_CLIENT_IP")
-                ? : self::arrayTryGetValue($_SERVER, "HTTP_X_FORWARDED_FOR")
-                ? : self::arrayTryGetValue($_SERVER, "REMOTE_ADDR");
+            ? : self::arrayTryGetValue($_SERVER, "HTTP_X_FORWARDED_FOR")
+            ? : self::arrayTryGetValue($_SERVER, "REMOTE_ADDR");
         return $ip;
     }
 
@@ -781,7 +822,8 @@ class KT {
      * @param string $address
      * @return string|null
      */
-    public static function getGoogleMapsGPS($address) {
+    public static function getGoogleMapsGPS($address)
+    {
         if (self::issetAndNotEmpty($address) && is_string($address)) {
             $address = urlencode(trim($address));
             $googleApiLink = "http://maps.googleapis.com/maps/api/geocode/json?address=$address&sensor=false";
@@ -789,8 +831,8 @@ class KT {
             if ($googleApiResult) {
                 $googleApiResultJson = json_decode($googleApiResult);
                 if (self::issetAndNotEmpty($googleApiResultJson)) {
-                    $gpsLatitude = (float) $googleApiResultJson->results[0]->geometry->location->lat;
-                    $gpsLongtitude = (float) $googleApiResultJson->results[0]->geometry->location->lng;
+                    $gpsLatitude = (float)$googleApiResultJson->results[0]->geometry->location->lat;
+                    $gpsLongtitude = (float)$googleApiResultJson->results[0]->geometry->location->lng;
                     if (self::issetAndNotEmpty($gpsLatitude) && self::issetAndNotEmpty($gpsLongtitude)) {
                         $coordinates = $gpsLatitude . ", " . $gpsLongtitude;
                         return $coordinates;
@@ -810,7 +852,8 @@ class KT {
      * @param mixed float|int|string $coordinate
      * @return number
      */
-    public static function clearGpsNumberCoordinate($coordinate) {
+    public static function clearGpsNumberCoordinate($coordinate)
+    {
         if (KT::issetAndNotEmpty($coordinate)) {
             $coordinateNumber = KT::tryGetFloat(preg_replace("/[^0-9,.\/-\/+]/", "", trim($coordinate)));
             return number_format($coordinateNumber, 6, ".", "");
@@ -827,7 +870,8 @@ class KT {
      * @param string $coordinates
      * @return string
      */
-    public static function clearGpsCoordinates($coordinates) {
+    public static function clearGpsCoordinates($coordinates)
+    {
         if (KT::issetAndNotEmpty($coordinates)) {
             return preg_replace("/[^0-9,.\/-\/+]/", "", trim($coordinates));
         }
@@ -846,7 +890,8 @@ class KT {
      * @param callable $callback
      * @return mixed
      */
-    public static function tryGetWpSiteData($blogId, callable $callback) {
+    public static function tryGetWpSiteData($blogId, callable $callback)
+    {
         switch_to_blog($blogId);
         $result = call_user_func($callback);
         restore_current_blog();
@@ -865,7 +910,8 @@ class KT {
      * @param string $alt
      * @param string $size
      */
-    public static function imageGetAttachmentHtml($id, array $linkArgs = array(), array $imageArgs = array(), $size = KT_WP_IMAGE_SIZE_THUBNAIL, $tabsCount = 0) {
+    public static function imageGetAttachmentHtml($id, array $linkArgs = array(), array $imageArgs = array(), $size = KT_WP_IMAGE_SIZE_THUBNAIL, $tabsCount = 0)
+    {
         $output = null;
         if (self::isIdFormat($id) > 0) {
             $source = wp_get_attachment_image_src($id, $size);
@@ -908,7 +954,8 @@ class KT {
      * @param string $fileName
      * @return string
      */
-    public static function imageGetUrlFromTheme($fileName) {
+    public static function imageGetUrlFromTheme($fileName)
+    {
         return $url = get_template_directory_uri() . "/images/" . $fileName;
     }
 
@@ -922,7 +969,8 @@ class KT {
      * @param bool $withSrcset
      * @return string
      */
-    public static function imageReplaceLazySrc($html, $withSrcset = false) {
+    public static function imageReplaceLazySrc($html, $withSrcset = false)
+    {
         if (self::issetAndNotEmpty($html) && !KT::isAjax()) { // @todo možnost provádět i při ajaxu, avšak je třeba dodělat javascript trigger
             $libxmlInternalErrorsState = libxml_use_internal_errors(true);
             $dom = new DOMDocument();
@@ -962,7 +1010,8 @@ class KT {
      * 
      * @return string
      */
-    public static function imageGetTransparent() {
+    public static function imageGetTransparent()
+    {
         return self::$imageTransparent;
     }
 
@@ -992,7 +1041,8 @@ class KT {
      * @param array $attrs Další html atributy
      * 
      */
-    public static function imageGetHtml($file, $width, $height, array $attrs = null) {
+    public static function imageGetHtml($file, $width, $height, array $attrs = null)
+    {
         if (filter_var($file, FILTER_VALIDATE_URL) === false) {
             $fileUrl = KT::imageGetUrlFromTheme($file);
         } else {
@@ -1018,7 +1068,8 @@ class KT {
      * @param array $attrs Další html atributy
      * 
      */
-    public static function imageGetHtmlByUrl($url, $width, $height, array $attrs = []) {
+    public static function imageGetHtmlByUrl($url, $width, $height, array $attrs = [])
+    {
         $attrs = array_merge($attrs, ["width" => $width, "height" => $height]);
         $htmlAttrs = "";
         foreach ($attrs as $param => $value) {
@@ -1039,7 +1090,8 @@ class KT {
      * @param array $attrs Další html atributy
      * 
      */
-    public static function imageGetHtmlByFileName($fileName, $width, $height, array $attrs = []) {
+    public static function imageGetHtmlByFileName($fileName, $width, $height, array $attrs = [])
+    {
         return self::imageGetHtmlByUrl(self::imageGetUrlFromTheme($fileName), $width, $height, $attrs);
     }
 
@@ -1054,7 +1106,8 @@ class KT {
      * @param array $attr
      * @return string HTML <img>
      */
-    public static function imageGetHtmlByAttachmentId($attachment_id, $size = 'thumbnail', $icon = false, $attr = []) {
+    public static function imageGetHtmlByAttachmentId($attachment_id, $size = 'thumbnail', $icon = false, $attr = [])
+    {
         $html = wp_get_attachment_image($attachment_id, $size, $icon, $attr);
         return apply_filters("kt_image_prepare_lazyload", $html);
     }
@@ -1071,7 +1124,8 @@ class KT {
      * @param array $imgAttrs Attributy pro img tag atribute => hodnota
      * @return string Kolekce tagů <img> x * <source>
      */
-    public static function imageGetPictureSet(WP_Post $post, $defaultSize, $width, $height, $sizes = [], $imgAttrs = []) {
+    public static function imageGetPictureSet(WP_Post $post, $defaultSize, $width, $height, $sizes = [], $imgAttrs = [])
+    {
         $picture = "";
         foreach ($sizes as $minWidth => $size) {
             $picture .= sprintf('<source srcset="%s" media="(min-width:%spx)">', wp_get_attachment_image_url($post->ID, $size), $minWidth);
@@ -1093,7 +1147,8 @@ class KT {
      * @param string $defaultTitle
      * @return string
      */
-    public static function getCustomMenuNameByLocation($location, $defaultTitle = null) {
+    public static function getCustomMenuNameByLocation($location, $defaultTitle = null)
+    {
         $locations = get_nav_menu_locations();
         $menuLocation = KT::arrayTryGetValue($locations, $location);
         if (self::issetAndNotEmpty($menuLocation)) {
@@ -1118,7 +1173,8 @@ class KT {
      *
      * @return string
      */
-    public static function getCustomMenuIdByLocation($location) {
+    public static function getCustomMenuIdByLocation($location)
+    {
         $locations = get_nav_menu_locations();
         $menuLocation = $locations[$location];
         if (self::issetAndNotEmpty($menuLocation)) {
@@ -1144,7 +1200,8 @@ class KT {
      * @param Walker_Nav_Menu $customWalker
      * @param array $customArgs
      */
-    public static function theWpNavMenu($themeLocation, $depth = 0, Walker_Nav_Menu $customWalker = null, array $customArgs = null) {
+    public static function theWpNavMenu($themeLocation, $depth = 0, Walker_Nav_Menu $customWalker = null, array $customArgs = null)
+    {
         $defaults = array(
             "theme_location" => $themeLocation,
             "container" => false,
@@ -1171,7 +1228,8 @@ class KT {
      * @param mixed $value
      * @return boolean
      */
-    public static function isIdFormat($value) {
+    public static function isIdFormat($value)
+    {
         $id = self::tryGetInt($value);
         if ($id > 0) {
             return true;
@@ -1189,8 +1247,9 @@ class KT {
      * @param mixed $value
      * @return boolean
      */
-    public static function isIndexFormat($value) {
-	    $index = self::tryGetInt($value);
+    public static function isIndexFormat($value)
+    {
+        $index = self::tryGetInt($value);
         if ($index === 0 || $index > 0) {
             return true;
         }
@@ -1206,15 +1265,16 @@ class KT {
      * @param number $value
      * @return integer|null
      */
-    public static function tryGetInt($value) {
+    public static function tryGetInt($value)
+    {
         if (isset($value) && is_numeric($value)) {
             if (is_int($value)) {
                 return $value;
             }
-            return (int) $value;
+            return (int)$value;
         }
         if ($value === "0") {
-            return (int) 0;
+            return (int)0;
         }
         return null;
     }
@@ -1228,15 +1288,16 @@ class KT {
      * @param number $value
      * @return float|null
      */
-    public static function tryGetFloat($value) {
+    public static function tryGetFloat($value)
+    {
         if (isset($value) && is_numeric($value)) {
             if (is_float($value)) {
                 return $value;
             }
-            return (float) $value;
+            return (float)$value;
         }
         if ($value === "0") {
-            return (float) 0;
+            return (float)0;
         }
         return null;
     }
@@ -1250,15 +1311,16 @@ class KT {
      * @param number $value
      * @return double|null
      */
-    public static function tryGetDouble($value) {
+    public static function tryGetDouble($value)
+    {
         if (isset($value) && is_numeric($value)) {
             if (is_double($value)) {
                 return $value;
             }
-            return (double) $value;
+            return (double)$value;
         }
         if ($value === "0") {
-            return (double) 0;
+            return (double)0;
         }
         return null;
     }
@@ -1273,7 +1335,8 @@ class KT {
      * @param int $b
      * @return int
      */
-    public static function intCompare($a, $b) {
+    public static function intCompare($a, $b)
+    {
         $first = self::tryGetInt($a);
         $second = self::tryGetInt($b);
         if ($first == $second) {
@@ -1295,7 +1358,8 @@ class KT {
      * @param number $value
      * @return number
      */
-    public static function roundNumber($value) {
+    public static function roundNumber($value)
+    {
         if ((self::issetAndNotEmpty($value) && is_numeric($value) || $value === "0")) {
             if (is_int($value)) {
                 return round($value, 0, PHP_ROUND_HALF_UP);
@@ -1315,10 +1379,11 @@ class KT {
      * @param mixed string|int $phoneNumber
      * @return string
      */
-    public static function clearPhoneNumber($phoneNumber) {
+    public static function clearPhoneNumber($phoneNumber)
+    {
         if (KT::issetAndNotEmpty($phoneNumber)) {
-            $before = ["+", "(", ")", " "];
-            $after = ["00", "", "", ""];
+            $before = ["(", ")", " "];
+            $after = ["", ""];
             return $phoneNumber = str_replace($before, $after, $phoneNumber);
         }
         return null;
@@ -1335,7 +1400,8 @@ class KT {
      * @param number $value
      * @return integer|null
      */
-    public static function tryGetBool($value) {
+    public static function tryGetBool($value)
+    {
         if (isset($value)) {
             if (is_bool($value)) {
                 return $value;
@@ -1371,7 +1437,8 @@ class KT {
      * @param array $userArgs // pro paginate_links (@link http://codex.wordpress.org/Function_Reference/paginate_links)
      * @return string
      */
-    public static function getPaginationLinks(WP_Query $wp_query = null, $userArgs = array()) {
+    public static function getPaginationLinks(WP_Query $wp_query = null, $userArgs = array())
+    {
         if (KT::notIssetOrEmpty($wp_query)) {
             global $wp_query;
         }
@@ -1408,10 +1475,12 @@ class KT {
      * @global integer $paged
      * @global WP_Query $wp_query
      */
-    public static function bootstrapPagination($previousNext = true, $customClass = null, WP_Query $query = null, $customStyle = null, $urlSuffix = null) {
+    public static function bootstrapPagination($previousNext = true, $customClass = null, WP_Query $query = null, $customStyle = null, $urlSuffix = null)
+    {
         global $wp_query;
         global $paged;
-        $paged = self::tryGetInt($paged) ?: 1;
+
+        $paged = self::tryGetInt($paged) ? : 1;
         $pages = self::tryGetInt(($query ?? $wp_query)->max_num_pages);
         if (self::issetAndNotEmpty($pages) && $pages > 1 && $paged >= $paged) {
             self::theTabsIndent(0, "<ul class=\"pagination $customClass\"$customStyle>", true);
@@ -1426,7 +1495,7 @@ class KT {
                 }
             }
 
-            for ($i = 1; $i <= $pages; $i ++) {
+            for ($i = 1; $i <= $pages; $i++) {
                 $pagenumLink = get_pagenum_link($i) . $urlSuffix;
                 $activeClass = ($i == $paged) ? 'class="active"' : "";
                 self::theTabsIndent(1, "<li $activeClass><a href=\"$pagenumLink\">$i</a></li>", true);
@@ -1459,10 +1528,11 @@ class KT {
      * @global integer $paged
      * @global WP_Query $wp_query
      */
-    public static function bootstrapPaginateLinks($previousNext = true, $customClass = null, WP_Query $query = null, $customStyle = null) {
+    public static function bootstrapPaginateLinks($previousNext = true, $customClass = null, WP_Query $query = null, $customStyle = null)
+    {
         global $wp_query;
         global $paged;
-        $current = self::tryGetInt($paged) ?: 1;
+        $current = self::tryGetInt($paged) ? : 1;
         $pages = self::tryGetInt(($query ?? $wp_query)->max_num_pages);
         $paginateLinks = paginate_links([
             "base" => str_replace(PHP_INT_MAX, "%#%", esc_url(get_pagenum_link(PHP_INT_MAX))),
@@ -1499,7 +1569,8 @@ class KT {
      * @param string $excludedTerms
      * @return string
      */
-    public static function getPreviousNextPostLinks($class = null, $maxLength = 30, $separator = " | ", $taxonomy = KT_WP_CATEGORY_KEY, $inSameTerm = false, $excludedTerms = "") {
+    public static function getPreviousNextPostLinks($class = null, $maxLength = 30, $separator = " | ", $taxonomy = KT_WP_CATEGORY_KEY, $inSameTerm = false, $excludedTerms = "")
+    {
         $links = array();
         $previousPost = get_previous_post($inSameTerm, $excludedTerms, $taxonomy);
         if (KT::issetAndNotEmpty($previousPost)) {
@@ -1531,7 +1602,8 @@ class KT {
      * @param string $substring hledaný podřetězec
      * @return boolean true, pokud $substring se nachází v $string, jinak false
      */
-    public static function stringContains($string, $substring) {
+    public static function stringContains($string, $substring)
+    {
         $position = strpos($string, $substring);
         if ($position === false) {
             return false;
@@ -1549,7 +1621,8 @@ class KT {
      * @param string $ending
      * @return boolean
      */
-    public static function stringEndsWith($string, $ending) {
+    public static function stringEndsWith($string, $ending)
+    {
         $length = strlen($ending);
         $string_end = substr($string, strlen($string) - $length);
         return $string_end === $ending;
@@ -1565,7 +1638,8 @@ class KT {
      * @param string $starting
      * @return boolean
      */
-    public static function stringStartsWith($string, $starting) {
+    public static function stringStartsWith($string, $starting)
+    {
         $length = strlen($starting);
         return (substr($string, 0, $length) === $starting);
     }
@@ -1579,7 +1653,8 @@ class KT {
      * @param string $text
      * @return string
      */
-    public static function stringClearHtml($text) {
+    public static function stringClearHtml($text)
+    {
         return htmlspecialchars(strip_tags($text));
     }
 
@@ -1595,7 +1670,8 @@ class KT {
      * @param string $suffixPrefix - ukončovácí přípona/předpona navíc (podle parametru $fromBeginOrEnd)
      * @return string
      */
-    public static function stringCrop($text, $maxLength, $fromBeginOrEnd = true, $suffixPrefix = "...") {
+    public static function stringCrop($text, $maxLength, $fromBeginOrEnd = true, $suffixPrefix = "...")
+    {
         $maxLength = self::tryGetInt($maxLength);
         $currentLength = strlen($text);
         if ($maxLength > 0 && $currentLength > $maxLength) {
@@ -1617,7 +1693,8 @@ class KT {
      * @param string $text
      * @return string
      */
-    public static function stringRemoveSpaces($text) {
+    public static function stringRemoveSpaces($text)
+    {
         if (KT::issetAndNotEmpty($text)) {
             return str_replace(" ", "", trim($text));
         }
@@ -1633,7 +1710,8 @@ class KT {
      * @param string $text
      * @return string
      */
-    public static function stringHtmlDecode($text) {
+    public static function stringHtmlDecode($text)
+    {
         if (self::issetAndNotEmpty($text)) {
             return html_entity_decode(stripslashes($text), ENT_COMPAT | ENT_HTML401, "UTF-8");
         }
@@ -1650,7 +1728,8 @@ class KT {
      * @param array $tags [$tag => $wildcard]
      * @return string
      */
-    public static function stringLineFormat($text, array $tags = array()) {
+    public static function stringLineFormat($text, array $tags = array())
+    {
         if (self::issetAndNotEmpty($text)) {
             foreach ($tags as $tag => $wildcard) {
                 $text = str_replace($tag, $wildcard, $text);
@@ -1671,7 +1750,8 @@ class KT {
      * @param string $placeholder
      * @return string
      */
-    public static function stringWpDbPlaceholders(array $values, $placeholder = "s") {
+    public static function stringWpDbPlaceholders(array $values, $placeholder = "s")
+    {
         return implode(",", array_fill(0, count($values), "%{$placeholder}"));
     }
 
@@ -1684,7 +1764,8 @@ class KT {
      * @param string $text
      * @return string
      */
-    public static function stringEscape($text) {
+    public static function stringEscape($text)
+    {
         if (self::issetAndNotEmpty($text)) {
             return esc_attr(trim($text));
         }
@@ -1700,7 +1781,8 @@ class KT {
      * @param string $text
      * @return array
      */
-    public static function textLinesToArray($text) {
+    public static function textLinesToArray($text)
+    {
         if (KT::issetAndNotEmpty($text)) {
             return explode(PHP_EOL, $text);
         }
@@ -1718,7 +1800,8 @@ class KT {
      * @param string $class CSS třída pro jednotlivé HTML tagy
      * @return string (HTML)
      */
-    public static function textLinesToHtml($text, $tag, $class = null) {
+    public static function textLinesToHtml($text, $tag, $class = null)
+    {
         $lines = self::textLinesToArray($text);
         if (KT::arrayIssetAndNotEmpty($lines)) {
             $classPart = null;
@@ -1744,7 +1827,8 @@ class KT {
      * @param string $text Vstupní text
      * @return string Zvýrazněný výstupní text
      */
-    public static function textMarkdownEmphasis($text) {
+    public static function textMarkdownEmphasis($text)
+    {
         $patterns = [
             "/\*\*(.+?)\*\*/i",
             "/\*(.+?)\*/i",
@@ -1770,7 +1854,8 @@ class KT {
      *
      * @return string (HTML)
      */
-    public static function formatText($text, $containerElement = "p", $containerClass = null) {
+    public static function formatText($text, $containerElement = "p", $containerClass = null)
+    {
         if (KT::issetAndNotEmpty($text)) {
             $output = KT::stringLineFormat(KT_String_Markdown::doMarkdownEmphasis($text));
             $classAttribute = KT::issetAndNotEmpty($containerClass) ? " class=\"$containerClass\"" : "";
@@ -1790,7 +1875,8 @@ class KT {
      *
      * @return string
      */
-    public static function formatNumber($number, $decimals = 0) {
+    public static function formatNumber($number, $decimals = 0)
+    {
         if (isset($number) && is_numeric($number)) {
             return number_format($number, $decimals, ",", " ");
         }
@@ -1808,7 +1894,8 @@ class KT {
      * @param string $url
      * @return string
      */
-    public static function curlGetContents($url) {
+    public static function curlGetContents($url)
+    {
         if (self::issetAndNotEmpty($url)) {
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -1833,7 +1920,8 @@ class KT {
      * @param WP_Post $post
      * @return string - template path
      */
-    public static function getSingleTemplate(WP_Post $post) {
+    public static function getSingleTemplate(WP_Post $post)
+    {
         $templatePart = null;
         $template = get_post_meta($post->ID, KT_META_KEY_SINGLE_TEMPLATE, true);
         if (KT::issetAndNotEmpty($template)) {
@@ -1861,7 +1949,8 @@ class KT {
      * @param WP_Post $post
      * @return string|boolean - template path
      */
-    public static function getAttachmentTemplate() {
+    public static function getAttachmentTemplate()
+    {
         $file = TEMPLATEPATH . '/singles/single-attachment.php';
         if (file_exists($file)) {
             return $file;
@@ -1884,7 +1973,8 @@ class KT {
      * @param WP_Post $post
      * @return string - template path
      */
-    public static function getPageTemplate(WP_Post $post) {
+    public static function getPageTemplate(WP_Post $post)
+    {
         $page_template = get_post_meta($post->ID, KT_WP_META_KEY_PAGE_TEMPLATE, true);
 
         if ($page_template != 'default' && $page_template != '') {
@@ -1912,7 +2002,8 @@ class KT {
      * @param WP_Post $post
      * @return string - template path
      */
-    public static function getArchiveTemplate() {
+    public static function getArchiveTemplate()
+    {
         global $wp_query;
         $postType = $wp_query->query_vars["post_type"];
         $file = TEMPLATEPATH . "/archives/archive-{$postType}.php";
@@ -1935,7 +2026,8 @@ class KT {
      * @param string $categorySlug = slug zobrazované category
      * @return string - template path
      */
-    public static function getCategoryTemplate($categorySlug) {
+    public static function getCategoryTemplate($categorySlug)
+    {
         $file = TEMPLATEPATH . "/categories/category-{$categorySlug}.php";
         if (file_exists($file)) {
             return $file;
@@ -1965,7 +2057,8 @@ class KT {
      * @param string $taxonomyName - slug zobrazené taxonomy
      * @return string - template path
      */
-    public static function getTaxonomyTemplate($taxonomyName) {
+    public static function getTaxonomyTemplate($taxonomyName)
+    {
         $term = get_queried_object();
         $file = TEMPLATEPATH . "/taxonomies/taxonomy-{$taxonomyName}-{$term->slug}.php";
         if (file_exists($file)) {
@@ -1996,7 +2089,8 @@ class KT {
      * @param string $tagName - slug zobrazeného tagu
      * @return string - template path
      */
-    public static function getTagTemplate($tagName) {
+    public static function getTagTemplate($tagName)
+    {
         $term = get_queried_object();
         $file = TEMPLATEPATH . "/tags/tag-{$tagName}-{$term->slug}.php";
         if (file_exists($file)) {
@@ -2023,7 +2117,8 @@ class KT {
      * @param string $partName
      * @param array $args Pole proměných dostupných v template partě
      */
-    public static function getTemplatePart($partName, $args = []) {
+    public static function getTemplatePart($partName, $args = [])
+    {
         $template = TEMPLATEPATH . '/' . $partName . '.php';
         global $posts, $post, $wp_did_header, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
 
@@ -2046,7 +2141,8 @@ class KT {
      * @param string $taxonomy
      * @return int
      */
-    public static function getTermParentId($termId, $taxonomy) {
+    public static function getTermParentId($termId, $taxonomy)
+    {
         $term = get_term($termId, $taxonomy);
         if (KT::issetAndNotEmpty($term)) {
             $parentId = $term->parent;
@@ -2068,7 +2164,8 @@ class KT {
      * @param string $taxonomy
      * @param array $results
      */
-    public static function fillTermTreeNode($termId, $taxonomy, array &$results) {
+    public static function fillTermTreeNode($termId, $taxonomy, array &$results)
+    {
         $term = get_term($termId, $taxonomy);
         if (KT::issetAndNotEmpty($term)) {
             array_push($results, $term);
@@ -2089,7 +2186,8 @@ class KT {
      * @param array $terms
      * @return boolean
      */
-    public static function isLastTerm($termId, array $terms) {
+    public static function isLastTerm($termId, array $terms)
+    {
         if (KT::issetAndNotEmpty($termId)) {
             foreach ($terms as $id => $term) {
                 if ($id == $termId) {

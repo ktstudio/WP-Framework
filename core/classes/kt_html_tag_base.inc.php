@@ -5,7 +5,8 @@
  *
  * @author Tomáš Kocifaj
  */
-abstract class KT_HTML_Tag_Base {
+abstract class KT_HTML_Tag_Base
+{
 
     const CLASS_KEY = "class";
 
@@ -16,7 +17,8 @@ abstract class KT_HTML_Tag_Base {
     /**
      * @return array
      */
-    protected function getAttributes() {
+    protected function getAttributes()
+    {
         return $this->attributes;
     }
 
@@ -29,7 +31,8 @@ abstract class KT_HTML_Tag_Base {
      * @param array $attributes
      * @return \KT_HTML_Tag_Base
      */
-    protected function setAttributes(array $attributes = array()) {
+    protected function setAttributes(array $attributes = array())
+    {
         $this->attributes = $attributes;
         return $this;
     }
@@ -43,7 +46,8 @@ abstract class KT_HTML_Tag_Base {
      * 
      * @return string
      */
-    protected function getAttributeString() {
+    protected function getAttributeString()
+    {
         $html = "";
         $attrCollection = $this->getAttributes();
 
@@ -75,7 +79,8 @@ abstract class KT_HTML_Tag_Base {
      * 
      * @return string
      */
-    protected function getAttrClassString() {
+    protected function getAttrClassString()
+    {
         $html = "";
         if (array_key_exists(self::CLASS_KEY, $this->getAttributes())) {
             $classString = "";
@@ -95,7 +100,8 @@ abstract class KT_HTML_Tag_Base {
      * 
      * @author Tomáš Kocifaj
      */
-    protected function renderAttributeString() {
+    protected function renderAttributeString()
+    {
         echo $this->getAttributeString();
     }
 
@@ -107,7 +113,8 @@ abstract class KT_HTML_Tag_Base {
      * @param string $attrName
      * @return string | array
      */
-    protected function getAttrValueByName($attrName) {
+    protected function getAttrValueByName($attrName)
+    {
         if (array_key_exists($attrName, $this->getAttributes())) {
             return $this->attributes[$attrName];
         }
@@ -124,7 +131,8 @@ abstract class KT_HTML_Tag_Base {
      * @param string $value - hodnota
      * @return \KT_HTML_Tag_Base
      */
-    public function addAttribute($name, $value = null) {
+    public function addAttribute($name, $value = null)
+    {
         $this->attributes[$name] = $value;
 
         return $this;
@@ -138,7 +146,8 @@ abstract class KT_HTML_Tag_Base {
      * @param string $name
      * @return \KT_HTML_Tag_Base
      */
-    public function removeAttribute($name) {
+    public function removeAttribute($name)
+    {
         unset($this->attributes[$name]);
 
         return $this;
@@ -152,7 +161,8 @@ abstract class KT_HTML_Tag_Base {
      * @param string $id
      * @return \KT_HTML_Tag_Base
      */
-    public function setAttrId($id) {
+    public function setAttrId($id)
+    {
         $this->addAttribute("id", $id);
         return $this;
     }
@@ -165,7 +175,8 @@ abstract class KT_HTML_Tag_Base {
      * @param string $title
      * @return \KT_HTML_Tag_Base
      */
-    public function setAttrTitle($title) {
+    public function setAttrTitle($title)
+    {
         $this->addAttribute("title", $title);
         return $this;
     }
@@ -178,7 +189,15 @@ abstract class KT_HTML_Tag_Base {
      * @param int $maxlength
      * @return \KT_HTML_Tag_Base
      */
-    public function setAttrMaxlength($maxlength) {
+    public function setAttrMaxlength($maxlength)
+    {
+        $this->addAttribute("maxlength", $maxlength);
+        return $this;
+    }
+
+
+    public function setDisabled()
+    {
         $this->addAttribute("maxlength", $maxlength);
         return $this;
     }
@@ -191,7 +210,8 @@ abstract class KT_HTML_Tag_Base {
      * @param string $class
      * @return \KT_HTML_Tag_Base
      */
-    public function addAttrClass($class) {
+    public function addAttrClass($class)
+    {
         $classes = explode(" ", $class);
 
         if (KT::issetAndNotEmpty($classes)) {
@@ -217,7 +237,8 @@ abstract class KT_HTML_Tag_Base {
      * 
      * @param string $class
      */
-    public function removeAttrClass($class) {
+    public function removeAttrClass($class)
+    {
         $classes = $this->getClasses();
         $flipedClasses = array_flip($classes);
         unset($flipedClasses[$class]);
@@ -233,7 +254,8 @@ abstract class KT_HTML_Tag_Base {
      * 
      * @return array
      */
-    protected function getClasses() {
+    protected function getClasses()
+    {
         if (array_key_exists(self::CLASS_KEY, $this->getAttributes())) {
             return $this->attributes[self::CLASS_KEY];
         }
@@ -247,7 +269,8 @@ abstract class KT_HTML_Tag_Base {
      * 
      * @param array $classes
      */
-    private function setClasses(array $classes = array()) {
+    private function setClasses(array $classes = array())
+    {
         $this->attributes[self::CLASS_KEY] = $classes;
     }
 
