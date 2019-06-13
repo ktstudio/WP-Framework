@@ -92,13 +92,14 @@ function kt_load_all_modules() {
  * 
  * @return array
  */
-function kt_get_subdirs_names($dirPath, $checkForDirExists = true) {
+function kt_get_subdirs_names($dirPath, $checkForDirExists = true)
+{
     if (isset($dirPath) && is_dir($dirPath)) {
         $subdirsNames = array();
         $names = array_diff(scandir($dirPath), array(".", "..", ".git", ".gitignore", "LICENSE", "README.md", "composer.json", "kt_init.inc.php"));
         foreach ($names as $name) { // procházíme základní adresáře v KT, tedy moduly
             if ($checkForDirExists === true) {
-                if (is_dir(path_join($dirPath, $name))) {
+                if (substr(strrchr($name, '.'), 1) !== 'php' && is_dir(path_join($dirPath, $name))) {
                     array_push($subdirsNames, $name);
                 }
             } else {
