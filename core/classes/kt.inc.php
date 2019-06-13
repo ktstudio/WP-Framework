@@ -922,7 +922,7 @@ class KT {
      * @param bool $withSrcset
      * @return string
      */
-    public static function imageReplaceLazySrc($html, $withSrcset = false) {
+    public static function imageReplaceLazySrc($html, $withSrcset = true) {
         if (self::issetAndNotEmpty($html) && !KT::isAjax()) { // @todo možnost provádět i při ajaxu, avšak je třeba dodělat javascript trigger
             $libxmlInternalErrorsState = libxml_use_internal_errors(true);
             $dom = new DOMDocument();
