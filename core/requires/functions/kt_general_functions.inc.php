@@ -96,9 +96,6 @@ function kt_wp_before_admin_bar_render_callback() {
     ));
 }
 
-add_action("wp_footer", "kt_load_cookie_statement_content_callback");
-
-
 /**
  * Funce zajistí načtení, resp. vrácení cookie statement obsahu ajaxem
  * 
