@@ -70,9 +70,12 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base {
      */
     public function getField() {
         $html = "";
+        $value = $this->getValue();
+        $value = sanitize_textarea_field(KT::stringHtmlDecode($value));
+        $value = htmlspecialchars(strip_tags($value));
 
         $html .= "<textarea " . $this->getBasicHtml() . ">";
-        $html .= sanitize_textarea_field(KT::stringHtmlDecode($this->getValue()));
+        $html .= $value;
         $html .= "</textarea>";
 
         if ($this->hasErrorMsg()) {
