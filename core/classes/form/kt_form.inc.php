@@ -699,9 +699,9 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         $postMetas = KT_WP_Post_Base_Model::getPostMetas($postId);
 
         foreach ($this->getFieldsets() as $fieldset) {
-            /* @var $fieldset \KT_Form_Fieldset */
 
-            if (KT::issetAndNotEmpty($transientData[$fieldset->getName()])) {
+            /** @var \KT_Form_Fieldset $fieldset  */
+            if (is_array($transientData) && KT::issetAndNotEmpty($transientData[$fieldset->getName()])) {
                 $this->fieldsets[$fieldset->getName()] = $transientData[$fieldset->getName()];
                 continue;
             }
