@@ -6,6 +6,7 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base
     const FIELD_TYPE = "textarea";
 
     private $sanitizeValue = false;
+    private $htmlDecode = false;
 
     /**
      * Založení objektu typeu Textarea
@@ -64,9 +65,19 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base
         return $this->sanitizeValue = $Sanitize;
     }
 
+    public function setHtmlDecode(bool $htmlDecode)
+    {
+        return $this->htmlDecode = $htmlDecode;
+    }
+
     public function getSanitizeValue()
     {
         return $this->sanitizeValue;
+    }
+
+    public function getHtmlDecode()
+    {
+        return $this->htmlDecode;
     }
 
     /**
@@ -90,9 +101,14 @@ class KT_Textarea_Field extends KT_Placeholder_Field_base
         $html = "";
         $value = $this->getValue();
         $value = KT::stringHtmlDecode($value);
+
         if ($this->getSanitizeValue()) {
             $value = sanitize_textarea_field(KT::stringHtmlDecode($value));
             $value = htmlspecialchars(strip_tags($value));
+        }
+
+        if ($this->getHtmlDecode()) {
+            $value = html_entity_decode($value);
         }
 
         $html .= "<textarea " . $this->getBasicHtml() . ">";

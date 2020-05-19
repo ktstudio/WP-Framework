@@ -734,7 +734,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         if (KT::isIdFormat($userId) && $this->hasFieldset()) {
             $userMetas = KT_WP_User_Base_Model::getUserMetas($userId);
             foreach ($this->getFieldsets() as $fieldset) {
-                /* @var $fieldset \KT_Form_Fieldset */
+                /** @var \KT_Form_Fieldset $fieldset */
                 if ($fieldset->hasFields()) {
                     if ($fieldset->getSerializeSave()) {
                         $fieldset->setFieldsData($userMetas[$fieldset->getName()]);
