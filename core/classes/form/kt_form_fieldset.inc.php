@@ -1,6 +1,7 @@
 <?php
 
-class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
+class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess
+{
 
     private $title = null;
     private $description = null;
@@ -11,24 +12,27 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     private $beforeFieldsetContent = null;
     private $afterFieldsetContent = null;
 
-    public function __construct($name, $title = null, $description = null) {
+    public function __construct($name, $title = null, $description = null)
+    {
         $this->setName($name)
-                ->addAttrClass("kt_fieldset panel")
-                ->setAttrId($name)
-                ->setTitle($title)
-                ->setDescription($description);
+            ->addAttrClass("kt_fieldset panel")
+            ->setAttrId($name)
+            ->setTitle($title)
+            ->setDescription($description);
 
         return $this;
     }
 
     // --- arrayAccess ------------------
 
-    public function offsetExists($offset) {
+    public function offsetExists($offset)
+    {
         $fields = $this->getFields();
         return array_key_exists($offset, $fields);
     }
 
-    public function offsetGet($offset) {
+    public function offsetGet($offset)
+    {
         if ($this->offsetExists($offset)) {
             $fields = $this->getFields();
             return $fields[$offset];
@@ -37,12 +41,13 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
         return null;
     }
 
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset)
+    {
         $this->removeFieldByName($offset);
     }
 
-    public function offsetSet($offset, $value) {
-        
+    public function offsetSet($offset, $value)
+    {
     }
 
     // --- gettery ------------------
@@ -50,56 +55,64 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
     /**
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->title;
     }
 
     /**
      * @return string
      */
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
     /**
      * @return array
      */
-    public function getFields() {
+    public function getFields()
+    {
         return $this->fields;
     }
 
     /**
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
     /**
      * @return string
      */
-    public function getPostPrefix() {
+    public function getPostPrefix()
+    {
         return $this->postPrefix;
     }
 
     /**
      * @return boolean
      */
-    public function getSerializeSave() {
+    public function getSerializeSave()
+    {
         return $this->serializeSave;
     }
 
     /**
      * @return string
      */
-    function getBeforeFieldsetContent() {
+    function getBeforeFieldsetContent()
+    {
         return $this->beforeFieldsetContent;
     }
 
     /**
      * @return string
      */
-    function getAfterFieldsetContent() {
+    function getAfterFieldsetContent()
+    {
         return $this->afterFieldsetContent;
     }
 
@@ -114,7 +127,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param type $title
      * @return \KT_Form_Fieldset
      */
-    public function setTitle($title) {
+    public function setTitle($title)
+    {
         $this->title = $title;
         return $this;
     }
@@ -128,7 +142,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param type $description
      * @return \KT_Form_Fieldset
      */
-    public function setDescription($description) {
+    public function setDescription($description)
+    {
         $this->description = $description;
         return $this;
     }
@@ -142,7 +157,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param type $name
      * @return \KT_Form_Fieldset
      */
-    public function setName($name) {
+    public function setName($name)
+    {
         $this->name = $name;
         return $this;
     }
@@ -156,7 +172,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param type $postPrefix
      * @return \KT_Form_Fieldset
      */
-    public function setPostPrefix($postPrefix) {
+    public function setPostPrefix($postPrefix)
+    {
         $this->postPrefix = $postPrefix;
 
         $this->setPostPrefixToAllFields();
@@ -173,7 +190,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param type $fields
      * @return \KT_Form_Fieldset
      */
-    public function setFields(array $fields) {
+    public function setFields(array $fields)
+    {
         $this->fields = $fields;
         return $this;
     }
@@ -187,7 +205,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param type $serializeSave
      * @return \KT_Form_Fieldset
      */
-    public function setSerializeSave($serializeSave = true) {
+    public function setSerializeSave($serializeSave = true)
+    {
         if (is_bool($serializeSave)) {
             $this->serializeSave = $serializeSave;
         }
@@ -204,7 +223,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $beforeFieldsetContent
      * @return \KT_Form_Fieldset
      */
-    public function setBeforeFieldsetContent($beforeFieldsetContent = null) {
+    public function setBeforeFieldsetContent($beforeFieldsetContent = null)
+    {
         $this->beforeFieldsetContent = $beforeFieldsetContent;
         return $this;
     }
@@ -218,7 +238,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $afterFieldsetContent
      * @return \KT_Form_Fieldset
      */
-    public function setAfterFieldsetContent($afterFieldsetContent = null) {
+    public function setAfterFieldsetContent($afterFieldsetContent = null)
+    {
         $this->afterFieldsetContent = $afterFieldsetContent;
         return $this;
     }
@@ -233,7 +254,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * 
      * @return boolean
      */
-    public function hasFieldsError() {
+    public function hasFieldsError()
+    {
         if ($this->hasFields()) {
             foreach ($this->getFields() as $field) {
                 /* @var $field \KT_Field */
@@ -254,7 +276,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $name
      * @return \KT_Field
      */
-    public function getFieldByName($name) {
+    public function getFieldByName($name)
+    {
         $fieldsCollection = $this->getFields();
         if (isset($fieldsCollection[$name]))
             return $field = $fieldsCollection[$name];
@@ -269,7 +292,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $name
      * @return boolean
      */
-    public function hasFieldByName($name) {
+    public function hasFieldByName($name)
+    {
         $fieldsCollection = $this->getFields();
         return array_key_exists($name, $fieldsCollection);
     }
@@ -283,7 +307,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param type $name
      * @return \KT_Form_Fieldset
      */
-    public function removeFieldByName($name) {
+    public function removeFieldByName($name)
+    {
         $fieldsCollection = $this->getFields();
         unset($fieldsCollection[$name]);
         $this->setFields($fieldsCollection);
@@ -298,7 +323,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @param array $fieldsData
      */
-    public function setFieldsData($fieldsData) {
+    public function setFieldsData($fieldsData)
+    {
         if (KT::arrayIssetAndNotEmpty($fieldsData)) {
             foreach ($this->getFields() as $field) {
                 /** @var $field \KT_Field */
@@ -323,12 +349,13 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param KT_Field $field
      * @return string
      */
-    public function convertFieldValue(KT_Field $field, $value) {
+    public function convertFieldValue(KT_Field $field, $value)
+    {
         if ($field->getFieldType() == KT_Text_Field::FIELD_TYPE) {
             if ($field->getInputType() == KT_Text_Field::INPUT_DATE) {
                 return KT::dateConvert($value, "d.m.Y");
             } elseif ($field->getInputType() == KT_Text_Field::INPUT_DATETIME) {
-	            return KT::dateConvert($value, "d.m.Y H:i");
+                return KT::dateConvert($value, "d.m.Y H:i");
             }
         }
         return $value;
@@ -343,7 +370,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param array $fieldsCollection
      * @return \KT_Form
      */
-    public function addFieldCollection(array $fieldsCollection) {
+    public function addFieldCollection(array $fieldsCollection)
+    {
         if ($this->hasFields()) {
             $mergeColelctions = array_merge($this->fields, $fieldsCollection);
             $this->setFields($mergeColelctions);
@@ -363,7 +391,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param KT_Field $field
      * @return \KT_Form_Fieldset
      */
-    public function addField(KT_Field $field) {
+    public function addField(KT_Field $field)
+    {
         $field->setPostPrefix($this->getPostPrefix());
         $fieldsCollection = $this->getFields();
         $fieldsCollection[$field->getName()] = $field;
@@ -380,7 +409,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * 
      * @return array
      */
-    public function getDataFromGet() {
+    public function getDataFromGet()
+    {
         if (KT::notIssetOrEmpty($_GET)) {
             return array();
         }
@@ -402,7 +432,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * 
      * @return array
      */
-    public function getDataFromPost() {
+    public function getDataFromPost()
+    {
         if (KT::notIssetOrEmpty($_POST)) {
             return array();
         }
@@ -427,7 +458,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return string - HTML
      *
      */
-    public function getInputsToTable($class = null) {
+    public function getInputsToTable($class = null)
+    {
 
         $html = "";
 
@@ -468,7 +500,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param KT_Field $field
      * @return string
      */
-    public function getInputToTr(KT_Field $field) {
+    public function getInputToTr(KT_Field $field)
+    {
 
         if ($field->getFieldType() === KT_WP_Editor_Field::FIELD_TYPE) {
             $field->getField();
@@ -499,7 +532,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @return string - HTML
      */
-    public function getInputsToSimpleHtml($displayLables = false) {
+    public function getInputsToSimpleHtml($displayLables = false)
+    {
 
         $html = "";
 
@@ -536,7 +570,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @return string HTML
      */
-    public function getStartHtmlOfFieldSet($fieldsetTag = true) {
+    public function getStartHtmlOfFieldSet($fieldsetTag = true)
+    {
         $html = "<div {$this->getAttributeString()}>";
 
         if (KT::issetAndNotEmpty($this->getTitle())) {
@@ -564,7 +599,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @return string HTML
      */
-    public function getEndHtmlOfFieldSet($fieldsetTag = true) {
+    public function getEndHtmlOfFieldSet($fieldsetTag = true)
+    {
         $html = "";
         if (KT::issetAndNotEmpty($this->getAfterFieldsetContent())) {
             $html .= "<div class=\"fieldsetAfterContent\">{$this->getAfterFieldsetContent()}</div>";
@@ -586,7 +622,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @return string
      */
-    public function getInputsDataToTable($excludeFields = array(), $class = null) {
+    public function getInputsDataToTable($excludeFields = array(), $class = null)
+    {
 
         if (!$this->hasFields()) {
             return null;
@@ -633,7 +670,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @return bol
      */
-    public function hasFields() {
+    public function hasFields()
+    {
         if (KT::issetAndNotEmpty($this->getFields())) {
             return true;
         }
@@ -654,7 +692,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Text_Field
      */
-    public function addText($name, $label) {
+    public function addText($name, $label)
+    {
         $field = $this->fields[$name] = new KT_Text_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -671,7 +710,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_File_Field
      */
-    public function addFile($name, $label) {
+    public function addFile($name, $label)
+    {
         $field = $this->fields[$name] = new KT_File_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -687,7 +727,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Hidden_Field
      */
-    public function addHidden($name, $label = null) {
+    public function addHidden($name, $label = null)
+    {
         $field = $this->fields[$name] = new KT_Hidden_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -704,7 +745,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Checkbox_Field
      */
-    public function addCheckbox($name, $label) {
+    public function addCheckbox($name, $label)
+    {
         $field = $this->fields[$name] = new KT_Checkbox_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -721,7 +763,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Radio_Field
      */
-    public function addRadio($name, $label) {
+    public function addRadio($name, $label)
+    {
         $field = $this->fields[$name] = new KT_Radio_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -737,7 +780,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Select_Field
      */
-    public function addSelect($name, $label = "") {
+    public function addSelect($name, $label = "")
+    {
         $field = $this->fields[$name] = new KT_Select_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -753,7 +797,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Multi_Select_Field
      */
-    public function addMultiSelect($name, $label = "") {
+    public function addMultiSelect($name, $label = "")
+    {
         $field = $this->fields[$name] = new KT_Multi_Select_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -769,7 +814,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Single_Select_Field
      */
-    public function addSingleSelect($name, $label = "") {
+    public function addSingleSelect($name, $label = "")
+    {
         $field = $this->fields[$name] = new KT_Single_Select_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -786,7 +832,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Image_Field
      */
-    public function addMedia($name, $label) {
+    public function addMedia($name, $label)
+    {
         $field = $this->fields[$name] = new KT_Media_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -803,7 +850,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Switch_Field
      */
-    public function addSwitch($name, $label) {
+    public function addSwitch($name, $label)
+    {
         $field = $this->fields[$name] = new KT_Switch_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
 
@@ -820,9 +868,20 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Textarea_Field
      */
-    public function addTextarea($name, $label) {
+    public function addTextarea($name, $label)
+    {
         $field = $this->fields[$name] = new KT_Textarea_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
+        return $field;
+    }
+
+
+    public function addTrumbowygTextarea($name, $label)
+    {
+        $field = $this->fields[$name] = new KT_Textarea_Field($name, $label);
+        $field->setPostPrefix($this->getPostPrefix());
+        $field->addAttrClass("fancy-textarea");
+        $field->setHtmlDecode(true);
         return $field;
     }
 
@@ -837,7 +896,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Page_Field
      */
-    public function addWpPage($name, $label, $parentPage = null, $pageTemplate = null) {
+    public function addWpPage($name, $label, $parentPage = null, $pageTemplate = null)
+    {
         $field = $this->fields[$name] = new KT_Page_Field($name, $label, $parentPage, $pageTemplate);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -853,7 +913,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Category_Field
      */
-    public function addWpCategory($name, $label) {
+    public function addWpCategory($name, $label)
+    {
         $categoryManager = new KT_Taxonomy_Data_Manager(KT_WP_CATEGORY_KEY);
         $field = $this->fields[$name] = new KT_Select_Field($name, $label);
         $field->setDataManager($categoryManager)->setPostPrefix($this->getPostPrefix());
@@ -871,7 +932,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_WP_User_Field
      */
-    public function addWpUsers($name, $label) {
+    public function addWpUsers($name, $label)
+    {
         $field = $this->fields[$name] = new KT_WP_User_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -887,7 +949,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Slider_Field
      */
-    public function addSlider($name, $label) {
+    public function addSlider($name, $label)
+    {
         $field = $this->fields[$name] = new KT_Slider_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -904,7 +967,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_WP_Editor_Field
      */
-    public function addWpEditor($name, $label) {
+    public function addWpEditor($name, $label)
+    {
         $field = $this->fields[$name] = new KT_WP_Editor_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -920,7 +984,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_Color_Field
      */
-    public function addColor($name, $label) {
+    public function addColor($name, $label)
+    {
         $field = $this->fields[$name] = new KT_Color_Field($name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -936,7 +1001,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return \KT_WP_Nonce_Field_Field
      */
-    public function addWpNonce($name, $label = null) {
+    public function addWpNonce($name, $label = null)
+    {
         $field = $this->fields[$name] = new KT_WP_Nonce_Field($this->getName(), $name, $label);
         $field->setPostPrefix($this->getPostPrefix());
         return $field;
@@ -951,7 +1017,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param array $fieldsetRecipy Recept pro vygenerování fieldsetu. Př. ["KT_ZZZ_Post_Config", KT_ZZZ_Post_Config::DYNAMIC_FIELDSET"]
      * @return \KT_Fieldset_Field
      */
-    public function addFieldset($name, $label, $fieldsetRecipy) {
+    public function addFieldset($name, $label, $fieldsetRecipy)
+    {
         $field = $this->fields[$name] = new KT_Fieldset_Field($name, $label, $fieldsetRecipy);
         return $field;
     }
@@ -965,7 +1032,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param array $fieldsetRecipy Recept pro vygenerování fieldsetu. Př. ["KT_ZZZ_Post_Config", KT_ZZZ_Post_Config::DYNAMIC_FIELDSET"]
      * @return \KT_Fieldset_Field
      */
-    public function addKeyValueFieldset($name, $label) {
+    public function addKeyValueFieldset($name, $label)
+    {
         $field = $this->fields[$name] = new KT_Fieldset_Field($name, $label, ["KT_Dynamic_Fieldset_Predefined_Config", KT_Dynamic_Fieldset_Predefined_Config::KEY_VALUE_FIELDSET]);
         return $field;
     }
@@ -980,7 +1048,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return KT_Text_Field
      * @throws KT_Not_Set_Argument_Exception
      */
-    public function addEmail($name, $label, $withValidationRule = true) {
+    public function addEmail($name, $label, $withValidationRule = true)
+    {
         $field = $this->addText($name, $label);
         $field->setInputType(KT_Text_Field::INPUT_EMAIL);
         if ($withValidationRule) {
@@ -999,7 +1068,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return KT_Text_Field
      * @throws KT_Not_Set_Argument_Exception
      */
-    public function addUrl($name, $label, $withValidationRule = true) {
+    public function addUrl($name, $label, $withValidationRule = true)
+    {
         $field = $this->addText($name, $label);
         $field->setInputType(KT_Text_Field::INPUT_URL);
         if ($withValidationRule) {
@@ -1018,7 +1088,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return KT_Text_Field
      * @throws KT_Not_Set_Argument_Exception
      */
-    public function addNumber($name, $label, $withValidationRule = true) {
+    public function addNumber($name, $label, $withValidationRule = true)
+    {
         $field = $this->addText($name, $label);
         $field->setInputType(KT_Text_Field::INPUT_NUMBER);
         if ($withValidationRule) {
@@ -1037,7 +1108,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @return KT_Text_Field
      * @throws KT_Not_Set_Argument_Exception
      */
-    public function addNumeric($name, $label, $withValidationRule = true) {
+    public function addNumeric($name, $label, $withValidationRule = true)
+    {
         $field = $this->addText($name, $label);
         $field->setInputType(KT_Text_Field::INPUT_NUMBER);
         $field->addAttribute("step", "any");
@@ -1055,7 +1127,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return KT_Text_Field
      */
-    public function addDate($name, $label) {
+    public function addDate($name, $label)
+    {
         $field = $this->addText($name, $label);
         $field->setInputType(KT_Text_Field::INPUT_DATE);
         return $field;
@@ -1069,7 +1142,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return KT_Text_Field
      */
-    public function addDatetime($name, $label) {
+    public function addDatetime($name, $label)
+    {
         $field = $this->addText($name, $label);
         $field->setInputType(KT_Text_Field::INPUT_DATETIME);
         return $field;
@@ -1083,7 +1157,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param string $label
      * @return KT_Text_Field
      */
-    public function addPassword($name, $label) {
+    public function addPassword($name, $label)
+    {
         $field = $this->addText($name, $label);
         $field->setInputType(KT_Text_Field::INPUT_PASSWORD);
         return $field;
@@ -1093,7 +1168,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @deprecated deprecated since version 1.12
      * @see addNumber
      */
-    public function addInt($name, $label, $withValidationRule = true) {
+    public function addInt($name, $label, $withValidationRule = true)
+    {
         return $this->addNumber($name, $label, $withValidationRule);
     }
 
@@ -1101,7 +1177,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @deprecated deprecated since version 1.12
      * @see addNumeric
      */
-    public function addFloat($name, $label, $withValidationRule = true) {
+    public function addFloat($name, $label, $withValidationRule = true)
+    {
         return $this->addNumeric($name, $label, $withValidationRule);
     }
 
@@ -1115,7 +1192,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      *
      * @return \KT_Form_Fieldset
      */
-    private function setPostPrefixToAllFields() {
+    private function setPostPrefixToAllFields()
+    {
         if ($this->hasFields() && KT::issetAndNotEmpty($this->postPrefix)) {
             foreach ($this->fields as $field) {
                 $field->setPostPrefix($this->getPostPrefix());
@@ -1136,7 +1214,8 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
      * @param KT_Field $field
      * @return string
      */
-    private function getInputDataToTr(KT_Field $field, $exclude_keys = array()) {
+    private function getInputDataToTr(KT_Field $field, $exclude_keys = array())
+    {
 
         if (in_array($field->getName(), $exclude_keys)) {
             return;
@@ -1183,5 +1262,4 @@ class KT_Form_Fieldset extends KT_HTML_Tag_Base implements ArrayAccess {
 
         return $html;
     }
-
 }

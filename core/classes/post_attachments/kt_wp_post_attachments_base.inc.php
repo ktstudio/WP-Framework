@@ -1,8 +1,9 @@
 <?php
 
-abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
+abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base
+{
 
-    const DEFAULT_ORDERBY = "ID";
+    const DEFAULT_ORDERBY = "menu_order";
     const DEFAULT_ORDER = "ASC";
     const DEFAULT_IMAGES_NUMBER = "-1";
     const DEFAULT_CONTAINER_TITLE_HTML_TAG = "h2";
@@ -24,7 +25,8 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
      * 
      * @param WP_Post $post
      */
-    public function __construct(WP_Post $post) {
+    public function __construct(WP_Post $post)
+    {
         $this->setPost($post);
     }
 
@@ -37,56 +39,64 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
     /**
      * @return \WP_Post
      */
-    protected function getPost() {
+    protected function getPost()
+    {
         return $this->post;
     }
 
     /**
      * @return string
      */
-    protected function getOrderby() {
+    protected function getOrderby()
+    {
         return $this->orderby;
     }
 
     /**
      * @return string
      */
-    protected function getOrder() {
+    protected function getOrder()
+    {
         return $this->order;
     }
 
     /**
      * @return int
      */
-    public function getNumberFiles() {
+    public function getNumberFiles()
+    {
         return $this->numberFiles;
     }
 
     /**
      * @return string
      */
-    protected function getLinkClass() {
+    protected function getLinkClass()
+    {
         return $this->linkClass;
     }
 
     /**
      * @return string
      */
-    private function getGalleryTitle() {
+    private function getGalleryTitle()
+    {
         return $this->containerTitle;
     }
 
     /**
      * @return string
      */
-    private function getGalleryTitleContainer() {
+    private function getGalleryTitleContainer()
+    {
         return $this->containerTitleHtmlTag;
     }
 
     /**
      * @return array
      */
-    public function getFiles() {
+    public function getFiles()
+    {
         if ($this->files === null) {
             $this->initialize();
         }
@@ -104,7 +114,8 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
      * @param WP_Post $post
      * @return \KT_WP_Post_Attachments_Base
      */
-    public function setPost(WP_Post $post) {
+    public function setPost(WP_Post $post)
+    {
         $this->post = $post;
         return $this;
     }
@@ -118,7 +129,8 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
      * 
      * @param string $orderby
      */
-    public function setOrderby($orderby) {
+    public function setOrderby($orderby)
+    {
         $this->orderby = $orderby;
         return $this;
     }
@@ -132,7 +144,8 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
      * 
      * @param string $order
      */
-    public function setOrder($order) {
+    public function setOrder($order)
+    {
         $this->order = $order;
         return $this;
     }
@@ -145,7 +158,8 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
      * 
      * @param int $numberImages
      */
-    public function setNumberFiles($numberImages) {
+    public function setNumberFiles($numberImages)
+    {
         $this->numberFiles = $numberImages;
         return $this;
     }
@@ -159,7 +173,8 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
      * @param string $linkClass
      * @return \KT_WP_Post_Attachments_Base
      */
-    public function setLinkClass($linkClass) {
+    public function setLinkClass($linkClass)
+    {
         $this->linkClass = $linkClass;
         return $this;
     }
@@ -173,7 +188,8 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
      * @param string $galleryTitle
      * @return \KT_WP_Post_Attachments_Base
      */
-    public function setContainerTitle($galleryTitle) {
+    public function setContainerTitle($galleryTitle)
+    {
         $this->containerTitle = $galleryTitle;
         return $this;
     }
@@ -190,7 +206,8 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
      * @param type $galleryTitleContainer
      * @return \KT_WP_Post_Attachments_Base
      */
-    public function setContainerTitleHtmlTag($galleryTitleContainer) {
+    public function setContainerTitleHtmlTag($galleryTitleContainer)
+    {
         $this->containerTitleHtmlTag = $galleryTitleContainer;
         return $this;
     }
@@ -204,7 +221,8 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
      * @param array $files
      * @return \KT_WP_Post_Attachments_Base
      */
-    protected function setFiles(array $files) {
+    protected function setFiles(array $files)
+    {
         $this->files = $files;
         return $this;
     }
@@ -219,7 +237,8 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
      * 
      * @return boolean
      */
-    public function hasFiles() {
+    public function hasFiles()
+    {
         if (KT::issetAndNotEmpty($this->getFiles())) {
             return true;
         }
@@ -234,7 +253,8 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
      * 
      * @return string
      */
-    protected function getContainerHeader() {
+    protected function getContainerHeader()
+    {
 
         $html = "";
         $title = $this->getGalleryTitle();
@@ -254,5 +274,4 @@ abstract class KT_WP_Post_Attachments_Base extends KT_HTML_Tag_Base {
 
         return $title;
     }
-
 }

@@ -17,6 +17,7 @@ class KT_Image
     private $alt;
     private $title;
     private $class;
+    private $draggable;
     private $data = [];
     private $isLazyLoading;
     private $isNoScript;
@@ -149,6 +150,22 @@ class KT_Image
         return $this;
     }
 
+    /** @return string */
+    public function getDraggable()
+    {
+        return $this->draggable;
+    }
+
+    /**
+     * @param boolean $draggable
+     * @return KT_Image
+     */
+    public function setDraggable($draggable)
+    {
+        $this->draggable = $draggable;
+        return $this;
+    }
+
     /** @return array */
     public function getData()
     {
@@ -266,6 +283,7 @@ class KT_Image
         $imageTag .= $this->tryGetImageParam("alt", $this->getAlt());
         $imageTag .= $this->tryGetImageParam("title", $this->getTitle());
         $imageTag .= $this->tryGetImageParam("class", $this->getClass());
+        $imageTag .= $this->tryGetImageParam("draggable", "{$this->getDraggable()}");
         $data = $this->getData();
         if (KT::arrayIssetAndNotEmpty($data)) {
             foreach ($data as $dataKey => $dataValue) {

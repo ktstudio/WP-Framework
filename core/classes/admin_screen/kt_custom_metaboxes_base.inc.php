@@ -35,7 +35,7 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function __construct() {
         $this->defaultCallbackFunction = array($this, 'renderPage');
-        $this->crudInstance = null;
+        self::$crudInstance = null;
     }
 
     // --- gettery ----------------------
@@ -348,8 +348,8 @@ abstract class KT_Custom_Metaboxes_Base {
      */
     public function adminNoticesError() {
         echo "<div class=\"error\">";
-        if (isset($this->crudInstance) && $this->crudInstance->hasError()) {
-            foreach ($this->crudInstance->getErrors() as $error) {
+        if (isset(self::$crudInstance) && self::$crudInstance->hasError()) {
+            foreach (self::$crudInstance->getErrors() as $error) {
                 echo "<p>{$error["message"]}</p>";
                 echo "<p>{$error["data"]}</p>";
             }
@@ -532,7 +532,7 @@ abstract class KT_Custom_Metaboxes_Base {
                 );
 
                 $this->saveResult = apply_filters("kt-custom-metabox-save-$screenName", $this->saveResult, 1);
-                $this->crudInstance = $crudInstance = KT::arrayTryGetValue($this->saveResult, "crud");
+                self::$crudInstance = KT::arrayTryGetValue($this->saveResult, "crud");
 
                 if (KT::arrayTryGetValue($this->saveResult, self::REDIRECT_ALLOWED) == false) {
                     return;
@@ -549,7 +549,7 @@ abstract class KT_Custom_Metaboxes_Base {
                 );
 
                 if (array_key_exists("crud", $this->saveResult)) {
-                    $urlParams[$crudInstance::ID_COLUMN] = $crudInstance->getId();
+                    $urlParams[self::$crudInstance::ID_COLUMN] = self::$crudInstance->getId();
                     $urlParams["action"] = "update";
                 }
 

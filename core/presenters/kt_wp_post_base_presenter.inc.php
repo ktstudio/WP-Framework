@@ -272,10 +272,12 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @param string $imageSize
      * @param array $imageAttr // parametry obrázky $key => $value
      * @param string $defaultImageSrc
+     * @param boolean $isLazyLoading
+     * @param boolean $isNoScript
      * @return mixed null|string (HTML)
      */
-    public function getThumbnailImage($imageSize, array $imageAttr = array(), $defaultImageSrc = null, $isLazyLoading = true) {
-        return self::getThumbnailImageByPost($this->getModel()->getPost(), $imageSize, $imageAttr, $defaultImageSrc, $isLazyLoading);
+    public function getThumbnailImage($imageSize, array $imageAttr = array(), $defaultImageSrc = null, $isLazyLoading = true, $isNoScript = true) {
+        return self::getThumbnailImageByPost($this->getModel()->getPost(), $imageSize, $imageAttr, $defaultImageSrc, $isLazyLoading, $isNoScript);
     }
 
     /**
@@ -391,9 +393,10 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
      * @param array $imageAttr // parametry obrázky $key => $value
      * @param string $defaultImageSrc
      * @param boolean $isLazyLoading
+     * @param boolean $isNoScript
      * @return mixed string || null
      */
-    public static function getThumbnailImageByPost(WP_Post $post, $imageSize, array $imageAttr = array(), $defaultImageSrc = null, $isLazyLoading = true) {
+    public static function getThumbnailImageByPost(WP_Post $post, $imageSize, array $imageAttr = array(), $defaultImageSrc = null, $isLazyLoading = true, $isNoScript = true) {
         $defaults = array("alt" => esc_attr($post->post_title));
         if (has_post_thumbnail($post->ID)) {
             $thumbnailId = get_post_thumbnail_id($post->ID);
@@ -407,24 +410,26 @@ class KT_WP_Post_Base_Presenter extends KT_Presenter_Base {
             $imageSrc = $defaultImageSrc;
         }
         $imageAttr = wp_parse_args($imageAttr, $defaults);
-        return self::getImageHtmlTag($imageSrc, $imageAttr, $isLazyLoading);
+        return self::getImageHtmlTag($imageSrc, $imageAttr, $isLazyLoading, $isNoScript);
     }
 
     /**
      * Sestavení HTML tagu obrázku na základě zadaných parametrů
-     * 
+     *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
+     *
      * @param string $imageSrc
      * @param array $imageAttr
      * @param boolean $isLazyLoading
+     * @param boolean $isNoScript
      * @return mixed string|null
      */
-    public static function getImageHtmlTag($imageSrc, array $imageAttr = array(), $isLazyLoading = true) {
+    public static function getImageHtmlTag($imageSrc, array $imageAttr = array(), $isLazyLoading = true, $isNoScript = true) {
         $image = new KT_Image($imageSrc);
         $image->setSrc($imageSrc);
         $image->setIsLazyLoading($isLazyLoading);
+        $image->setIsNoScript($isNoScript);
         $image->initialize($imageAttr);
         return $image->buildHtml();
     }

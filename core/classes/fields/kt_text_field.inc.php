@@ -1,6 +1,7 @@
 <?php
 
-class KT_Text_Field extends KT_Placeholder_Field_base {
+class KT_Text_Field extends KT_Placeholder_Field_base
+{
 
     const FIELD_TYPE = "text";
     const INPUT_NUMBER = "number";
@@ -11,6 +12,7 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
     const INPUT_URL = "url";
 
     private $inputType = self::FIELD_TYPE;
+    private $sanitizeValue = false;
 
     /**
      * Založení objektu typu input type="text || number || email || password"
@@ -25,7 +27,8 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      * @param string $label - popisek v html
      * @return KT_Text_Field
      */
-    public function __construct($name, $label) {
+    public function __construct($name, $label)
+    {
         parent::__construct($name, $label);
     }
 
@@ -43,13 +46,14 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      * @throws InvalidArgumentException
      * @throws KT_Not_Set_Argument_Exception
      */
-    public function setInputType($type) {
+    public function setInputType($type)
+    {
         if (KT::issetAndNotEmpty($type)) {
 
             if ($type == self::INPUT_DATE) {
                 $this->addAttrClass("datepicker");
             } else if ($type == self::INPUT_DATETIME) {
-	            $this->addAttrClass("datetimepicker");
+                $this->addAttrClass("datetimepicker");
             }
 
             $this->inputType = $type;
@@ -70,8 +74,19 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      *
      * @return string
      */
-    public function getFieldType() {
+    public function getFieldType()
+    {
         return self::FIELD_TYPE;
+    }
+
+    public function setSanitizeValue(bool $Sanitize)
+    {
+        return $this->sanitizeValue = $Sanitize;
+    }
+
+    public function getSanitizeValue()
+    {
+        return $this->sanitizeValue;
     }
 
     // --- veařejné funkce -----------------
@@ -83,7 +98,8 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      * @link http://www.ktstudio.cz
      *
      */
-    public function renderField() {
+    public function renderField()
+    {
         echo $this->getField();
     }
 
@@ -95,13 +111,18 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      *
      * @return string
      */
-    public function getField() {
+    public function getField()
+    {
 
         $html = "";
 
         $inputType = $this->getInputType();
         $fieldType = ($inputType === self::INPUT_DATE || $inputType === self::INPUT_DATETIME) ? "text" : $inputType;
         $value = KT::stringHtmlDecode($this->getValue());
+        if ($this->getSanitizeValue()) {
+            $value = sanitize_text_field($value);
+            $value = htmlspecialchars(strip_tags($value));
+        }
 
         $html .= "<input type=\"{$fieldType}\" ";
         $html .= $this->getBasicHtml();
@@ -123,7 +144,8 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      *
      * @return mixed string || null
      */
-    public function getInputType() {
+    public function getInputType()
+    {
         return $this->inputType;
     }
 
@@ -136,16 +158,16 @@ class KT_Text_Field extends KT_Placeholder_Field_base {
      * @param bolean $original - má vrátít originální hodnotu v DB nebo hodnotou pro zobrazení
      * @return null
      */
-    public function getConvertedValue() {
+    public function getConvertedValue()
+    {
         $fieldValue = parent::getConvertedValue();
 
         if ($this->getInputType() == self::INPUT_DATE && KT::issetAndNotEmpty($fieldValue)) {
             return $newFieldValue = KT::dateConvert($fieldValue, "d.m.Y");
         } elseif ($this->getInputType() == self::INPUT_DATETIME && KT::issetAndNotEmpty($fieldValue)) {
-		    return $newFieldValue = KT::dateConvert($fieldValue, "d.m.Y H:i");
-	    }
+            return $newFieldValue = KT::dateConvert($fieldValue, "d.m.Y H:i");
+        }
 
         return $fieldValue;
     }
-
 }

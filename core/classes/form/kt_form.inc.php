@@ -699,9 +699,9 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         $postMetas = KT_WP_Post_Base_Model::getPostMetas($postId);
 
         foreach ($this->getFieldsets() as $fieldset) {
-            /* @var $fieldset \KT_Form_Fieldset */
 
-            if (KT::issetAndNotEmpty($transientData[$fieldset->getName()])) {
+            /** @var \KT_Form_Fieldset $fieldset  */
+            if (is_array($transientData) && KT::issetAndNotEmpty($transientData[$fieldset->getName()])) {
                 $this->fieldsets[$fieldset->getName()] = $transientData[$fieldset->getName()];
                 continue;
             }
@@ -734,7 +734,7 @@ class KT_Form extends KT_HTML_Tag_Base implements ArrayAccess {
         if (KT::isIdFormat($userId) && $this->hasFieldset()) {
             $userMetas = KT_WP_User_Base_Model::getUserMetas($userId);
             foreach ($this->getFieldsets() as $fieldset) {
-                /* @var $fieldset \KT_Form_Fieldset */
+                /** @var \KT_Form_Fieldset $fieldset */
                 if ($fieldset->hasFields()) {
                     if ($fieldset->getSerializeSave()) {
                         $fieldset->setFieldsData($userMetas[$fieldset->getName()]);

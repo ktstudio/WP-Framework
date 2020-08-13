@@ -12,6 +12,7 @@ class KT {
     const CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     private static $dateGmtOffset;
+    private static $imageTransparent = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
     // --- POLE - ARRAY ---------------------------
 
@@ -921,7 +922,7 @@ class KT {
      * @param bool $withSrcset
      * @return string
      */
-    public static function imageReplaceLazySrc($html, $withSrcset = false) {
+    public static function imageReplaceLazySrc($html, $withSrcset = true) {
         if (self::issetAndNotEmpty($html) && !KT::isAjax()) { // @todo možnost provádět i při ajaxu, avšak je třeba dodělat javascript trigger
             $libxmlInternalErrorsState = libxml_use_internal_errors(true);
             $dom = new DOMDocument();
@@ -954,7 +955,7 @@ class KT {
     }
 
     /**
-     * Vrátí průhledný ("systémový") obrázek (včetně URL)
+     * Vrátí průhledný ("systémový") obrázek
      * 
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
@@ -962,7 +963,20 @@ class KT {
      * @return string
      */
     public static function imageGetTransparent() {
-        return "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"; // return KT_CORE_IMAGES_URL . "/transparent.png";
+        return self::$imageTransparent;
+    }
+
+    /**
+     * Nastaví nebo zruší vlastní průhledný ("systémový") obrázek
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param string $transparentImage
+     */
+    public static function imageSetTransparent(string $transparentImage)
+    {
+        self::$imageTransparent = $transparentImage;
     }
 
     /**
@@ -1385,55 +1399,89 @@ class KT {
      *
      * @author Martin Hlaváč
      * @link http://www.ktstudio.cz
-     * 
-     * @global integer $paged
-     * @global WP_Query $wp_query
+     *
      * @param boolean $previousNext
      * @param string $customClass
+     * @param WP_Query $query
+     * @param string $customStyle
+     * @param string $urlSuffix
+     * @global integer $paged
+     * @global WP_Query $wp_query
      */
-    public static function bootstrapPagination($previousNext = true, $customClass = "pagination-centered") {
+    public static function bootstrapPagination($previousNext = true, $customClass = null, WP_Query $query = null, $customStyle = null, $urlSuffix = null) {
+        global $wp_query;
         global $paged;
-        $paged = self::tryGetInt($paged) ? : 1;
-        if (self::issetAndNotEmpty($paged) && $paged > 0) {
-            global $wp_query;
-            $pages = self::tryGetInt($wp_query->max_num_pages);
-            if (self::issetAndNotEmpty($pages) && $pages > 1 && $paged >= $paged) {
-                self::theTabsIndent(0, "<ul class=\"pagination $customClass\">", true);
+        $paged = self::tryGetInt($paged) ?: 1;
+        $pages = self::tryGetInt(($query ?? $wp_query)->max_num_pages);
+        if (self::issetAndNotEmpty($pages) && $pages > 1 && $paged >= $paged) {
+            self::theTabsIndent(0, "<ul class=\"pagination $customClass\"$customStyle>", true);
 
-                if ($previousNext) {
-                    if ($paged > 2) {
-                        self::theTabsIndent(1, "<li><a href='" . get_pagenum_link(1) . "'>&laquo;</a></li>", true);
-                    } else {
-                        self::theTabsIndent(1, "<li class=\"disabled\"><span>&laquo;</span></li>", true);
-                    }
-                    if ($paged > 1) {
-                        self::theTabsIndent(1, "<li><a href='" . get_pagenum_link($paged - 1) . "'>&lsaquo;</a></li>", true);
-                    } else {
-                        self::theTabsIndent(1, "<li class=\"disabled\"><span>&lsaquo;</span></li>", true);
-                    }
+            if ($previousNext) {
+                if ($paged > 1) {
+                    self::theTabsIndent(1, "<li class=\"first\"><a href='" . get_pagenum_link(1) . $urlSuffix . "'>&laquo;</a></li>", true);
+                    self::theTabsIndent(1, "<li class=\"previous\"><a href='" . get_pagenum_link($paged - 1) . $urlSuffix . "'>&lsaquo;</a></li>", true);
+                } else {
+                    self::theTabsIndent(1, "<li class=\"first disabled\"><span>&laquo;</span></li>", true);
+                    self::theTabsIndent(1, "<li class=\"previous disabled\"><span>&lsaquo;</span></li>", true);
                 }
-
-                for ($i = 1; $i <= $pages; $i ++) {
-                    $pagenumlink = get_pagenum_link($i);
-                    $activeClass = ($i == $paged) ? 'class="active"' : "";
-                    self::theTabsIndent(1, "<li $activeClass><a href=\"$pagenumlink\">$i</a></li>", true);
-                }
-
-                if ($previousNext) {
-                    if ($paged < $pages) {
-                        self::theTabsIndent(1, "<li><a href='" . get_pagenum_link($paged + 1) . "'>&rsaquo;</a></li>", true);
-                    } else {
-                        self::theTabsIndent(1, "<li class=\"disabled\"><span>&rsaquo;</span></li>", true);
-                    }
-                    if ($paged < ($pages - 1)) {
-                        self::theTabsIndent(1, "<li><a href='" . get_pagenum_link($pages) . "'>&raquo;</a></li>", true);
-                    } else {
-                        self::theTabsIndent(1, "<li class=\"disabled\"><span>&raquo;</span></li>", true);
-                    }
-                }
-
-                self::theTabsIndent(0, "</ul>", true, true);
             }
+
+            for ($i = 1; $i <= $pages; $i ++) {
+                $pagenumLink = get_pagenum_link($i) . $urlSuffix;
+                $activeClass = ($i == $paged) ? 'class="active"' : "";
+                self::theTabsIndent(1, "<li $activeClass><a href=\"$pagenumLink\">$i</a></li>", true);
+            }
+
+            if ($previousNext) {
+                if ($paged < $pages) {
+                    self::theTabsIndent(1, "<li class=\"next\"><a href='" . get_pagenum_link($paged + 1) . $urlSuffix . "'>&rsaquo;</a></li>", true);
+                    self::theTabsIndent(1, "<li class=\"last\"><a href='" . get_pagenum_link($pages) . $urlSuffix . "'>&raquo;</a></li>", true);
+                } else {
+                    self::theTabsIndent(1, "<li class=\"next disabled\"><span>&rsaquo;</span></li>", true);
+                    self::theTabsIndent(1, "<li class=\"last disabled\"><span>&raquo;</span></li>", true);
+                }
+            }
+
+            self::theTabsIndent(0, "</ul>", true, true);
+        }
+    }
+
+    /**
+     * Vypíše stránkování určené pro WP loopu v bootstrap stylu dle WordPressu
+     *
+     * @author Martin Hlaváč
+     * @link http://www.ktstudio.cz
+     *
+     * @param boolean $previousNext
+     * @param string $customClass
+     * @param WP_Query $query
+     * @param string $customStyle
+     * @global integer $paged
+     * @global WP_Query $wp_query
+     */
+    public static function bootstrapPaginateLinks($previousNext = true, $customClass = null, WP_Query $query = null, $customStyle = null) {
+        global $wp_query;
+        global $paged;
+        $current = self::tryGetInt($paged) ?: 1;
+        $pages = self::tryGetInt(($query ?? $wp_query)->max_num_pages);
+        $paginateLinks = paginate_links([
+            "base" => str_replace(PHP_INT_MAX, "%#%", esc_url(get_pagenum_link(PHP_INT_MAX))),
+            "format" => "?paged=%#%",
+            "current" => $current,
+            "total" => $pages,
+            "type" => "array",
+            "show_all" => false,
+            "prev_next" => $previousNext,
+            "prev_text" => "&laquo;",
+            "next_text" => "&raquo;",
+        ]);
+        if (KT::arrayIssetAndNotEmpty($paginateLinks)) {
+            echo "<ul class=\"pagination $customClass\"$customStyle>";
+            foreach ($paginateLinks as $index => $link) {
+                $activeClass = self::stringContains($link, "current") ? " class=\"active\"" : "";
+                echo "<li$activeClass>$link</li>";
+            }
+            echo "</ul>";
         }
     }
 

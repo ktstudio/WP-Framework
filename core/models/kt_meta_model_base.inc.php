@@ -6,12 +6,14 @@
  * @author Martin Hlaváč
  * @link http://www.ktstudio.cz
  */
-abstract class KT_Meta_Model_Base extends KT_Model_Base {
+abstract class KT_Meta_Model_Base extends KT_Model_Base
+{
 
     private $metas = array();
     private $metaPrefix;
 
-    public function __construct($metaPrefix = null) {
+    public function __construct($metaPrefix = null)
+    {
         $this->metaPrefix = $metaPrefix;
     }
 
@@ -22,7 +24,8 @@ abstract class KT_Meta_Model_Base extends KT_Model_Base {
      * 
      * @return string
      */
-    public final function getMetaPrefix() {
+    public final function getMetaPrefix()
+    {
         return $this->metaPrefix;
     }
 
@@ -31,7 +34,8 @@ abstract class KT_Meta_Model_Base extends KT_Model_Base {
      * 
      * @return array
      */
-    public final function getMetas() {
+    public final function getMetas()
+    {
         if (KT::notIssetOrEmpty($this->metas)) {
             $this->initMetas();
         }
@@ -44,7 +48,8 @@ abstract class KT_Meta_Model_Base extends KT_Model_Base {
      * @param array $metas
      * @return \KT_Meta_Model_Base
      */
-    protected final function setMetas(array $metas) {
+    protected final function setMetas(array $metas)
+    {
         $this->metas = $metas;
         return $this;
     }
@@ -58,7 +63,8 @@ abstract class KT_Meta_Model_Base extends KT_Model_Base {
      * @param string $key
      * @return string
      */
-    public function getMetaValue($key) {
+    public function getMetaValue($key)
+    {
         $metas = $this->getMetas();
         if (array_key_exists($key, $metas)) {
             $value = $metas[$key];
@@ -78,7 +84,8 @@ abstract class KT_Meta_Model_Base extends KT_Model_Base {
      * @param string $postType
      * @return mixed
      */
-    public function getMetaTranslateId($key, $postType) {
+    public function getMetaTranslateId($key, $postType)
+    {
         $value = $this->getMetaValue($key);
         if (defined("ICL_LANGUAGE_CODE")) {
             if (is_array($value)) {
@@ -98,7 +105,8 @@ abstract class KT_Meta_Model_Base extends KT_Model_Base {
      * @deprecated since version 1.3
      * @see getMetaValue
      */
-    public function getMetaValueByKey($key) {
+    public function getMetaValueByKey($key)
+    {
         return $this->getMetaValue($key);
     }
 
@@ -108,4 +116,9 @@ abstract class KT_Meta_Model_Base extends KT_Model_Base {
      * Inicializace pole metas @see setMetas
      */
     protected abstract function initMetas();
+
+    public function setMetaPrefix($metaPrefix)
+    {
+        return $this->metaPrefix = $metaPrefix;
+    }
 }
